@@ -22,7 +22,7 @@ var confSectionSpecFactories = map[string]func() registeredSection{
 	"tag":    func() registeredSection { return tagSectionSpec() },
 	"editor": func() registeredSection { return editorSectionSpec() },
 	"export": func() registeredSection {
-		return newSectionSpec("export", &Conf.Export, conf.NormalizeExport, exportReactions()...)
+		return newSectionSpec("export", &Conf.Export, conf.NormalizeExport)
 	},
 	"graph":    func() registeredSection { return graphSectionSpec() },
 	"uiLayout": func() registeredSection { return newSectionSpec("uiLayout", &Conf.UILayout, conf.NormalizeUILayout) },
@@ -34,7 +34,6 @@ var confSectionSpecFactories = map[string]func() registeredSection{
 	},
 	"flashcard":  func() registeredSection { return flashcardSectionSpec() },
 	"ai":         func() registeredSection { return newSectionSpec("ai", &Conf.AI, conf.NormalizeAI) },
-	"ocr":        func() registeredSection { return ocrSectionSpec() },
 	"secrets":    func() registeredSection { return newSectionSpec("secrets", &Conf.Secrets, conf.NormalizeSecrets) },
 	"variables":  func() registeredSection { return newSectionSpec("variables", &Conf.Variables, conf.NormalizeVariables) },
 	"bazaar":     func() registeredSection { return bazaarSectionSpec() },
@@ -84,15 +83,14 @@ func onboardingSectionSpec() *SectionSpec[*conf.Onboarding] {
 	return newSectionSpec("onboarding", &Conf.Onboarding, conf.NormalizeOnboarding)
 }
 
-// syncSectionSpec 在连接信息改变或同步关闭时清除当前来源的索引读取提示。
+// syncSectionSpec 在连接信息改变或同步关闭时重新评估同步来源。
 func syncSectionSpec() *SectionSpec[*conf.Sync] {
 	return newSectionSpec("sync", &Conf.Sync, conf.NormalizeSync, Reaction[*conf.Sync]{
 		Name: "cloud-index-notice", Changed: func(old, next *conf.Sync) bool {
 			return !next.Enabled || old.Provider != next.Provider || old.CloudName != next.CloudName ||
-				(old.Provider == conf.ProviderS3 && !reflect.DeepEqual(old.S3, next.S3)) ||
 				(old.Provider == conf.ProviderWebDAV && !reflect.DeepEqual(old.WebDAV, next.WebDAV)) ||
 				(old.Provider == conf.ProviderLocal && !reflect.DeepEqual(old.Local, next.Local))
-		}, Apply: func(old, next *conf.Sync) { syncIndexListNotice.reset(util.PushClearMsg) },
+		},
 	})
 }
 
@@ -229,11 +227,5 @@ func searchReactions() []Reaction[*conf.Search] {
 		{Name: "virtual-block-ref", Changed: func(old, next *conf.Search) bool {
 			return old.VirtualRefName != next.VirtualRefName || old.VirtualRefAlias != next.VirtualRefAlias || old.VirtualRefAnchor != next.VirtualRefAnchor || old.VirtualRefDoc != next.VirtualRefDoc
 		}, Apply: func(old, next *conf.Search) { ResetVirtualBlockRefCache() }},
-	}
-}
-
-func exportReactions() []Reaction[*conf.Export] {
-	return []Reaction[*conf.Export]{
-		{Name: "pandoc", Changed: func(old, next *conf.Export) bool { return old.PandocBin != next.PandocBin }, Apply: func(old, next *conf.Export) { util.InitPandoc(next.PandocBin) }},
 	}
 }

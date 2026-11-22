@@ -104,14 +104,6 @@ type ExportMarkdownContentRequest struct {
 	ExportMarkdownContentOptions
 }
 
-type ExportDocxRequest struct {
-	ID                      string `json:"id" api:"trim"`
-	SavePath                string `json:"savePath" api:"trim"`
-	RemoveAssets            bool   `json:"removeAssets"`
-	Merge                   bool   `json:"merge" api:"optional,nullable"`
-	MergeDocHeadingMode     string `json:"mergeDocHeadingMode" api:"optional,nullable"`
-	MergeContentHeadingMode string `json:"mergeContentHeadingMode" api:"optional,nullable"`
-}
 type ExportTitleOptions struct {
 	AddTitle    *bool  `json:"addTitle" api:"optional"`
 	CustomTitle string `json:"customTitle" api:"optional,nullable,ignoretype"`
@@ -294,7 +286,6 @@ func bindExportDecoder[Request, Data any](endpoint *Endpoint[Request, Data]) {
 func init() {
 	bindExportDecoder(&ExportCodeBlock)
 	bindExportDecoder(&ExportAttributeView)
-	bindExportDecoder(&Export2Liandi)
 	bindExportDecoder(&ExportDataInFolder)
 	bindExportDecoder(&ExportResources)
 	bindExportDecoder(&ExportNotebookMd)
@@ -306,7 +297,6 @@ func init() {
 	bindExportDecoder(&ExportSYs)
 	bindExportDecoder(&ExportSY)
 	bindExportDecoder(&ExportMdContent)
-	bindExportDecoder(&ExportDocx)
 	bindExportDecoder(&ExportMdHTML)
 	bindExportDecoder(&ExportTempContent)
 	bindExportDecoder(&ExportBrowserHTML)
@@ -315,13 +305,4 @@ func init() {
 	bindExportDecoder(&ProcessPDF)
 	bindExportDecoder(&ExportPreview)
 	bindExportDecoder(&CopyExportFile)
-	bindExportDecoder(&ExportEPUB)
-	bindExportDecoder(&ExportRTF)
-	bindExportDecoder(&ExportODT)
-	bindExportDecoder(&ExportMediaWiki)
-	bindExportDecoder(&ExportOrgMode)
-	bindExportDecoder(&ExportOPML)
-	bindExportDecoder(&ExportTextile)
-	bindExportDecoder(&ExportAsciiDoc)
-	bindExportDecoder(&ExportReStructuredText)
 }

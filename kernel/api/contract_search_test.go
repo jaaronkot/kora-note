@@ -353,12 +353,6 @@ func testSearchAssetMetadataContract(t *testing.T) {
 	tree.ID, tree.Box, tree.Path, tree.HPath = tree.Root.ID, "20260912000000-boxapi1", "/"+tree.Root.ID+".sy", "/Images"
 	sql.UpsertTreeQueue(tree)
 	sql.FlushQueue()
-	util.SetAssetText("assets/metadata-c.png", "metadata recognized text")
-	util.SetAssetText("assets/metadata-orphan.png", "metadata orphan text")
-	t.Cleanup(func() {
-		util.SetAssetText("assets/metadata-c.png", "")
-		util.SetAssetText("assets/metadata-orphan.png", "")
-	})
 	engine := gin.New()
 	engine.POST("/api/search/searchAsset", searchAsset)
 	for _, tc := range []struct {
@@ -369,7 +363,6 @@ func testSearchAssetMetadataContract(t *testing.T) {
 		{`{"k":"caption","includeMetadata":false}`, nil},
 		{`{"k":"caption","includeMetadata":true}`, []string{"assets/metadata-a.png", "assets/metadata-b.webp"}},
 		{`{"k":"other","includeMetadata":true}`, []string{"assets/metadata-b.webp"}},
-		{`{"k":"recognized","includeMetadata":true}`, []string{"assets/metadata-c.png"}},
 		{`{"k":"orphan text","includeMetadata":true,"exts":["webp"]}`, nil},
 		{`{"k":"caption","includeMetadata":true,"exts":["png"],"match":{"mode":"suffix","value":"-a.png"}}`, []string{"assets/metadata-a.png"}},
 		{`{"k":"recognized","includeMetadata":true,"pageSize":1,"page":2}`, nil},

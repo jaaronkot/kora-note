@@ -69,7 +69,6 @@ var serveCmd = &cobra.Command{
 		model.CleanupEmptyPluginStorageDirs()
 		model.InitBoxes()
 		model.LoadFlashcards()
-		util.LoadAssetsTexts()
 
 		util.SetBooted()
 		util.PushClearAllMsg()

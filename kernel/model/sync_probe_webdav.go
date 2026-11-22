@@ -25,6 +25,15 @@ import (
 	"github.com/studio-b12/gowebdav"
 )
 
+const (
+	// SyncProbeOK 表示写入与列举指向同一个对象键
+	SyncProbeOK = "ok"
+	// SyncProbeConfig 表示可以确定的配置错误
+	SyncProbeConfig = "config"
+	// SyncProbeNetwork 表示网络或服务端不可达，无法判定配置
+	SyncProbeNetwork = "network"
+)
+
 // TestSyncProviderWebDAV 仅使用草稿配置，验证集合、目录创建和探针读写，不读取或保存同步配置。
 func TestSyncProviderWebDAV(draft *conf.WebDAV, cloudName string) (kind, msg string) {
 	if err := validateSyncWebDAV(draft); err != nil {

@@ -7,7 +7,6 @@ package api
 import (
 	"errors"
 	"io"
-	"math"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -28,11 +27,6 @@ var validPackageTypes = map[string]bool{
 	"templates": true,
 	"widgets":   true,
 }
-
-var (
-	getBazaarPackageUserRatingsModel = model.GetInstalledBazaarPackageUserRatings
-	setBazaarPackageRatingModel      = model.SetBazaarPackageRating
-)
 
 var installLocalBazaarPackage = contractHandler(apicontract.InstallLocalBazaarPackage, func(c *gin.Context, request apicontract.InstallLocalBazaarPackageRequest) apicontract.Response[apicontract.BazaarLocalInstallResult] {
 	fileHeader := request.File
@@ -156,60 +150,6 @@ var getBazaarPackageRatings = contractHandler(apicontract.GetBazaarPackageRating
 		return apicontract.Failure[apicontract.BazaarRatingsData](1, err.Error())
 	}
 	return apicontract.Success(apicontract.BazaarRatingsData{Ratings: bazaarRatings(ratings), EligiblePackageNames: eligiblePackageNames})
-})
-
-var getBazaarPackageUserRatings = contractHandler(apicontract.GetBazaarPackageUserRatings, func(c *gin.Context, request apicontract.GetBazaarPackageUserRatingsRequest) apicontract.Response[apicontract.BazaarUserRatingsResult] {
-	if !validPackageTypes[request.PackageType] {
-		return apicontract.Failure[apicontract.BazaarUserRatingsResult](1, "Invalid package type")
-	}
-
-	if request.NamesError != nil {
-		return apicontract.Failure[apicontract.BazaarUserRatingsResult](-1, request.NamesError.Error())
-	}
-
-	userRatings, eligiblePackageNames, err := getBazaarPackageUserRatingsModel(
-		c.Request.Context(), request.PackageType, request.PackageNames)
-	if nil != err {
-		if data := bazaarRatingError(err); data != nil {
-			return apicontract.GetBazaarPackageUserRatings.FailureWithData(1, err.Error(), apicontract.NewBazaarUserRatingsResultError(*data))
-		}
-		return apicontract.Failure[apicontract.BazaarUserRatingsResult](1, err.Error())
-	}
-	return apicontract.Success(apicontract.NewBazaarUserRatingsResult(apicontract.BazaarUserRatingsData{UserRatings: userRatings, EligiblePackageNames: eligiblePackageNames}))
-})
-
-var getBazaarPackageRating = contractHandler(apicontract.GetBazaarPackageRating, func(c *gin.Context, request apicontract.GetBazaarPackageRatingRequest) apicontract.Response[apicontract.BazaarRatingResult] {
-	if !validPackageTypes[request.PackageType] {
-		return apicontract.Failure[apicontract.BazaarRatingResult](1, "Invalid package type")
-	}
-
-	rating, ratingAvailable, userRating, err := model.GetBazaarPackageRating(c.Request.Context(), request.PackageType, request.PackageName)
-	if nil != err {
-		if data := bazaarRatingError(err); data != nil {
-			return apicontract.GetBazaarPackageRating.FailureWithData(1, err.Error(), apicontract.NewBazaarRatingResultError(*data))
-		}
-		return apicontract.Failure[apicontract.BazaarRatingResult](1, err.Error())
-	}
-	return apicontract.Success(apicontract.NewBazaarRatingResult(apicontract.BazaarRatingData{Rating: bazaarRating(rating), RatingAvailable: ratingAvailable, UserRating: userRating}))
-})
-
-var setBazaarPackageRating = contractHandler(apicontract.SetBazaarPackageRating, func(c *gin.Context, request apicontract.SetBazaarPackageRatingRequest) apicontract.Response[apicontract.BazaarRatingResult] {
-	if !validPackageTypes[request.PackageType] {
-		return apicontract.Failure[apicontract.BazaarRatingResult](1, "Invalid package type")
-	}
-	if request.Rating < 0 || 5 < request.Rating || request.Rating != math.Trunc(request.Rating) {
-		return apicontract.Failure[apicontract.BazaarRatingResult](1, "Rating must be an integer from 0 to 5")
-	}
-
-	rating, ratingAvailable, userRating, err := setBazaarPackageRatingModel(
-		c.Request.Context(), request.PackageType, request.PackageName, int(request.Rating))
-	if nil != err {
-		if data := bazaarRatingError(err); data != nil {
-			return apicontract.SetBazaarPackageRating.FailureWithData(1, err.Error(), apicontract.NewBazaarRatingResultError(*data))
-		}
-		return apicontract.Failure[apicontract.BazaarRatingResult](1, err.Error())
-	}
-	return apicontract.Success(apicontract.NewBazaarRatingResult(apicontract.BazaarRatingData{Rating: bazaarRating(rating), RatingAvailable: ratingAvailable, UserRating: userRating}))
 })
 
 var getBazaarPackageREADME = contractHandler(apicontract.GetBazaarPackageREADME, func(c *gin.Context, request apicontract.GetBazaarPackageREADMERequest) apicontract.Response[apicontract.BazaarREADMEData] {
@@ -409,15 +349,6 @@ var uninstallBazaarTheme = contractHandler(apicontract.UninstallBazaarTheme, fun
 
 func prepareLocalBazaarUpload(c *gin.Context) *apicontract.Response[apicontract.BazaarLocalInstallResult] {
 	c.Request.Body = http.MaxBytesReader(c.Writer, c.Request.Body, bazaar.MaxLocalPackageArchiveSize+1024*1024)
-	return nil
-}
-func bazaarRatingError(err error) *apicontract.BazaarRatingError {
-	if errors.Is(err, model.ErrBazaarRatingRateLimited) {
-		return &apicontract.BazaarRatingError{ErrorCode: "bazaarRatingRateLimited"}
-	}
-	if errors.Is(err, model.ErrBazaarPackagePending) {
-		return &apicontract.BazaarRatingError{ErrorCode: "bazaarPackagePending"}
-	}
 	return nil
 }
 func bazaarRating(value *bazaar.PackageRating) *apicontract.BazaarPackageRating {

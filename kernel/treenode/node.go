@@ -165,38 +165,6 @@ func ExportNodeStdMd(node *ast.Node, luteEngine *lute.Lute) string {
 	return markdown
 }
 
-func IsNodeOCRed(node *ast.Node) (ret bool) {
-	if !util.TesseractEnabled || nil == node {
-		return true
-	}
-
-	ret = true
-	ast.Walk(node, func(n *ast.Node, entering bool) ast.WalkStatus {
-		if !entering {
-			return ast.WalkContinue
-		}
-
-		if ast.NodeImage == n.Type {
-			linkDest := n.ChildByType(ast.NodeLinkDest)
-			if nil == linkDest {
-				return ast.WalkContinue
-			}
-
-			linkDestStr := linkDest.TokensStr()
-			if !cache.ExistAsset(linkDestStr) {
-				return ast.WalkContinue
-			}
-
-			if !util.ExistsAssetText(linkDestStr) {
-				ret = false
-				return ast.WalkStop
-			}
-		}
-		return ast.WalkContinue
-	})
-	return
-}
-
 func GetNodeSrcTokens(n *ast.Node) (ret string) {
 	if index := bytes.Index(n.Tokens, []byte("src=\"")); 0 < index {
 		src := n.Tokens[index+len("src=\""):]

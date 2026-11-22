@@ -74,19 +74,13 @@ type ClearSyncProviderConfigRequest struct {
 type SyncProviderConfigRulesRequest struct {
 	Provider int    `json:"provider"`
 	Endpoint string `json:"endpoint" api:"optional"`
-	Bucket   string `json:"bucket" api:"optional"`
 }
 
 type SyncProviderConfigRulesData struct {
-	RequiredFields        []string `json:"requiredFields" api:"nonnullable"`
-	EndpointBucketWarning bool     `json:"endpointBucketWarning"`
+	RequiredFields []string `json:"requiredFields" api:"nonnullable"`
 }
 
-type TestSyncProviderS3Request struct {
-	S3 SyncS3 `json:"s3"`
-}
-
-type TestSyncProviderS3Data struct {
+type TestSyncProviderData struct {
 	Kind string `json:"kind"`
 	Msg  string `json:"msg"`
 }
@@ -102,7 +96,6 @@ type TestSyncProviderLocalRequest struct {
 
 type ClearSyncProviderConfigData struct {
 	Enabled bool        `json:"enabled"`
-	S3      *SyncS3     `json:"s3,omitempty"`
 	WebDAV  *SyncWebDAV `json:"webdav,omitempty"`
 	Local   *SyncLocal  `json:"local,omitempty"`
 }
@@ -148,17 +141,6 @@ type SyncProviderExportData struct {
 	Name string `json:"name"`
 	Zip  string `json:"zip"`
 }
-type SyncS3 struct {
-	Endpoint       string `json:"endpoint" api:"optional,nullable"`
-	AccessKey      string `json:"accessKey" api:"optional,nullable"`
-	SecretKey      string `json:"secretKey" api:"optional,nullable"`
-	Bucket         string `json:"bucket" api:"optional,nullable"`
-	Region         string `json:"region" api:"optional,nullable"`
-	PathStyle      bool   `json:"pathStyle" api:"optional,nullable"`
-	SkipTlsVerify  bool   `json:"skipTlsVerify" api:"optional,nullable"`
-	Timeout        int    `json:"timeout" api:"optional,nullable"`
-	ConcurrentReqs int    `json:"concurrentReqs" api:"optional,nullable"`
-}
 type SyncWebDAV struct {
 	Endpoint       string `json:"endpoint" api:"optional,nullable"`
 	Username       string `json:"username" api:"optional,nullable"`
@@ -172,18 +154,11 @@ type SyncLocal struct {
 	Timeout        int    `json:"timeout" api:"optional,nullable"`
 	ConcurrentReqs int    `json:"concurrentReqs" api:"optional,nullable"`
 }
-type SyncS3Data struct {
-	S3 *SyncS3 `json:"s3"`
-}
 type SyncWebDAVData struct {
 	WebDAV *SyncWebDAV `json:"webdav"`
 }
 type SyncLocalData struct {
 	Local *SyncLocal `json:"local"`
-}
-type SetSyncS3Request struct {
-	S3          SyncS3 `json:"s3"`
-	configError error
 }
 type SetSyncWebDAVRequest struct {
 	WebDAV      SyncWebDAV `json:"webdav"`
@@ -194,7 +169,6 @@ type SetSyncLocalRequest struct {
 	configError error
 }
 
-func (r SetSyncS3Request) ConfigError() error     { return r.configError }
 func (r SetSyncWebDAVRequest) ConfigError() error { return r.configError }
 func (r SetSyncLocalRequest) ConfigError() error  { return r.configError }
 
@@ -259,7 +233,7 @@ func syncRequestFields(reader io.Reader, path string) (fields map[string]json.Ra
 }
 
 func init() {
-	for _, endpoint := range []*Endpoint[SyncEnabledRequest, Null]{&SetSyncEnable, &SetSyncPerception, &SetSyncGenerateConflictDoc} {
+	for _, endpoint := range []*Endpoint[SyncEnabledRequest, Null]{&SetSyncEnable, &SetSyncGenerateConflictDoc} {
 		path := endpoint.definition.Path
 		endpoint.decodeRequest = func(reader io.Reader) (r SyncEnabledRequest, err error) {
 			fields, err := syncRequestFields(reader, path)
@@ -341,18 +315,6 @@ func init() {
 			r.CloudID, err = legacyField[string](r.uploadFields, "cloudID", "String", true)
 		}
 		return r, err
-	}
-	SetSyncProviderS3.decodeRequest = func(reader io.Reader) (r SetSyncS3Request, err error) {
-		fields, err := syncRequestFields(reader, SetSyncProviderS3.definition.Path)
-		if err != nil {
-			return r, err
-		}
-		if _, err = legacyField[map[string]json.RawMessage](fields, "s3", "Object", true); err != nil {
-			return r, err
-		}
-		r.S3, r.configError = legacyJSONValue[SyncS3](fields["s3"])
-		r.configError = syncConfigError(r.configError, "S3")
-		return r, nil
 	}
 	SetSyncProviderWebDAV.decodeRequest = func(reader io.Reader) (r SetSyncWebDAVRequest, err error) {
 		fields, err := syncRequestFields(reader, SetSyncProviderWebDAV.definition.Path)

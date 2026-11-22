@@ -347,7 +347,15 @@ export class Plugin {
             if (!document.contains(iconElement) ||
                 options.element && iconElement.parentElement !== document.getElementById("toolbar") ||
                 previousLocation !== iconElement.getAttribute("data-location")) {
-                document.querySelector("#" + (iconElement.getAttribute("data-location") === "right" ? "barPlugins" : "drag"))?.before(iconElement);
+                // 顶栏不再有插件入口按钮，插件图标直接挂在拖拽区右侧或左侧。
+                const anchor = document.getElementById("drag");
+                if (anchor) {
+                    if (iconElement.getAttribute("data-location") === "right") {
+                        anchor.insertAdjacentElement("afterend", iconElement);
+                    } else {
+                        anchor.before(iconElement);
+                    }
+                }
             }
         }
         if (isNew) {

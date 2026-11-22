@@ -113,7 +113,6 @@ func TestAPIContractImportedPortablePreferences(t *testing.T) {
 	appearance.EntryVisibility = &conf.EntryVisibility{Version: conf.EntryVisibilityVersion, Active: "portable",
 		Profiles: []*conf.EntryVisibilityProfile{{ID: "portable", Name: "Portable", Defaults: conf.EntryVisibilityProfileFull,
 			Entries: map[string]bool{"topBar.search": false}, Orders: map[string][]string{"topBar": {"search", "config"}}}}}
-	source.OCR.Store(&conf.OCR{Provider: "ai", AIModelID: "20261016120000-model01", Auto: true, ShowText: new(false), ShowError: true})
 	source.Snippet.Store(&conf.Snpt{EnabledCSS: false, EnabledJS: false})
 	source.Variables.Store(&conf.Variables{Items: []*conf.Variable{{Name: "PROJECT", Value: "portable"}}})
 	source.UILayout.Store(&conf.UILayout{"layout": map[string]any{"type": "portable"}})
@@ -145,7 +144,6 @@ func TestAPIContractImportedPortablePreferences(t *testing.T) {
 			target.Appearance.Load().LightThemes = []*conf.AppearanceTheme{{Name: "local-light"}}
 			target.Api.Load().Token = "local-api-token"
 			target.AccessAuthCode = "local-lock-password"
-			target.UserData = "local-account"
 			target.Repo.Load().Key = []byte("local-repository-key")
 			target.NotebookCrypto.MasterSalt = []byte("local-master-salt")
 			target.NotebookCrypto.KEKVerifier = []byte("local-authenticated-verifier")
@@ -172,7 +170,7 @@ func TestAPIContractImportedPortablePreferences(t *testing.T) {
 				!reflect.DeepEqual(target.Bazaar.Load().CompatibilityFilters, source.Bazaar.Load().CompatibilityFilters) ||
 				!reflect.DeepEqual(actualAppearance.EntryVisibility, source.Appearance.Load().EntryVisibility) ||
 				!reflect.DeepEqual(actualAppearance.GlobalFontFamilies, source.Appearance.Load().GlobalFontFamilies) ||
-				!reflect.DeepEqual(target.OCR.Load(), source.OCR.Load()) || !reflect.DeepEqual(target.Snippet.Load(), source.Snippet.Load()) ||
+				!reflect.DeepEqual(target.Snippet.Load(), source.Snippet.Load()) ||
 				!reflect.DeepEqual(target.Variables.Load(), source.Variables.Load()) || !reflect.DeepEqual(target.UILayout.Load(), source.UILayout.Load()) {
 				t.Fatal("portable preferences did not survive configuration transfer")
 			}
@@ -184,7 +182,7 @@ func TestAPIContractImportedPortablePreferences(t *testing.T) {
 			cryptoAfter, _ := json.Marshal(target.NotebookCrypto)
 			if target.NotebookCrypto != crypto || !bytes.Equal(cryptoBefore, cryptoAfter) || target.Sync.Load() != sync || target.Api.Load() != api ||
 				target.Repo.Load() != repo || target.Secrets.Load() != secrets || target.Api.Load().Token != "local-api-token" ||
-				target.AccessAuthCode != "local-lock-password" || target.UserData != "local-account" ||
+				target.AccessAuthCode != "local-lock-password" ||
 				target.System.Load().UpdateChannel != conf.UpdateChannelBeta || target.System.Load().NetworkProxy != proxy {
 				t.Fatal("import replaced protected local configuration")
 			}
@@ -195,7 +193,7 @@ func TestAPIContractImportedPortablePreferences(t *testing.T) {
 			saved := model.NewAppConf()
 			if err = json.Unmarshal(persisted, saved); err != nil || saved.Lang != "ja" || saved.Appearance.Load().Lang != "ja" ||
 				!reflect.DeepEqual(saved.Bazaar.Load().CompatibilityFilters, source.Bazaar.Load().CompatibilityFilters) ||
-				!reflect.DeepEqual(saved.OCR.Load(), source.OCR.Load()) || !reflect.DeepEqual(saved.Snippet.Load(), source.Snippet.Load()) ||
+				!reflect.DeepEqual(saved.Snippet.Load(), source.Snippet.Load()) ||
 				!reflect.DeepEqual(saved.Variables.Load(), source.Variables.Load()) || !reflect.DeepEqual(saved.UILayout.Load(), source.UILayout.Load()) {
 				t.Fatalf("imported preferences were not persisted: %v", err)
 			}
@@ -213,14 +211,14 @@ func TestAPIContractImportedPortablePreferences(t *testing.T) {
 
 func TestAPIContractImportedMissingPortablePreferences(t *testing.T) {
 	importedPreferencesFixture(t)
-	for _, payload := range []string{`{"editor":{}}`, `{"appearance":null,"ocr":null,"snippet":null,"variables":null}`} {
-		appearance, ocr, snippet, variables := model.Conf.Appearance.Load(), model.Conf.OCR.Load(), model.Conf.Snippet.Load(), model.Conf.Variables.Load()
+	for _, payload := range []string{`{"editor":{}}`, `{"appearance":null,"snippet":null,"variables":null}`} {
+		appearance, snippet, variables := model.Conf.Appearance.Load(), model.Conf.Snippet.Load(), model.Conf.Variables.Load()
 		model.Conf.Lang = "ja"
 		appearance.Lang = "ja"
 		if code := importPreferencesRequest(t, "old-settings.json", []byte(payload)); code != 0 {
 			t.Fatalf("legacy import failed: %d", code)
 		}
-		if model.Conf.Appearance.Load() != appearance || model.Conf.OCR.Load() != ocr || model.Conf.Snippet.Load() != snippet ||
+		if model.Conf.Appearance.Load() != appearance || model.Conf.Snippet.Load() != snippet ||
 			model.Conf.Variables.Load() != variables || model.Conf.Lang != "ja" {
 			t.Fatal("legacy import reset preferences missing from its package")
 		}

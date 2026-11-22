@@ -58,106 +58,6 @@ var exportAttributeView = contractHandler(apicontract.ExportAttributeView, func(
 	return apicontract.Success(apicontract.ExportZipData{Zip: zipPath})
 })
 
-var exportEPUB = contractHandler(apicontract.ExportEPUB, func(c *gin.Context, request apicontract.ExportIDRequest) apicontract.Response[apicontract.ExportNamedZipData] {
-
-	id := request.ID
-	if err := holdEncryptedExportRequest(c, id); err != nil {
-		return apicontract.FailureFrom[apicontract.ExportNamedZipData](err)
-	}
-	name, zipPath := model.ExportPandocConvertZip([]string{id}, "epub", ".epub")
-	return apicontract.Success(apicontract.ExportNamedZipData{Name: name, Zip: zipPath})
-})
-
-var exportRTF = contractHandler(apicontract.ExportRTF, func(c *gin.Context, request apicontract.ExportIDRequest) apicontract.Response[apicontract.ExportNamedZipData] {
-
-	id := request.ID
-	if err := holdEncryptedExportRequest(c, id); err != nil {
-		return apicontract.FailureFrom[apicontract.ExportNamedZipData](err)
-	}
-	name, zipPath := model.ExportPandocConvertZip([]string{id}, "rtf", ".rtf")
-	return apicontract.Success(apicontract.ExportNamedZipData{Name: name, Zip: zipPath})
-})
-
-var exportODT = contractHandler(apicontract.ExportODT, func(c *gin.Context, request apicontract.ExportIDRequest) apicontract.Response[apicontract.ExportNamedZipData] {
-
-	id := request.ID
-	if err := holdEncryptedExportRequest(c, id); err != nil {
-		return apicontract.FailureFrom[apicontract.ExportNamedZipData](err)
-	}
-	name, zipPath := model.ExportPandocConvertZip([]string{id}, "odt", ".odt")
-	return apicontract.Success(apicontract.ExportNamedZipData{Name: name, Zip: zipPath})
-})
-
-var exportMediaWiki = contractHandler(apicontract.ExportMediaWiki, func(c *gin.Context, request apicontract.ExportIDRequest) apicontract.Response[apicontract.ExportNamedZipData] {
-
-	id := request.ID
-	if err := holdEncryptedExportRequest(c, id); err != nil {
-		return apicontract.FailureFrom[apicontract.ExportNamedZipData](err)
-	}
-	name, zipPath := model.ExportPandocConvertZip([]string{id}, "mediawiki", ".wiki")
-	return apicontract.Success(apicontract.ExportNamedZipData{Name: name, Zip: zipPath})
-})
-
-var exportOrgMode = contractHandler(apicontract.ExportOrgMode, func(c *gin.Context, request apicontract.ExportIDRequest) apicontract.Response[apicontract.ExportNamedZipData] {
-
-	id := request.ID
-	if err := holdEncryptedExportRequest(c, id); err != nil {
-		return apicontract.FailureFrom[apicontract.ExportNamedZipData](err)
-	}
-	name, zipPath := model.ExportPandocConvertZip([]string{id}, "org", ".org")
-	return apicontract.Success(apicontract.ExportNamedZipData{Name: name, Zip: zipPath})
-})
-
-var exportOPML = contractHandler(apicontract.ExportOPML, func(c *gin.Context, request apicontract.ExportIDRequest) apicontract.Response[apicontract.ExportNamedZipData] {
-
-	id := request.ID
-	if err := holdEncryptedExportRequest(c, id); err != nil {
-		return apicontract.FailureFrom[apicontract.ExportNamedZipData](err)
-	}
-	name, zipPath := model.ExportPandocConvertZip([]string{id}, "opml", ".opml")
-	return apicontract.Success(apicontract.ExportNamedZipData{Name: name, Zip: zipPath})
-})
-
-var exportTextile = contractHandler(apicontract.ExportTextile, func(c *gin.Context, request apicontract.ExportIDRequest) apicontract.Response[apicontract.ExportNamedZipData] {
-
-	id := request.ID
-	if err := holdEncryptedExportRequest(c, id); err != nil {
-		return apicontract.FailureFrom[apicontract.ExportNamedZipData](err)
-	}
-	name, zipPath := model.ExportPandocConvertZip([]string{id}, "textile", ".textile")
-	return apicontract.Success(apicontract.ExportNamedZipData{Name: name, Zip: zipPath})
-})
-
-var exportAsciiDoc = contractHandler(apicontract.ExportAsciiDoc, func(c *gin.Context, request apicontract.ExportIDRequest) apicontract.Response[apicontract.ExportNamedZipData] {
-
-	id := request.ID
-	if err := holdEncryptedExportRequest(c, id); err != nil {
-		return apicontract.FailureFrom[apicontract.ExportNamedZipData](err)
-	}
-	name, zipPath := model.ExportPandocConvertZip([]string{id}, "asciidoc", ".adoc")
-	return apicontract.Success(apicontract.ExportNamedZipData{Name: name, Zip: zipPath})
-})
-
-var exportReStructuredText = contractHandler(apicontract.ExportReStructuredText, func(c *gin.Context, request apicontract.ExportIDRequest) apicontract.Response[apicontract.ExportNamedZipData] {
-
-	id := request.ID
-	if err := holdEncryptedExportRequest(c, id); err != nil {
-		return apicontract.FailureFrom[apicontract.ExportNamedZipData](err)
-	}
-	name, zipPath := model.ExportPandocConvertZip([]string{id}, "rst", ".rst")
-	return apicontract.Success(apicontract.ExportNamedZipData{Name: name, Zip: zipPath})
-})
-
-var export2Liandi = contractHandler(apicontract.Export2Liandi, func(c *gin.Context, request apicontract.ExportIDRequest) apicontract.Response[apicontract.Null] {
-
-	id := request.ID
-	err := model.Export2Liandi(id)
-	if err != nil {
-		return apicontract.Failure[apicontract.Null](-1, err.Error())
-	}
-	return apicontract.Success(apicontract.Null{})
-})
-
 var exportDataInFolder = contractHandler(apicontract.ExportDataInFolder, func(c *gin.Context, request apicontract.ExportFolderRequest) apicontract.Response[apicontract.ExportNameData] {
 
 	exportFolder := request.Folder
@@ -238,7 +138,7 @@ var exportMds = contractHandler(apicontract.ExportMds, func(c *gin.Context, requ
 	if err := request.Validate(); err != nil {
 		return apicontract.Failure[apicontract.ExportNamedZipData](-1, err.Error())
 	}
-	name, zipPath := model.ExportPandocConvertZipWithOptions(ids, "", ".md", exportMarkdownOptions(request.ExportMarkdownOptions))
+	name, zipPath := model.ExportArchiveZipWithOptions(ids, ".md", exportMarkdownOptions(request.ExportMarkdownOptions))
 	return apicontract.Success(apicontract.ExportNamedZipData{Name: name, Zip: zipPath})
 })
 
@@ -251,7 +151,7 @@ var exportMd = contractHandler(apicontract.ExportMd, func(c *gin.Context, reques
 	if err := request.Validate(); err != nil {
 		return apicontract.Failure[apicontract.ExportNamedZipData](-1, err.Error())
 	}
-	name, zipPath := model.ExportPandocConvertZipWithOptions([]string{id}, "", ".md", exportMarkdownOptions(request.ExportMarkdownOptions))
+	name, zipPath := model.ExportArchiveZipWithOptions([]string{id}, ".md", exportMarkdownOptions(request.ExportMarkdownOptions))
 	return apicontract.Success(apicontract.ExportNamedZipData{Name: name, Zip: zipPath})
 })
 
@@ -343,31 +243,6 @@ var exportMdContent = contractHandler(apicontract.ExportMdContent, func(c *gin.C
 		},
 	})
 	return apicontract.Success(apicontract.ExportMarkdownContentData{HPath: hPath, Content: content})
-})
-
-var exportDocx = contractHandler(apicontract.ExportDocx, func(c *gin.Context, request apicontract.ExportDocxRequest) apicontract.Response[apicontract.ExportPathData] {
-
-	id := request.ID
-	savePath := request.SavePath
-	removeAssets := request.RemoveAssets
-	merge := request.Merge
-	mergeDocHeadingMode := request.MergeDocHeadingMode
-	mergeContentHeadingMode := request.MergeContentHeadingMode
-	if err := holdEncryptedExportRequest(c, id); err != nil {
-		return apicontract.FailureFrom[apicontract.ExportPathData](err)
-	}
-
-	// savePath 由客户端指定，禁止写入加密笔记本目录（明文导出物会绕过加密、锁定后残留）
-	if rejectEncryptedBoxPath(savePath) {
-		return apicontract.Failure[apicontract.ExportPathData](-1, model.Conf.Language(383))
-	}
-
-	mergeHeadingOptions := model.MergeHeadingOptions{DocHeadingMode: mergeDocHeadingMode, ContentHeadingMode: mergeContentHeadingMode}
-	fullPath, err := model.ExportDocx(id, savePath, removeAssets, merge, mergeHeadingOptions)
-	if err != nil {
-		return apicontract.FailureWithTimeout[apicontract.ExportPathData](1, err.Error(), 7000)
-	}
-	return apicontract.Success(apicontract.ExportPathData{Path: fullPath})
 })
 
 var exportMdHTML = contractHandler(apicontract.ExportMdHTML, func(c *gin.Context, request apicontract.ExportMarkdownHTMLRequest) apicontract.Response[apicontract.ExportHTMLData] {

@@ -85,8 +85,6 @@ Plugin resource declarations, data authorization, and publishing APIs are docume
 * [Export](#Export)
     * [Export Markdown](#Export-Markdown)
     * [Export Files and Folders](#Export-files-and-folders)
-* [Conversion](#Conversion)
-    * [Pandoc](#Pandoc)
 * [Notification](#Notification)
     * [Push message](#Push-message)
     * [Push error message](#Push-error-message)
@@ -1934,45 +1932,6 @@ Incoming titles containing ASCII `/` must declare `Spec` at least `6`; otherwise
                 * `langs`
                 * `conf.json`
                 * `index.html`
-
-## Conversion
-
-### Pandoc
-
-* `/api/convert/pandoc`
-* Working directory
-    * Executing the pandoc command will set the working directory to `workspace/temp/convert/pandoc/${dir}`
-    * API [`Put file`](#put-file) can be used to write the file to be converted to this directory first
-    * Then call the API for conversion, and the converted file will also be written to this directory
-    * Finally, call the API [`Get file`](#get-file) to get the converted file
-        * Or call the API [Create a document with Markdown](#Create-a-document-with-Markdown)
-        * Or call the internal API `importStdMd` to import the converted folder directly
-* Parameters
-
-  ```json
-  {
-    "dir": "test",
-    "args": [
-      "--to", "markdown_strict-raw_html",
-      "foo.epub",
-      "-o", "foo.md"
-   ]
-  }
-  ```
-
-    * `args`: Pandoc command line parameters
-* Return value
-
-  ```json
-  {
-    "code": 0,
-    "msg": "",
-    "data": {
-       "path": "/temp/convert/pandoc/test"
-    }
-  }
-  ```
-    * `path`: the path under the workspace
 
 ## Notification
 

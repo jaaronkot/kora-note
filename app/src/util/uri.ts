@@ -9,8 +9,6 @@ import {openFile, openFileById} from "../editor/util";
 import {fetchPost} from "./fetch";
 import {checkFold} from "./noRelyPCFunction";
 import {openMobileFileById} from "../mobile/editor";
-import {isValidBazaarPackageName} from "./bazaarPackage";
-import {isBazaarAvailable} from "./bazaarAvailability";
 
 import type {App} from "../index";
 import {openDatabaseItem} from "../protyle/render/av/openDatabaseItem";
@@ -20,7 +18,6 @@ import {normalizeSiYuanUri, type ParsedSiYuanUri} from "./normalizeSiYuanUri";
 import {showMessage} from "../dialog/message";
 import {resolveCustomModelFactory} from "../plugin/customTabOwner";
 
-const bazaarTypes = new Set<TBazaarType>(["plugins", "themes", "icons", "templates", "widgets"]);
 
 const processSiYuanUriBlocks = (app: App, uriObj: ParsedSiYuanUri, event?: MouseEvent, ctrlIsPressed = false): boolean => {
     const blockInfo = parseSiYuanUriInfo(uriObj.href);
@@ -132,43 +129,6 @@ const processSiYuanUriPlugins = (app: App, uriObj: ParsedSiYuanUri): boolean => 
     return true;
 };
 
-const processSiYuanUriBazaar = (app: App, uriObj: ParsedSiYuanUri): boolean => {
-    if (!isBazaarAvailable()) {
-        return false;
-    }
-    const [, _type, _name, target] = uriObj.pathname.split("/");
-    if (!_type || !_name) return false;
-    if (!bazaarTypes.has(_type as TBazaarType)) {
-        return false;
-    }
-    const resourceType = _type as TBazaarType;
-    let resourceName: string;
-    try {
-        resourceName = decodeURIComponent(_name);
-    } catch {
-        return false;
-    }
-    if (!isValidBazaarPackageName(resourceName)) {
-        return false;
-    }
-    switch (target) {
-        case "readme":
-        case "readme-installed": {
-            // siyuan://bazaar/plugins/plugin-sample/readme
-            // siyuan://bazaar/plugins/plugin-sample/readme-installed
-            const from = target === "readme-installed" ? "downloaded" : "bazaar";
-            (async () => {
-                const {openBazaarReadme} = await import("../config");
-                openBazaarReadme(app, resourceType, resourceName, from);
-            })();
-            return true;
-        }
-        default:
-            break;
-    }
-    return false;
-};
-
 export const processSiYuanUri = (app: App, uri: string, event?: MouseEvent, ctrlIsPressed = false) => {
     let uriObj: ParsedSiYuanUri;
     try {
@@ -185,8 +145,6 @@ export const processSiYuanUri = (app: App, uri: string, event?: MouseEvent, ctrl
             return processSiYuanUriBlocks(app, uriObj, event, ctrlIsPressed);
         case "plugins":
             return processSiYuanUriPlugins(app, uriObj);
-        case "bazaar":
-            return processSiYuanUriBazaar(app, uriObj);
         default:
             break;
     }

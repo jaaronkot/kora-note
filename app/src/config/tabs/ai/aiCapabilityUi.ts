@@ -208,11 +208,11 @@ const showAgentCapabilityLoading = (root: HTMLElement) => {
     return view;
 };
 
-const openAgentCapabilityView = (settingRoot: HTMLElement, backendCapabilities: ICapabilityInfo[]) => {
+const openAgentCapabilityView = (settingRoot: HTMLElement, backendCapabilities: ICapabilityInfo[],
+                                scope: CapabilityScope = "mcp") => {
     const expanded = new Set<string>();
     let query = "";
     let onlySelected = false;
-    let scope: CapabilityScope = "agent";
     const view = ensureAgentCapabilityView(settingRoot);
     view.innerHTML = `<div class="b3-dialog__header fn__flex">
     <div class="block__logo fn__pointer fn__flex-1" data-action="back">
@@ -221,10 +221,6 @@ const openAgentCapabilityView = (settingRoot: HTMLElement, backendCapabilities: 
     </div>
 </div>
 <div class="b3-dialog__body fn__flex-1" style="overflow:hidden;">
-<div class="layout-tab-bar fn__flex">
-    <div class="item item--full item--focus" data-capability-scope="agent"><span class="fn__flex-1"></span><span class="item__text">${window.siyuan.languages.agentCapabilitiesScopeAgent}</span><span class="fn__flex-1"></span></div>
-    <div class="item item--full" data-capability-scope="mcp"><span class="fn__flex-1"></span><span class="item__text">${window.siyuan.languages.agentCapabilitiesScopeMcp}</span><span class="fn__flex-1"></span></div>
-</div>
 <div class="b3-dialog__content config-agent-capability__content">
     <div class="config-group config-agent-capability__controls">
         <div class="config-items">
@@ -264,9 +260,6 @@ const openAgentCapabilityView = (settingRoot: HTMLElement, backendCapabilities: 
         tip.textContent = scope === "agent"
             ? window.siyuan.languages.agentCapabilitiesDialogTip
             : window.siyuan.languages.agentCapabilitiesMcpExposureTip;
-        view.querySelectorAll<HTMLElement>("[data-capability-scope]").forEach((item) => {
-            item.classList.toggle("item--focus", item.dataset.capabilityScope === scope);
-        });
         const normalizedQuery = query.trim().toLocaleLowerCase();
         const visible = capabilities.filter((capability) =>
             (!onlySelected || isCapabilityAllowed(capability.id, scope)) && capabilityMatches(capability, normalizedQuery));
@@ -383,14 +376,6 @@ const openAgentCapabilityView = (settingRoot: HTMLElement, backendCapabilities: 
         }
     };
     view.onclick = (event) => {
-        const scopeTarget = (event.target as HTMLElement).closest<HTMLElement>("[data-capability-scope]");
-        const nextScope = scopeTarget?.dataset.capabilityScope as CapabilityScope | undefined;
-        if (nextScope && nextScope !== scope) {
-            scope = nextScope;
-            expanded.clear();
-            render();
-            return;
-        }
         const action = (event.target as HTMLElement).closest<HTMLElement>("[data-action]");
         if (action?.dataset.action === "back") {
             closeAgentCapabilityView(view);
@@ -428,7 +413,6 @@ export const getAgentCapabilityKeywords = (): string[] => [
     window.siyuan.languages.agentCapabilitiesFrontend,
     window.siyuan.languages.agentCapabilitiesPlugins,
     window.siyuan.languages.agentCapabilitiesMcp,
-    window.siyuan.languages.agentCapabilitiesScopeAgent,
     window.siyuan.languages.agentCapabilitiesScopeMcp,
     window.siyuan.languages.agentCapabilitiesMcpExposureTip,
     window.siyuan.languages.agentCapabilitiesCapabilityApprovalMode,
@@ -438,13 +422,14 @@ export const getAgentCapabilityKeywords = (): string[] => [
     window.siyuan.languages.agentCapabilitiesAutoApprove,
 ];
 
-export const mountAgentCapabilityBlock = (root: HTMLElement) => {
+export const mountAgentCapabilityBlock = (root: HTMLElement, scope: CapabilityScope = "mcp",
+                                          buttonId = "aiAgentCapabilities") => {
     ensureAgentCapabilityView(root);
-    root.querySelector("#aiAgentCapabilities")?.addEventListener("click", () => {
+    root.querySelector(`#${buttonId}`)?.addEventListener("click", () => {
         const view = showAgentCapabilityLoading(root);
         loadCapabilities((capabilities) => {
             if (view.classList.contains("config__view--show")) {
-                openAgentCapabilityView(root, capabilities);
+                openAgentCapabilityView(root, capabilities, scope);
             }
         });
     });

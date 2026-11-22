@@ -365,14 +365,14 @@ test("standalone provider rows use saved enablement when no switch is mounted", 
 });
 
 test("decision switch and providers share search keywords while retaining the switch-only save", () => {
-    const source = readFileSync("src/config/tabs/ai/aiTab.ts", "utf8");
+    const source = readFileSync("src/config/tabs/ai/aiOptionalGroups.ts", "utf8");
     const code = transpileModule(source, {compilerOptions: {module: ModuleKind.CommonJS}}).outputText;
-    const exports: {registerAiTab?: (tab: any) => void} = {};
+    const exports: {registerAiDecisionGroup?: (tab: any) => void} = {};
     const definitions = new Map<string, any>();
     runInNewContext(code, {exports,
         window: {siyuan: {languages: new Proxy({}, {get: (_target, key) => String(key)})}},
         require: () => new Proxy({}, {get: () => (): unknown[] => []})});
-    exports.registerAiTab({group: () => new Proxy({}, {get: (_target, method) => (id: string | {key: string}, spec: any) => {
+    exports.registerAiDecisionGroup({group: () => new Proxy({}, {get: (_target, method) => (id: string | {key: string}, spec: any) => {
         if (method === "switch") { definitions.set(String(id), spec); }
         if (method === "slot") { definitions.set((id as {key: string}).key, id); }
     }})});

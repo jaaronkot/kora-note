@@ -7,7 +7,6 @@ package model
 import (
 	"bytes"
 	"encoding/json"
-	"strings"
 
 	"github.com/88250/gulu"
 	"github.com/siyuan-community/siyuan/kernel/conf"
@@ -57,37 +56,12 @@ var confMigrations = []confMigration{
 		return !bytes.Equal(before, after), nil
 	}},
 	{4, "docxTemplate", func(c *AppConf, raw []byte) (bool, error) {
-		// Word 导出模板并入 Pandoc 参数
-		if nil == c.Export.Load() {
-			return false, nil
-		}
-		var legacy struct {
-			Export struct {
-				DocxTemplate string `json:"docxTemplate"`
-			} `json:"export"`
-		}
-		if len(raw) > 0 {
-			if err := gulu.JSON.UnmarshalJSON(raw, &legacy); err != nil {
-				return false, err
-			}
-		}
-		docxTemplate := util.RemoveInvalid(legacy.Export.DocxTemplate)
-		if "" == docxTemplate {
-			return false, nil
-		}
-		params := util.RemoveInvalid(c.Export.Load().PandocParams)
-		if gulu.File.IsExist(docxTemplate) && !strings.Contains(params, "--reference-doc") && !util.ISMicrosoftStore {
-			if !strings.HasPrefix(docxTemplate, "\"") {
-				docxTemplate = "\"" + docxTemplate + "\""
-			}
-			params += " --reference-doc " + docxTemplate
-			c.Export.Load().PandocParams = strings.TrimSpace(params)
-		}
-		return true, nil
+		// 导出模板配置项已不再使用，旧配置中的该字段直接丢弃
+		return false, nil
 	}},
 	{5, "pandoc", func(c *AppConf, raw []byte) (bool, error) {
-		// 移除指向临时目录的 Pandoc 路径和内置模板参数
-		return migratePandocConfig(c.Export.Load()), nil
+		// Pandoc 相关配置项已不再使用，旧配置中的该字段直接丢弃
+		return false, nil
 	}},
 	{6, "exportBlockRefMode", func(c *AppConf, raw []byte) (bool, error) {
 		return conf.MigrateExportBlockRefMode(c.Export.Load()), nil

@@ -69,7 +69,6 @@ func TestRenameAssetReferences(t *testing.T) {
 			}
 			writeAssetRelinkTestFile(t, assetDiskPath, []byte("PDF content"))
 			writeAssetRelinkTestFile(t, assetDiskPath+".sya", []byte(`{"annotation":"content"}`))
-			util.SetAssetText(oldPath, "OCR content")
 			encodedPath := (&url.URL{Path: oldPath}).EscapedPath()
 			hrefs := []string{oldPath + test.suffix, encodedPath + test.suffix, encodedPath + "?page=9#other"}
 			tree := treenode.NewTree(fixture.box.ID, "/"+test.id+".sy", "/References", "References")
@@ -128,9 +127,6 @@ func TestRenameAssetReferences(t *testing.T) {
 			wantAV, _ := json.Marshal(map[string]any{"paths": want, "text": path.Base(oldPath)})
 			if err != nil || !bytes.Equal(updated, wantAV) {
 				t.Fatalf("database references: %s, want %s: %v", updated, wantAV, err)
-			}
-			if util.GetAssetText(newCleanPath) != "OCR content" {
-				t.Fatal("OCR metadata was not preserved")
 			}
 		})
 	}

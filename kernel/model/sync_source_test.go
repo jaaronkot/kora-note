@@ -70,28 +70,23 @@ func TestSyncSourcePreviewThroughWriteAdmission(t *testing.T) {
 }
 
 func TestSyncSourceIdentity(t *testing.T) {
-	c := &cloud.Conf{Dir: "main", Server: "server", UserID: "user", S3: &cloud.ConfS3{Endpoint: "https://s3", Bucket: "notes"},
+	c := &cloud.Conf{Dir: "main", Server: "server", UserID: "user",
 		WebDAV: &cloud.ConfWebDAV{Endpoint: "https://dav", Username: "user"}, Local: &cloud.ConfLocal{Endpoint: "/cloud"}}
-	for _, provider := range []int{conf.ProviderSiYuan, conf.ProviderS3, conf.ProviderWebDAV, conf.ProviderLocal} {
+	for _, provider := range []int{conf.ProviderWebDAV, conf.ProviderLocal} {
 		before := syncSourceIdentity(provider, c)
 		if before != syncSourceIdentity(provider, c) {
 			t.Fatal("unstable identity")
 		}
 		copy := *c
 		copy.Dir = "other"
-		if (before == syncSourceIdentity(provider, &copy)) != (provider == conf.ProviderS3) {
+		if before == syncSourceIdentity(provider, &copy) {
 			t.Fatal("directory identity mismatch")
 		}
 	}
-	before := syncSourceIdentity(conf.ProviderSiYuan, c)
-	c.UserID = "other"
-	if before == syncSourceIdentity(conf.ProviderSiYuan, c) {
-		t.Fatal("account not included")
-	}
-	before = syncSourceIdentity(conf.ProviderS3, c)
-	c.S3.SecretKey, c.S3.AccessKey, c.S3.Timeout = "new", "rotated", 99
-	if before != syncSourceIdentity(conf.ProviderS3, c) {
-		t.Fatal("credentials or options change source")
+	before := syncSourceIdentity(conf.ProviderWebDAV, c)
+	c.WebDAV.Endpoint, c.WebDAV.Username = "https://other", "other"
+	if before == syncSourceIdentity(conf.ProviderWebDAV, c) {
+		t.Fatal("repository endpoint not included")
 	}
 }
 

@@ -58,8 +58,6 @@ func TestNativeToolWriteAndNetworkEffects(t *testing.T) {
 		{HTTPRequestTool, "", ToolEffects{LocalWrite: true, DataEgress: true, ExternalCost: true}},
 		{HTTPRequestTool, "get", ToolEffects{LocalWrite: true, DataEgress: true, ExternalCost: true}},
 		{HTTPRequestTool, "post", ToolEffects{LocalWrite: true, DataEgress: true, ExternalCost: true}},
-		{InboxTool, "list", ToolEffects{DataEgress: true, ExternalCost: true}},
-		{InboxTool, "convert", ToolEffects{LocalWrite: true, DataEgress: true, ExternalCost: true}},
 		{BazaarTool, "installed", ToolEffects{LocalRead: true}},
 		{BazaarTool, "readme", ToolEffects{LocalRead: true, DataEgress: true}},
 		{BazaarTool, "updates", ToolEffects{LocalRead: true, DataEgress: true}},
@@ -80,7 +78,7 @@ func TestNativeToolWriteAndNetworkEffects(t *testing.T) {
 func TestSyncToolEffectsFollowProvider(t *testing.T) {
 	previous := model.Conf
 	t.Cleanup(func() { model.Conf = previous })
-	for _, provider := range []int{conf.ProviderSiYuan, conf.ProviderS3, conf.ProviderWebDAV, conf.ProviderLocal, -1} {
+	for _, provider := range []int{conf.ProviderWebDAV, conf.ProviderLocal, -1} {
 		model.Conf = model.NewAppConf()
 		config := conf.NewSync()
 		config.Provider = provider
@@ -122,7 +120,7 @@ func TestNativeEffectManifestSerialization(t *testing.T) {
 	previous := model.Conf
 	t.Cleanup(func() { model.Conf = previous })
 	model.Conf = model.NewAppConf()
-	for _, provider := range []int{conf.ProviderLocal, conf.ProviderSiYuan} {
+	for _, provider := range []int{conf.ProviderLocal, conf.ProviderWebDAV} {
 		config := conf.NewSync()
 		config.Provider = provider
 		model.Conf.Sync.Store(config)

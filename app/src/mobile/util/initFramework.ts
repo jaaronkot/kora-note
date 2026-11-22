@@ -4,7 +4,7 @@ import {openStandaloneDatabaseItemByURI} from "../../protyle/render/av/openStand
 import {closeModel, closePanel} from "./closePanel";
 import {getCurrentEditor, openMobileFileById} from "../editor";
 import {openMobileOnboarding} from "../../onboarding";
-import {getEventName, isDisabledFeature, isInMobileApp} from "../../protyle/util/compatibility";
+import {getEventName, isInMobileApp} from "../../protyle/util/compatibility";
 import {fetchPost} from "../../util/fetch";
 import {setInlineStyle} from "../../util/assets";
 import {renderSnippet} from "../../config/util/snippets";
@@ -21,7 +21,6 @@ import {MobileBookmarks} from "../dock/MobileBookmarks";
 import {MobileTags} from "../dock/MobileTags";
 import {activeBlur, initKeyboardToolbar} from "./keyboardToolbar";
 import {syncGuide} from "../../sync/syncGuide";
-import {Inbox} from "../../layout/dock/Inbox";
 import type {App} from "../../index";
 import {checkFold} from "../../util/noRelyPCFunction";
 import {activateQueuedAVLocate, queueAVLocateRequest} from "../../protyle/render/av/locate";
@@ -169,8 +168,7 @@ export const renderMobileSidePanelLayout = (
             if (!tabElement || !dockContentElement) {
                 return;
             }
-            tabElement.classList.toggle("fn__none", resolvedConfig.hidden.includes(type) ||
-                (type === "agent" && (window.siyuan.config.readonly || window.siyuan.isPublish || isDisabledFeature("ai"))));
+            tabElement.classList.toggle("fn__none", resolvedConfig.hidden.includes(type));
             toolbarScrollElement.append(tabElement);
             contentElement.append(dockContentElement);
             sideDockIds[side].push(type);
@@ -227,12 +225,6 @@ const updateDock = (app: App, type: string, element: HTMLElement) => {
         } else {
             window.siyuan.mobile.docks.tag.update();
         }
-    } else if (type === "inbox" && !window.siyuan.mobile.docks.inbox) {
-        window.siyuan.mobile.docks.inbox = new Inbox(app, element);
-    } else if (type === "agent") {
-        void import("../agent/MobileAgentChat").then(({activateMobileAgent}) => {
-            activateMobileAgent(app, element);
-        });
     } else {
         const pluginDock = getMobilePluginDockEntries(app).find(item => item.type === type);
         if (!pluginDock) {

@@ -1,8 +1,8 @@
 import type {DocInfo} from "../../types/api";
 import type {App} from "../../index";
-import {fetchPost, fetchSyncPost} from "../../util/fetch";
+import {fetchSyncPost} from "../../util/fetch";
 import {MenuItem} from "../../menus/Menu";
-import {copySubMenu, exportMd, movePathToMenu, openFileAttr, openFileWechatNotify,} from "../../menus/commonMenuItem";
+import {copySubMenu, exportMd, movePathToMenu, openFileAttr} from "../../menus/commonMenuItem";
 import {deleteFile} from "../../editor/deleteFile";
 import {updateHotkeyTip, writeClipboardData} from "../util/compatibility";
 /// #if !MOBILE
@@ -12,10 +12,7 @@ import * as path from "path";
 import {openMobileFileById} from "../../mobile/editor";
 /// #endif
 import {Constants} from "../../constants";
-import {openCardByData} from "../../card/openCard";
-import {viewCards} from "../../card/viewCards";
-import {getDocDisplayName, getDisplayName, getNotebookName, isEncryptedBox, pathPosix, useShell} from "../../util/pathName";
-import {makeCard, quickMakeCard} from "../../card/makeCard";
+import {getDocDisplayName, getDisplayName, getNotebookName, pathPosix, useShell} from "../../util/pathName";
 import {emitOpenMenu} from "../../plugin/EventBus";
 import dayjs from "dayjs";
 import {popSearch} from "../../mobile/menu/search";
@@ -32,7 +29,6 @@ import {buildWebClipboardHTML} from "../util/clipboardData";
 import {exportImage} from "../export/util";
 import {getHostCapabilities} from "../../util/hostCapabilities";
 import {getLute} from "../render/setLute";
-import {transaction} from "../wysiwyg/transaction";
 
 export const openDocumentMenu = (options: {
     app: App,
@@ -212,87 +208,6 @@ export const openDocumentMenu = (options: {
             openFileAttr(docInfo.ial, "bookmark", protyle);
         }
     }).element);
-    if (!window.siyuan.config.readonly) {
-        if (window.siyuan.config.cloudRegion === 0) {
-            window.siyuan.menus.menu.append(new MenuItem({
-                id: "wechatReminder",
-                label: window.siyuan.languages.wechatReminder,
-                icon: "iconMp",
-                click() {
-                    openFileWechatNotify(id, notebookId);
-                }
-            }).element);
-        }
-        const isCardMade = (docInfo.ial[Constants.CUSTOM_RIFF_DECKS] || "").includes(Constants.QUICK_DECK_ID);
-        if (!isEncryptedBox(notebookId)) {
-            const riffCardMenu: IMenu[] = [{
-                id: "spaceRepetition",
-                iconHTML: "",
-                label: window.siyuan.languages.spaceRepetition,
-                accelerator: window.siyuan.config.keymap.editor.general.spaceRepetition.custom,
-                click: () => {
-                    fetchPost("/api/riff/getTreeRiffDueCards", {rootID: id}, (response) => {
-                        openCardByData(app, response.data, "doc", id);
-                    });
-                }
-            }, {
-                id: "manage",
-                iconHTML: "",
-                label: window.siyuan.languages.manage,
-                click: () => {
-                    fetchPost("/api/filetree/getHPathByID", {
-                        id
-                    }, (response) => {
-                        viewCards(app, id, pathPosix().join(getNotebookName(notebookId), response.data), "Tree");
-                    });
-                }
-            }, {
-                id: isCardMade ? "removeCard" : "quickMakeCard",
-                iconHTML: "",
-                label: isCardMade ? window.siyuan.languages.removeCard : window.siyuan.languages.quickMakeCard,
-                accelerator: window.siyuan.config.keymap.editor.general.quickMakeCard.custom,
-                click: () => {
-                    if (!protyle) {
-                        const remove = (docInfo.ial[Constants.CUSTOM_RIFF_DECKS] || "").includes(Constants.QUICK_DECK_ID);
-                        transaction(undefined, [{
-                            action: remove ? "removeFlashcards" : "addFlashcards",
-                            deckID: Constants.QUICK_DECK_ID,
-                            blockIDs: [id],
-                        }], [{
-                            action: remove ? "addFlashcards" : "removeFlashcards",
-                            deckID: Constants.QUICK_DECK_ID,
-                            blockIDs: [id],
-                        }]);
-                        return;
-                    }
-                    let titleElement = protyle.title?.element;
-                    if (!titleElement) {
-                        titleElement = document.createElement("div");
-                        titleElement.setAttribute("data-node-id", id);
-                        titleElement.setAttribute(Constants.CUSTOM_RIFF_DECKS, docInfo.ial[Constants.CUSTOM_RIFF_DECKS]);
-                    }
-                    quickMakeCard(protyle, [titleElement]);
-                }
-            }];
-            if (window.siyuan.config.flashcard.deck) {
-                riffCardMenu.push({
-                    id: "addToDeck",
-                    iconHTML: "",
-                    label: window.siyuan.languages.addToDeck,
-                    click: () => {
-                        makeCard(app, [id]);
-                    }
-                });
-            }
-            window.siyuan.menus.menu.append(new MenuItem({
-                id: "riffCard",
-                label: window.siyuan.languages.riffCard,
-                type: "submenu",
-                icon: "iconRiffCard",
-                submenu: riffCardMenu,
-            }).element);
-        }
-    }
     window.siyuan.menus.menu.append(new MenuItem({
         id: "search",
         label: window.siyuan.languages.search,

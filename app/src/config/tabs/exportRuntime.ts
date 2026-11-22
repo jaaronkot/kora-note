@@ -5,8 +5,4 @@ export const exportConfigApi = createConfigNamespaceApi<Config.IExport>({
     namespace: "export",
     getConfig: () => window.siyuan.config.export,
     setConfig: data => { window.siyuan.config.export = data; },
-    reactions: [{name: "pandoc-path", changed: () => true, apply: (_old, next) => {
-        const pathDisplay = document.getElementById("pandocBinPathDisplay");
-        if (pathDisplay) pathDisplay.textContent = next.pandocBin || `${window.siyuan.languages.builtIn} Pandoc`;
-    }}],
 });

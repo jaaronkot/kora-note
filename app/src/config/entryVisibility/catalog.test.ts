@@ -1,9 +1,3 @@
-import {IMAGE_OCR_MENU} from "../../menus/declarations/imageOCRMenu";
-import {createDeclaredMenu} from "../../menus/declarations/menuDeclaration";
-const imageOCRContext = {
-    textAvailable: true, localAvailable: true, aiAvailable: true,
-    getStatus: async () => false, openResult: () => {}, copyText: () => {}, clearText: () => {}, runLocal: () => {}, runAI: () => {},
-};
 import * as assert from "node:assert/strict";
 import {readFileSync} from "node:fs";
 import {resolve} from "node:path";
@@ -71,7 +65,7 @@ test("the workspace menu has no standalone Markdown entry or configurable applic
     assert.ok(source.indexOf('id: "workspaceList"') < source.indexOf('id: "layout"'));
 });
 
-test("image OCR actions retain their configurable paths and order", t => {
+test("image copy as PNG action retains its configurable path", t => {
     const descriptor = Object.getOwnPropertyDescriptor(globalThis, "window");
     Object.defineProperty(globalThis, "window", {configurable: true, value: {siyuan: {languages: {}}}});
     t.after(() => {
@@ -81,28 +75,12 @@ test("image OCR actions retain their configurable paths and order", t => {
             Reflect.deleteProperty(globalThis, "window");
         }
     });
-    const imageAction = getEntryCatalogNode("editor.image.ocrText");
-    assert.equal(imageAction.type, "entry");
-    assert.equal(imageAction.simple, false);
-    assert.equal(imageAction.sortable, false);
-    assert.equal(getEntryParentPath("editor.image.ocrText"), "editor.image");
-    assert.deepEqual(getEntryCatalogChildren("editor.image").map(item => item.key), ["ocrText", "copyAsPNG"]);
     const copyImage = getEntryCatalogNode("editor.image.copyAsPNG");
     assert.equal(copyImage.type, "entry");
     assert.equal(copyImage.simple, false);
     assert.equal(copyImage.sortable, false);
     assert.equal(getEntryParentPath("editor.image.copyAsPNG"), "editor.image");
-    assert.deepEqual(getEntryCatalogChildren("inline.image.ocr").map(item => item.key), [
-        "ocrResult", "copyOCRText", "clearOCRText", "separator_reOCR", "reOCR", "reAIOCR",
-    ]);
-    assert.equal(getEntryCatalogNode("inline.image.ocr.copyOCRText").simple, false);
-    assert.equal(getEntryParentPath("inline.image.ocr.copyOCRText"), "inline.image.ocr");
-    assert.equal(getEntryCatalogNode("inline.image.ocr.clearOCRText").simple, false);
-    assert.equal(getEntryParentPath("inline.image.ocr.clearOCRText"), "inline.image.ocr");
-    assert.equal(getEntryCatalogNode("inline.image.ocr.reAIOCR").simple, false);
-    assert.equal(getEntryParentPath("inline.image.ocr.reAIOCR"), "inline.image.ocr");
-    assert.deepEqual(createDeclaredMenu(IMAGE_OCR_MENU, imageOCRContext).submenu.map(item => item.id),
-        getEntryCatalogChildren("inline.image.ocr").map(item => item.key));
+    assert.deepEqual(getEntryCatalogChildren("editor.image").map(item => item.key), ["copyAsPNG"]);
 });
 
 test("remove list precedes list types in single and multiple block conversion menus", () => {
@@ -285,16 +263,10 @@ test("top bar catalog includes a fixed drag boundary in built-in DOM order", () 
     assert.equal(TOP_BAR_ROOT_PATH, "topBar");
     assert.deepEqual(getEntryCatalogChildren(TOP_BAR_ROOT_PATH).map((item) => item.key), [
         "barSync",
-        "barDailyNote",
-        "barRiffCard",
         "barBack",
         "barForward",
         "drag",
-        "toolbarVIP",
-        "toolbarTitle",
-        "barPlugins",
         "barCommand",
-        "barSearch",
         "barZoom",
         "barMode",
         "barExit",
@@ -318,21 +290,6 @@ test("top bar markup stays aligned with its configurable built-in catalog", () =
     assert.deepEqual(markupKeys, catalogKeys);
     assert.match(source, /id="drag"/);
     assert.doesNotMatch(source, /id="drag"[^>]*data-topbar-entry/);
-});
-
-test("desktop daily note and flashcard top bar entries are visible in both built-in profiles", () => {
-    for (const key of ["barDailyNote", "barRiffCard"]) {
-        const path = `${TOP_BAR_ROOT_PATH}.${key}`;
-        const entry = getEntryCatalogNode(path)!;
-        const defaultVisible = getEntryCatalogDefaultVisibility(path);
-        assert.equal(defaultVisible, true);
-        assert.equal(entry.simpleDefaultVisible, true);
-        assert.equal(getEntryCatalogCustomDefaultVisibility(path), false);
-        assert.equal(getBuiltinProfileEntryVisibility("full", entry.simple, defaultVisible,
-            entry.simpleDefaultVisible), true);
-        assert.equal(getBuiltinProfileEntryVisibility("simple", entry.simple, defaultVisible,
-            entry.simpleDefaultVisible), true);
-    }
 });
 
 const topBarElement = (attributes: Record<string, string>) => ({
@@ -371,12 +328,10 @@ test("top bar catalog inserts plugin entries on their declared side of the fixed
         }]);
         const children = getEntryCatalogChildren(TOP_BAR_ROOT_PATH);
         const keys = children.map((item) => item.key);
-        assert.deepEqual(keys.slice(0, 7), ["barSync", "barDailyNote", "barRiffCard", "barBack", "barForward", leftKey, "drag"]);
-        assert.deepEqual(keys.slice(keys.indexOf("toolbarTitle"), keys.indexOf("barCommand")), [
-            "toolbarTitle",
+        assert.deepEqual(keys.slice(0, 5), ["barSync", "barBack", "barForward", leftKey, "drag"]);
+        assert.deepEqual(keys.slice(keys.indexOf("drag") + 1, keys.indexOf("barCommand")), [
             rightKey,
             legacyKey,
-            "barPlugins",
         ]);
         assert.equal(getEntryCatalogNode(`${TOP_BAR_ROOT_PATH}.${leftKey}`)?.label(),
             "Plugin One - Left Item");
@@ -562,13 +517,10 @@ test("dock catalog exposes the built-in default positions", () => {
     const positions = {
         file: "LeftTop",
         outline: "LeftTop",
+        graph: "LeftTop",
+        backlink: "LeftTop",
         bookmark: "LeftBottom",
         tag: "LeftBottom",
-        backlink: "RightBottom",
-        agentChat: "RightTop",
-        inbox: "LeftTop",
-        graph: "RightTop",
-        globalGraph: "RightTop",
     };
     Object.entries(positions).forEach(([key, position]) => {
         assert.equal(getDockEntryPosition(key), position, key);
@@ -1316,12 +1268,11 @@ test("document tree creation entries match menu order and remain available in th
 test("document tree sort menus follow their scope inheritance options", () => {
     const documentEntries = getEntryCatalogChildren("docTree.document");
     const attrIndex = documentEntries.findIndex((item) => item.key === "attr");
-    assert.deepEqual(documentEntries.slice(attrIndex, attrIndex + 5).map((item) => item.key), [
+    assert.deepEqual(documentEntries.slice(attrIndex, attrIndex + 4).map((item) => item.key), [
         "attr",
         "pinDoc",
         "unpinDoc",
         "sort",
-        "riffCard",
     ]);
 
     const commonSortEntries = [
@@ -1422,7 +1373,6 @@ test("simple profile follows the reviewed defaults", () => {
         "document.title.copy.copyAsPNG",
         "document.title.export.exportTemplate",
         "document.title.export.exportImage",
-        "gutter.single.addToAgent",
         "gutter.single.copy.copyAsPNG",
         "gutter.single.turnInto.code",
         "gutter.single.layout.alignTop",
@@ -1452,7 +1402,6 @@ test("simple profile follows the reviewed defaults", () => {
         "gutter.single.addToDatabase",
         "gutter.single.enterBack",
         "gutter.single.jumpTo",
-        "gutter.single.wechatReminder",
         "document.more.netAssets2LocalAssets",
         "document.more.fullWidth",
         "docTree.notebook.sort.fileNameASC",

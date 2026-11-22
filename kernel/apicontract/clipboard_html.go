@@ -14,9 +14,6 @@ type HTMLClipboardRequest struct {
 	DOM                  string `json:"dom"`
 	Notebook             string `json:"notebook" api:"optional,nullable,ignoretype"`
 	Text                 string `json:"text" api:"optional,nullable,ignoretype"`
-	MathML               string `json:"mathML" api:"optional,nullable,ignoretype"`
-	Office               string `json:"office" api:"optional,nullable,ignoretype"`
-	OfficeMathHTML       string `json:"officeMathHTML" api:"optional,nullable,ignoretype"`
 	WPS                  string `json:"wps" api:"optional,nullable,ignoretype"`
 	SkipLocalAssets      bool   `json:"skipLocalAssets" api:"optional,nullable"`
 	SkipBase64Assets     bool   `json:"skipBase64Assets" api:"optional,nullable"`

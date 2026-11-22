@@ -10,14 +10,6 @@ declare namespace Config {
         accessAuthCode: string;
         oidc: IOIDC;
         ai: IAI;
-        /**
-         * 当前设备的 OCR 设置；阈值只影响后续 PaddleOCR 识别，空值使用模型检测参数和 0.5 的识别阈值。
-         * provider 为 ai 时，手动和自动识别均使用独立的 aiModelId；失效时不回退到其他模型或提供商。
-         * 首次从本地提供商切换到 AI 时关闭自动识别，之后可以显式开启。
-         * reasoningEffort 独立控制手动和自动 AI OCR，空字符串沿用模型默认。
-         * showText、showEmpty、showError 独立控制图片悬浮提示，不受自动识别开关影响，也不改变搜索结果。
-         */
-        ocr: import("./api").SettingOCR;
         api: IAPI;
         appearance: IAppearance;
         bazaar: IBazaar;
@@ -89,10 +81,6 @@ declare namespace Config {
         system: ISystem;
         tag: ITag;
         uiLayout: IUiLayout;
-        /**
-         * Community user data (Encrypted)
-         */
-        userData: string;
         /**
          * Global variables store, referenced via {{vars.NAME}} placeholders.
          * 全局变量库，通过 {{vars.NAME}} 占位符引用
@@ -320,7 +308,7 @@ declare namespace Config {
     }
 
     /**
-     * SiYuan API related configuration
+     * KoraNote API related configuration
      */
     export interface IAPI {
         /**
@@ -330,7 +318,7 @@ declare namespace Config {
     }
 
     /**
-     * SiYuan appearance related configuration
+     * KoraNote appearance related configuration
      */
     export interface IAppearance {
         /** 使用当前工作空间的单张锁屏壁纸；图片独立存储，登录前可见，不参与同步或设置导出 */
@@ -504,7 +492,7 @@ declare namespace Config {
         | "zh-TW";
 
     /**
-     * SiYuan bazaar related configuration
+     * KoraNote bazaar related configuration
      */
     export interface IBazaar {
         /** Package names excluded from batch updates only; manual updates remain available. */
@@ -527,7 +515,7 @@ declare namespace Config {
     }
 
     /**
-     * SiYuan editor markdown related configuration
+     * KoraNote editor markdown related configuration
      */
     interface IMarkdown {
         /**
@@ -587,7 +575,7 @@ declare namespace Config {
     }
 
     /**
-     * SiYuan editor related configuration
+     * KoraNote editor related configuration
      */
     export interface IEditor {
 
@@ -875,7 +863,7 @@ declare namespace Config {
     }
 
     /**
-     * SiYuan export related configuration
+     * KoraNote export related configuration
      */
     export interface IExport {
         /** Preserve document heading numbering for Markdown copy/export; defaults to false. */
@@ -945,14 +933,6 @@ declare namespace Config {
          * Whether to include related documents when exporting
          */
         includeRelatedDocs: boolean;
-        /**
-         * Pandoc executable file path
-         */
-        pandocBin: string;
-        /**
-         * Pandoc parameters
-         */
-        pandocParams: string;
         /**
          * Whether the beginning of the paragraph is empty two spaces.
          * Insert two full-width spaces `U+3000` at the beginning of the paragraph.
@@ -1178,7 +1158,7 @@ declare namespace Config {
     }
 
     /**
-     * SiYuan graph related configuration
+     * KoraNote graph related configuration
      */
     export interface IGraph {
         global: IGraphGlobal;
@@ -1244,7 +1224,7 @@ declare namespace Config {
     }
 
     /**
-     * SiYuan node type filter
+     * KoraNote node type filter
      */
     export interface IGraphType {
         /**
@@ -1306,7 +1286,7 @@ declare namespace Config {
     }
 
     /**
-     * SiYuan keymap related configuration
+     * KoraNote keymap related configuration
      */
     export interface IKeymap {
         editor?: IKeymapEditor;
@@ -1315,7 +1295,7 @@ declare namespace Config {
     }
 
     /**
-     * SiYuan editor shortcut keys
+     * KoraNote editor shortcut keys
      */
     export interface IKeymapEditor {
         general?: IKeymapEditorGeneral;
@@ -1326,7 +1306,7 @@ declare namespace Config {
     }
 
     /**
-     * SiYuan editor general shortcut keys
+     * KoraNote editor general shortcut keys
      */
     export interface IKeymapEditorGeneral extends IKeys {
         ai?: IKey;
@@ -1396,14 +1376,14 @@ declare namespace Config {
     }
 
     /**
-     * SiYuan shortcut keys
+     * KoraNote shortcut keys
      */
     export interface IKeys {
         [key: string]: IKey;
     }
 
     /**
-     * SiYuan shortcut key
+     * KoraNote shortcut key
      */
     export interface IKey {
         /** 多快捷键配置，custom 保留第一项以兼容单快捷键调用方。 */
@@ -1424,7 +1404,7 @@ declare namespace Config {
     }
 
     /**
-     * SiYuan editor heading shortcut keys
+     * KoraNote editor heading shortcut keys
      */
     export interface IKeymapEditorHeading extends IKeys {
         heading1?: IKey;
@@ -1437,7 +1417,7 @@ declare namespace Config {
     }
 
     /**
-     * SiYuan editor insert shortcut keys
+     * KoraNote editor insert shortcut keys
      */
     export interface IKeymapEditorInsert extends IKeys {
         appearance?: IKey;
@@ -1465,7 +1445,7 @@ declare namespace Config {
     }
 
     /**
-     * SiYuan editor list shortcut keys
+     * KoraNote editor list shortcut keys
      */
     export interface IKeymapEditorList extends IKeys {
         prependListItem?: IKey;
@@ -1482,7 +1462,7 @@ declare namespace Config {
     }
 
     /**
-     * SiYuan editor table shortcut keys
+     * KoraNote editor table shortcut keys
      */
     export interface IKeymapEditorTable extends IKeys {
         "delete-column": IKey;
@@ -1498,7 +1478,7 @@ declare namespace Config {
     }
 
     /**
-     * SiYuan general shortcut keys
+     * KoraNote general shortcut keys
      */
     export interface IKeymapGeneral extends IKeys {
         previousDatabaseRow?: IKey;
@@ -1579,7 +1559,7 @@ declare namespace Config {
     }
 
     /**
-     * SiYuan plugin shortcut keys
+     * KoraNote plugin shortcut keys
      */
     export interface IKeymapPlugin {
         [key: string]: IKeys;
@@ -1678,7 +1658,7 @@ declare namespace Config {
     }
 
     /**
-     * SiYuan search related configuration
+     * KoraNote search related configuration
      */
     export interface ISearch {
         /**
@@ -1832,7 +1812,7 @@ declare namespace Config {
     }
 
     /**
-     * SiYuan code snippets related configuration
+     * KoraNote code snippets related configuration
      */
     export interface ISnippet {
         /**
@@ -1900,7 +1880,7 @@ declare namespace Config {
     }
 
     /**
-     * SiYuan workspace content statistics
+     * KoraNote workspace content statistics
      */
     export interface IStat {
         /**
@@ -1938,7 +1918,7 @@ declare namespace Config {
     }
 
     /**
-     * SiYuan synchronization related configuration
+     * KoraNote synchronization related configuration
      */
     export interface ISync {
         /**
@@ -1971,18 +1951,11 @@ declare namespace Config {
          */
         interval: number;
         /**
-         * Whether to enable synchronization perception
-         */
-        perception: boolean;
-        /**
          * Cloud storage service provider
-         * - `0`: SiYuan official cloud storage service
-         * - `2`: Object storage service compatible with S3 protocol
          * - `3`: Network storage service using WebDAV protocol
          * - `4`: Local file system
          */
         provider: number;
-        s3: ISyncS3;
         /**
          * The prompt information of the last synchronization
          */
@@ -2007,48 +1980,6 @@ declare namespace Config {
          * Maximum number of concurrent peer requests
          */
         maxConcurrentReqs: number;
-    }
-
-    /**
-     * S3 compatible object storage related configuration
-     */
-    export interface ISyncS3 {
-        /**
-         * Access key
-         */
-        accessKey: string;
-        /**
-         * Bucket name
-         */
-        bucket: string;
-        /**
-         * Service endpoint address
-         */
-        endpoint: string;
-        /**
-         * Whether to use path-style URLs
-         */
-        pathStyle: boolean;
-        /**
-         * Storage region
-         */
-        region: string;
-        /**
-         * Security key
-         */
-        secretKey: string;
-        /**
-         * Whether to skip TLS verification
-         */
-        skipTlsVerify: boolean;
-        /**
-         * Timeout (unit: seconds)
-         */
-        timeout: number;
-        /**
-         * Concurrent requests.
-         */
-        concurrentReqs: number;
     }
 
     /**
@@ -2108,7 +2039,7 @@ declare namespace Config {
      */
     export interface ISystem {
         /**
-         * The absolute path of the `resources` directory under the SiYuan installation directory
+         * The absolute path of the `resources` directory under the KoraNote installation directory
          */
         appDir: string;
         /**
@@ -2226,7 +2157,7 @@ declare namespace Config {
     export type TUpdateChannel = "stable" | "beta" | "alpha";
 
     /**
-     * SiYuan Network proxy configuration
+     * KoraNote Network proxy configuration
      */
     export interface INetworkProxy {
         /**
@@ -2270,7 +2201,7 @@ declare namespace Config {
     export type TSystemOS = "android" | "darwin" | "ios" | "linux" | "windows";
 
     /**
-     * SiYuan tag dock related configuration
+     * KoraNote tag dock related configuration
      */
     export interface ITag {
         /**
@@ -2286,7 +2217,7 @@ declare namespace Config {
     }
 
     /**
-     * SiYuan UI layout related configuration
+     * KoraNote UI layout related configuration
      */
     export interface IUiLayout {
         bottom?: IUILayoutDock;
@@ -2300,7 +2231,7 @@ declare namespace Config {
     }
 
     /**
-     * SiYuan dock related configuration
+     * KoraNote dock related configuration
      */
     export interface IUILayoutDock {
         /**
@@ -2314,7 +2245,7 @@ declare namespace Config {
     }
 
     /**
-     * SiYuan dock tab data
+     * KoraNote dock tab data
      */
     export interface IUILayoutDockTab {
         /**
@@ -2341,7 +2272,7 @@ declare namespace Config {
     }
 
     /**
-     * SiYuan dock tab size
+     * KoraNote dock tab size
      */
     export interface IUILayoutDockPanelSize {
         /**
@@ -2355,7 +2286,7 @@ declare namespace Config {
     }
 
     /**
-     * SiYuan layout item
+     * KoraNote layout item
      */
     export type TPersistedUILayoutItem = (
         ({instance?: "Layout"} & Partial<Pick<IUILayoutLayout, "direction" | "size" | "type" | "resize">>) |
@@ -2386,7 +2317,7 @@ declare namespace Config {
         | IUILayoutTabSearch;
 
     /**
-     * SiYuan panel layout
+     * KoraNote panel layout
      */
     export interface IUILayoutLayout {
         /**
@@ -2426,7 +2357,7 @@ declare namespace Config {
     }
 
     /**
-     * SiYuan window layout
+     * KoraNote window layout
      */
     export interface IUILayoutWnd {
         /**
@@ -2496,7 +2427,7 @@ declare namespace Config {
     /**
      * Tab content
      *
-     * SiYuan asset file tab
+     * KoraNote asset file tab
      */
     export interface IUILayoutTabAsset {
         /**
@@ -2515,7 +2446,7 @@ declare namespace Config {
 
 
     /**
-     * SiYuan back link tab
+     * KoraNote back link tab
      */
     export interface IUILayoutTabBacklink {
         /**
@@ -2550,7 +2481,7 @@ declare namespace Config {
     export type TUILayoutTabBacklinkType = "pin" | "local";
 
     /**
-     * SiYuan bookmark tab
+     * KoraNote bookmark tab
      */
     export interface IUILayoutTabBookmark {
         /**
@@ -2560,7 +2491,7 @@ declare namespace Config {
     }
 
     /**
-     * SiYuan custom tab
+     * KoraNote custom tab
      */
     export interface IUILayoutTabCustom {
         /**
@@ -2578,7 +2509,7 @@ declare namespace Config {
     }
 
     /**
-     * SiYuan editor tab
+     * KoraNote editor tab
      */
     export interface IUILayoutTabEditor {
         /**
@@ -2619,7 +2550,7 @@ declare namespace Config {
     }
 
     /**
-     * SiYuan filetree tab
+     * KoraNote filetree tab
      */
     export interface IUILayoutTabFiles {
         /**
@@ -2630,7 +2561,7 @@ declare namespace Config {
 
 
     /**
-     * SiYuan graph tab
+     * KoraNote graph tab
      */
     export interface IUILayoutTabGraph {
         /**
@@ -2668,7 +2599,7 @@ declare namespace Config {
     export type TUILayoutTabGraphType = "pin" | "local" | "global";
 
     /**
-     * SiYuan outline tab
+     * KoraNote outline tab
      */
     export interface IUILayoutTabOutline {
         /**
@@ -2704,7 +2635,7 @@ declare namespace Config {
     export type TUILayoutTabOutlineType = "pin" | "local";
 
     /**
-     * SiYuan tag tab
+     * KoraNote tag tab
      */
     export interface IUILayoutTabTag {
         /**
@@ -2714,7 +2645,7 @@ declare namespace Config {
     }
 
     /**
-     * SiYuan search tab
+     * KoraNote search tab
      */
     export interface IUILayoutTabSearch {
         config: IUILayoutTabSearchConfig;
@@ -2725,7 +2656,7 @@ declare namespace Config {
     }
 
     /**
-     * SiYuan search tab configuration
+     * KoraNote search tab configuration
      */
     export interface IUILayoutTabSearchConfig {
         /**

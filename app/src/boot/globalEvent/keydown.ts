@@ -25,11 +25,10 @@ import {toggleEditMode} from "../../protyle/util/toggleEditMode";
 import {rename} from "../../editor/rename";
 import {Files} from "../../layout/dock/Files";
 import {getActiveDocTreeController} from "../../layout/dock/docTree/DocTreeController";
-import {newDailyNote} from "../../util/mount";
 import {hideElements} from "../../protyle/ui/hideElements";
 import {fetchPost} from "../../util/fetch";
 import {goBack, goForward} from "../../util/backForward";
-import {getDocDisplayName, getDisplayName, getNotebookName, isEncryptedBox} from "../../util/pathName";
+import {getDocDisplayName, getNotebookName, isEncryptedBox} from "../../util/pathName";
 import {openFileById} from "../../editor/util";
 import {getAllDocks, getAllEditor, getAllModels, getAllTabs} from "../../layout/getAll";
 import {getDockHotkey, getDockKeymap} from "../../layout/dock/hotkey";
@@ -53,7 +52,6 @@ import {Backlink} from "../../layout/dock/Backlink";
 import {setZoom} from "../../layout/topBar";
 /// #endif
 import {openHistory} from "../../history/history";
-import {openCard, openCardByData} from "../../card/openCard";
 import {lockScreen} from "../../dialog/processSystem";
 import {isWindow} from "../../util/functions";
 import {reloadProtyle} from "../../protyle/util/reload";
@@ -64,8 +62,6 @@ import {openBacklink, openGraph, openOutline, toggleDockBar} from "../../layout/
 import {workspaceMenu} from "../../menus/workspace";
 import {Search} from "../../search";
 import {Custom} from "../../layout/dock/Custom";
-import {transaction} from "../../protyle/wysiwyg/transaction";
-import {quickMakeCard} from "../../card/makeCard";
 import {getContentByInlineHTML} from "../../protyle/wysiwyg/keydown";
 import {searchKeydown} from "./searchKeydown";
 import {historyKeydown} from "../../history/keydown";
@@ -129,11 +125,7 @@ const switchDialogEvent = (app: App, event: MouseEvent) => {
         if (target.classList.contains("b3-list-item")) {
             const currentType = target.getAttribute("data-type");
             if (currentType) {
-                if (currentType === "riffCard") {
-                    openCard(app);
-                } else {
-                    getDockByType(currentType).toggleModel(currentType, true);
-                }
+                getDockByType(currentType).toggleModel(currentType, true);
             } else {
                 const currentId = target.getAttribute("data-id");
                 getAllTabs().find(item => {
@@ -183,11 +175,7 @@ const dialogArrow = (app: App, element: HTMLElement, event: KeyboardEvent) => {
         } else if (event.key === "Enter") {
             const currentType = currentLiElement.getAttribute("data-type");
             if (currentType) {
-                if (currentType === "riffCard") {
-                    openCard(app);
-                } else {
-                    getDockByType(currentType).toggleModel(currentType, true);
-                }
+                getDockByType(currentType).toggleModel(currentType, true);
             } else {
                 openFileById({
                     app,
@@ -238,14 +226,6 @@ const documentKeydown = (app: App, event: KeyboardEvent, protyle: IProtyle, rang
             app,
             protyle,
             previousRange: range
-        });
-        event.preventDefault();
-        return true;
-    }
-    if (!isFileFocus && matchHotKey(window.siyuan.config.keymap.editor.general.spaceRepetition, event) &&
-        !window.siyuan.config.readonly && !isEncryptedBox(protyle.notebookId)) {
-        fetchPost("/api/riff/getTreeRiffDueCards", {rootID: protyle.block.rootID}, (response) => {
-            openCardByData(app, response.data, "doc", protyle.block.rootID, getDocDisplayName(protyle.title?.getText() ?? "", !protyle.title?.getText().trim()), true);
         });
         event.preventDefault();
         return true;
@@ -457,7 +437,6 @@ const editKeydown = (app: App, event: KeyboardEvent) => {
     if (protyle.disabled && [
         window.siyuan.config.keymap.general.move,
         window.siyuan.config.keymap.general.addToDatabase,
-        window.siyuan.config.keymap.editor.general.quickMakeCard,
         window.siyuan.config.keymap.editor.general.duplicate,
         window.siyuan.config.keymap.editor.general.duplicateCompletely,
         window.siyuan.config.keymap.editor.general.undo,
@@ -478,28 +457,6 @@ const editKeydown = (app: App, event: KeyboardEvent) => {
     // 正文命令需要正文上下文，控件未处理的快捷键继续交给全局处理器。
     if (isEditorControl) {
         return false;
-    }
-    if (!isFileFocus && range && matchHotKey(window.siyuan.config.keymap.editor.general.quickMakeCard, event) && !window.siyuan.config.readonly && !isEncryptedBox(protyle.notebookId)) {
-        if (protyle.title?.editElement.contains(range.startContainer)) {
-            quickMakeCard(protyle, [protyle.title.element]);
-        } else {
-            const selectElement: Element[] = [];
-            protyle.wysiwyg.element.querySelectorAll(".protyle-wysiwyg--select").forEach(item => {
-                const block = hasClosestBlock(item, true) || item;
-                if (!selectElement.includes(block)) {
-                    selectElement.push(block);
-                }
-            });
-            if (selectElement.length === 0) {
-                const nodeElement = hasClosestBlock(range.startContainer, true);
-                if (nodeElement) {
-                    selectElement.push(nodeElement);
-                }
-            }
-            quickMakeCard(protyle, selectElement);
-        }
-        event.preventDefault();
-        return true;
     }
     if (!isFileFocus && matchHotKey(window.siyuan.config.keymap.general.addToDatabase, event)) {
         execByCommand({
@@ -697,32 +654,6 @@ const fileTreeKeydown = (app: App, event: KeyboardEvent) => {
     const isFile = selectedItems[0].kind === "document";
     const ids = actionItems.filter(item => item.kind === "document").map(item => item.id);
 
-    if (matchHotKey(window.siyuan.config.keymap.editor.general.spaceRepetition, event) && !window.siyuan.config.readonly && !isEncryptedBox(notebookId)) {
-        if (isFile) {
-            const id = selectedItems[0].id;
-            fetchPost("/api/riff/getTreeRiffDueCards", {rootID: id}, (response) => {
-                openCardByData(app, response.data, "doc", id, getDisplayName(selectedItems[0].name, false, true), true);
-            });
-        } else {
-            fetchPost("/api/riff/getNotebookRiffDueCards", {notebook: notebookId}, (response) => {
-                openCardByData(app, response.data, "notebook", notebookId, getNotebookName(notebookId), true);
-            });
-        }
-        event.preventDefault();
-        return true;
-    }
-
-    if (matchHotKey(window.siyuan.config.keymap.editor.general.quickMakeCard, event) && !isEncryptedBox(notebookId)) {
-        if (ids.length > 0) {
-            transaction(undefined, [{
-                action: "addFlashcards",
-                deckID: Constants.QUICK_DECK_ID,
-                blockIDs: ids,
-            }]);
-        }
-        event.preventDefault();
-        return true;
-    }
 
     if (matchHotKey(window.siyuan.config.keymap.general.addToDatabase, event)) {
         execByCommand({
@@ -980,8 +911,7 @@ const panelTreeKeydown = (app: App, event: KeyboardEvent) => {
             return true;
         }
     }
-    if (activePanelElement.classList.contains("sy__inbox") ||
-        activePanelElement.classList.contains("sy__globalGraph") ||
+    if (activePanelElement.classList.contains("sy__globalGraph") ||
         activePanelElement.classList.contains("sy__graph")) {
         return false;
     }
@@ -1262,20 +1192,14 @@ export const windowKeyDown = (app: App, event: KeyboardEvent) => {
         }
         let dockHtml = "";
         if (!isTabWindow) {
-            dockHtml = `<ul class="b3-list b3-list--background" style="overflow: auto;width: 200px;">
-<li data-type="riffCard" data-index="0" class="b3-list-item${!tabHtml ? " b3-list-item--focus" : ""}">
-    <svg class="b3-list-item__graphic"><use xlink:href="#iconRiffCard"></use></svg>
-    <span class="b3-list-item__text">${window.siyuan.languages.riffCard}</span>
-    <span class="b3-list-item__meta">${updateHotkeyTip(window.siyuan.config.keymap.general.riffCard.custom)}</span>
-</li>`;
             getAllDocks().forEach((item, index) => {
-                dockHtml += `<li data-type="${item.type}" data-index="${index + 1}" class="b3-list-item">
+                dockHtml += `<li data-type="${item.type}" data-index="${index}" class="b3-list-item${!tabHtml && index === 0 ? " b3-list-item--focus" : ""}">
     <svg class="b3-list-item__graphic"><use xlink:href="#${item.icon}"></use></svg>
     <span class="b3-list-item__text">${item.title}</span>
     <span class="b3-list-item__meta">${updateHotkeyTip(getDockHotkey(item))}</span>
 </li>`;
             });
-            dockHtml = dockHtml + "</ul>";
+            dockHtml = `<ul class="b3-list b3-list--background" style="overflow: auto;width: 200px;">${dockHtml}</ul>`;
         }
         hideElements(["dialog"]);
         switchDialog = new Dialog({
@@ -1460,21 +1384,6 @@ export const windowKeyDown = (app: App, event: KeyboardEvent) => {
     if (matchDock) {
         return;
     }
-    if (!isTabWindow && matchHotKey(window.siyuan.config.keymap.general.riffCard, event)) {
-        openCard(app, true);
-        if (document.activeElement && !window.siyuan.dialogs.some(item =>
-            item.element.getAttribute("data-key") === Constants.DIALOG_OPENCARD)) {
-            (document.activeElement as HTMLElement).blur();
-        }
-        event.preventDefault();
-        return;
-    }
-    if (!isTabWindow && matchHotKey(window.siyuan.config.keymap.general.dailyNote, event)) {
-        newDailyNote(app);
-        event.stopPropagation();
-        event.preventDefault();
-        return;
-    }
     if (matchHotKey(window.siyuan.config.keymap.general.newFile, event)) {
         newFile(app);
         event.preventDefault();
@@ -1598,8 +1507,10 @@ export const windowKeyDown = (app: App, event: KeyboardEvent) => {
     }
 
     if (!isTabWindow && matchHotKey(window.siyuan.config.keymap.general.mainMenu, event)) {
-        const target = document.querySelector("#barWorkspace");
-        workspaceMenu(app, target.getBoundingClientRect(), true, target);
+        const target = document.querySelector("#dockWorkspaceMenu");
+        if (target) {
+            workspaceMenu(app, target.getBoundingClientRect(), true, target);
+        }
         event.preventDefault();
         return;
     }

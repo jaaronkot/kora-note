@@ -20,12 +20,8 @@ EORUN
 
 ADD app/ .
 COPY kernel/av/lunar_calendar_data.json /kernel/av/lunar_calendar_data.json
-ADD scripts/prepare-ocr.py scripts/ocr-assets.json /scripts/
 RUN <<EORUN
 #!/bin/bash -e
-apt-get update
-apt-get install -y --no-install-recommends python3
-python3 /scripts/prepare-ocr.py
 pnpm run build
 node scripts/trimChangelogs.js
 mkdir /artifacts
@@ -140,13 +136,6 @@ COPY --from=onnx-build /onnx-artifacts /onnx-artifacts
 # 发布构建传入不可变的产物摘要；未指定时仍支持从源码独立构建。
 FROM ${ONNX_IMAGE} AS onnx-runtime
 
-FROM go-source AS ocr-build
-ARG TARGETARCH
-RUN --mount=type=cache,target=/root/.cache/go-build \
-    mkdir -p /ocr/linux-${TARGETARCH} \
-    && go build -trimpath -ldflags "-s -w" -o /ocr/linux-${TARGETARCH}/siyuan-ocr ./ocr/cmd/ocr-worker
-COPY --from=onnx-runtime /onnx-artifacts/ /ocr/linux-${TARGETARCH}/
-
 FROM ${ALPINE_IMAGE}
 LABEL maintainer="Liang Ding<845765@qq.com>"
 
@@ -160,7 +149,6 @@ EXPOSE 6806
 WORKDIR /opt/siyuan/
 COPY --from=go-build --chmod=755 /kernel/kernel /kernel/entrypoint.sh .
 COPY --from=node-build /artifacts .
-COPY --from=ocr-build /ocr stage/ocr/runtime
 COPY LICENSE THIRD_PARTY_NOTICES.md .
 
 ENTRYPOINT ["/opt/siyuan/entrypoint.sh"]

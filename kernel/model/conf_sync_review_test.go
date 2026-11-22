@@ -69,12 +69,11 @@ func TestConfSyncProviderSettersKeepHeldInputsImmutable(t *testing.T) {
 	normalizeAppConf(Conf)
 	util.ReadOnly = true
 	input := cloneConfSection(Conf.Sync.Load())
-	input.S3 = &conf.S3{Endpoint: "s3.example", AccessKey: " key ", SecretKey: " secret ", Bucket: " bucket ", Region: " region "}
 	input.WebDAV = &conf.WebDAV{Endpoint: "dav.example", Username: " user ", Password: " password "}
 	input.Local = &conf.Local{Endpoint: t.TempDir()}
 	Conf.Sync.Store(input)
 	before, _ := json.Marshal(input)
-	for _, err := range []error{SetSyncProviderS3(input.S3), SetSyncProviderWebDAV(input.WebDAV), SetSyncProviderLocal(input.Local)} {
+	for _, err := range []error{SetSyncProviderWebDAV(input.WebDAV), SetSyncProviderLocal(input.Local)} {
 		if err != nil {
 			t.Fatal(err)
 		}

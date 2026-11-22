@@ -50,7 +50,7 @@ const setup = ({mobile = false, browser = false, settingsWindow = false, native 
         "./setting/tabs": {getSettingTabDefs: () => []},
         "./tabs/accessRuntime": {clearAccessTabElement() {}}, "./tabs/syncRuntime": {clearSyncTabElement() {}},
         "./tabs/ai/aiProviderUi": {openChatGPTProvider: () => calls.push(["chatgpt"])},
-        "./assets": {unmountAssetsTab() {}}, "./ocr": {unmountOCRTab() {}},
+        "./assets": {unmountAssetsTab() {}},
         "../util/hostCapabilities": {getHostCapabilities: () => ({documentImportExport: true})},
         "./tabs/workspaceStorage": {unmountWorkspaceStorage() {}},
         "./setting/nativeWindow": {

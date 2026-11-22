@@ -82,7 +82,6 @@ func (c *AppConf) cloneSettings() AppConf {
 	next.Search = c.Search.Clone()
 	next.Flashcard = c.Flashcard.Clone()
 	next.AI = c.AI.Clone()
-	next.OCR = c.OCR.Clone()
 	next.Secrets = c.Secrets.Clone()
 	next.Variables = c.Variables.Clone()
 	next.Bazaar = c.Bazaar.Clone()
@@ -185,13 +184,6 @@ func (c *AppConf) LoadAI() *conf.AI {
 		return nil
 	}
 	return c.AI.Load()
-}
-
-func (c *AppConf) LoadOCR() *conf.OCR {
-	if c == nil {
-		return nil
-	}
-	return c.OCR.Load()
 }
 
 func (c *AppConf) LoadSecrets() *conf.Secrets {

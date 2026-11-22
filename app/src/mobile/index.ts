@@ -66,7 +66,6 @@ import {isNotEditBlock} from "../protyle/wysiwyg/getBlock";
 import {updateCardHV} from "../card/util";
 import {mobileKeydown} from "./util/keydown";
 import {correctHotkey} from "../boot/globalEvent/commonHotkey";
-import {processIOSPurchaseResponse} from "../util/iOSPurchase";
 import {nbsp2space} from "../protyle/util/normalizeText";
 import {armKeyboardLock, callMobileAppShowKeyboard, canInput, setWebViewFocusable} from "./util/mobileAppUtil";
 import {hideAllElements} from "../protyle/ui/hideElements";
@@ -132,7 +131,6 @@ class App {
                     bookmark: null,
                     tag: null,
                     backlink: null,
-                    inbox: null,
                     agent: null,
                 }
             },
@@ -257,8 +255,7 @@ class App {
                     } else if (!isInIOS()) {
                         document.querySelector('meta[name="viewport"]').setAttribute("content", "width=device-width, height=device-height, interactive-widget=resizes-visual, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover");
                     }
-                    fetchPost("/api/setting/getCloudUser", {cached: true}, guardStartup<IWebSocketData>(async userResponse => {
-                        window.siyuan.user = userResponse.data && "userId" in userResponse.data ? userResponse.data : null;
+                    void (async () => {
                         await ensureOnboarding();
                         fetchPost("/api/system/getEmojiConf", {}, guardStartup<IWebSocketData>(async emojiResponse => {
                             window.siyuan.emojis = emojiResponse.data as IEmoji[];
@@ -275,9 +272,8 @@ class App {
                             mainWs.flushMainMessages();
                             bootSync();
                             completeStartup();
-                            fetchPost("/api/setting/getCloudUser", {});
                         }), undefined, startupRequestFailed);
-                    }), undefined, startupRequestFailed);
+                    })();
                 }), reportStartupError);
             }), reportStartupError);
             document.addEventListener("touchstart", handleTouchStart, false);
@@ -357,7 +353,6 @@ window.lockscreenByMode = () => {
 };
 window.goBack = goBack;
 window.showMessage = showMessage;
-window.processIOSPurchaseResponse = processIOSPurchaseResponse;
 window.showKeyboardToolbar = showKeyboardToolbar;
 window.hideKeyboardToolbar = hideKeyboardToolbarByApp;
 window.openFileByURL = (openURL) => {

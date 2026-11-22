@@ -1,4 +1,3 @@
-import {newDailyNote} from "../../../util/mount";
 import {openHistory} from "../../../history/history";
 import type {Editor} from "../../../editor";
 /// #if MOBILE
@@ -36,7 +35,6 @@ import {Constants} from "../../../constants";
 import {editorConfigApi} from "../../../config/tabs/editorRuntime";
 import {lockScreen} from "../../../dialog/processSystem";
 import {newFile} from "../../../util/newFile";
-import {openCard} from "../../../card/openCard";
 import {syncGuide} from "../../../sync/syncGuide";
 import {unsplitCurrentWnd, unsplitWnd} from "../../../menus/tab";
 import {openFile} from "../../../editor/util";
@@ -65,7 +63,6 @@ export const globalCommand = (command: string, app: App, range?: Range, openOnly
         case "outline":
         case "bookmark":
         case "tag":
-        case "inbox":
             openDock(command);
             return true;
         case "backlinks":
@@ -91,7 +88,6 @@ export const globalCommand = (command: string, app: App, range?: Range, openOnly
             return true;
         case "bookmark":
         case "tag":
-        case "inbox":
             getDockByType(command).toggleModel(command);
             return true;
         case "backlinks":
@@ -99,9 +95,6 @@ export const globalCommand = (command: string, app: App, range?: Range, openOnly
             return true;
         case "graphView":
             getDockByType("graph").toggleModel("graph");
-            return true;
-        case "globalGraph":
-            getDockByType("globalGraph").toggleModel("globalGraph");
             return true;
         case "config":
             openSetting(app);
@@ -161,8 +154,10 @@ export const globalCommand = (command: string, app: App, range?: Range, openOnly
             return true;
         case "mainMenu":
             if (!isWindow()) {
-                const target = document.querySelector("#barWorkspace");
-                workspaceMenu(app, target.getBoundingClientRect(), openOnly, target);
+                const target = document.querySelector("#dockWorkspaceMenu");
+                if (target) {
+                    workspaceMenu(app, target.getBoundingClientRect(), openOnly, target);
+                }
             }
             return true;
         case "recentDocs":
@@ -458,9 +453,6 @@ export const globalCommand = (command: string, app: App, range?: Range, openOnly
         case "resetEditorFontSize":
             adjustEditorFontSize("reset");
             return true;
-        case "dailyNote":
-            newDailyNote(app);
-            return true;
         case "dataHistory":
             openHistory(app, "doc", openOnly);
             return true;
@@ -472,9 +464,6 @@ export const globalCommand = (command: string, app: App, range?: Range, openOnly
             return true;
         case "newFile":
             newFile(app);
-            return true;
-        case "riffCard":
-            openCard(app, openOnly);
             return true;
         case "selectOpen1":
             selectOpenTab();

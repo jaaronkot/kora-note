@@ -19,7 +19,7 @@ func visibleConf(c *gin.Context) (masked *model.AppConf, isPublish bool, err err
 	if err != nil {
 		return nil, false, err
 	}
-	if !masked.Sync.Load().Enabled || (0 == masked.Sync.Load().Provider && !model.IsSubscriber()) {
+	if !masked.Sync.Load().Enabled {
 		masked.Sync.Load().Stat = model.Conf.Language(53)
 	}
 
@@ -78,8 +78,6 @@ func sectionConfPayload(value *apicontract.SystemAppConf, namespace string) *api
 		section.Flashcard = value.Flashcard
 	case "ai":
 		section.AI = value.AI
-	case "ocr":
-		section.OCR = value.OCR
 	case "secrets":
 		section.Secrets = value.Secrets
 	case "variables":

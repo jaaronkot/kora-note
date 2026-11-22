@@ -192,7 +192,6 @@ func TestSyncPerceptionDelayedNotificationPreservesLocalEdit(t *testing.T) {
 	prepareSyncDirectoryTest(t)
 	Conf.Sync.Load().Provider, Conf.Sync.Load().CloudName, Conf.Sync.Load().Enabled = conf.ProviderLocal, "main", true
 	Conf.Sync.Load().Local = &conf.Local{Endpoint: "perception-test"}
-	Conf.User = &conf.User{UserId: "perception-test", UserSiYuanOneTimePayStatus: 1}
 	util.RepoDir = a.repo.Path
 	previousRequests := syncRemoteRequests
 	t.Cleanup(func() { syncRemoteRequests = previousRequests })

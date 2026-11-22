@@ -79,10 +79,10 @@ test("side panel layout selects initial defaults, remembers activated tabs and f
     });
     render([]);
     assert.equal(tabs.get("file").classList.contains("toolbar__icon--active"), true);
-    render(["file", "inbox"]);
+    render(["file", "tag"]);
     assert.equal(tabs.get("file").classList.contains("fn__none"), true);
     assert.equal(contents.get("file").classList.contains("fn__none"), true);
-    assert.equal(tabs.get("inbox").classList.contains("fn__none"), true);
+    assert.equal(tabs.get("tag").classList.contains("fn__none"), true);
     assert.equal(tabs.get("bookmark").classList.contains("toolbar__icon--active"), true);
     left.style.transform = "translateX(0px)";
     render([...MOBILE_SIDE_PANEL_DOCK_IDS]);
@@ -94,22 +94,19 @@ test("side panel layout selects initial defaults, remembers activated tabs and f
     render([]);
     assert.equal(tabs.get("file").classList.contains("fn__none"), false);
     assert.equal(tabs.get("file").classList.contains("toolbar__icon--active"), true);
-    assert.equal(tabs.get("agent").classList.contains("fn__none"), true);
     aiDisabled = false;
-    render([]);
-    assert.equal(tabs.get("agent").classList.contains("fn__none"), false);
 
     moduleExports.initSidePanelTabs({}, left);
     moduleExports.initSidePanelTabs({}, right);
     const config = {...createDefaultMobileSidePanelConfig(),
-        left: ["tag", "bookmark", "file", "inbox"], right: ["agent", "outline", "backlink"], hidden: ["agent"],
+        left: ["tag", "bookmark", "file"], right: ["outline", "backlink"], hidden: [] as string[],
     };
     moduleExports.renderMobileSidePanelLayout({}, config);
     assert.equal(tabs.get("tag").classList.contains("toolbar__icon--active"), true);
     assert.equal(tabs.get("outline").classList.contains("toolbar__icon--active"), true);
 
     // 首次打开前变更布局时，仍按最新顺序选择首个可见功能。
-    config.left = ["file", "tag", "bookmark", "inbox"];
+    config.left = ["file", "tag", "bookmark"];
     moduleExports.renderMobileSidePanelLayout({}, config);
     assert.equal(tabs.get("file").classList.contains("toolbar__icon--active"), true);
     left.firstElementChild.dispatchEvent({detail: "bookmark"});
@@ -118,7 +115,7 @@ test("side panel layout selects initial defaults, remembers activated tabs and f
     assert.equal(tabs.get("bookmark").classList.contains("toolbar__icon--active"), true);
     assert.equal(tabs.get("backlink").classList.contains("toolbar__icon--active"), true);
 
-    config.hidden = ["agent", "bookmark", "backlink"];
+    config.hidden = ["bookmark", "backlink"];
     moduleExports.renderMobileSidePanelLayout({}, config);
     assert.equal(tabs.get("file").classList.contains("toolbar__icon--active"), true);
     assert.equal(tabs.get("outline").classList.contains("toolbar__icon--active"), true);

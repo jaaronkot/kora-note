@@ -121,18 +121,16 @@ func TestMatchHTMLClipboardElementsPreservesSemanticOverrides(t *testing.T) {
 
 func TestPrepareHTMLClipboardStyleModes(t *testing.T) {
 	input := `<p style="color:red;background:yellow;font-family:Arial;font-size:18px"><strong>text</strong></p>`
-	noMath := func(string, string, string) (string, bool) { return "", false }
-	noOffice := func(string) (string, bool) { return "", false }
-	matched, useHTML := prepareHTMLClipboardContent(util.NewLute(), input, "", "", "", "", "", false, false, noMath, noOffice)
-	if !useHTML || strings.Contains(matched, "color:") || strings.Contains(matched, "font-size:") || !strings.Contains(matched, "<strong>") {
+	matched := prepareHTMLClipboardContent(input, "", "", false, false)
+	if strings.Contains(matched, "color:") || strings.Contains(matched, "font-size:") || !strings.Contains(matched, "<strong>") {
 		t.Fatalf("unexpected matched HTML: %s", matched)
 	}
-	preserved, useHTML := prepareHTMLClipboardContent(util.NewLute(), input, "", "", "", "", "", true, false, noMath, noOffice)
-	if !useHTML || preserved != input {
+	preserved := prepareHTMLClipboardContent(input, "", "", true, false)
+	if preserved != input {
 		t.Fatalf("source formatting was not preserved: %s", preserved)
 	}
-	frozen, useHTML := prepareHTMLClipboardContent(util.NewLute(), preserved, "", "", "", "", "", true, true, noMath, noOffice)
-	if !useHTML || frozen != preserved {
+	frozen := prepareHTMLClipboardContent(preserved, "", "", true, true)
+	if frozen != preserved {
 		t.Fatalf("prepared HTML changed: %s", frozen)
 	}
 }

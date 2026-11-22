@@ -32,7 +32,7 @@ func TestExportDocumentPathsArchiveAndReferenceCollisions(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	archive := openExportArchive(t, exportPandocConvertZip0(archiveExportOptions{
+	archive := openExportArchive(t, exportArchiveZip0(archiveExportOptions{
 		Config: resolveExportOptions(nil), BoxID: boxID, BaseFolderName: "Collisions", DocPaths: docPaths, Ext: ".md",
 	}))
 	seen := map[string]bool{}

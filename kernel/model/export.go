@@ -12,10 +12,8 @@ import (
 	"fmt"
 	"io/fs"
 	"maps"
-	"net/http"
 	"net/url"
 	"os"
-	"os/exec"
 	"path"
 	"path/filepath"
 	"slices"
@@ -35,8 +33,6 @@ import (
 	"github.com/88250/lute/render"
 	"github.com/emirpasic/gods/sets/hashset"
 	"github.com/emirpasic/gods/stacks/linkedliststack"
-	"github.com/imroc/req/v3"
-	shellquote "github.com/kballard/go-shellquote"
 	"github.com/pdfcpu/pdfcpu/pkg/api"
 	"github.com/pdfcpu/pdfcpu/pkg/font"
 	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu"
@@ -49,7 +45,6 @@ import (
 	"github.com/siyuan-community/siyuan/kernel/treenode"
 	"github.com/siyuan-community/siyuan/kernel/util"
 	"github.com/siyuan-note/filelock"
-	"github.com/siyuan-note/httpclient"
 	"github.com/siyuan-note/logging"
 	"github.com/siyuan-note/riff"
 )
@@ -389,147 +384,6 @@ func ExportAv2CSV(avID, blockID string) (zipPath string, err error) {
 		} else {
 			zipPath = "/export/csv/" + url.PathEscape(filepath.Base(absZipPath))
 		}
-		return nil
-	})
-	return
-}
-
-func Export2Liandi(id string) (err error) {
-	if err = prepareExportBlockAssets(id, false); err != nil {
-		return
-	}
-	err = withExportReadLockByBlockID(id, func() error {
-		tree, loadErr := LoadTreeByBlockID(id)
-		if loadErr != nil {
-			logging.LogErrorf("load tree by block id [%s] failed: %s", id, loadErr)
-			return loadErr
-		}
-
-		if IsUserGuide(tree.Box) {
-			// Doc in the user guide no longer supports one-click sending to the community https://github.com/siyuan-note/siyuan/issues/8388
-			return errors.New(Conf.Language(204))
-		}
-
-		assets := getAssetsLinkDests(tree.Root, false)
-		embedAssets := getQueryEmbedNodesAssetsLinkDests(tree.Root)
-		assets = append(assets, embedAssets...)
-		assets = gulu.Str.RemoveDuplicatedElem(assets)
-		_, err = uploadAssets2Cloud(assets, bizTypeExport2Liandi, false)
-		if err != nil {
-			return err
-		}
-
-		msgId := util.PushMsg(Conf.Language(182), 15000)
-		defer util.PushClearMsg(msgId)
-
-		// 判断帖子是否已经存在，存在则使用更新接口
-		const liandiArticleIdAttrName = "custom-liandi-articleid"
-		const liandiArticleIdAttrNameOld = "custom-liandi-articleId" // 兼容旧属性名
-		foundArticle := false
-		// 优先使用新属性名，如果不存在则尝试旧属性名
-		articleId := tree.Root.IALAttr(liandiArticleIdAttrName)
-		if "" == articleId {
-			articleId = tree.Root.IALAttr(liandiArticleIdAttrNameOld)
-		}
-		if "" != articleId {
-			result := gulu.Ret.NewResult()
-			request := httpclient.NewCloudRequest30s()
-			resp, getErr := request.
-				SetSuccessResult(result).
-				SetCookies(&http.Cookie{Name: "symphony", Value: Conf.GetUser().UserToken}).
-				Get(util.GetCloudAccountServer() + "/api/v2/article/update/" + articleId)
-			if nil != getErr {
-				logging.LogErrorf("get liandi article info failed: %s", getErr)
-				return getErr
-			}
-
-			switch resp.StatusCode {
-			case 200:
-				if 0 == result.Code {
-					foundArticle = true
-				} else if 1 == result.Code {
-					foundArticle = false
-				}
-			case 404:
-				foundArticle = false
-			default:
-				return fmt.Errorf("get liandi article info failed [sc=%d]", resp.StatusCode)
-			}
-		}
-
-		apiURL := util.GetCloudAccountServer() + "/api/v2/article"
-		if foundArticle {
-			apiURL += "/" + articleId
-		}
-
-		title := treenode.ReadDocumentTitle(tree.Root).Text
-		tags := tree.Root.IALAttr("tags")
-		content := exportMarkdownContent0(id, tree, markdownExportOptions{
-			Config: conf.Export{
-				BlockRefMode:          3,
-				BlockEmbedMode:        1,
-				FileAnnotationRefMode: 1,
-				TagOpenMarker:         "#",
-				TagCloseMarker:        "#",
-				BlockRefTextLeft:      "",
-				BlockRefTextRight:     "",
-				AddTitle:              false,
-				InlineMemo:            false,
-			},
-			CloudAssetsBase:            util.GetCloudForumAssetsServer() + time.Now().Format("2006/01") + "/siyuan/" + Conf.GetUser().UserId + "/",
-			AssetsDestSpace2Underscore: true,
-			AdjustHeadingLevel:         false,
-			ImgTag:                     false,
-			Ext:                        ".md",
-			DefBlockIDs:                nil,
-			References:                 nil,
-			FillCSSVar:                 false,
-			BoxPaths:                   nil,
-			AVPublishFilter:            nil,
-		})
-		result := gulu.Ret.NewResult()
-		request := httpclient.NewCloudRequest30s()
-		request = request.
-			SetSuccessResult(result).
-			SetCookies(&http.Cookie{Name: "symphony", Value: Conf.GetUser().UserToken}).
-			SetBody(map[string]any{
-				"articleTitle":   title,
-				"articleTags":    tags,
-				"articleContent": content})
-		var resp *req.Response
-		var sendErr error
-		if foundArticle {
-			resp, sendErr = request.Put(apiURL)
-		} else {
-			resp, sendErr = request.Post(apiURL)
-		}
-		if nil != sendErr {
-			logging.LogErrorf("send article to liandi failed: %s", sendErr)
-			return sendErr
-		}
-		if 200 != resp.StatusCode {
-			msg := fmt.Sprintf("send article to liandi failed [sc=%d]", resp.StatusCode)
-			logging.LogError(msg)
-			return errors.New(msg)
-		}
-
-		if 0 != result.Code {
-			msg := fmt.Sprintf("send article to liandi failed [code=%d, msg=%s]", result.Code, result.Msg)
-			logging.LogError(msg)
-			util.PushClearMsg(msgId)
-			return errors.New(result.Msg)
-		}
-
-		if !foundArticle {
-			articleId = result.Data.(string)
-			tree, _ = LoadTreeByBlockID(id) // 这里必须重新加载，因为前面导出时已经修改了树结构
-			tree.Root.SetIALAttr(liandiArticleIdAttrName, articleId)
-			if err = writeTreeUpsertQueue(tree); err != nil {
-				return err
-			}
-		}
-
-		util.PushMsg(fmt.Sprintf(Conf.Language(181), util.GetCloudAccountServer()+"/article/"+articleId), 7000)
 		return nil
 	})
 	return
@@ -1114,99 +968,6 @@ func ExportPreview(id string, fillCSSVar bool, avPublishFilter AVExportPublishFi
 	}); exportErr != nil {
 		logging.LogErrorf("export preview [%s] failed: %s", id, exportErr)
 		return
-	}
-	return
-}
-
-func ExportDocx(id, savePath string, removeAssets, merge bool, mergeHeadingOptions ...MergeHeadingOptions) (fullPath string, err error) {
-	if err = prepareExportBlockAssets(id, merge); err != nil {
-		return
-	}
-	err = withExportReadLockByBlockID(id, func() error {
-		confExportSnapshot := Conf.LoadExport()
-
-		pandocRuntime := util.GetPandocRuntime()
-		if !util.IsValidPandocBin(pandocRuntime.BinPath) {
-			util.InitPandoc(confExportSnapshot.PandocBin)
-			pandocRuntime = util.GetPandocRuntime()
-			if !util.IsValidPandocBin(pandocRuntime.BinPath) {
-				return errors.New(Conf.Language(115))
-			}
-		}
-
-		tmpDir := filepath.Join(util.TempDir, "export", gulu.Rand.String(7))
-		if bt := getExportBlockTree(id); bt != nil && IsEncryptedBox(bt.BoxID) {
-			exportID, idErr := newManagedEncryptedExportID()
-			if idErr != nil {
-				return idErr
-			}
-			tmpDir = filepath.Join(util.TempDir, "export", bt.BoxID, "docx", exportID)
-		}
-		if mkdirErr := os.MkdirAll(tmpDir, 0755); mkdirErr != nil {
-			return mkdirErr
-		}
-		defer os.RemoveAll(tmpDir)
-		name, content, exportErr := exportMarkdownHTML(id, tmpDir, true, merge, mergeHeadingOptions...)
-		if exportErr != nil {
-			return exportErr
-		}
-		content = strings.ReplaceAll(content, "  \n", "<br>\n")
-
-		tmpDocxPath := filepath.Join(tmpDir, name+".docx")
-		args := []string{
-			"-f", "html+tex_math_dollars",
-			"--resource-path", tmpDir,
-			"-o", tmpDocxPath,
-		}
-
-		params := util.ReplaceNewline(confExportSnapshot.PandocParams, " ")
-		if "" != params {
-			customArgs, parseErr := shellquote.Split(params)
-			if nil != parseErr {
-				logging.LogErrorf("parse pandoc custom params [%s] failed: %s", params, parseErr)
-			} else {
-				args = append(args, customArgs...)
-			}
-		}
-
-		filterPath, filterErr := writePandocDocxFilter(tmpDir)
-		if nil != filterErr {
-			return filterErr
-		}
-		args = appendBuiltinPandocDocxFilter(args, filterPath)
-
-		if !hasPandocOption(args, "--reference-doc") && "" != pandocRuntime.TemplatePath {
-			args = append(args, "--reference-doc", pandocRuntime.TemplatePath)
-		}
-
-		pandoc := exec.Command(pandocRuntime.BinPath, args...)
-		gulu.CmdAttr(pandoc)
-		pandoc.Stdin = bytes.NewBufferString(content)
-		output, pandocErr := pandoc.CombinedOutput()
-		if pandocErr != nil {
-			argStr := strings.Join(args, " ")
-			msg := gulu.DecodeCmdOutput(output)
-			logging.LogErrorf("export docx [%s] failed: %s", argStr, msg)
-			return fmt.Errorf(Conf.Language(14), msg)
-		}
-
-		fullPath = filepath.Join(savePath, name+".docx")
-		fullPath = util.GetUniqueFilename(fullPath)
-		if copyErr := util.CopyUserFile(tmpDocxPath, fullPath); copyErr != nil {
-			logging.LogErrorf("export docx failed: %s", copyErr)
-			return fmt.Errorf(Conf.Language(14), copyErr)
-		}
-
-		if tmpAssets := filepath.Join(tmpDir, "assets"); !removeAssets && gulu.File.IsDir(tmpAssets) {
-			if copyErr := util.CopyUserFile(tmpAssets, filepath.Join(savePath, "assets")); copyErr != nil {
-				logging.LogErrorf("export docx failed: %s", copyErr)
-				return fmt.Errorf(Conf.Language(14), copyErr)
-			}
-		}
-		return nil
-	})
-	if err != nil {
-		fullPath = ""
 	}
 	return
 }
@@ -2296,11 +2057,6 @@ func ExportStdMarkdown(id string, opts *ExportOptions) string {
 		}
 
 		tree := prepareExportTree(bt)
-		cloudAssetsBase := ""
-		// 社区版的 IsSubscriber 恒为真，未登录时没有用户，也就没有云端资源地址。
-		if user := Conf.GetUser(); IsSubscriber() && nil != user {
-			cloudAssetsBase = util.GetCloudAssetsServer() + user.UserId + "/"
-		}
 
 		var defBlockIDs []string
 		if 4 == config.BlockRefMode { // 脚注+锚点哈希
@@ -2330,7 +2086,6 @@ func ExportStdMarkdown(id string, opts *ExportOptions) string {
 
 		ret = exportMarkdownContent0(id, tree, markdownExportOptions{
 			Config:                     config,
-			CloudAssetsBase:            cloudAssetsBase,
 			AssetsDestSpace2Underscore: formatOpts.AssetsDestSpace2Underscore,
 			AdjustHeadingLevel:         formatOpts.AdjustHeadingLevel,
 			ImgTag:                     formatOpts.ImgTag,
@@ -2424,8 +2179,8 @@ func resolveExportOptions(opts *ExportOptions) (ret conf.Export) {
 	return
 }
 
-func ExportPandocConvertZipWithOptions(ids []string, pandocTo, ext string, opts *ExportOptions) (name, zipPath string) {
-	return exportPandocConvertZipWithConfig(ids, pandocTo, ext, resolveExportOptions(opts))
+func ExportArchiveZipWithOptions(ids []string, ext string, opts *ExportOptions) (name, zipPath string) {
+	return exportArchiveZipWithConfig(ids, ext, resolveExportOptions(opts))
 }
 
 func ExportNotebookMarkdownWithOptions(boxID string, opts *ExportOptions) (zipPath string) {
@@ -2486,7 +2241,7 @@ func ParseExportOptions(arg map[string]any) (opts *ExportOptions) {
 	return
 }
 
-func exportPandocConvertZipWithConfig(ids []string, pandocTo, ext string, config conf.Export) (name, zipPath string) {
+func exportArchiveZipWithConfig(ids []string, ext string, config conf.Export) (name, zipPath string) {
 	if len(ids) == 0 {
 		return
 	}
@@ -2495,7 +2250,7 @@ func exportPandocConvertZipWithConfig(ids []string, pandocTo, ext string, config
 		return
 	}
 	if IsEncryptedBox(block.BoxID) && !IsBoxUnlocked(block.BoxID) {
-		logging.LogErrorf("export pandoc zip [%s] failed: encrypted notebook locked", ids[0])
+		logging.LogErrorf("export archive zip [%s] failed: encrypted notebook locked", ids[0])
 		return
 	}
 	box := Conf.Box(block.BoxID)
@@ -2525,13 +2280,11 @@ func exportPandocConvertZipWithConfig(ids []string, pandocTo, ext string, config
 	}
 
 	defBlockIDs, docPaths := prepareExportTreesWithConfig(docPaths, config, block.BoxID)
-	zipPath = exportPandocConvertZip0(archiveExportOptions{
+	zipPath = exportArchiveZip0(archiveExportOptions{
 		BoxID:          block.BoxID,
 		BaseFolderName: baseFolderName,
 		DocPaths:       docPaths,
 		DefBlockIDs:    defBlockIDs,
-		PandocFrom:     "gfm+footnotes+hard_line_breaks",
-		PandocTo:       pandocTo,
 		Ext:            ext,
 		BoxPaths:       nil,
 		Config:         config,
@@ -2561,13 +2314,11 @@ func exportNotebookMarkdownWithConfig(boxID string, config conf.Export) (zipPath
 	}
 
 	defBlockIDs, docPaths := prepareExportTreesWithConfig(docPaths, config, boxID)
-	zipPath = exportPandocConvertZip0(archiveExportOptions{
+	zipPath = exportArchiveZip0(archiveExportOptions{
 		BoxID:          boxID,
 		BaseFolderName: box.Name,
 		DocPaths:       docPaths,
 		DefBlockIDs:    defBlockIDs,
-		PandocFrom:     "",
-		PandocTo:       "",
 		Ext:            ".md",
 		BoxPaths:       nil,
 		Config:         config,
@@ -2615,13 +2366,11 @@ func exportNotebooksMarkdownWithConfig(boxIDs []string, config conf.Export) (zip
 		rootIDs = append(rootIDs, "/"+rootID+".sy")
 	}
 	sort.Strings(rootIDs)
-	zipPath = exportPandocConvertZip0(archiveExportOptions{
+	zipPath = exportArchiveZip0(archiveExportOptions{
 		BoxID:          "",
 		BaseFolderName: exportNotebooksBaseName(boxes),
 		DocPaths:       rootIDs,
 		DefBlockIDs:    defBlockIDs,
-		PandocFrom:     "",
-		PandocTo:       "",
 		Ext:            ".md",
 		BoxPaths:       boxPaths,
 		Config:         config,
@@ -3417,7 +3166,7 @@ func exportMarkdownContent0(id string, tree *parse.Tree, exportOpts markdownExpo
 	if numberHeadings == nil {
 		numberHeadings = exportOpts.Config.HeadingNumber
 	}
-	// Pandoc 格式复用 Markdown 中间态，但不使用 Markdown 编号偏好。
+	// 非 Markdown 归档格式复用 Markdown 中间态，但不使用 Markdown 编号偏好。
 	if exportOpts.Ext != ".md" || (numberHeadings != nil && *numberHeadings) {
 		if numberErr := applyHeadingNumbersForExport(tree, getExportBlockTreeInBox(id, tree.Box), false); nil != numberErr {
 			logging.LogErrorf("prepare Markdown heading numbers failed: %s", numberErr)
@@ -4734,7 +4483,7 @@ func processFileAnnotationRef(refID string, n *ast.Node, fileAnnotationRefMode i
 	return nil
 }
 
-func exportPandocConvertZip0(exportOpts archiveExportOptions) (zipPath string) {
+func exportArchiveZip0(exportOpts archiveExportOptions) (zipPath string) {
 	defer util.ClearPushProgress(100)
 	if err := prepareExportAssets(exportOpts.BoxID, exportOpts.DocPaths, true); err != nil {
 		util.PushErrMsg(err.Error(), 7000)
@@ -4869,10 +4618,8 @@ func exportPandocConvertZip0(exportOpts archiveExportOptions) (zipPath string) {
 
 		md = rewriteExportMarkdownAssets(md, assetsOldNew)
 
-		// 调用 Pandoc 进行格式转换
-		pandocErr := util.Pandoc(exportOpts.PandocFrom, exportOpts.PandocTo, writePath, md)
-		if pandocErr != nil {
-			logging.LogErrorf("pandoc failed: %s", pandocErr)
+		if writeErr := gulu.File.WriteFileSafer(writePath, []byte(md), 0644); writeErr != nil {
+			logging.LogErrorf("write export file [%s] failed: %s", writePath, writeErr)
 			continue
 		}
 

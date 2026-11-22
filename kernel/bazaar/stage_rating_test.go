@@ -53,7 +53,6 @@ func TestPrefetchBazaarRatingsCoalescesConcurrentCalls(t *testing.T) {
 
 func TestGetStageAndBazaarDoesNotWaitForRatings(t *testing.T) {
 	resetBazaarRatingTestState(t)
-	oldApplyHash := applyBazaarCacheHash
 	oldOnlineLoader := bazaarOnlineLoader
 	oldStageLoader := stageIndexLoader
 	oldStatsLoader := bazaarStatsLoader
@@ -65,7 +64,6 @@ func TestGetStageAndBazaarDoesNotWaitForRatings(t *testing.T) {
 	stageIndexCache = map[string]*StageIndex{}
 	bazaarMemMu.Unlock()
 	t.Cleanup(func() {
-		applyBazaarCacheHash = oldApplyHash
 		bazaarOnlineLoader = oldOnlineLoader
 		stageIndexLoader = oldStageLoader
 		bazaarStatsLoader = oldStatsLoader
@@ -77,7 +75,6 @@ func TestGetStageAndBazaarDoesNotWaitForRatings(t *testing.T) {
 		bazaarMemMu.Unlock()
 	})
 
-	applyBazaarCacheHash = func(context.Context) {}
 	bazaarOnlineLoader = func() bool { return true }
 	stageIndexLoader = func(context.Context, string) (*StageIndex, error) {
 		return &StageIndex{}, nil
@@ -126,7 +123,6 @@ func TestGetStageAndBazaarDoesNotWaitForRatings(t *testing.T) {
 
 func TestGetStageAndBazaarIncludesCompletedRatingPrefetch(t *testing.T) {
 	resetBazaarRatingTestState(t)
-	oldApplyHash := applyBazaarCacheHash
 	oldOnlineLoader := bazaarOnlineLoader
 	oldStageLoader := stageIndexLoader
 	oldStatsLoader := bazaarStatsLoader
@@ -137,7 +133,6 @@ func TestGetStageAndBazaarIncludesCompletedRatingPrefetch(t *testing.T) {
 	stageIndexCache = map[string]*StageIndex{}
 	bazaarMemMu.Unlock()
 	t.Cleanup(func() {
-		applyBazaarCacheHash = oldApplyHash
 		bazaarOnlineLoader = oldOnlineLoader
 		stageIndexLoader = oldStageLoader
 		bazaarStatsLoader = oldStatsLoader
@@ -150,7 +145,6 @@ func TestGetStageAndBazaarIncludesCompletedRatingPrefetch(t *testing.T) {
 
 	ratingReady := make(chan struct{})
 	ratingFinished := make(chan struct{})
-	applyBazaarCacheHash = func(context.Context) {}
 	bazaarOnlineLoader = func() bool { return true }
 	stageIndexLoader = func(context.Context, string) (*StageIndex, error) {
 		<-ratingReady
@@ -187,7 +181,6 @@ func TestGetStageAndBazaarIncludesCompletedRatingPrefetch(t *testing.T) {
 
 func TestGetStageAndBazaarOfflineDoesNotWaitForLoaders(t *testing.T) {
 	resetBazaarRatingTestState(t)
-	oldApplyHash := applyBazaarCacheHash
 	oldOnlineLoader := bazaarOnlineLoader
 	oldStageLoader := stageIndexLoader
 	oldStatsLoader := bazaarStatsLoader
@@ -198,7 +191,6 @@ func TestGetStageAndBazaarOfflineDoesNotWaitForLoaders(t *testing.T) {
 	stageIndexCache = map[string]*StageIndex{}
 	bazaarMemMu.Unlock()
 	t.Cleanup(func() {
-		applyBazaarCacheHash = oldApplyHash
 		bazaarOnlineLoader = oldOnlineLoader
 		stageIndexLoader = oldStageLoader
 		bazaarStatsLoader = oldStatsLoader
@@ -209,7 +201,6 @@ func TestGetStageAndBazaarOfflineDoesNotWaitForLoaders(t *testing.T) {
 		bazaarMemMu.Unlock()
 	})
 
-	applyBazaarCacheHash = func(context.Context) {}
 	loadersStarted := make(chan struct{}, 2)
 	releaseStage := make(chan struct{})
 	releaseStats := make(chan struct{})

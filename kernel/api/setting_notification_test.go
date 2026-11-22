@@ -14,10 +14,41 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/gorilla/websocket"
+	"github.com/olahol/melody"
 	"github.com/siyuan-community/siyuan/kernel/apicontract"
 	"github.com/siyuan-community/siyuan/kernel/model"
 	"github.com/siyuan-community/siyuan/kernel/util"
 )
+
+// connectSettingNotifications 建立 main 会话并返回可读取推送的连接，供各设置通知测试共用。
+func connectSettingNotifications(t *testing.T, engine *gin.Engine) *websocket.Conn {
+	t.Helper()
+	push := melody.New()
+	connected := make(chan *melody.Session, 1)
+	push.HandleConnect(func(session *melody.Session) {
+		util.AddPushChan(session)
+		connected <- session
+	})
+	push.HandleDisconnect(util.RemovePushChan)
+	engine.GET("/ws", func(c *gin.Context) { _ = push.HandleRequest(c.Writer, c.Request) })
+	server := httptest.NewServer(engine)
+	t.Cleanup(func() { push.Close(); server.Close() })
+	endpoint := "ws" + strings.TrimPrefix(server.URL, "http") + "/ws?app=" + t.Name() + "&id=settings-notifications&type=main"
+	connection, response, err := websocket.DefaultDialer.Dial(endpoint, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	response.Body.Close()
+	t.Cleanup(func() { connection.Close() })
+	select {
+	case session := <-connected:
+		t.Cleanup(func() { util.RemovePushChan(session) })
+	case <-time.After(5 * time.Second):
+		t.Fatal("settings WebSocket did not connect")
+	}
+	return connection
+}
 
 // settingReadAction 匹配读取类端点的动作名。这类端点即使顺带写入配置，也由配置段发布通知，
 // 包装层再补一次只会在内容未变化时产生多余广播。

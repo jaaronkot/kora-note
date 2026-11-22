@@ -2,7 +2,6 @@ import {toggleMenu} from "../menus/menuToggle";
 import type {App} from "../index";
 import {Menu} from "./Menu";
 import {setStorageVal} from "../protyle/util/compatibility";
-import {isBazaarAvailable} from "../util/bazaarAvailability";
 import {Constants} from "../constants";
 import {hasPluginSetting} from "./index";
 import {isMobile} from "../util/functions";
@@ -12,19 +11,6 @@ export const openTopBarMenu = (app: App, target?: Element) => {
         target: target,
         build: (_menu, session) => {
             const menu = new Menu(Constants.MENU_BAR_PLUGIN);
-            const manageElement = menu.addItem({
-                id: "manage",
-                icon: "iconSettings",
-                label: window.siyuan.languages.manage,
-                ignore: !isBazaarAvailable() || window.siyuan.config.readonly,
-                click() {
-                    void import("../config").then(({openSetting}) => openSetting(app, "bazaar"));
-                }
-            });
-            const manageSeparatorElement = menu.addSeparator({
-                id: "separator_1",
-                ignore: !isBazaarAvailable() || window.siyuan.config.readonly,
-            });
             let hasPlugin = false;
             const settingItems: IMenu[] = [];
             app.plugins.forEach((plugin) => {
@@ -115,8 +101,7 @@ export const openTopBarMenu = (app: App, target?: Element) => {
                 hasPlugin = true;
             }
             if (!hasPlugin) {
-                manageSeparatorElement?.remove();
-                if (!manageElement && !target) {
+                if (!target) {
                     menu.addItem({
                         id: "emptyContent",
                         iconHTML: "",

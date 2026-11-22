@@ -5,7 +5,6 @@
 package api
 
 import (
-	"fmt"
 	"reflect"
 	"sync"
 
@@ -274,13 +273,6 @@ func applyExportSetting(c *gin.Context, request apicontract.SetExportRequest) (r
 	}
 
 	conf.MigrateExportBlockRefMode(export)
-	// 只校验本次实际改动的 Pandoc 路径，避免沿用已有路径时重复提示
-	previousPandocBin := model.Conf.Export.Load().PandocBin
-	if "" != export.PandocBin && export.PandocBin != previousPandocBin && !util.IsValidPandocBin(export.PandocBin) {
-		util.PushErrMsg(fmt.Sprintf(model.Conf.Language(117), export.PandocBin), 5000)
-		export.PandocBin = previousPandocBin
-	}
-
 	issues, applyErr := model.ApplyConfSection("export", export)
 	recordSettingIssues(c, issues)
 	err = applyErr
@@ -291,18 +283,6 @@ func applyExportSetting(c *gin.Context, request apicontract.SetExportRequest) (r
 	ret = apicontract.Success(settingExportPayload(model.Conf.Export.Load()))
 	return
 }
-
-var getPandocBin = contractHandler(apicontract.GetPandocBin, func(c *gin.Context, request apicontract.EmptyRequest) apicontract.Response[string] {
-	pandocRuntime := util.GetPandocRuntime()
-	if !util.IsValidPandocBin(pandocRuntime.BinPath) {
-		util.InitPandoc(model.Conf.Export.Load().PandocBin)
-		pandocRuntime = util.GetPandocRuntime()
-	}
-	if !util.IsValidPandocBin(pandocRuntime.BinPath) {
-		return apicontract.Failure[string](-1, model.Conf.Language(115))
-	}
-	return apicontract.Success(pandocRuntime.BinPath)
-})
 
 var applyFiletreeSetting = func(c *gin.Context, request apicontract.SetFiletreeRequest) apicontract.Response[*apicontract.SettingFileTree] {
 	return applySettingSection(c, request, "fileTree", conf.NewFileTree, model.Conf.FileTree.Load, settingFileTreePayload)
@@ -460,36 +440,6 @@ var getPublish = contractHandler(apicontract.GetPublish, func(c *gin.Context, re
 		return apicontract.Failure[apicontract.SettingPublishData](-1, err.Error())
 	}
 	return apicontract.Success(apicontract.SettingPublishData{Port: port, Publish: settingPublishPayload(model.Conf.Publish.Load())})
-})
-
-var getCloudUser = contractHandler(apicontract.GetCloudUser, func(c *gin.Context, request apicontract.SettingCloudUserRequest) apicontract.Response[*apicontract.SettingUser] {
-	user, err := model.GetCloudUser(request.Token, request.Cached)
-	data := settingUserPayload(user)
-	if err == nil {
-		return apicontract.Success(data)
-	}
-	if model.IsInvalidUserRefresh(err) {
-		return apicontract.GetCloudUser.FailureWithData(255, model.Conf.Language(19), nil)
-	}
-	if model.IsCloudAssetSourceChange(err) {
-		return apicontract.GetCloudUser.FailureWithData(1, err.Error(), data)
-	}
-	return apicontract.GetCloudUser.FailureWithData(1, model.Conf.Language(18), data)
-}, func(c *gin.Context) *apicontract.Response[*apicontract.SettingUser] {
-	if model.IsAdminRoleContext(c) {
-		return nil
-	}
-	ret := apicontract.Success((*apicontract.SettingUser)(nil))
-	return &ret
-})
-
-var logoutCloudUser = contractHandler(apicontract.LogoutCloudUser, func(c *gin.Context, request apicontract.EmptyRequest) apicontract.Response[apicontract.Null] {
-	model.LogoutUser()
-	return apicontract.Success(apicontract.Null{})
-})
-
-var login2faCloudUser = contractHandler(apicontract.Login2faCloudUser, func(c *gin.Context, request apicontract.SettingLogin2faRequest) apicontract.Response[apicontract.Login2faEnvelope] {
-	return apicontract.SuccessDirectJSON(*model.Login2fa(request.Token, request.Code))
 })
 
 var setEmoji = contractHandler(apicontract.SetEmoji, func(c *gin.Context, request apicontract.SettingEmojiRequest) apicontract.Response[apicontract.Null] {

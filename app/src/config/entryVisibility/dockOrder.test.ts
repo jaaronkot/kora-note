@@ -126,6 +126,19 @@ test("dock default order follows the catalog while retaining placement and unkno
     assert.deepEqual(merged[DOCK_ORDER_SCOPE_BY_POSITION.LeftBottom], ["bookmark"]);
 });
 
+test("saved dock orders no longer move the bookmark entry out of the left dock", () => {
+    const snapshot = emptySnapshot();
+    snapshot[DOCK_ORDER_SCOPE_BY_POSITION.LeftBottom] = ["bookmark", "tag"];
+    snapshot[DOCK_ORDER_SCOPE_BY_POSITION.RightTop] = ["outline"];
+    const merged = mergeDockEntryOrderSnapshot(snapshot, {
+        [DOCK_ORDER_SCOPE_BY_POSITION.RightTop]: ["bookmark", "outline"],
+        [DOCK_ORDER_SCOPE_BY_POSITION.LeftBottom]: ["tag"],
+    });
+
+    assert.deepEqual(merged[DOCK_ORDER_SCOPE_BY_POSITION.LeftBottom], ["bookmark", "tag"]);
+    assert.deepEqual(merged[DOCK_ORDER_SCOPE_BY_POSITION.RightTop], ["outline"]);
+});
+
 test("dock order scopes map to all six runtime containers", () => {
     const containers = Array.from({length: 6}, () => new FakeDockContainer());
     const layout = layoutWith(containers);
@@ -151,7 +164,6 @@ test("dock order snapshot removes duplicates and appends missing catalog entries
         {key: "outline", position: "LeftTop"},
         {key: "bookmark", position: "LeftBottom"},
         {key: "tag", position: "LeftBottom"},
-        {key: "agentChat", position: "RightTop"},
         {key: "backlink", position: "RightBottom"},
         {key: "bottom-left", position: "BottomLeft"},
         {key: "bottom-right", position: "BottomRight"},
@@ -159,7 +171,7 @@ test("dock order snapshot removes duplicates and appends missing catalog entries
 
     assert.deepEqual(snapshot[DOCK_ORDER_SCOPE_BY_POSITION.LeftTop], ["file", "plugin:one:dock", "outline"]);
     assert.deepEqual(snapshot[DOCK_ORDER_SCOPE_BY_POSITION.LeftBottom], ["bookmark", "tag"]);
-    assert.deepEqual(snapshot[DOCK_ORDER_SCOPE_BY_POSITION.RightTop], ["graph", "agentChat"]);
+    assert.deepEqual(snapshot[DOCK_ORDER_SCOPE_BY_POSITION.RightTop], ["graph"]);
     assert.deepEqual(snapshot[DOCK_ORDER_SCOPE_BY_POSITION.RightBottom], ["backlink"]);
     assert.deepEqual(snapshot[DOCK_ORDER_SCOPE_BY_POSITION.BottomLeft], ["bottom-left"]);
     assert.deepEqual(snapshot[DOCK_ORDER_SCOPE_BY_POSITION.BottomRight], ["bottom-right"]);

@@ -16,7 +16,6 @@ import (
 	"time"
 
 	"github.com/olahol/melody"
-	"github.com/siyuan-community/siyuan/kernel/conf"
 	"github.com/siyuan-community/siyuan/kernel/util"
 )
 
@@ -58,8 +57,7 @@ func TestFailedExitRestoresBackgroundServices(t *testing.T) {
 				OnKernelPluginsStart = func() { resumed++ }
 				defer unlockSync()
 			} else {
-				Conf.Sync.Load().Enabled, Conf.Sync.Load().Mode, Conf.Sync.Load().Perception = true, 1, false
-				Conf.SetUser(&conf.User{UserId: "exit-service-test", UserSiYuanOneTimePayStatus: 1})
+				Conf.Sync.Load().Enabled, Conf.Sync.Load().Mode = true, 1
 				Conf.Repo.Load().Key = nil
 			}
 			for attempt := 0; attempt < 2; attempt++ {
@@ -117,9 +115,7 @@ func TestExitSyncSkippedAndFailed(t *testing.T) {
 	}
 	Conf.Sync.Load().Mode = 1
 	Conf.Sync.Load().Enabled = true
-	Conf.SetUser(&conf.User{UserId: "sync-test", UserSiYuanOneTimePayStatus: 1})
 	Conf.Repo.Load().Key = nil
-	Conf.Sync.Load().Perception = false
 	autoSyncErrCount.Store(8)
 	if !checkSync(false, true, false) {
 		t.Fatal("exit retry was blocked by automatic sync backoff")

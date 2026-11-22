@@ -11,17 +11,6 @@ import {
     resolveEntryOrderWithBoundaryDefaults,
 } from "./order";
 
-test("new OCR actions merge into saved image menus while retaining plugin slots and valid separators", () => {
-    const entries = getEntryCatalogChildren("inline.image.ocr");
-    const defaults = entries.map(item => item.key);
-    const saved = ["copyOCRText", "plugin:example:item", "ocrResult", "separator_reOCR", "reOCR"];
-    const separators = new Set(entries.filter(item => item.type === "separator").map(item => item.key));
-    const merged = mergeEntryOrderPreservingUnknown(defaults, saved, undefined, separators);
-    assert.deepEqual(merged, ["copyOCRText", "plugin:example:item", "clearOCRText", "ocrResult", "separator_reOCR", "reOCR", "reAIOCR"]);
-    assert.deepEqual(resolveEntryOrder([...defaults, "plugin:example:item"], merged, separators), merged);
-    assert.equal(isValidEntryOrder(merged, separators), true);
-});
-
 test("super block creation merges into saved menu orders and preserves plugin slots", () => {
     const groups: Array<[string, string[]]> = [
         ["gutter.single.superBlock", ["prependSuperBlockColumn", "prependSuperBlockChild", "appendSuperBlockColumn", "appendSuperBlockChild"]],
@@ -413,21 +402,21 @@ test("entry order preserves plugin registration slots", () => {
 });
 
 test("top bar order can move entries across its fixed boundary while preserving an unavailable plugin slot", () => {
-    const defaultOrder = ["barSync", "barBack", "drag", "toolbarVIP", "barPlugins"];
-    const savedOrder = ["barBack", "plugin:missing:item", "drag", "barSync", "toolbarVIP", "barPlugins"];
+    const defaultOrder = ["barSync", "barBack", "drag", "toolbarVIP", "barCommand"];
+    const savedOrder = ["barBack", "plugin:missing:item", "drag", "barSync", "toolbarVIP", "barCommand"];
     assert.deepEqual(mergeEntryOrderPreservingUnknown(defaultOrder, savedOrder, [
         "barBack",
         "toolbarVIP",
         "drag",
         "barSync",
-        "barPlugins",
+        "barCommand",
     ]), [
         "barBack",
         "plugin:missing:item",
         "toolbarVIP",
         "drag",
         "barSync",
-        "barPlugins",
+        "barCommand",
     ]);
 });
 

@@ -17,7 +17,7 @@ import {progressLoading, updateReindexProgressStatus} from "../../dialog/progres
 import {updateExitProgressStatus} from "../../dialog/exitRequest";
 import {syncCheckoutProgress} from "../../sync/checkoutProgress";
 import type {App} from "../../index";
-import {applyPluginReload, syncGlobalPluginConfig} from "../../plugin/globalState";
+import {applyPluginReload} from "../../plugin/globalState";
 import {reloadEmoji} from "../../emoji";
 import {renderSnippet} from "../../config/util/snippets";
 import {redirectToCheckAuth} from "../../util/pathName";
@@ -29,7 +29,6 @@ import {renderMobileBottomBar} from "./mobileBottomBar";
 import {Constants} from "../../constants";
 import {MOBILE_SIDE_PANEL_CONFIG_CHANGE_EVENT} from "./mobileSidePanelConfig";
 import {appearanceConfigApi, refreshAppearance} from "../../config/tabs/appearanceRuntime";
-import {applyCloudUserState} from "../../config/tabs/accountUi";
 import {isInMobileApp} from "../../protyle/util/compatibility";
 import {handleMobileKernelExit} from "./kernelExit";
 import {sanitizeKernelHTML} from "../../util/hostCapabilities";
@@ -113,10 +112,6 @@ export const onMessage = (app: App, data: IWebSocketData) => {
                 break;
             case "setConf":
                 window.siyuan.config = data.data;
-                syncGlobalPluginConfig(app, data.data.bazaar.petalDisabled);
-                break;
-            case "setCloudUser":
-                applyCloudUserState(data.data.user, data.data.userName);
                 break;
             case "setServerAddrs":
                 updateServerAddresses(data.data);

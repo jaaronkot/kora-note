@@ -94,7 +94,7 @@ func TestConfNormalizeIsSharedAndIdempotent(t *testing.T) {
 	}
 	for name, value := range map[string]any{
 		"tag": c.Tag.Load(), "snippet": c.Snippet.Load(), "api": c.Api.Load(), "bazaar": c.Bazaar.Load(), "notebookCrypto": c.NotebookCrypto,
-		"stat": c.Stat.Load(), "ocr": c.OCR.Load(), "oidc": c.OIDC, "secrets": c.Secrets.Load(), "variables": c.Variables.Load(),
+		"stat": c.Stat.Load(), "oidc": c.OIDC, "secrets": c.Secrets.Load(), "variables": c.Variables.Load(),
 		"keymap": c.Keymap.Load(), "uiLayout": c.UILayout.Load(), "onboarding": c.Onboarding.Load(), "system": c.System.Load(),
 	} {
 		if reflect.ValueOf(value).IsNil() {

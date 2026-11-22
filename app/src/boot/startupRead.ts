@@ -7,7 +7,7 @@ export const finishStartupReads = () => {pending = false;};
 
 const reads = new Set([
     "/api/system/getConf", "/api/petal/loadPetals", "/api/storage/getLocalStorage",
-    "/api/setting/getCloudUser", "/api/system/getEmojiConf",
+    "/api/system/getEmojiConf",
 ]);
 
 export const fetchStartupRead = async (input: RequestInfo | URL, init?: RequestInit,

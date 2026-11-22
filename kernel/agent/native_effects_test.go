@@ -35,7 +35,7 @@ func TestNativeToolConfirmationAndSnapshotsFollowDeclaredEffects(t *testing.T) {
 	t.Cleanup(func() { model.Conf = previous })
 	model.Conf = model.NewAppConf()
 	for _, enabled := range []bool{false, true} {
-		for _, provider := range []int{conf.ProviderSiYuan, conf.ProviderS3, conf.ProviderWebDAV, conf.ProviderLocal} {
+		for _, provider := range []int{conf.ProviderWebDAV, conf.ProviderLocal} {
 			sync := conf.NewSync()
 			sync.Provider = provider
 			sync.Enabled = enabled
@@ -85,7 +85,7 @@ func TestCapabilityEffectsRejectExpansion(t *testing.T) {
 	model.Conf.Sync.Store(sync)
 	registration := &capabilityRegistration{ModelName: "sync", Tool: tools.SyncTool}
 	approved := capabilityEffects(registration, "perform")
-	sync.Provider = conf.ProviderS3
+	sync.Provider = conf.ProviderWebDAV
 	if err := validateCapabilityEffects(registration, "perform", approved); err == nil {
 		t.Fatal("local-to-remote sync reused a confirmation without external effects")
 	}

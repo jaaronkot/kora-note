@@ -253,8 +253,6 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y strace
-      - name: Prepare native OCR verification resources
-        run: python3 scripts/prepare-ocr.py --runtime linux-amd64 --build-worker
       - name: Test kernel test runner
         run: node --test scripts/test-kernel.test.mjs
       - name: Test all kernel packages
@@ -263,9 +261,6 @@ jobs:
         continue-on-error: true
         run: node ../scripts/test-kernel.mjs --shards 4 --output "${{ runner.temp }}/kernel-test-results"
         working-directory: kernel
-        env:
-          SIYUAN_OCR_TEST_ASSETS: ${{ github.workspace }}/app/stage/ocr/models
-          SIYUAN_OCR_TEST_LIBRARY: ${{ github.workspace }}/app/stage/ocr/runtime/linux-amd64/libonnxruntime.so
       - name: Test default structured title migration
         id: test_default_structured_title_migration
         continue-on-error: true
@@ -413,8 +408,6 @@ jobs:
         continue-on-error: true
         run: pnpm test
         working-directory: app
-      - name: Test OCR build and resource scripts
-        run: python -m unittest discover -s scripts -p "test_*ocr*.py"
       - name: Test editor group selection
         id: test_editor_group_selection
         continue-on-error: true
@@ -1021,8 +1014,7 @@ jobs:
              ${{ github.workspace }}/siyuan-android/app/libs/kernel.aar
           cd ${{ github.workspace }}/go/src/github.com/${{ github.repository }}/app
           node scripts/trimChangelogs.js
-          python3 ../scripts/prepare-ocr.py
-          zip -r app.zip appearance guide stage $([ -d changelogs ] && echo changelogs) -x 'stage/ocr/runtime/*'
+          zip -r app.zip appearance guide stage $([ -d changelogs ] && echo changelogs)
           zip -j app.zip ../LICENSE ../THIRD_PARTY_NOTICES.md
           mkdir -p ${{ github.workspace }}/siyuan-android/app/src/main/assets
           cp app.zip ${{ github.workspace }}/siyuan-android/app/src/main/assets/app.zip

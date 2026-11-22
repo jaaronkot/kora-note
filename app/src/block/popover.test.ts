@@ -15,7 +15,6 @@ const browserCases = async (source: string, keyboardSource: string) => {
     const assetRequests: {path: string, signal: AbortSignal, receive: (response: unknown) => void}[] = [];
     const notebookRequests: {id: string, receive: (response: unknown) => void}[] = [];
     const treeItems = new WeakMap<Element, {notebookId: string}>();
-    const ocrRequests: ((text: string | undefined | {text: string, failed: boolean}) => void)[] = [];
     class Panel {
         element = document.createElement("div");
         editors: {protyle: IProtyle}[] = [];
@@ -42,8 +41,6 @@ const browserCases = async (source: string, keyboardSource: string) => {
         getDocTreeItem: (element: Element) => treeItems.get(element?.closest("li[data-tree-key]")),
         BlockPanel: Panel,
         fetchSyncPost: () => new Promise(resolve => requests.push(resolve)),
-        getImageOCRResult: () => new Promise<{text: string, failed: boolean} | undefined>(resolve => ocrRequests.push(result =>
-            resolve(typeof result === "string" ? {text: result, failed: false} : result))),
         hideTooltip: () => { tooltip = ""; },
         showTooltip: (text: string) => { tooltip = text; },
         fetchPost: (url: string, body: {path: string, notebook?: string}, receive: (response: unknown) => void,
@@ -71,8 +68,7 @@ const browserCases = async (source: string, keyboardSource: string) => {
         config: {editor: {floatWindowMode: 0, floatWindowDelay: 20}},
         menus: {menu: {element: document.createElement("div")}},
         blockPanels: [],
-        languages: {ocrResult: "OCR text", ocrNoText: "No OCR text", ocrFailed: "OCR recognition failed",
-            emptyContent: "No related content found", modifiedAt: "Modified", createdAt: "Created",
+        languages: {emptyContent: "No related content found", modifiedAt: "Modified", createdAt: "Created",
             listItemActionTip: "List menu and attributes"},
     } as unknown as typeof window.siyuan;
     window.JSAndroid = {} as typeof window.JSAndroid;
@@ -194,92 +190,26 @@ const browserCases = async (source: string, keyboardSource: string) => {
     check.equal(assetRequests.length, 1);
     assetRequests[0].receive({code: 0, data: {hSize: "2 MiB"}});
     check.match(tooltip, /PNG · 1920 × 1080 · 2 MiB$/);
-    ocrRequests[0]("<script> & text\nsecond line");
-    await Promise.resolve();
-    check.match(tooltip, /OCR text:<br>&lt;script> &amp; text<br>second line$/);
     check.match(tooltip, /2 MiB/);
     image.dispatchEvent(new MouseEvent("mouseover", {bubbles: true}));
     document.body.dispatchEvent(new MouseEvent("mouseover", {bubbles: true}));
     check.equal(assetRequests[1].signal.aborted, true);
     tooltip = "later target";
     assetRequests[1].receive({code: 0, data: {hSize: "stale"}});
-    ocrRequests[1]("stale OCR");
-    await Promise.resolve();
     check.equal(tooltip, "later target");
     image.dispatchEvent(new MouseEvent("mouseover", {bubbles: true}));
     const unavailable = tooltip;
     assetRequests[2].receive({code: 1, data: null});
     check.equal(tooltip, unavailable);
-    ocrRequests[2](" \n ");
-    await Promise.resolve();
-    check.equal(tooltip, unavailable, "empty OCR leaves only the existing image information");
     image.setAttribute("data-src", "https://example.com/photo.webp");
     image.dispatchEvent(new MouseEvent("mouseover", {bubbles: true}));
     check.match(tooltip, /photo.webp.*WEBP · 1920 × 1080/);
     check.equal(assetRequests.length, 3);
-    check.equal(ocrRequests.length, 3, "remote images do not query OCR");
     image.setAttribute("data-src", "assets/encrypted.png?box=encrypted");
     image.dispatchEvent(new MouseEvent("mouseover", {bubbles: true}));
     check.equal(assetRequests.length, 3);
-    check.equal(ocrRequests.length, 3, "encrypted resources do not query OCR");
-    image.setAttribute("data-src", "assets/long-ocr.png");
-    image.dispatchEvent(new MouseEvent("mouseover", {bubbles: true}));
-    const longText = "x".repeat(201);
-    ocrRequests[3](longText);
-    await Promise.resolve();
-    check.ok(tooltip.endsWith("x".repeat(200) + "..."));
-    check.equal(tooltip.includes(longText), false);
-    image.dispatchEvent(new MouseEvent("mouseover", {bubbles: true}));
-    ocrRequests[4]("1\r\n2\r3\n4\n5\n6\n7");
-    await Promise.resolve();
-    check.ok(tooltip.endsWith("1<br>2<br>3<br>4<br>5<br>6..."));
-    image.dispatchEvent(new MouseEvent("mouseover", {bubbles: true}));
-    ocrRequests[5]("😀".repeat(201));
-    await Promise.resolve();
-    check.ok(tooltip.endsWith("😀".repeat(200) + "..."), "truncation does not split surrogate pairs");
-    image.dispatchEvent(new MouseEvent("mouseover", {bubbles: true}));
-    ocrRequests[6]("<".repeat(201));
-    await Promise.resolve();
-    check.ok(tooltip.endsWith("&lt;".repeat(200) + "..."), "truncation precedes HTML escaping");
-    image.dispatchEvent(new MouseEvent("mouseover", {bubbles: true}));
-    ocrRequests[7]("x".repeat(200));
-    await Promise.resolve();
-    check.ok(tooltip.endsWith("x".repeat(200)));
-    check.equal(tooltip.endsWith("..."), false, "exact-length text remains complete");
-    image.dispatchEvent(new MouseEvent("mouseover", {bubbles: true}));
-    ocrRequests[8]("1\n2\n3\n4\n5\n6");
-    await Promise.resolve();
-    check.ok(tooltip.endsWith("1<br>2<br>3<br>4<br>5<br>6"), "six complete lines remain unchanged");
     check.equal(image.title, "");
     check.equal(image.alt, "");
-    window.siyuan.config.ocr = {provider: "paddleocr", model: "tiny", auto: false,
-        aiModelId: "", reasoningEffort: "", thresholds: {detection: null, box: null, recognition: null},
-        showText: false, showEmpty: false, showError: false};
-    const previousOCRRequests = ocrRequests.length;
-    image.dispatchEvent(new MouseEvent("mouseover", {bubbles: true}));
-    check.equal(ocrRequests.length, previousOCRRequests, "disabled tooltip options skip OCR reads but retain asset information");
-    check.match(tooltip, /PNG · 1920 × 1080/);
-    window.siyuan.config.ocr.showEmpty = true;
-    image.dispatchEvent(new MouseEvent("mouseover", {bubbles: true}));
-    ocrRequests.at(-1)("");
-    await Promise.resolve();
-    check.match(tooltip, /No OCR text$/);
-    window.siyuan.config.ocr.showError = true;
-    image.dispatchEvent(new MouseEvent("mouseover", {bubbles: true}));
-    ocrRequests.at(-1)({text: "old text", failed: true});
-    await Promise.resolve();
-    check.match(tooltip, /OCR recognition failed$/);
-    check.equal(tooltip.includes("old text"), false);
-    image.dispatchEvent(new MouseEvent("mouseover", {bubbles: true}));
-    ocrRequests.at(-1)(undefined);
-    await Promise.resolve();
-    check.doesNotMatch(tooltip, /No OCR text|OCR recognition failed/, "read failures are not recognition failures");
-    window.siyuan.config.ocr.showText = true;
-    image.dispatchEvent(new MouseEvent("mouseover", {bubbles: true}));
-    window.siyuan.config.ocr.showText = false;
-    ocrRequests.at(-1)("late preview");
-    await Promise.resolve();
-    check.equal(tooltip.includes("late preview"), false, "late responses use the latest tooltip preferences");
     const link = document.createElement("span");
     link.setAttribute("data-type", "a");
     link.setAttribute("data-href", "https://example.com/file.pdf");

@@ -101,7 +101,7 @@ func TestSafeWebDAVEndpoint(t *testing.T) {
 func TestFormatRepoCloudLockError(t *testing.T) {
 	previousConf, previousLangs := Conf, util.Langs
 	t.Cleanup(func() { Conf, util.Langs = previousConf, previousLangs })
-	Conf = &AppConf{Lang: "en", Sync: NewConfSection(&conf.Sync{Provider: conf.ProviderSiYuan})}
+	Conf = &AppConf{Lang: "en", Sync: NewConfSection(&conf.Sync{Provider: conf.ProviderWebDAV})}
 	util.Langs = map[string]map[int]string{"en": {
 		24: "timeout", 31: "auth", 188: "lock failed", 189: "another device", 249: "forbidden", 408: "DNS failed",
 	}}
@@ -121,7 +121,7 @@ func TestFormatRepoCloudLockError(t *testing.T) {
 		{cloud.ErrCloudForbidden, "forbidden"},
 	} {
 		got := formatRepoErrorMsg(tc.err)
-		want := tc.want + " (Provider: " + conf.ProviderToStr(conf.ProviderSiYuan) + ")"
+		want := tc.want + " (Provider: " + conf.ProviderToStr(conf.ProviderWebDAV) + ")"
 		if got != want {
 			t.Fatalf("got %q, want %q", got, want)
 		}
@@ -136,12 +136,12 @@ func TestFormatRepoCloudLockError(t *testing.T) {
 func TestFormatRepoPermissionError(t *testing.T) {
 	previousConf, previousLangs := Conf, util.Langs
 	t.Cleanup(func() { Conf, util.Langs = previousConf, previousLangs })
-	Conf = &AppConf{Lang: "en", Sync: NewConfSection(&conf.Sync{Provider: conf.ProviderS3})}
+	Conf = &AppConf{Lang: "en", Sync: NewConfSection(&conf.Sync{Provider: conf.ProviderWebDAV})}
 	util.Langs = map[string]map[int]string{"en": {33: "check workspace permissions"}}
 	for _, message := range []string{"Access is denied.", "access is denied", "ACCESS IS DENIED", "permission denied"} {
 		t.Run(message, func(t *testing.T) {
 			err := &os.LinkError{Op: "rename", Old: "private.jpg.tmp", New: "private.jpg", Err: errors.New(message)}
-			want := "check workspace permissions (Provider: " + conf.ProviderToStr(conf.ProviderS3) + ")"
+			want := "check workspace permissions (Provider: " + conf.ProviderToStr(conf.ProviderWebDAV) + ")"
 			if got := formatRepoErrorMsg(err); got != want {
 				t.Fatalf("got %q, want %q", got, want)
 			}
@@ -152,7 +152,7 @@ func TestFormatRepoPermissionError(t *testing.T) {
 func TestFormatRepoDocumentSpecError(t *testing.T) {
 	previousConf, previousLangs := Conf, util.Langs
 	t.Cleanup(func() { Conf, util.Langs = previousConf, previousLangs })
-	Conf = &AppConf{Lang: "en", Sync: NewConfSection(&conf.Sync{Provider: conf.ProviderS3})}
+	Conf = &AppConf{Lang: "en", Sync: NewConfSection(&conf.Sync{Provider: conf.ProviderWebDAV})}
 	util.Langs = map[string]map[int]string{"en": {275: "Please upgrade to the latest version and try again"}}
 	for _, test := range []struct {
 		name string

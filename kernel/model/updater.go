@@ -5,7 +5,6 @@
 package model
 
 import (
-	"context"
 	"crypto/sha256"
 	"errors"
 	"fmt"
@@ -45,6 +44,18 @@ type installPackageDownload struct {
 
 var checkDownloadInstallPkgLock = sync.Mutex{}
 var errUpdatePackageUnavailable = errors.New("update package is unavailable")
+
+// RefreshCheckJob6H 定期检查是否有可下载的新版本安装包。
+func RefreshCheckJob6H() {
+	go refreshCheckDownloadInstallPkg()
+}
+
+func refreshCheckDownloadInstallPkg() {
+	defer logging.Recover()
+
+	time.Sleep(3 * time.Minute)
+	checkDownloadInstallPkg(true)
+}
 
 func checkDownloadInstallPkg(notifyPackageUnavailable bool) {
 	defer logging.Recover()
@@ -287,37 +298,6 @@ func sha256Hash(filename string) (ret string, err error) {
 		return "", err
 	}
 	return fmt.Sprintf("%x", hash.Sum(nil)), nil
-}
-
-type Announcement struct {
-	Id     string `json:"id"`
-	Title  string `json:"title"`
-	URL    string `json:"url"`
-	Region int    `json:"region"`
-}
-
-func getAnnouncements() (ret []*Announcement) {
-	result, err := util.GetRhyResult(context.TODO(), false)
-	if err != nil {
-		logging.LogErrorf("get announcement failed: %s", err)
-		return
-	}
-
-	if nil == result["announcement"] {
-		return
-	}
-
-	announcements := result["announcement"].([]any)
-	for _, announcement := range announcements {
-		ann := announcement.(map[string]any)
-		ret = append(ret, &Announcement{
-			Id:     ann["id"].(string),
-			Title:  ann["title"].(string),
-			URL:    ann["url"].(string),
-			Region: int(ann["region"].(float64)),
-		})
-	}
-	return
 }
 
 func CheckUpdate(showMsg bool) {

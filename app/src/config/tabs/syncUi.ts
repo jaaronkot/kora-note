@@ -5,22 +5,20 @@ import {showMessage} from "../../dialog/message";
 import {fetchPost, fetchSyncPost} from "../../util/fetch";
 import {ContractFormData} from "../../util/contractFormData";
 import type {APICallbackResponse, APIPOSTRoutes} from "../../types/api";
-import {isInIOS, saveExportFile} from "../../protyle/util/compatibility";
-import {isPaidUser, needSubscribe} from "../../util/needSubscribe";
+import {saveExportFile} from "../../protyle/util/compatibility";
+import {isPaidUser} from "../../util/needSubscribe";
 import {getCloudURL} from "../util/about";
-import {getHostCapabilities, sanitizeKernelHTML} from "../../util/hostCapabilities";
+import {getHostCapabilities} from "../../util/hostCapabilities";
 import {Dialog} from "../../dialog";
 import {escapeHtmlTextAndAttr} from "../../util/escape";
 import {isMobile} from "../../util/functions";
 import {canPurgeRepo} from "../../history/repoPurge";
-import {refreshSyncCloudDirBlock} from "../../sync/syncGuide";
 
 /** 按当前配置刷新同步 Tab 可见性与动态面板（供 syncRuntime 调用） */
 export const refreshSyncTabPanels = (root: Element) => {
     setSyncConfigItemVisible(root);
     setSyncModeRelatedConfigItemVisible(root);
     renderProviderConfig(root);
-    renderCloudSpace(root);
 };
 
 /** 仅刷新与同步模式相关的配置项可见性（供 syncRuntime 调用） */
@@ -28,17 +26,15 @@ export const refreshSyncModeRelatedItems = (root: Element) => {
     setSyncModeRelatedConfigItemVisible(root);
 };
 
-/** 根据云端同步和运行环境刷新局域网同步配置项可见性 */
+/** 根据运行环境刷新局域网同步配置项可见性 */
 export const refreshLANSyncConfigItemVisibility = (root: Element) => {
-    const visible = window.siyuan.config.sync.provider === 0 ? !needSubscribe("") : isPaidUser();
     root.querySelector(`#${CSS.escape("sync.lan.enabled")}`)?.closest(".config-item")?.classList.toggle(
-        "fn__none", !visible || !window.siyuan.config.sync.enabled || window.siyuan.config.system.container === "docker");
+        "fn__none", !isPaidUser() || !window.siyuan.config.sync.enabled || window.siyuan.config.system.container === "docker");
 };
 
 /** 搜索时区分局域网同步的前置条件和硬性使用限制 */
 export const getLANSyncSearchAvailability = () => {
-    const entitled = window.siyuan.config.sync.provider === 0 ? !needSubscribe("") : isPaidUser();
-    if (!entitled || window.siyuan.config.system.container === "docker") {
+    if (!isPaidUser() || window.siyuan.config.system.container === "docker") {
         return {available: false};
     }
     if (!window.siyuan.config.sync.enabled) {
@@ -48,15 +44,13 @@ export const getLANSyncSearchAvailability = () => {
 };
 
 const setSyncConfigItemVisible = (root: Element) => {
-    const visible = window.siyuan.config.sync.provider === 0 ? !needSubscribe("") : isPaidUser();
+    const visible = isPaidUser();
     [
-        "cloudSpace",
         "sync.enabled",
         "sync.generateConflictDoc",
         "sync.mode",
         "sync.assetDownloadMode",
         "sync.interval",
-        "sync.perception",
         "sync.lan.enabled",
         "syncCloudDirBlock",
         "syncCloudBackupBlock",
@@ -74,9 +68,8 @@ const setSyncModeRelatedConfigItemVisible = (root: Element) => {
         return;
     }
     const syncMode: Config.ISync["mode"] = Number(syncModeElement.value);
-    const isProviderOfficialAutoSync = syncMode === 1 && !needSubscribe("");
-    root.querySelector(`#${CSS.escape("sync.interval")}`)?.closest(".config-item")?.classList.toggle("fn__none", !isProviderOfficialAutoSync);
-    root.querySelector(`#${CSS.escape("sync.perception")}`)?.closest(".config-item")?.classList.toggle("fn__none", !(isProviderOfficialAutoSync && window.siyuan.config.sync.provider === 0 && window.siyuan.config.system.container !== "docker"));
+    // 自动同步模式才需要配置同步间隔
+    root.querySelector(`#${CSS.escape("sync.interval")}`)?.closest(".config-item")?.classList.toggle("fn__none", syncMode !== 1);
 };
 
 /** 同步提供商配置区检索关键词（供 syncTab 注册 slot） */
@@ -91,14 +84,7 @@ export const getSyncProviderConfigRowKeywords = (): string[] => [
     window.siyuan.languages.export,
     window.siyuan.languages.clearSyncConfig,
     "Endpoint",
-    "Access Key",
-    "Secret Key",
-    "Bucket",
-    "Region ID",
     "Timeout (s)",
-    "Addressing",
-    "Path-style",
-    "Virtual-hosted-style",
     "TLS Verify",
     "Verify",
     "Skip",
@@ -107,7 +93,7 @@ export const getSyncProviderConfigRowKeywords = (): string[] => [
     "Password",
 ];
 
-type SyncProviderConfigKey = Extract<keyof Config.ISync, "s3" | "webdav" | "local">;
+type SyncProviderConfigKey = "webdav" | "local";
 
 type SyncProviderFieldDef =
     | {type: "input"; label: string; id: string; attrs?: string}
@@ -124,7 +110,6 @@ type SyncThirdPartyProviderDef = SyncProviderIntroDef & {
     api: string;
     fields: SyncProviderFieldDef[];
 } & (
-    | {configKey: "s3"; getConfig: () => Config.ISync["s3"]}
     | {configKey: "webdav"; getConfig: () => Config.ISync["webdav"]}
     | {configKey: "local"; getConfig: () => Config.ISync["local"]}
 );
@@ -142,71 +127,7 @@ const genThirdPartyUnpaidIntro = (): string => {
 </div>`;
 };
 
-const SYNC_PROVIDER_DEFS: Record<Config.ISync["provider"], SyncProviderDef> = {
-    0: {
-        isProviderConfigAllowed: () => !needSubscribe(""),
-        genIntro: () => `<div class="b3-label b3-label--inner">${window.siyuan.languages.syncOfficialProviderIntro}</div>`,
-        genUnpaidIntro: () => {
-            const accountServer = getCloudURL("");
-            return `<div class="b3-label b3-label--inner">
-    ${isInIOS() ? window.siyuan.languages._kernel[295] : window.siyuan.languages._kernel[29].replaceAll("${accountServer}", accountServer)}
-</div>
-<div class="b3-label b3-label--inner">
-    ${window.siyuan.languages.cloudIntro1}
-    <div class="b3-label__text">
-        <ul class="fn__list">
-            <li>${window.siyuan.languages.cloudIntro2}</li>
-            <li>${window.siyuan.languages.cloudIntro3}</li>
-            <li>${window.siyuan.languages.cloudIntro4}</li>
-            <li>${window.siyuan.languages.cloudIntro5}</li>
-            <li>${window.siyuan.languages.cloudIntro6}</li>
-            <li>${window.siyuan.languages.cloudIntro7}</li>
-            <li>${window.siyuan.languages.cloudIntro8}</li>
-        </ul>
-    </div>
-</div>
-<div class="b3-label b3-label--inner">
-    ${window.siyuan.languages.cloudIntro9}
-    <div class="b3-label__text">
-        <ul style="padding-left: 2em">
-            <li>${window.siyuan.languages.cloudIntro10}</li>
-            <li>${window.siyuan.languages.cloudIntro11}</li>
-        </ul>
-    </div>
-</div>`;
-        },
-    },
-    2: {
-        isProviderConfigAllowed: isPaidUser,
-        configKey: "s3",
-
-        getConfig: () => window.siyuan.config.sync.s3,
-        genIntro: () => `<div class="b3-label b3-label--inner">
-    ${window.siyuan.languages.syncThirdPartyProviderS3Intro}
-    <div class="fn__hr"></div>
-    <em>${window.siyuan.languages.proFeature}</em>
-    <div class="fn__hr"></div>
-    ${window.siyuan.languages.syncThirdPartyProviderTip}
-</div>`,
-        genUnpaidIntro: genThirdPartyUnpaidIntro,
-        fields: [
-            {type: "input", label: "Endpoint", id: "endpoint"},
-            {type: "input", label: "Access Key", id: "accessKey"},
-            {type: "password", label: "Secret Key", id: "secretKey"},
-            {type: "input", label: "Bucket", id: "bucket"},
-            {type: "input", label: "Region ID", id: "region"},
-            {type: "input", label: "Timeout (s)", id: "timeout", attrs: 'type="number" min="7" max="300"'},
-            {type: "select", label: "Addressing", id: "pathStyle", options: [
-                {value: "true", label: "Path-style"},
-                {value: "false", label: "Virtual-hosted-style"},
-            ]},
-            {type: "select", label: "TLS Verify", id: "skipTlsVerify", options: [
-                {value: "false", label: "Verify"},
-                {value: "true", label: "Skip"},
-            ]},
-            {type: "input", label: "Concurrent Reqs", id: "concurrentReqs", attrs: 'type="number" min="1" max="16"'},
-        ],
-    },
+const SYNC_PROVIDER_DEFS: Partial<Record<number, SyncProviderDef>> = {
     3: {
         isProviderConfigAllowed: isPaidUser,
         configKey: "webdav",
@@ -261,26 +182,10 @@ const SYNC_PROVIDER_DEFS: Record<Config.ISync["provider"], SyncProviderDef> = {
 const buildProviderConfigKeywords = (): string[] => {
     const accountServer = getCloudURL("");
     return [
-        // 官方云（provider === 0）
-        window.siyuan.languages.syncOfficialProviderIntro,
-        window.siyuan.languages._kernel[29].replaceAll("${accountServer}", accountServer),
-        window.siyuan.languages._kernel[295],
-        window.siyuan.languages.cloudIntro1,
-        window.siyuan.languages.cloudIntro2,
-        window.siyuan.languages.cloudIntro3,
-        window.siyuan.languages.cloudIntro4,
-        window.siyuan.languages.cloudIntro5,
-        window.siyuan.languages.cloudIntro6,
-        window.siyuan.languages.cloudIntro7,
-        window.siyuan.languages.cloudIntro8,
-        window.siyuan.languages.cloudIntro9,
-        window.siyuan.languages.cloudIntro10,
-        window.siyuan.languages.cloudIntro11,
         // 未订阅 / 本地等提示
         window.siyuan.languages._kernel[214].replaceAll("${accountServer}", accountServer),
         window.siyuan.languages.mobileNotSupport,
-        // S3 / WebDAV / 本地第三方
-        window.siyuan.languages.syncThirdPartyProviderS3Intro,
+        // WebDAV / 本地第三方
         window.siyuan.languages.syncThirdPartyProviderWebDAVIntro,
         window.siyuan.languages.syncThirdPartyProviderLocalIntro,
         window.siyuan.languages.proFeature,
@@ -289,15 +194,15 @@ const buildProviderConfigKeywords = (): string[] => {
     ];
 };
 
-/** 第三方同步配置摘要：S3 显示「Bucket · Endpoint」，WebDAV 显示「Username · Endpoint」，未配置时给本地化占位 */
+/** 第三方同步配置摘要：WebDAV 显示「Username · Endpoint」，未配置时给本地化占位 */
 const getProviderConfigSummary = (def: SyncThirdPartyProviderDef): string => {
     const endpoint = def.getConfig().endpoint?.trim() || "";
     if (!endpoint) {
         return window.siyuan.languages.noProviderConfigured;
     }
-    // S3 以 Endpoint + Bucket 定位仓库，WebDAV 以 Endpoint + Username；只显示 Endpoint 时换桶看不出变化
+    // WebDAV 以 Endpoint + Username 定位仓库；只显示 Endpoint 时换桶看不出变化
     const sync = window.siyuan.config.sync;
-    const scope = def.configKey === "s3" ? sync.s3?.bucket?.trim() : def.configKey === "webdav" ? sync.webdav?.username?.trim() : "";
+    const scope = def.configKey === "webdav" ? sync.webdav?.username?.trim() : "";
     // 作用域在前：值行末尾会被省略号截断，而作用域才是区分仓库的那一项；分隔符沿用思源既有的「 · 」
     return scope ? `${scope} · ${endpoint}` : endpoint;
 };
@@ -307,8 +212,8 @@ const genProviderConfigRowHtml = (def: SyncThirdPartyProviderDef): string => {
     const L = window.siyuan.languages;
     const disabled = window.siyuan.config.readonly ? " disabled" : "";
     const summary = getProviderConfigSummary(def);
-    const canImportExport = getHostCapabilities().importExport && (def.configKey === "s3" || def.configKey === "webdav");
-    // 导入 / 导出仅 S3 与 WebDAV 支持；多个操作按钮竖排，与同分组的数据仓库密钥一致
+    const canImportExport = getHostCapabilities().importExport && def.configKey === "webdav";
+    // 导入 / 导出仅 WebDAV 支持；多个操作按钮竖排，与同分组的数据仓库密钥一致
     const importExportHtml = canImportExport ? `<div class="fn__hr"></div>
     <button class="b3-button b3-button--outline fn__block" style="position: relative"${disabled}>
         <input id="importSyncConfig" class="b3-form__upload" type="file" data-type="${def.configKey}">
@@ -346,7 +251,7 @@ const renderProviderConfig = (root: Element) => {
     if (def) {
         const allowed = def.isProviderConfigAllowed();
         introHtml = allowed ? def.genIntro() : def.genUnpaidIntro();
-        // 未订阅或官方云端没有可配置项时整项隐藏，与拆出前的可见规则一致
+        // 未订阅时没有可配置项时整项隐藏，与拆出前的可见规则一致
         if (allowed && isThirdPartySyncProviderDef(def)) {
             rowHtml = genProviderConfigRowHtml(def);
         }
@@ -360,10 +265,10 @@ const renderProviderConfig = (root: Element) => {
     }
 };
 
-const genProviderField = (field: SyncProviderFieldDef, warning = ""): string => {
+const genProviderField = (field: SyncProviderFieldDef): string => {
     switch (field.type) {
         case "input":
-            return genProviderFlexInput(field.label, field.id, field.attrs, warning);
+            return genProviderFlexInput(field.label, field.id, field.attrs);
         case "password":
             return genProviderFlexPassword(field.label, field.id);
         case "select":
@@ -372,12 +277,11 @@ const genProviderField = (field: SyncProviderFieldDef, warning = ""): string => 
     }
 };
 
-const genProviderFlexInput = (label: string, id: string, attrs = "", warning = "") => `<div class="b3-label b3-label--inner fn__flex config-sync-field">
+const genProviderFlexInput = (label: string, id: string, attrs = "") => `<div class="b3-label b3-label--inner fn__flex config-sync-field">
     <label for="${id}" class="fn__flex-center fn__size200">${label}</label>
     <div class="fn__space"></div>
-    <div class="fn__flex-1"><input spellcheck="false" id="${id}" class="b3-text-field fn__block" aria-describedby="sync-${id}-error${warning ? ` sync-${id}-warning` : ""}"${attrs ? ` ${attrs}` : ""}>
-    <div id="sync-${id}-error" class="ft__error fn__none" role="status"><div class="fn__hr"></div><span></span></div>${warning ? `
-    <div id="sync-${id}-warning" class="ft__error fn__none" role="status"><div class="fn__hr"></div><span>${warning}</span></div>` : ""}</div>
+    <div class="fn__flex-1"><input spellcheck="false" id="${id}" class="b3-text-field fn__block" aria-describedby="sync-${id}-error"${attrs ? ` ${attrs}` : ""}>
+    <div id="sync-${id}-error" class="ft__error fn__none" role="status"><div class="fn__hr"></div><span></span></div></div>
 </div>`;
 
 const genProviderFlexPassword = (label: string, id: string) => `<div class="b3-label b3-label--inner fn__flex config-sync-field">
@@ -404,16 +308,11 @@ const bindProviderConfigEvent = (configElement: Element, root: Element) => {
             return;
         }
         const formData = new ContractFormData({file: importElement.files[0]});
-        const isS3 = importElement.getAttribute("data-type") === "s3";
-        fetchPost(isS3 ? "/api/sync/importSyncProviderS3" : "/api/sync/importSyncProviderWebDAV", formData, (response: APICallbackResponse<APIPOSTRoutes["/api/sync/importSyncProviderS3" | "/api/sync/importSyncProviderWebDAV"]["response"]>) => {
+        fetchPost("/api/sync/importSyncProviderWebDAV", formData, (response: APICallbackResponse<APIPOSTRoutes["/api/sync/importSyncProviderWebDAV"]["response"]>) => {
             if (response.code !== 0 || !response.data) {
                 return;
             }
-            if ("s3" in response.data) {
-                window.siyuan.config.sync.s3 = response.data.s3;
-            } else {
-                window.siyuan.config.sync.webdav = response.data.webdav;
-            }
+            window.siyuan.config.sync.webdav = response.data.webdav;
             renderProviderConfig(root);
             showMessage(window.siyuan.languages.imported);
         });
@@ -424,7 +323,7 @@ const bindProviderConfigEvent = (configElement: Element, root: Element) => {
         if (!getHostCapabilities().importExport) {
             return;
         }
-        fetchPost(exportButton.getAttribute("data-type") === "s3" ? "/api/sync/exportSyncProviderS3" : "/api/sync/exportSyncProviderWebDAV", {}, (response) => {
+        fetchPost("/api/sync/exportSyncProviderWebDAV", {}, (response) => {
             void saveExportFile(response.data.zip);
         });
     });
@@ -468,7 +367,6 @@ const openSyncProviderConfigDialog = (root: Element) => {
         return;
     }
     const L = window.siyuan.languages;
-    const warning = def.configKey === "s3" ? L.s3EndpointBucketWarning : "";
     const testButton = `<div class="fn__space"></div>
     <button class="b3-button b3-button--outline" data-action="test"><svg class="b3-button__icon"><use xlink:href="#iconPlugZap"></use></svg><span>${L.testConnection}</span></button>`;
     const cloudName = window.siyuan.config.sync.cloudName;
@@ -476,10 +374,10 @@ const openSyncProviderConfigDialog = (root: Element) => {
     let rulesVersion = 0;
     let rulesTimer: ReturnType<typeof setTimeout>;
     const dialog = new MobileDialog({
-        title: `${L.syncConfig} - ${def.configKey === "s3" ? "S3" : def.configKey === "webdav" ? "WebDAV" : L.localFileSystem}`,
+        title: `${L.syncConfig} - ${def.configKey === "webdav" ? "WebDAV" : L.localFileSystem}`,
         width: isMobile() ? "92vw" : "680px",
         containerClassName: "config-sync-dialog",
-        content: `<div class="b3-dialog__content config-sync-form">${def.fields.map(field => genProviderField(field, field.id === "endpoint" ? warning : "")).join("")}
+        content: `<div class="b3-dialog__content config-sync-form">${def.fields.map(field => genProviderField(field)).join("")}
 <div data-type="sync-config-error" class="ft__error fn__none" role="status"></div></div>
 <div class="b3-dialog__action">
     <button class="b3-button b3-button--remove" data-action="clear">${L.clearSyncConfig}</button>${testButton}<div class="fn__flex-1"></div><div class="fn__space"></div>
@@ -534,7 +432,6 @@ const openSyncProviderConfigDialog = (root: Element) => {
         const response = await fetchSyncPost("/api/sync/getSyncProviderConfigRules", {
             provider,
             endpoint: configElement.querySelector<HTMLInputElement>("#endpoint").value,
-            bucket: configElement.querySelector<HTMLInputElement>("#bucket")?.value || "",
         }).catch(error => {
             if (closed || version !== rulesVersion) return;
             throw error;
@@ -542,7 +439,6 @@ const openSyncProviderConfigDialog = (root: Element) => {
         if (!response || closed || version !== rulesVersion) return;
         if (response.code !== 0) throw new Error(response.msg || L.syncConfigSaveFailed);
         requiredFields = response.data.requiredFields;
-        configElement.querySelector("#sync-endpoint-warning")?.classList.toggle("fn__none", !response.data.endpointBucketWarning);
         if (validationShown) validateSyncProviderFields(configElement, def, requiredFields);
         return response.data;
     };
@@ -574,9 +470,6 @@ const openSyncProviderConfigDialog = (root: Element) => {
         const currentRoot = root.isConnected ? root : document.querySelector("#syncProviderConfig")?.closest(".config__tab-container, .config");
         if (currentRoot) {
             refreshSyncTabPanels(currentRoot);
-            if (window.siyuan.config.sync.provider === 2) {
-                refreshSyncCloudDirBlock(currentRoot);
-            }
             const enabled = currentRoot.querySelector<HTMLInputElement>('[id="sync.enabled"]');
             if (enabled) {
                 enabled.checked = window.siyuan.config.sync.enabled;
@@ -658,9 +551,7 @@ const openSyncProviderConfigDialog = (root: Element) => {
                 configElement.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus();
                 return;
             }
-            const response = def.configKey === "s3" ? await fetchSyncPost("/api/sync/testSyncProviderS3", {
-                s3: readProviderConfigFields(configElement, def.getConfig()),
-            }) : def.configKey === "webdav" ? await fetchSyncPost("/api/sync/testSyncProviderWebDAV", {
+            const response = def.configKey === "webdav" ? await fetchSyncPost("/api/sync/testSyncProviderWebDAV", {
                 webdav: readProviderConfigFields(configElement, def.getConfig()), cloudName,
             }) : await fetchSyncPost("/api/sync/testSyncProviderLocal", {
                 local: readProviderConfigFields(configElement, def.getConfig()),
@@ -702,9 +593,6 @@ const openSyncProviderConfigDialog = (root: Element) => {
                     setError(response.msg || L.syncConfigSaveFailed);
                     return;
                 }
-                if (response.data.s3) {
-                    window.siyuan.config.sync.s3 = response.data.s3;
-                }
                 if (response.data.webdav) {
                     window.siyuan.config.sync.webdav = response.data.webdav;
                 }
@@ -720,7 +608,6 @@ const openSyncProviderConfigDialog = (root: Element) => {
     configElement.addEventListener("input", () => {
         rulesVersion++;
         clearTimeout(rulesTimer);
-        configElement.querySelector("#sync-endpoint-warning")?.classList.toggle("fn__none", true);
         // 配置已改变，旧的测试结果不再对应当前草稿
         setStatus("");
         rulesTimer = setTimeout(refreshRules, 300);
@@ -743,7 +630,7 @@ const openSyncProviderConfigDialog = (root: Element) => {
         }
     });
     configElement.querySelector('[data-action="togglePassword"]')?.addEventListener("click", () => {
-        const input = configElement.querySelector<HTMLInputElement>('input[id="secretKey"], input[id="password"]');
+        const input = configElement.querySelector<HTMLInputElement>('input[id="password"]');
         const icon = configElement.querySelector('[data-action="togglePassword"] use');
         input.type = input.type === "password" ? "text" : "password";
         icon.setAttribute("xlink:href", input.type === "password" ? "#iconEye" : "#iconEyeoff");
@@ -779,87 +666,3 @@ const readProviderConfigFields = <T extends object>(configElement: Element, temp
     });
     return result as T;
 };
-
-const renderCloudSpace = (root: Element) => {
-    const cloudSpaceElement = root.querySelector("#cloudSpace");
-    if (!cloudSpaceElement) {
-        return;
-    }
-
-    const isProviderOfficial = window.siyuan.config.sync.provider === 0;
-    const subscribed = !needSubscribe("");
-    const hidden = cloudSpaceElement.classList.toggle("fn__none", !isProviderOfficial || !subscribed);
-    if (!hidden) {
-        cloudSpaceElement.innerHTML = buildCloudSpaceHtml(
-            Object.fromEntries(CLOUD_SPACE_DISPLAY_KEYS.map((key) => [key, "0B"])) as CloudSpaceDisplayData,
-            true
-        );
-        fetchSyncPost("/api/cloud/getCloudSpace").then((response) => {
-            if (response.code === 1) {
-                cloudSpaceElement.innerHTML = `<span class="ft__error">${sanitizeKernelHTML(response.msg)}</span>`;
-                return;
-            }
-            if (response.code !== 0 || !response.data) {
-                return;
-            }
-            cloudSpaceElement.innerHTML = buildCloudSpaceHtml({
-                syncSize: response.data.sync.hSize,
-                backupSize: response.data.backup.hSize,
-                hAssetSize: response.data.hAssetSize,
-                hSize: response.data.hSize,
-                hTotalSize: response.data.hTotalSize,
-                hExchangeSize: response.data.hExchangeSize,
-                hTrafficUploadSize: response.data.hTrafficUploadSize,
-                hTrafficDownloadSize: response.data.hTrafficDownloadSize,
-                hTrafficAPIGet: response.data.hTrafficAPIGet,
-                hTrafficAPIPut: response.data.hTrafficAPIPut,
-            }, false);
-        }).catch(() => {});
-    }
-};
-
-const CLOUD_SPACE_DISPLAY_KEYS = [
-    "syncSize",
-    "backupSize",
-    "hAssetSize",
-    "hSize",
-    "hTotalSize",
-    "hExchangeSize",
-    "hTrafficUploadSize",
-    "hTrafficDownloadSize",
-    "hTrafficAPIGet",
-    "hTrafficAPIPut",
-] as const;
-
-type CloudSpaceDisplayData = Record<(typeof CLOUD_SPACE_DISPLAY_KEYS)[number], string>;
-
-const buildCloudSpaceHtml = (data: CloudSpaceDisplayData, loading: boolean) =>
-    `<div class="fn__flex config-cloud-space${loading ? " config-cloud-space--loading" : ""}">
-    <div class="config-cloud-space__body">
-        <div class="config-cloud-space__title">${window.siyuan.languages.cloudStorage}</div>
-        <div class="config-cloud-space__placeholder">
-        <div class="fn__hr"></div>
-        <ul class="b3-list">
-            <li class="b3-list-item" style="cursor: auto;">${window.siyuan.languages.sync}<span class="b3-list-item__meta">${data.syncSize}</span></li>
-            <li class="b3-list-item" style="cursor: auto;">${window.siyuan.languages.backup}<span class="b3-list-item__meta">${data.backupSize}</span></li>
-            <li class="b3-list-item" style="cursor: auto;"><a href="${getCloudURL("settings/file?type=3")}" target="_blank">${window.siyuan.languages.cdn}</a><span class="b3-list-item__meta">${data.hAssetSize}</span></li>
-            <li class="b3-list-item" style="cursor: auto;">${window.siyuan.languages.total}<span class="b3-list-item__meta">${data.hSize}</span></li>
-            <li class="b3-list-item" style="cursor: auto;">${window.siyuan.languages.sizeLimit}<span class="b3-list-item__meta">${data.hTotalSize}</span></li>
-            <li class="b3-list-item" style="cursor: auto;"><a href="${getCloudURL("settings/point")}" target="_blank">${window.siyuan.languages.pointExchangeSize}</a><span class="b3-list-item__meta">${data.hExchangeSize}</span></li>
-        </ul>
-        </div>
-    </div>
-    <div class="config-cloud-space__body">
-        <div class="config-cloud-space__title">${window.siyuan.languages.trafficStat}</div>
-        <div class="config-cloud-space__placeholder">
-        <div class="fn__hr"></div>
-        <ul class="b3-list">
-            <li class="b3-list-item" style="cursor: auto;">${window.siyuan.languages.upload}<span class="fn__space"></span><span class="ft__on-surface">${data.hTrafficUploadSize}</span></li>
-            <li class="b3-list-item" style="cursor: auto;">${window.siyuan.languages.download}<span class="fn__space"></span><span class="ft__on-surface">${data.hTrafficDownloadSize}</span></li>
-            <li class="b3-list-item" style="cursor: auto;">API GET<span class="fn__space"></span><span class="ft__on-surface">${data.hTrafficAPIGet}</span></li>
-            <li class="b3-list-item" style="cursor: auto;">API PUT<span class="fn__space"></span><span class="ft__on-surface">${data.hTrafficAPIPut}</span></li>
-        </ul>
-        </div>
-    </div>
-    ${loading ? '<div class="fn__loading"><span class="b3-loading" aria-hidden="true"></span></div>' : ""}
-</div>`;

@@ -78,14 +78,13 @@ var syncStatusCmd = &cobra.Command{
 		switch outputFormat {
 		case "json":
 			data, _ := json.MarshalIndent(map[string]any{
-				"enabled":    s.Enabled,
-				"mode":       s.Mode,
-				"provider":   s.Provider,
-				"stat":       s.Stat,
-				"synced":     s.Synced,
-				"cloudName":  s.CloudName,
-				"perception": s.Perception,
-				"interval":   s.Interval,
+				"enabled":   s.Enabled,
+				"mode":      s.Mode,
+				"provider":  s.Provider,
+				"stat":      s.Stat,
+				"synced":    s.Synced,
+				"cloudName": s.CloudName,
+				"interval":  s.Interval,
 			}, "", "  ")
 			fmt.Println(string(data))
 		default:
@@ -99,7 +98,6 @@ var syncStatusCmd = &cobra.Command{
 			}
 			fmt.Printf("Provider:  %s\n", conf.ProviderToStr(s.Provider))
 			fmt.Printf("Cloud:     %s\n", s.CloudName)
-			fmt.Printf("Perception: %v\n", s.Perception)
 			fmt.Printf("Interval:   %ds\n", s.Interval)
 		}
 		return nil

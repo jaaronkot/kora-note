@@ -43,10 +43,10 @@ test("slash visibility shares profile settings and only platform defaults differ
         for (const mobile of [false, true]) {
             runtimeWindow.siyuan.mobile = mobile ? {} : undefined;
             for (const visible of [false, true]) {
-                custom.entries["editor.image.ocrText"] = visible;
-                assert.equal(api.isEntryVisible("editor.image.ocrText"), visible);
+                custom.entries["editor.image.copyAsPNG"] = visible;
+                assert.equal(api.isEntryVisible("editor.image.copyAsPNG"), visible);
             }
-            delete custom.entries["editor.image.ocrText"];
+            delete custom.entries["editor.image.copyAsPNG"];
             for (const active of ["simple", "full", "custom"]) {
                 config.active = active;
                 assert.equal(api.isEntryVisible("editor.blockEmbed.toolbar"), true);

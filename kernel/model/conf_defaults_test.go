@@ -5,7 +5,6 @@
 package model
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/siyuan-community/siyuan/kernel/conf"
@@ -28,65 +27,6 @@ func TestNormalizeFileTreeDefaultIcon(t *testing.T) {
 			fileTree := normalizeFileTreeDefaultIcon(test.fileTree, test.confFileExists)
 			if test.want != fileTree.UseSVGDefaultIcon {
 				t.Fatalf("unexpected default icon setting: got %t, want %t", fileTree.UseSVGDefaultIcon, test.want)
-			}
-		})
-	}
-}
-
-func TestNormalizeOCRConfig(t *testing.T) {
-	for _, test := range []struct {
-		name           string
-		value          *conf.OCR
-		confFileExists bool
-		want           conf.OCR
-	}{
-		{name: "new device", want: conf.OCR{Provider: "paddleocr", Model: "tiny", Auto: false}},
-		{name: "legacy device", confFileExists: true, want: conf.OCR{Provider: "tesseract", Model: "tiny", Auto: true}},
-		{
-			name:           "existing workspace without provider",
-			value:          &conf.OCR{},
-			confFileExists: true,
-			want:           conf.OCR{Provider: "tesseract", Model: "tiny", Auto: true},
-		},
-		{
-			name:           "existing workspace with provider but without model",
-			value:          &conf.OCR{Provider: "paddleocr", Auto: true},
-			confFileExists: true,
-			want:           conf.OCR{Provider: "paddleocr", Model: "tiny", Auto: true},
-		},
-		{
-			name:           "new device without model",
-			value:          &conf.OCR{Provider: "paddleocr"},
-			confFileExists: false,
-			want:           conf.OCR{Provider: "paddleocr", Model: "tiny", Auto: false},
-		},
-		{
-			name:           "saved PaddleOCR with auto enabled",
-			value:          &conf.OCR{Provider: "paddleocr", Model: "small", Auto: true},
-			confFileExists: true,
-			want:           conf.OCR{Provider: "paddleocr", Model: "tiny", Auto: true},
-		},
-		{
-			name:           "saved Tesseract with auto disabled",
-			value:          &conf.OCR{Provider: "tesseract", Model: "tiny", Auto: false},
-			confFileExists: true,
-			want:           conf.OCR{Provider: "tesseract", Model: "tiny", Auto: false},
-		},
-		{
-			name:           "saved PaddleOCR with imported model",
-			value:          &conf.OCR{Provider: "paddleocr", Model: "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef", Auto: false},
-			confFileExists: true,
-			want:           conf.OCR{Provider: "paddleocr", Model: "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef", Auto: false},
-		},
-	} {
-		t.Run(test.name, func(t *testing.T) {
-			test.want.ShowText = new(true)
-			got := normalizeOCRConfig(test.value, test.confFileExists)
-			if !reflect.DeepEqual(*got, test.want) {
-				t.Fatalf("OCR config: got %+v, want %+v", *got, test.want)
-			}
-			if test.value != nil && got != test.value {
-				t.Fatal("saved OCR config should be retained")
 			}
 		})
 	}

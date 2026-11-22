@@ -41,7 +41,6 @@ func normalizeAppConf(c *AppConf) (flashcardWarning string) {
 		c.Flashcard.Store(flashcard)
 		flashcardWarning = warning
 	}
-	c.OCR.Store(conf.NormalizeOCR(c.OCR.Load()))
 	c.AI.Store(conf.NormalizeAI(c.AI.Load()))
 	c.OIDC = conf.NormalizeOIDC(c.OIDC)
 	c.Secrets.Store(conf.NormalizeSecrets(c.Secrets.Load()))

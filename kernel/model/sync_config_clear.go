@@ -17,7 +17,7 @@ func ClearSyncProviderConfig(provider int) error {
 	if util.ReadOnly {
 		return errors.New(Conf.Language(34))
 	}
-	if provider != conf.ProviderS3 && provider != conf.ProviderWebDAV && provider != conf.ProviderLocal {
+	if provider != conf.ProviderWebDAV && provider != conf.ProviderLocal {
 		return errors.New("invalid sync provider")
 	}
 	release := lockAssetSourceChange()
@@ -36,9 +36,6 @@ func ClearSyncProviderConfig(provider int) error {
 	if err := persistClearedSyncProviderConfig(provider); err != nil {
 		return err
 	}
-	if provider == Conf.Sync.Load().Provider {
-		syncIndexListNotice.reset(util.PushClearMsg)
-	}
 	refreshLANSyncManager()
 	return nil
 }
@@ -56,8 +53,6 @@ func persistClearedSyncProviderConfig(provider int) error {
 	timeout := util.NormalizeTimeout(0)
 	concurrentReqs := util.NormalizeConcurrentReqs(0, provider)
 	switch provider {
-	case conf.ProviderS3:
-		syncConfig.S3 = &conf.S3{PathStyle: true, SkipTlsVerify: true, Timeout: timeout, ConcurrentReqs: concurrentReqs}
 	case conf.ProviderWebDAV:
 		syncConfig.WebDAV = &conf.WebDAV{SkipTlsVerify: true, Timeout: timeout, ConcurrentReqs: concurrentReqs}
 	case conf.ProviderLocal:

@@ -135,7 +135,6 @@ func StartKernel(container, appDir, workspaceBaseDir, timezoneID, localIPs, lang
 		model.CleanupEmptyPluginStorageDirs()
 		model.InitBoxes()
 		model.LoadFlashcards()
-		util.LoadAssetsTexts()
 
 		util.SetBooted()
 		util.PushClearAllMsg()

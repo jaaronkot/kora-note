@@ -18,16 +18,18 @@ test("frontend scripts and dependencies no longer build or include the map SDK",
     }
 });
 
-test("desktop packages filter the OCR runtime out of the shipped stage folder", () => {
+test("desktop packages no longer ship an OCR runtime", () => {
     // The inherited association fragment is not a distributable package target.
     const configs = fs.readdirSync(app).filter(name => /^electron-builder(?:-[\w-]+)?\.yml$/.test(name) &&
         name !== "electron-builder-common.yml");
     assert.equal(configs.length, 6);
     for (const name of configs) {
-        const stage = read(name).match(/from: "stage"\s+to: "stage"\s+filter: (\[[^\n]+\])/);
+        const content = read(name);
+        assert.doesNotMatch(content, /ocr/i, name);
+        const stage = content.match(/from: "stage"\s+to: "stage"\s+filter: (\[[^\n]+\])/);
         assert.ok(stage, name);
-        // 精确匹配：已撤回的地图产物不应再出现在打包过滤项里
-        assert.deepEqual(JSON.parse(stage[1]), ["**/*", "!ocr/runtime/**/*"], name);
+        // 精确匹配：打包过滤项不再排除已撤回的 OCR 运行时
+        assert.deepEqual(JSON.parse(stage[1]), ["**/*"], name);
     }
 });
 

@@ -191,26 +191,6 @@ func TestAssetUploadContractAdapter(t *testing.T) {
 	}
 }
 
-func TestAssetOCRMissingPathContract(t *testing.T) {
-	setupAssetContractWorkspace(t)
-	previous := util.GetAssetText("")
-	util.SetAssetText("", "empty path content")
-	t.Cleanup(func() { util.SetAssetText("", previous) })
-	engine := gin.New()
-	engine.POST("/api/asset/getImageOCRText", getImageOCRText)
-	for _, test := range []struct{ body, text string }{
-		{`{}`, ""}, {`{"path":null}`, ""}, {`{"path":""}`, "empty path content"},
-	} {
-		recorder := httptest.NewRecorder()
-		engine.ServeHTTP(recorder, httptest.NewRequest("POST", "/api/asset/getImageOCRText", strings.NewReader(test.body)))
-		requireAPIContract(t, "POST", "/api/asset/getImageOCRText", recorder)
-		var response struct{ Data apicontract.AssetTextData }
-		if err := json.Unmarshal(recorder.Body.Bytes(), &response); err != nil || response.Data.Text != test.text {
-			t.Fatalf("OCR response: %s %v", recorder.Body.String(), err)
-		}
-	}
-}
-
 func TestAssetAnnotationContractFormat(t *testing.T) {
 	assets := setupAssetContractWorkspace(t)
 	if err := os.WriteFile(filepath.Join(assets, "fixture.pdf"), []byte("PDF fixture"), 0644); err != nil {

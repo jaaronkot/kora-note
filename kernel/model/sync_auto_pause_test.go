@@ -71,7 +71,6 @@ func TestAutoSyncPauseNotificationAndStatus(t *testing.T) {
 	status.MsgDataSyncDisabled = false
 	util.StatusBarCfg.Store(status)
 	Conf.Sync.Load().Enabled, Conf.Sync.Load().Mode = true, 1
-	Conf.SetUser(&conf.User{UserId: "sync-test", UserSiYuanOneTimePayStatus: 1})
 
 	push := melody.New()
 	connected := make(chan *melody.Session, 1)

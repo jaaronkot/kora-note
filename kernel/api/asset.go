@@ -5,7 +5,6 @@
 package api
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -87,61 +86,6 @@ var fullReindexAssetContent = contractHandler(apicontract.FullReindexAssetConten
 	model.ReindexAssetContent()
 
 	return apicontract.Success(apicontract.Null{})
-})
-
-var getImageOCRText = contractHandler(apicontract.GetImageOCRText, func(c *gin.Context, request apicontract.AssetOCRTextRequest) apicontract.Response[apicontract.ImageOCRTextData] {
-
-	if request.Path == nil {
-		return apicontract.Success(apicontract.ImageOCRTextData{Text: ""})
-	}
-	path := *request.Path
-
-	// 加密笔记本的资源不参与全局 OCR（OCR 文本存在全局 data/assets/ocr-texts.json）
-	if model.IsEncryptedOCRAsset(path) {
-		return apicontract.Success(apicontract.ImageOCRTextData{Text: ""})
-
-	}
-
-	return apicontract.Success(apicontract.ImageOCRTextData{Text: util.GetAssetText(path), Failed: model.HasOCRFailure(path)})
-})
-
-var setImageOCRText = contractHandler(apicontract.SetImageOCRText, func(c *gin.Context, request apicontract.SetAssetOCRTextRequest) apicontract.Response[apicontract.Null] {
-
-	path := request.Path
-	text := request.Text
-
-	// 加密笔记本的资源不参与全局 OCR
-	if model.IsEncryptedOCRAsset(path) {
-		return apicontract.Success(apicontract.Null{})
-	}
-	model.SetOCRAssetText(path, text)
-
-	return apicontract.Success(apicontract.Null{})
-})
-
-var ocr = contractHandler(apicontract.AssetOCR, func(c *gin.Context, request apicontract.AssetPathRequest) apicontract.Response[apicontract.AssetOCRData] {
-
-	path, _, _ := strings.Cut(request.Path, "#")
-
-	// 加密笔记本的资源不参与全局 OCR
-	if model.IsEncryptedOCRAsset(path) {
-		return apicontract.FailureWithTimeout[apicontract.AssetOCRData](-1, model.Conf.Language(380), 3000)
-	}
-	absPath, err := model.GetAssetAbsPathInBox(path, "")
-	if err != nil {
-		return apicontract.Failure[apicontract.AssetOCRData](-1, err.Error())
-	}
-	if model.IsEncryptedAssetPath(absPath) {
-		return apicontract.FailureWithTimeout[apicontract.AssetOCRData](-1, model.Conf.Language(380), 3000)
-	}
-	ctx, cancel := context.WithTimeout(c.Request.Context(), 2*time.Minute)
-	defer cancel()
-	text, ocrJSON, err := model.OCRAsset(ctx, path)
-	if nil != err {
-		return apicontract.FailureWithTimeout[apicontract.AssetOCRData](-1, err.Error(), 7000)
-	}
-
-	return apicontract.Success(apicontract.AssetOCRData{Text: text, OCRJSON: ocrJSON})
 })
 
 var renameAsset = contractHandler(apicontract.RenameAsset, func(c *gin.Context, request apicontract.RenameAssetRequest) apicontract.Response[apicontract.AssetRenameData] {
@@ -425,40 +369,6 @@ var resolveAssetPath = contractHandler(apicontract.ResolveAssetPath, func(c *gin
 		return apicontract.FailureWithTimeout[string](-1, err.Error(), 7000)
 	}
 	return apicontract.Success(p)
-})
-
-var uploadCloud = contractHandler(apicontract.AssetUploadCloud, func(c *gin.Context, request apicontract.AssetCloudUploadRequest) apicontract.Response[apicontract.Null] {
-
-	ignorePushMsg := request.IgnorePushMsg
-	id := request.ID
-
-	app := resolveRequestAppID(c, "")
-	count, err := model.UploadAssets2CloudWithApp(id, ignorePushMsg, app)
-	if err != nil {
-		return apicontract.FailureWithTimeout[apicontract.Null](-1, err.Error(), 3000)
-	}
-
-	util.PushMsgWithApp(app, fmt.Sprintf(model.Conf.Language(41), count), 3000)
-
-	return apicontract.Success(apicontract.Null{})
-})
-
-var uploadCloudByAssetsPaths = contractHandler(apicontract.AssetUploadCloudByAssetsPaths, func(c *gin.Context, request apicontract.AssetPathsCloudUploadRequest) apicontract.Response[apicontract.Null] {
-
-	assets := append([]string(nil), request.Paths...)
-	ignorePushMsg := request.IgnorePushMsg
-
-	app := resolveRequestAppID(c, "")
-	count, err := model.UploadAssets2CloudByAssetsPathsWithApp(assets, ignorePushMsg, app)
-	if err != nil {
-		return apicontract.FailureWithTimeout[apicontract.Null](-1, err.Error(), 3000)
-	}
-
-	if !ignorePushMsg {
-		util.PushMsgWithApp(app, fmt.Sprintf(model.Conf.Language(41), count), 3000)
-	}
-
-	return apicontract.Success(apicontract.Null{})
 })
 
 var insertLocalAssets = contractHandler(apicontract.InsertLocalAssets, func(c *gin.Context, request apicontract.InsertLocalAssetsRequest) apicontract.Response[apicontract.AssetUploadData] {

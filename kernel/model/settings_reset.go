@@ -41,7 +41,6 @@ func defaultWorkspaceSettings(current *AppConf) *AppConf {
 	next.Search.Store(conf.NewSearch())
 	next.Graph.Store(conf.NewGraph())
 	next.Flashcard.Store(conf.NewFlashcard())
-	next.OCR.Store(conf.NewOCR())
 	bazaar := conf.NewBazaar()
 	if currentBazaar := current.Bazaar.Load(); currentBazaar != nil {
 		// 兼容性筛选属于面板偏好，集市授权和插件启用状态保持当前值。
@@ -89,7 +88,6 @@ func defaultWorkspaceSettings(current *AppConf) *AppConf {
 		next.Flashcard.Store(confSectionValue0)
 		_ = confSectionValue1
 	}
-	next.OCR.Store(conf.NormalizeOCR(next.OCR.Load()))
 	return &next
 }
 
@@ -153,10 +151,9 @@ func ResetSettings() error {
 		Conf.Graph.Store(confSectionValue2)
 	}
 	{
-		confSectionValue0, confSectionValue1, confSectionValue2 := next.Flashcard.Load(), next.OCR.Load(), next.Appearance.Load()
+		confSectionValue0, confSectionValue1 := next.Flashcard.Load(), next.Appearance.Load()
 		Conf.Flashcard.Store(confSectionValue0)
-		Conf.OCR.Store(confSectionValue1)
-		Conf.Appearance.Store(confSectionValue2)
+		Conf.Appearance.Store(confSectionValue1)
 	}
 	{
 		confSectionValue0, confSectionValue1 := next.UILayout.Load(), next.Keymap.Load()
@@ -184,7 +181,6 @@ func ApplyResetSettings(previousSearch *conf.Search) {
 	RefreshBoxDocFeature()
 	refreshAppearanceConfig()
 	WatchThemes()
-	go nativePaddle.Close()
 	if previousSearch == nil || previousSearch.CaseSensitive != confSearchSnapshot.CaseSensitive ||
 		previousSearch.HanSensitiveVal() != confSearchSnapshot.HanSensitiveVal() ||
 		previousSearch.IndexAssetPath != confSearchSnapshot.IndexAssetPath {

@@ -23,8 +23,3 @@ type SwapBlockRefRequest struct {
 	IncludeChildren bool   `json:"includeChildren"`
 	OriginalToEmbed bool   `json:"originalToEmbed" api:"optional"`
 }
-
-type BlockReminderRequest struct {
-	ID    string `json:"id"`
-	Timed string `json:"timed"`
-}

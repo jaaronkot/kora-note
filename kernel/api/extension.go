@@ -6,11 +6,7 @@ package api
 
 import (
 	"bytes"
-	"context"
-	"fmt"
 	"io"
-	"mime"
-	"net/http"
 	"net/url"
 	"os"
 	"path"
@@ -27,7 +23,6 @@ import (
 	"github.com/siyuan-community/siyuan/kernel/apicontract"
 	"github.com/siyuan-community/siyuan/kernel/model"
 	"github.com/siyuan-community/siyuan/kernel/util"
-	"github.com/siyuan-note/httpclient"
 	"github.com/siyuan-note/logging"
 )
 
@@ -58,56 +53,8 @@ var extensionCopy = contractHandler(apicontract.ExtensionCopy, func(c *gin.Conte
 		return apicontract.SuccessWithMessage((*apicontract.ExtensionCopyData)(nil), err.Error())
 	}
 
-	clippingSym := false
-	symArticleHref := ""
-	hasHref := request.Href != nil
-	isPartClip := request.ClipType != nil && *request.ClipType == "part"
-	if hasHref && !isPartClip {
-		// 剪藏链滴帖子时直接使用 Markdown 接口的返回
-		// https://ld246.com/article/raw/1724850322251
-		symArticleHref = *request.Href
-
-		var baseURL, originalPrefix string
-		if strings.HasPrefix(symArticleHref, "https://ld246.com/article/") {
-			baseURL = "https://ld246.com/article/raw/"
-			originalPrefix = "https://ld246.com/article/"
-		} else if strings.HasPrefix(symArticleHref, "https://liuyun.io/article/") {
-			baseURL = "https://liuyun.io/article/raw/"
-			originalPrefix = "https://liuyun.io/article/"
-		}
-
-		if "" != baseURL {
-			articleID := strings.TrimPrefix(symArticleHref, originalPrefix)
-			if idx := strings.IndexAny(articleID, "/?#"); -1 != idx {
-				articleID = articleID[:idx]
-			}
-
-			symArticleHref = baseURL + articleID
-			clippingSym = true
-		}
-	}
-
-	var md string
-	if clippingSym {
-		var err error
-		md, err = extensionSymMarkdown(c.Request.Context(), symArticleHref)
-		if err != nil {
-			logging.LogWarnf("get [%s] failed: %s", symArticleHref, err)
-		}
-		clippingSym = strings.TrimSpace(md) != ""
-		if !clippingSym {
-			md = ""
-		}
-	}
-
 	uploaded := map[string]string{}
 	for originalName, file := range request.Files {
-		// 链滴/流云整页剪藏走服务端原始 Markdown，扩展上传的 DOM 资源地址与原始 Markdown 中的地址必然不一致，
-		// 上传的文件无法被匹配引用；该路径下由内核按“下载资源”开关统一下载本地化，因此跳过扩展上传的文件
-		if clippingSym {
-			continue
-		}
-
 		oName, err := url.PathUnescape(originalName)
 		unescaped := oName
 
@@ -186,56 +133,14 @@ var extensionCopy = contractHandler(apicontract.ExtensionCopy, func(c *gin.Conte
 	luteEngine.SetHTMLTag2TextMark(true)
 	var withMath bool
 
-	if clippingSym {
-		luteEngine.SetIndentCodeBlock(true) // 链滴支持缩进代码块，因此需要开启
-		tree := parse.Parse("", []byte(md), luteEngine.ParseOptions)
-		tree.Box = targetBoxID
-		ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
-			if ast.NodeInlineMath == n.Type {
-				withMath = true
-				return ast.WalkStop
-			} else if ast.NodeCodeBlock == n.Type {
-				if !n.IsFencedCodeBlock {
-					// 将缩进代码块转换为围栏代码块
-					n.IsFencedCodeBlock = true
-					n.CodeBlockFenceChar = '`'
-					n.PrependChild(&ast.Node{Type: ast.NodeCodeBlockFenceInfoMarker})
-					n.PrependChild(&ast.Node{Type: ast.NodeCodeBlockFenceOpenMarker, Tokens: []byte("```"), CodeBlockFenceLen: 3})
-					n.LastChild.InsertAfter(&ast.Node{Type: ast.NodeCodeBlockFenceCloseMarker, Tokens: []byte("```"), CodeBlockFenceLen: 3})
-					code := n.ChildByType(ast.NodeCodeBlockCode)
-					if nil != code {
-						code.Tokens = bytes.TrimPrefix(code.Tokens, []byte("    "))
-						code.Tokens = bytes.ReplaceAll(code.Tokens, []byte("\n    "), []byte("\n"))
-						code.Tokens = bytes.TrimPrefix(code.Tokens, []byte("\t"))
-						code.Tokens = bytes.ReplaceAll(code.Tokens, []byte("\n\t"), []byte("\n"))
-					}
-				}
-			}
-			return ast.WalkContinue
-		})
+	// 通过正则将 <iframe>.*</iframe> 标签中间包含的换行去掉
+	dom = extensionIframePattern.ReplaceAllStringFunc(dom, func(s string) string {
+		s = strings.ReplaceAll(s, "\n", "")
+		s = strings.ReplaceAll(s, "\r", "")
+		return s
+	})
 
-		// 链滴/流云整页剪藏时扩展上传的 DOM 资源地址与服务端原始 Markdown 中的地址不一致，
-		// 扩展上传的文件无法匹配；当用户开启“下载资源”时由内核直接下载原始 Markdown 中的网络资源到本地
-		if assetsOn := request.Assets != nil && *request.Assets == "true"; assetsOn {
-			model.DownloadNetAssets2LocalAssets(tree, false, symArticleHref, assets)
-		}
-
-		md, _ = lute.FormatNodeSync(tree.Root, luteEngine.ParseOptions, luteEngine.RenderOptions)
-	}
-
-	var tree *parse.Tree
-	if "" == md {
-		// 通过正则将 <iframe>.*</iframe> 标签中间包含的换行去掉
-		dom = extensionIframePattern.ReplaceAllStringFunc(dom, func(s string) string {
-			s = strings.ReplaceAll(s, "\n", "")
-			s = strings.ReplaceAll(s, "\r", "")
-			return s
-		})
-
-		tree, withMath = model.HTML2Tree(dom, luteEngine, targetBoxID)
-	} else {
-		tree = parse.Parse("", []byte(md), luteEngine.ParseOptions)
-	}
+	tree, withMath := model.HTML2Tree(dom, luteEngine, targetBoxID)
 
 	var unlinks []*ast.Node
 	ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
@@ -287,7 +192,7 @@ var extensionCopy = contractHandler(apicontract.ExtensionCopy, func(c *gin.Conte
 	parse.TextMarks2Inlines(tree) // 先将 TextMark 转换为 Inlines https://github.com/siyuan-note/siyuan/issues/13056
 	parse.NestedInlines2FlattedSpansHybrid(tree, false)
 
-	md, _ = lute.FormatNodeSync(tree.Root, luteEngine.ParseOptions, luteEngine.RenderOptions)
+	md, _ := lute.FormatNodeSync(tree.Root, luteEngine.ParseOptions, luteEngine.RenderOptions)
 	data := &apicontract.ExtensionCopyData{Markdown: md, WithMath: withMath}
 	message := model.Conf.Language(72)
 	if code != 0 {
@@ -295,39 +200,3 @@ var extensionCopy = contractHandler(apicontract.ExtensionCopy, func(c *gin.Conte
 	}
 	return apicontract.SuccessWithMessage(data, message)
 })
-
-func extensionSymMarkdown(ctx context.Context, href string) (string, error) {
-	user := model.Conf.GetUser()
-	if user == nil || user.UserToken == "" || !strings.HasPrefix(href, util.GetCloudAccountServer()+"/article/raw/") {
-		return "", nil
-	}
-
-	request, err := http.NewRequestWithContext(ctx, http.MethodGet, href, nil)
-	if err != nil {
-		return "", err
-	}
-	request.Header.Set("User-Agent", util.UserAgent)
-	request.AddCookie(&http.Cookie{Name: "symphony", Value: user.UserToken})
-
-	// 登录凭据只发送到当前账号所属站点，重定向交由浏览器页面内容回退处理。
-	client := *httpclient.NewCloudRequest30s().GetClient().GetClient()
-	client.Jar = nil
-	client.CheckRedirect = func(_ *http.Request, _ []*http.Request) error { return http.ErrUseLastResponse }
-	response, err := client.Do(request)
-	if err != nil {
-		return "", err
-	}
-	defer response.Body.Close()
-	if response.StatusCode != http.StatusOK {
-		return "", fmt.Errorf("unexpected article response status [%d]", response.StatusCode)
-	}
-	contentType, _, err := mime.ParseMediaType(response.Header.Get("Content-Type"))
-	if err != nil || (contentType != "text/plain" && contentType != "text/markdown") {
-		return "", fmt.Errorf("unexpected article response content type [%s]", response.Header.Get("Content-Type"))
-	}
-	data, err := io.ReadAll(response.Body)
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
-}

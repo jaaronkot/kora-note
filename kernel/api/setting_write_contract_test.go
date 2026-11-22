@@ -21,7 +21,6 @@ import (
 var settingWriteExemptions = map[string]string{
 	"/api/setting/getBootAppearances":          "只读",
 	"/api/setting/getCloudUser":                "读取账号信息，缓存的用户数据由账号流程维护",
-	"/api/setting/getPandocBin":                "只读",
 	"/api/setting/getPublish":                  "只读",
 	"/api/setting/logoutCloudUser":             "账号登出，用户数据不属于设置项",
 	"/api/setting/login2faCloudUser":           "账号登录，用户数据不属于设置项",

@@ -140,7 +140,6 @@ const (
 	DatabaseIndexCommit = "task.database.index.commit" // 数据库索引提交
 	DatabaseIndexRef    = "task.database.index.ref"    // 数据库索引引用
 
-	OCRImage                          = "task.ocr.image"                            // 图片 OCR 提取文本
 	HistoryGenerateFile               = "task.history.generateFile"                 // 生成文件历史
 	HistoryDatabaseIndexFull          = "task.history.database.index.full"          // 历史数据库重建索引
 	HistoryDatabaseIndexCommit        = "task.history.database.index.commit"        // 历史数据库索引提交
@@ -169,7 +168,6 @@ var uniqueActions = []string{
 	DatabaseIndexFull,
 	DatabaseIndexFTS,
 	DatabaseIndexCommit,
-	OCRImage,
 	HistoryGenerateFile,
 	HistoryDatabaseIndexFull,
 	HistoryDatabaseIndexCommit,

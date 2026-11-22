@@ -23,7 +23,7 @@ func TestDeferredAssetEffectsPreserveLocalReadsAndDeclareMaterialization(t *test
 		tool   *Tool
 		action string
 	}{
-		{ExportTool, "html"}, {ExportTool, "docx"}, {ExportTool, "sy"}, {ExportTool, "md-zip"}, {ExportTool, "data"},
+		{ExportTool, "html"}, {ExportTool, "sy"}, {ExportTool, "md-zip"}, {ExportTool, "data"},
 		{PDFTool, "list"}, {PDFTool, "preview"}, {PDFTool, "extract"}, {ImageTool, "analyze"}, {AssetTool, "clean"},
 	}
 	for _, pending := range []bool{false, true} {
@@ -35,7 +35,7 @@ func TestDeferredAssetEffectsPreserveLocalReadsAndDeclareMaterialization(t *test
 		}
 		for _, enabled := range []bool{false, true} {
 			sync.Enabled = enabled
-			for _, provider := range []int{conf.ProviderSiYuan, conf.ProviderS3, conf.ProviderWebDAV, conf.ProviderLocal} {
+			for _, provider := range []int{conf.ProviderWebDAV, conf.ProviderLocal} {
 				sync.Provider = provider
 				for _, tc := range cases {
 					want := tc.tool.ActionEffects[tc.action]
@@ -58,7 +58,7 @@ func TestDeferredAssetEffectsPreserveLocalReadsAndDeclareMaterialization(t *test
 		t.Fatalf("local LAN materialization effects: %+v", effects)
 	}
 	deferredAssetsForEffects = func() ([]*entity.File, error) { return nil, errors.New("unreadable metadata") }
-	sync.Provider = conf.ProviderSiYuan
+	sync.Provider = conf.ProviderWebDAV
 	if effects, _ := ExportTool.EffectsFor("html"); !effects.LocalWrite || !effects.DataEgress || !effects.ExternalCost {
 		t.Fatalf("unreadable deferred metadata must be conservative: %+v", effects)
 	}

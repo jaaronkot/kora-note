@@ -268,10 +268,6 @@ func TestDocumentStructuredAddressing(t *testing.T) {
 			t.Fatalf("legacy path behavior changed: %+v, %v", target, err)
 		}
 	}
-	if result, err = inboxConvert(map[string]any{"notebook": box.ID, "path": "/A/B/New", "ids": "1"}); err != nil || !result.IsError ||
-		!strings.Contains(result.Content[0].Text, "pathAmbiguous") {
-		t.Fatalf("inbox reached cloud conversion before rejecting the legacy path: %+v, %v", result, err)
-	}
 	t.Run("list truncation", func(t *testing.T) {
 		listParent := createFixture(nil, "Limited listing")
 		createFixture(listParent, "Hidden child", true)

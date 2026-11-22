@@ -18,7 +18,7 @@ test("desktop and mobile configuration writes use the shared gateway", () => {
             const file = relative("src", path).replaceAll("\\", "/");
             if (["config/util/configApi.ts", "config/util/resourceConfig.ts"].includes(file)) continue;
             const source = readFileSync(path, "utf8");
-            const writes = source.matchAll(/(?:fetchPost|fetchSyncPost)\(\s*"(\/api\/(?:setting\/(?:patch|set\w+)|system\/set\w+|sync\/set\w+|repo\/set\w+|asset\/setOCRConfig|graph\/setGraphConf))"/g);
+            const writes = source.matchAll(/(?:fetchPost|fetchSyncPost)\(\s*"(\/api\/(?:setting\/(?:patch|set\w+)|system\/set\w+|sync\/set\w+|repo\/set\w+|graph\/setGraphConf))"/g);
             for (const write of writes) assert.ok(dedicated.has(write[1]), `${file} bypasses config.set through ${write[1]}`);
             const resourceWrites = source.matchAll(/(?:fetchPost|fetchSyncPost|postFile)\(\s*"(\/api\/(?:system\/(?:setWorkspaceDir|setUILayout|importConf)|storage\/(?:removeCriterion|setOutlineStorage)|notebook\/setNotebookConf))"/g);
             for (const write of resourceWrites) assert.fail(`${file} bypasses the resource configuration gateway through ${write[1]}`);

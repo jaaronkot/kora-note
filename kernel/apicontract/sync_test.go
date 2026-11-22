@@ -101,27 +101,6 @@ func TestSyncConditionalDirection(t *testing.T) {
 	}
 }
 
-func TestSyncProviderDecodeCompatibility(t *testing.T) {
-	request, err := SetSyncProviderS3.Decode(strings.NewReader(`{"s3":{"ENDPOINT":" endpoint ","timeout":1.0,"concurrentReqs":9007199254740993,"pathStyle":null,"unknown":1}}`))
-	if err != nil || request.ConfigError() != nil {
-		t.Fatalf("config decode failed: %v %v", err, request.ConfigError())
-	}
-	if request.S3.Endpoint != " endpoint " || request.S3.Timeout != 1 || request.S3.ConcurrentReqs != 9007199254740992 || request.S3.PathStyle {
-		t.Fatalf("configuration binding changed: %+v", request.S3)
-	}
-	for _, body := range []string{`{"s3":{"timeout":1.5}}`, `{"s3":{"endpoint":false}}`} {
-		request, err := SetSyncProviderS3.Decode(strings.NewReader(body))
-		if err != nil || request.ConfigError() == nil || !strings.Contains(request.ConfigError().Error(), "S3.") {
-			t.Fatalf("nested error lost deferred timeout behavior: %v %v", err, request.ConfigError())
-		}
-	}
-	for _, body := range []string{`{}`, `{"s3":null}`, `{"s3":[]}`} {
-		if _, err := SetSyncProviderS3.Decode(strings.NewReader(body)); err == nil {
-			t.Fatalf("missing or invalid object accepted: %s", body)
-		}
-	}
-}
-
 func TestSyncNameAndNumericCompatibility(t *testing.T) {
 	request, err := SetCloudSyncDir.Decode(strings.NewReader(`{"name":"  cloud  "}`))
 	if err != nil || request.Name != "cloud" {

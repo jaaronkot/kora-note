@@ -5,11 +5,7 @@
 package api
 
 import (
-	"errors"
-
-	"github.com/88250/gulu"
 	"github.com/siyuan-community/siyuan/kernel/bazaar"
-	"github.com/siyuan-community/siyuan/kernel/model"
 )
 
 func bazaarPackageRatingsResponseData(ratings map[string]*bazaar.PackageRating,
@@ -28,14 +24,4 @@ func bazaarPackageRatingResponseData(rating *bazaar.PackageRating, ratingAvailab
 		ret["rating"] = rating
 	}
 	return ret
-}
-func setBazaarPackageRatingError(ret *gulu.Result, err error) {
-	ret.Code = 1
-	ret.Msg = err.Error()
-	if errors.Is(err, model.ErrBazaarRatingRateLimited) {
-		ret.Data = map[string]any{"errorCode": "bazaarRatingRateLimited"}
-	}
-	if errors.Is(err, model.ErrBazaarPackagePending) {
-		ret.Data = map[string]any{"errorCode": "bazaarPackagePending"}
-	}
 }

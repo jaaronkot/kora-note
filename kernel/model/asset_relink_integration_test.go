@@ -50,7 +50,6 @@ func TestAssetRelinkPersistenceAndHistory(t *testing.T) {
 	orphan, orphanBefore := assetRelinkUnavailableTree(t)
 	writeAssetRelinkTestFile(t, "assets/a.png", []byte("original asset"))
 	writeAssetRelinkTestFile(t, "assets/b.webp", []byte("replacement asset"))
-	writeAssetRelinkTestFile(t, "assets/ocr-texts.json", []byte(`{"assets/a.png":"OCR text"}`))
 	const viewID = "20260914020000-relink0"
 	view := av.NewAttributeView(viewID)
 	view.KeyValues = append(view.KeyValues, &av.KeyValues{
@@ -113,9 +112,6 @@ func TestAssetRelinkPersistenceAndHistory(t *testing.T) {
 	if err != nil || view.KeyValues[len(view.KeyValues)-1].Values[0].MAsset[0].Content != "assets/b.webp#x" {
 		t.Fatalf("database relink failed: %+v %v", view, err)
 	}
-	if util.GetAssetText("assets/a.png") != "OCR text" || util.GetAssetText("assets/b.webp") != "OCR text" {
-		t.Fatal("OCR metadata not preserved")
-	}
 	if data, _ := os.ReadFile(filepath.Join(util.DataDir, "assets/a.png")); string(data) != "original asset" {
 		t.Fatal("source asset changed")
 	}
@@ -140,10 +136,9 @@ func TestAssetRelinkPersistenceAndHistory(t *testing.T) {
 	if data, _ := os.ReadFile(filepath.Join(util.DataDir, "assets/b.pdf.sya")); !strings.Contains(string(data), "annotation") {
 		t.Fatal("annotation metadata was not copied")
 	}
-	// 两组有效映射共享文档、数据库和 OCR，失败项保留原引用。
+	// 两组有效映射共享文档和数据库，失败项保留原引用。
 	writeAssetRelinkTestFile(t, "assets/c.png", []byte("second source"))
 	writeAssetRelinkTestFile(t, "assets/d.webp", []byte("second target"))
-	util.SetAssetText("assets/c.png", "second OCR")
 	loaded, err = filesys.LoadTree(tree.Box, tree.Path, util.NewLute())
 	if err != nil {
 		t.Fatal(err)
@@ -199,8 +194,8 @@ func TestAssetRelinkPersistenceAndHistory(t *testing.T) {
 		}
 	}
 	document, _ := os.ReadFile(filepath.Join(util.DataDir, sources[0]))
-	if !bytes.Contains(document, []byte("assets/blocked.png")) || util.GetAssetText("assets/d.webp") != "second OCR" {
-		t.Fatal("failed mapping or OCR was not preserved")
+	if !bytes.Contains(document, []byte("assets/blocked.png")) {
+		t.Fatal("failed mapping was not preserved")
 	}
 	retry, err := RelinkAssets(context.Background(), mappings, false)
 	if err != nil || retry.Updated != 0 || retry.HistoryPath != "" {

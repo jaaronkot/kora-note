@@ -15,7 +15,6 @@ type SystemAppConf struct {
 	Export         *SettingExport        `json:"export" api:"optional,nullable"`
 	Graph          *SystemGraph          `json:"graph" api:"optional,nullable"`
 	UILayout       *map[string]JSONValue `json:"uiLayout" api:"optional,nullable"`
-	UserData       string                `json:"userData" api:"optional,nullable"`
 	ReadOnly       bool                  `json:"readonly" api:"optional,nullable"`
 	ServerAddrs    []string              `json:"serverAddrs" api:"optional,nullable"`
 	AccessAuthCode string                `json:"accessAuthCode" api:"optional,nullable"`
@@ -26,7 +25,6 @@ type SystemAppConf struct {
 	Search         *SettingSearch        `json:"search" api:"optional,nullable"`
 	Flashcard      *SettingFlashcard     `json:"flashcard" api:"optional,nullable"`
 	AI             *SettingAI            `json:"ai" api:"optional,nullable"`
-	OCR            *SettingOCR           `json:"ocr" api:"optional,nullable"`
 	Secrets        *SettingSecrets       `json:"secrets" api:"optional,nullable"`
 	Variables      *SettingVariables     `json:"variables" api:"optional,nullable"`
 	Bazaar         *SettingBazaar        `json:"bazaar" api:"optional,nullable"`
@@ -149,35 +147,21 @@ type SystemNetworkProxy struct {
 }
 
 type SystemSync struct {
-	CloudName  string `json:"cloudName" api:"optional,nullable"`
-	Enabled    bool   `json:"enabled" api:"optional,nullable"`
-	Perception bool   `json:"perception" api:"optional,nullable"`
-	Mode       int    `json:"mode" api:"optional,nullable"`
-	Interval   int    `json:"interval" api:"optional,nullable"`
-	Synced     int64  `json:"synced" api:"optional,nullable"`
-	Stat       string `json:"stat" api:"optional,nullable"`
+	CloudName string `json:"cloudName" api:"optional,nullable"`
+	Enabled   bool   `json:"enabled" api:"optional,nullable"`
+	Mode      int    `json:"mode" api:"optional,nullable"`
+	Interval  int    `json:"interval" api:"optional,nullable"`
+	Synced    int64  `json:"synced" api:"optional,nullable"`
+	Stat      string `json:"stat" api:"optional,nullable"`
 	// LastResult is kernel-maintained: 0 unknown (including older configurations), 1 success, 2 failure or automatic pause.
 	// An in-progress operation does not replace the last completed result.
 	LastResult          int            `json:"lastResult" api:"optional,nullable"`
 	GenerateConflictDoc bool           `json:"generateConflictDoc" api:"optional,nullable"`
 	AssetDownloadMode   int            `json:"assetDownloadMode" api:"optional,nullable"`
 	Provider            int            `json:"provider" api:"optional,nullable"`
-	S3                  *SystemS3      `json:"s3" api:"optional,nullable"`
 	WebDAV              *SystemWebDAV  `json:"webdav" api:"optional,nullable"`
 	Local               *SystemLocal   `json:"local" api:"optional,nullable"`
 	LAN                 *SystemLANSync `json:"lan" api:"optional,nullable"`
-}
-
-type SystemS3 struct {
-	Endpoint       string `json:"endpoint" api:"optional,nullable"`
-	AccessKey      string `json:"accessKey" api:"optional,nullable"`
-	SecretKey      string `json:"secretKey" api:"optional,nullable"`
-	Bucket         string `json:"bucket" api:"optional,nullable"`
-	Region         string `json:"region" api:"optional,nullable"`
-	PathStyle      bool   `json:"pathStyle" api:"optional,nullable"`
-	SkipTlsVerify  bool   `json:"skipTlsVerify" api:"optional,nullable"`
-	Timeout        int    `json:"timeout" api:"optional,nullable"`
-	ConcurrentReqs int    `json:"concurrentReqs" api:"optional,nullable"`
 }
 
 type SystemWebDAV struct {

@@ -8,8 +8,6 @@ import {aiConfigApi} from "../tabs/ai/aiRuntime";
 import {objEquals} from "../../util/functions";
 import {syncSettingTasks} from "./taskBlocker";
 import {processSync} from "../../dialog/processSystem";
-import {notifyOCRChanged} from "../ocrRuntime";
-import {refreshMountedBazaar, refreshMountedBazaarFilters} from "../bazaarTab";
 import {remountOpenSettingTab} from "./mount";
 /// #if !MOBILE
 import {applyKeymap} from "../tabs/keymapRuntime";
@@ -79,12 +77,6 @@ export const refreshSettingConfigAfter = async (namespace: string, save: () => P
 
 const applySettingConfig = async (next: Config.IConf, namespaces: Set<string>) => {
     const includes = (key: string) => namespaces.has("*") || namespaces.has(key);
-    const preserveBazaarView = namespaces.size === 1 && namespaces.has("bazaar") &&
-        window.siyuan.config.bazaar?.trust === next.bazaar?.trust &&
-        window.siyuan.config.bazaar?.petalDisabled === next.bazaar?.petalDisabled;
-    const onlyBazaarFiltersChanged = preserveBazaarView &&
-        (!objEquals(window.siyuan.config.bazaar?.compatibilityFilters, next.bazaar?.compatibilityFilters) ||
-            !objEquals(window.siyuan.config.bazaar?.batchUpdateExcluded, next.bazaar?.batchUpdateExcluded));
     if (includes("editor") && !objEquals(window.siyuan.config.editor, next.editor)) {
         await editorConfigApi.apply(next.editor);
     }
@@ -120,20 +112,10 @@ const applySettingConfig = async (next: Config.IConf, namespaces: Set<string>) =
         window.siyuan.config.keymap = next.keymap;
     }
     /// #endif
-    const simple = ["fileTree", "search", "flashcard", "secrets", "variables", "repo", "system", "bazaar", "publish", "ocr", "snippet", "tag", "graph", "uiLayout", "stat"] as const;
+    const simple = ["fileTree", "search", "flashcard", "secrets", "variables", "repo", "system", "bazaar", "publish", "snippet", "tag", "graph", "uiLayout", "stat"] as const;
     for (const key of simple) {
         if (includes(key) && (key !== "graph" || !window.siyuan.config.readonly)) {
             Object.assign(window.siyuan.config, {[key]: next[key]});
-        }
-    }
-    if (includes("ocr") && next.ocr) {
-        notifyOCRChanged();
-    }
-    if (includes("bazaar")) {
-        if (onlyBazaarFiltersChanged) {
-            await refreshMountedBazaarFilters();
-        } else {
-            void refreshMountedBazaar();
         }
     }
     /// #if !MOBILE
@@ -141,8 +123,7 @@ const applySettingConfig = async (next: Config.IConf, namespaces: Set<string>) =
     const remountTabs = new Set<TSettingTab>();
     for (const key of namespaces.has("*") ? [...simple, "editor", "export", "keymap", "appearance", "ai", "sync"] : namespaces) {
         const tab = getSettingTabDefs().find(definition => definition.id === (tabs[key] || key));
-        if (tab && tab.id !== "ocr" && tab.id !== "appearance" &&
-            !(tab.id === "bazaar" && preserveBazaarView)) remountTabs.add(tab.id);
+        if (tab && tab.id !== "appearance") remountTabs.add(tab.id);
     }
     if (accessChanged) remountTabs.add("access");
     remountTabs.forEach(tab => { void remountOpenSettingTab(tab); });

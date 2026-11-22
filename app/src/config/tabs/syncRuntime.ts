@@ -4,7 +4,6 @@ import {fetchSyncPost} from "../../util/fetch";
 import {escapeHtml} from "../../util/escape";
 import {processSync} from "../../dialog/processSystem";
 import {progressLoading} from "../../dialog/progress";
-import {updateAccountPanelVisibility} from "./accountUi";
 import {hideMessage, showMessage} from "../../dialog/message";
 import {refreshSyncCloudDirBlock} from "../../sync/syncGuide";
 import {
@@ -114,7 +113,6 @@ export const clearSyncTabElement = (root?: HTMLElement) => {
 export const mountSyncTabExtras = (root: HTMLElement) => {
     syncTabElement = root;
     refreshSyncTabPanels(root);
-    updateAccountPanelVisibility(root);
 };
 
 export const refreshLANSyncStatus = (root: Element) => {
@@ -205,14 +203,6 @@ export const patchSyncConfig = (controlId: string, value: unknown) => {
             const interval = value as Config.ISync["interval"];
             configApi.set("sync.interval", interval, () => {
                 window.siyuan.config.sync.interval = interval;
-                processSync();
-            });
-            break;
-        }
-        case "sync.perception": {
-            const perception = Boolean(value) as Config.ISync["perception"];
-            configApi.set("sync.perception", perception, () => {
-                window.siyuan.config.sync.perception = perception;
                 processSync();
             });
             break;

@@ -482,14 +482,6 @@
             "seconds": 0,
             "tests": 1
         },
-        "TestInitPandocDoesNotUseWorkspac": {
-            "seconds": 0.013,
-            "tests": 1
-        },
-        "TestInitPandocExtractsDevelopmen": {
-            "seconds": 0.01,
-            "tests": 1
-        },
         "TestInstallCustomFontRejectsInva": {
             "seconds": 0.005,
             "tests": 1
@@ -924,10 +916,6 @@
         },
         "TestOperationWatchdogStopsAfterC": {
             "seconds": 0.051,
-            "tests": 1
-        },
-        "TestPandocZipPath": {
-            "seconds": 0.001,
             "tests": 1
         },
         "TestParseBundledFontLocalizedNam": {

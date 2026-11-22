@@ -12,7 +12,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/siyuan-note/dejavu/cloud"
 	"github.com/siyuan-note/logging"
 
 	"github.com/88250/gulu"
@@ -199,168 +198,6 @@ func exportSyncProviderWebDAVContract(c *gin.Context, request apicontract.EmptyR
 	return
 }
 
-var importSyncProviderS3 = contractHandler(apicontract.ImportSyncProviderS3, importSyncProviderS3Contract, prepareSyncProviderImport[apicontract.SyncS3Data])
-
-func importSyncProviderS3Contract(c *gin.Context, request apicontract.SyncProviderImportRequest) (ret apicontract.Response[apicontract.SyncS3Data]) {
-
-	f := request.File
-	fh, err := f.Open()
-	if err != nil {
-		logging.LogErrorf("read upload file failed: %s", err)
-		ret = apicontract.Failure[apicontract.SyncS3Data](-1, err.Error())
-		return
-	}
-
-	data, err := io.ReadAll(fh)
-	fh.Close()
-	if err != nil {
-		logging.LogErrorf("read upload file failed: %s", err)
-		ret = apicontract.Failure[apicontract.SyncS3Data](-1, err.Error())
-		return
-	}
-
-	importDir := filepath.Join(util.TempDir, "import")
-	if err = os.MkdirAll(importDir, 0755); err != nil {
-		logging.LogErrorf("import S3 provider failed: %s", err)
-		ret = apicontract.Failure[apicontract.SyncS3Data](-1, err.Error())
-		return
-	}
-
-	writePath := filepath.Join(importDir, f.Filename)
-	if !gulu.File.IsSubPath(importDir, writePath) {
-		logging.LogErrorf("import path [%s] is not sub path of import dir [%s]", writePath, importDir)
-		ret = apicontract.Failure[apicontract.SyncS3Data](-1, "import path is not sub path of import dir")
-		return
-	}
-
-	if err = os.WriteFile(writePath, data, 0644); err != nil {
-		logging.LogErrorf("import S3 provider failed: %s", err)
-		ret = apicontract.Failure[apicontract.SyncS3Data](-1, err.Error())
-		return
-	}
-
-	tmpDir := filepath.Join(importDir, "s3")
-	os.RemoveAll(tmpDir)
-	var copyError error
-	if strings.HasSuffix(strings.ToLower(writePath), ".zip") {
-		if err = gulu.Zip.Unzip(writePath, tmpDir); err != nil {
-			logging.LogErrorf("import S3 provider failed: %s", err)
-			ret = apicontract.Failure[apicontract.SyncS3Data](-1, err.Error())
-			return
-		}
-	} else if strings.HasSuffix(strings.ToLower(writePath), ".json") {
-		if err = gulu.File.CopyFile(writePath, filepath.Join(tmpDir, f.Filename)); err != nil {
-			logging.LogErrorf("import S3 provider failed: %s", err)
-			copyError = err
-		}
-	} else {
-		logging.LogErrorf("invalid S3 provider package")
-		ret = apicontract.Failure[apicontract.SyncS3Data](-1, "invalid S3 provider package")
-		return
-	}
-
-	entries, err := os.ReadDir(tmpDir)
-	if err != nil {
-		logging.LogErrorf("import S3 provider failed: %s", err)
-		ret = apicontract.Failure[apicontract.SyncS3Data](-1, err.Error())
-		return
-	}
-
-	if 1 != len(entries) {
-		logging.LogErrorf("invalid S3 provider package")
-		ret = apicontract.Failure[apicontract.SyncS3Data](-1, "invalid S3 provider package")
-		return
-	}
-
-	writePath = filepath.Join(tmpDir, entries[0].Name())
-	data, err = os.ReadFile(writePath)
-	if err != nil {
-		logging.LogErrorf("import S3 provider failed: %s", err)
-		ret = apicontract.Failure[apicontract.SyncS3Data](-1, err.Error())
-		return
-	}
-
-	data = util.AESDecrypt(string(data))
-	data, _ = hex.DecodeString(string(data))
-	s3 := &conf.S3{}
-	if err = gulu.JSON.UnmarshalJSON(data, s3); err != nil {
-		logging.LogErrorf("import S3 provider failed: %s", err)
-		ret = apicontract.Failure[apicontract.SyncS3Data](-1, err.Error())
-		return
-	}
-
-	err = model.SetSyncProviderS3(s3)
-	if err != nil {
-		logging.LogErrorf("import S3 provider failed: %s", err)
-		ret = apicontract.Failure[apicontract.SyncS3Data](-1, err.Error())
-		return
-	}
-
-	result := apicontract.SyncS3Data{S3: (*apicontract.SyncS3)(model.Conf.Sync.Load().S3)}
-	if copyError != nil {
-		return apicontract.ImportSyncProviderS3.FailureWithData(-1, copyError.Error(), result)
-	}
-	ret = apicontract.Success(result)
-	return
-}
-
-var exportSyncProviderS3 = contractHandler(apicontract.ExportSyncProviderS3, exportSyncProviderS3Contract)
-
-func exportSyncProviderS3Contract(c *gin.Context, request apicontract.EmptyRequest) (ret apicontract.Response[apicontract.SyncProviderExportData]) {
-	confSyncSnapshot := model.Conf.LoadSync()
-
-	name := "siyuan-s3-" + time.Now().Format("20060102150405") + ".json"
-	tmpDir := filepath.Join(util.TempDir, "export")
-	if err := os.MkdirAll(tmpDir, 0755); err != nil {
-		logging.LogErrorf("export S3 provider failed: %s", err)
-		ret = apicontract.Failure[apicontract.SyncProviderExportData](-1, err.Error())
-		return
-	}
-
-	s3 := confSyncSnapshot.S3
-	if nil == s3 {
-		s3 = &conf.S3{}
-	}
-
-	data, err := gulu.JSON.MarshalJSON(confSyncSnapshot.S3)
-	if err != nil {
-		logging.LogErrorf("export S3 provider failed: %s", err)
-		ret = apicontract.Failure[apicontract.SyncProviderExportData](-1, err.Error())
-		return
-	}
-
-	dataStr := util.AESEncrypt(string(data))
-	tmp := filepath.Join(tmpDir, name)
-	if err = os.WriteFile(tmp, []byte(dataStr), 0644); err != nil {
-		logging.LogErrorf("export S3 provider failed: %s", err)
-		ret = apicontract.Failure[apicontract.SyncProviderExportData](-1, err.Error())
-		return
-	}
-
-	zipFile, err := gulu.Zip.Create(tmp + ".zip")
-	if err != nil {
-		logging.LogErrorf("export S3 provider failed: %s", err)
-		ret = apicontract.Failure[apicontract.SyncProviderExportData](-1, err.Error())
-		return
-	}
-
-	if err = zipFile.AddEntry(name, tmp); err != nil {
-		logging.LogErrorf("export S3 provider failed: %s", err)
-		ret = apicontract.Failure[apicontract.SyncProviderExportData](-1, err.Error())
-		return
-	}
-
-	if err = zipFile.Close(); err != nil {
-		logging.LogErrorf("export S3 provider failed: %s", err)
-		ret = apicontract.Failure[apicontract.SyncProviderExportData](-1, err.Error())
-		return
-	}
-
-	zipPath := "/export/" + name + ".zip"
-	ret = apicontract.Success(apicontract.SyncProviderExportData{Name: name, Zip: zipPath})
-	return
-}
-
 var getSyncInfo = contractHandler(apicontract.GetSyncInfo, getSyncInfoContract)
 
 func getSyncInfoContract(c *gin.Context, request apicontract.EmptyRequest) (ret apicontract.Response[apicontract.SyncInfoData]) {
@@ -371,11 +208,7 @@ func getSyncInfoContract(c *gin.Context, request apicontract.EmptyRequest) (ret 
 		stat = model.Conf.Language(53)
 	}
 
-	kernels := model.GetOnlineKernels()
-	items := make([]*apicontract.SyncOnlineKernel, len(kernels))
-	for i, item := range kernels {
-		items[i] = (*apicontract.SyncOnlineKernel)(item)
-	}
+	items := []*apicontract.SyncOnlineKernel{}
 	ret = apicontract.Success(apicontract.SyncInfoData{Synced: confSyncSnapshot.Synced, Stat: stat, Kernels: items, Kernel: model.KernelID})
 	return
 }
@@ -419,7 +252,7 @@ func performSyncContract(c *gin.Context, request apicontract.PerformSyncRequest)
 		if !util.IsBooted() {
 			return
 		}
-		if nil == model.Conf.GetUser() || !confSyncSnapshot.Enabled {
+		if !confSyncSnapshot.Enabled {
 			return
 		}
 	}
@@ -481,9 +314,6 @@ func listCloudSyncDirContract(c *gin.Context, request apicontract.EmptyRequest) 
 	}
 
 	checkedSyncDir := confSyncSnapshot.CloudName
-	if conf.ProviderS3 == confSyncSnapshot.Provider {
-		checkedSyncDir = ""
-	}
 	var items []*apicontract.CloudSyncDir
 	if syncDirs != nil {
 		items = make([]*apicontract.CloudSyncDir, len(syncDirs))
@@ -557,16 +387,6 @@ func setSyncIntervalContract(c *gin.Context, request apicontract.SyncIntervalReq
 	return
 }
 
-var setSyncPerception = contractHandler(apicontract.SetSyncPerception, setSyncPerceptionContract)
-
-func setSyncPerceptionContract(c *gin.Context, request apicontract.SyncEnabledRequest) (ret apicontract.Response[apicontract.Null]) {
-	ret = apicontract.Success(apicontract.Null{})
-
-	enabled := request.Enabled
-	model.SetSyncPerception(enabled)
-	return
-}
-
 var setSyncLAN = contractHandler(apicontract.SetSyncLAN, setSyncLANContract)
 
 func setSyncLANContract(c *gin.Context, request apicontract.SyncLANRequest) (ret apicontract.Response[apicontract.SyncLANStatus]) {
@@ -624,8 +444,6 @@ func setSyncProviderContract(c *gin.Context, request apicontract.SyncProviderReq
 	return
 }
 
-var setSyncProviderS3 = contractHandler(apicontract.SetSyncProviderS3, setSyncProviderS3Contract)
-
 var clearSyncProviderConfig = contractHandler(apicontract.ClearSyncProviderConfig, func(c *gin.Context, request apicontract.ClearSyncProviderConfigRequest) apicontract.Response[apicontract.ClearSyncProviderConfigData] {
 
 	if err := model.ClearSyncProviderConfig(request.Provider); err != nil {
@@ -634,8 +452,6 @@ var clearSyncProviderConfig = contractHandler(apicontract.ClearSyncProviderConfi
 	confSyncSnapshot := model.Conf.LoadSync()
 	data := apicontract.ClearSyncProviderConfigData{Enabled: confSyncSnapshot.Enabled}
 	switch request.Provider {
-	case conf.ProviderS3:
-		data.S3 = (*apicontract.SyncS3)(confSyncSnapshot.S3)
 	case conf.ProviderWebDAV:
 		data.WebDAV = (*apicontract.SyncWebDAV)(confSyncSnapshot.WebDAV)
 	case conf.ProviderLocal:
@@ -643,31 +459,6 @@ var clearSyncProviderConfig = contractHandler(apicontract.ClearSyncProviderConfi
 	}
 	return apicontract.Success(data)
 })
-
-func setSyncProviderS3Contract(c *gin.Context, request apicontract.SetSyncS3Request) (ret apicontract.Response[apicontract.SyncS3Data]) {
-	confSyncSnapshot := model.Conf.LoadSync()
-
-	if err := request.ConfigError(); err != nil {
-		return apicontract.FailureWithTimeout[apicontract.SyncS3Data](-1, err.Error(), 5000)
-	}
-	s3 := (*conf.S3)(&request.S3)
-
-	newBucket := strings.TrimSpace(s3.Bucket)
-	prevBucket := strings.TrimSpace(confSyncSnapshot.S3.Bucket)
-	if newBucket != prevBucket && !cloud.IsValidCloudDirName(newBucket) {
-		ret = apicontract.FailureWithTimeout[apicontract.SyncS3Data](-1, model.Conf.Language(37), 5000)
-		return
-	}
-
-	err := model.SetSyncProviderS3(s3)
-	if err != nil {
-		ret = apicontract.FailureWithTimeout[apicontract.SyncS3Data](-1, err.Error(), 5000)
-		return
-	}
-
-	ret = apicontract.Success(apicontract.SyncS3Data{S3: (*apicontract.SyncS3)(model.Conf.LoadSync().S3)})
-	return
-}
 
 var setSyncProviderWebDAV = contractHandler(apicontract.SetSyncProviderWebDAV, setSyncProviderWebDAVContract)
 

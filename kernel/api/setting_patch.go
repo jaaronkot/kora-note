@@ -146,8 +146,6 @@ var patchSetting = contractHandler(apicontract.PatchSetting, func(c *gin.Context
 			return apicontract.Failure[*apicontract.SettingPatchData](-1, util.I18nTerm(model.Conf.Lang, "agentCapabilitiesUnavailable"))
 		}
 		response = applySettingPatch(c, patch, apicontract.SetAI, applyAISetting)
-	case "ocr":
-		response = applySettingPatch(c, patch, apicontract.SetOCRConfig, applyOCRSetting)
 	case "bazaar":
 		response = applySettingPatch(c, patch, apicontract.SetBazaar, applyBazaarSetting)
 	case "publish":

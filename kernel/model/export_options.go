@@ -48,15 +48,15 @@ type markdownExportOptions struct {
 }
 
 type archiveExportOptions struct {
-	Config                    conf.Export
-	BoxID, BaseFolderName     string
-	DocPaths, DefBlockIDs     []string
-	PandocFrom, PandocTo, Ext string
-	BoxPaths                  map[string]string
+	Config                conf.Export
+	BoxID, BaseFolderName string
+	DocPaths, DefBlockIDs []string
+	Ext                   string
+	BoxPaths              map[string]string
 }
 
-func ExportPandocConvertZip(ids []string, pandocTo, ext string) (name, zipPath string) {
-	return ExportPandocConvertZipWithOptions(ids, pandocTo, ext, nil)
+func ExportArchiveZip(ids []string, ext string) (name, zipPath string) {
+	return ExportArchiveZipWithOptions(ids, ext, nil)
 }
 
 func ExportNotebooksMarkdown(boxIDs []string) (zipPath string) {

@@ -47,7 +47,7 @@ func TestExportOptionsReachMarkdownArchiveStages(t *testing.T) {
 			options = &ExportOptions{AddTitle: new(true), MarkdownYFM: new(true), RemoveAssetsID: new(true),
 				IncludeSubDocs: new(true), IncludeRelatedDocs: new(true)}
 		}
-		_, zipPath := ExportPandocConvertZipWithOptions([]string{source.ID}, "", ".md", options)
+		_, zipPath := ExportArchiveZipWithOptions([]string{source.ID}, ".md", options)
 		archive := openExportArchive(t, zipPath)
 		md := markdownArchiveDocument(t, archive, "Source")
 		if strings.HasPrefix(md, "---\n") != overridden || strings.Contains(md, "# Source") != overridden {

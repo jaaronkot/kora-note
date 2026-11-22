@@ -67,7 +67,7 @@ func TestExportMarkdownHeadingNumberOptions(t *testing.T) {
 			if strings.Contains(noNumber, "# 1 First heading") || !strings.Contains(noNumber, "First heading") {
 				t.Fatalf("request must not enable numbering for a disabled document: %s", noNumber)
 			}
-			_, zipPath := ExportPandocConvertZipWithOptions([]string{source.ID, disabled.ID}, "", ".md", opts)
+			_, zipPath := ExportArchiveZipWithOptions([]string{source.ID, disabled.ID}, ".md", opts)
 			archive := openExportArchive(t, zipPath)
 			exported := markdownArchiveDocument(t, archive, "Source")
 			if strings.Contains(exported, "# 1 First heading") != wantNumber || !strings.Contains(exported, "First heading") {

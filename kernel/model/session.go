@@ -218,8 +218,8 @@ func CheckReadonly(c *gin.Context) {
 		switch c.Request.URL.Path {
 		case "/api/sync/performSync", "/api/sync/performBootSync", "/api/sync/getSyncSourceState",
 			"/api/sync/setCloudSyncDir", "/api/sync/removeCloudSyncDir", "/api/sync/setSyncProvider",
-			"/api/sync/setSyncProviderS3", "/api/sync/setSyncProviderWebDAV", "/api/sync/setSyncProviderLocal",
-			"/api/sync/importSyncProviderS3", "/api/sync/importSyncProviderWebDAV", "/api/sync/clearSyncProviderConfig",
+			"/api/sync/setSyncProviderWebDAV", "/api/sync/setSyncProviderLocal",
+			"/api/sync/importSyncProviderWebDAV", "/api/sync/clearSyncProviderConfig",
 			"/api/notebook/enableEncryptedNotebooks", "/mcp":
 			dataImportAccess.RUnlock()
 			released = true

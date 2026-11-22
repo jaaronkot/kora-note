@@ -1,25 +1,19 @@
 import {editorConfigApi} from "../tabs/editorRuntime";
 import {fileConfigApi} from "../tabs/fileRuntime";
-import {flashcardConfigApi} from "../tabs/flashcardRuntime";
 import {aiConfigApi} from "../tabs/ai/aiRuntime";
 import {secretsConfigApi} from "../tabs/secretsVariablesRuntime";
 import {exportConfigApi} from "../tabs/exportRuntime";
 import {searchConfigApi} from "../tabs/searchRuntime";
 import {appearanceConfigApi} from "../tabs/appearanceRuntime";
 import {mountSyncTabExtras, patchSyncConfig} from "../tabs/syncRuntime";
-import {refreshCloudUser} from "../tabs/accountUi";
 import {mountAccessTab} from "../tabs/accessRuntime";
 import {collectAssetsTabSearchStrings, mountAssetsTab} from "../assets";
-import {mountOCRTab, registerOCRTab, updateOCRTabBorders} from "../ocr";
-import {collectBazaarTabSearchStrings, mountBazaarTab} from "../bazaarTab";
 /// #if !MOBILE
 import {collectKeymapTabSearchStrings, mountKeymapTab} from "../tabs/keymapUi";
 /// #endif
-import {isBazaarAvailable} from "../../util/bazaarAvailability";
 import {SettingBuilder, type SettingTab} from "./builder";
 import {registerEditorTab} from "../tabs/editorTab";
 import {registerFileTab} from "../tabs/fileTab";
-import {registerFlashcardTab} from "../tabs/flashcardTab";
 import {registerAiTab} from "../tabs/ai/aiTab";
 import {registerSecretsVariablesTab} from "../tabs/secretsVariablesTab";
 import {registerExportTab} from "../tabs/exportTab";
@@ -53,20 +47,6 @@ const createSettingTabs = () => {
             title: () => window.siyuan.languages.appearance,
             defaultSave: appearanceConfigApi.patch,
         }, registerAppearanceTab),
-        bazaar: setting.panel({
-            id: "bazaar",
-            icon: "iconBazaar",
-            title: () => window.siyuan.languages.bazaar,
-            hidden: () => !isBazaarAvailable(),
-            searchStrings: collectBazaarTabSearchStrings,
-            mount: mountBazaarTab,
-        }),
-        flashcard: setting.tab({
-            id: "flashcard",
-            icon: "iconRiffCard",
-            title: () => window.siyuan.languages.riffCard,
-            defaultSave: flashcardConfigApi.patch,
-        }, registerFlashcardTab),
         ai: setting.tab({
             id: "ai",
             icon: "iconSparkles",
@@ -87,13 +67,6 @@ const createSettingTabs = () => {
             searchStrings: collectAssetsTabSearchStrings,
             mount: mountAssetsTab,
         }),
-        ocr: setting.tab({
-            id: "ocr",
-            icon: "iconOCR",
-            title: () => "OCR",
-            afterMount: mountOCRTab,
-            onShow: updateOCRTabBorders,
-        }, registerOCRTab),
         export: setting.tab({
             id: "export",
             icon: "iconDownload",
@@ -122,7 +95,6 @@ const createSettingTabs = () => {
             title: () => window.siyuan.languages.accountSync,
             defaultSave: patchSyncConfig,
             afterMount: mountSyncTabExtras,
-            onShow: (root) => { void refreshCloudUser(false, root); },
         }, registerSyncTab),
         access: setting.tab({
             id: "access",

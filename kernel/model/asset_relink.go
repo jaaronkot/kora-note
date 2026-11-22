@@ -46,7 +46,6 @@ type assetRelinkPlan struct {
 	files           []*assetRelinkFile
 	trees           []*parse.Tree
 	items           []*assetRelinkItem
-	ocrPlan         *util.AssetTextRelinkPlan
 	ctx             context.Context
 	batch           bool
 	lookup          bool

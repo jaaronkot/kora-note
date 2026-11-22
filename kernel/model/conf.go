@@ -48,8 +48,6 @@ type AppConf struct {
 	Export         ConfSection[conf.Export]     `json:"export"`         // 导出配置
 	Graph          ConfSection[conf.Graph]      `json:"graph"`          // 关系图配置
 	UILayout       ConfSection[conf.UILayout]   `json:"uiLayout"`       // 界面布局，通过 SetUILayout 更新
-	UserData       string                       `json:"userData"`       // 社区用户信息，对 User 加密存储
-	User           *conf.User                   `json:"-"`              // 社区用户内存结构，不持久化。不要直接使用，使用 GetUser() 和 SetUser() 方法
 	ReadOnly       bool                         `json:"readonly"`       // 是否是以只读模式运行
 	ServerAddrs    []string                     `json:"serverAddrs"`    // 本地服务器地址列表
 	AccessAuthCode string                       `json:"accessAuthCode"` // 锁屏密码
@@ -60,7 +58,6 @@ type AppConf struct {
 	Search         ConfSection[conf.Search]     `json:"search"`         // 搜索配置
 	Flashcard      ConfSection[conf.Flashcard]  `json:"flashcard"`      // 闪卡配置
 	AI             ConfSection[conf.AI]         `json:"ai"`             // 人工智能配置
-	OCR            ConfSection[conf.OCR]        `json:"ocr"`            // 本地图片文字识别
 	Secrets        ConfSection[conf.Secrets]    `json:"secrets"`        // 全局密钥库
 	Variables      ConfSection[conf.Variables]  `json:"variables"`      // 全局变量库
 	Bazaar         ConfSection[conf.Bazaar]     `json:"bazaar"`         // 集市配置
@@ -79,8 +76,7 @@ type AppConf struct {
 
 	MCPOAuth string `json:"mcpOAuth"` // MCP OAuth 凭据密文
 
-	m        *sync.RWMutex // 配置数据锁
-	userLock *sync.RWMutex // 用户数据独立锁，避免与配置保存操作竞争
+	m *sync.RWMutex // 配置数据锁
 
 	Community *conf.Community `json:"community"` // 社区配置
 }
@@ -101,7 +97,6 @@ func NewAppConf() *AppConf {
 		Search:     NewConfSection[conf.Search](nil),
 		Flashcard:  NewConfSection[conf.Flashcard](nil),
 		AI:         NewConfSection[conf.AI](nil),
-		OCR:        NewConfSection[conf.OCR](nil),
 		Secrets:    NewConfSection[conf.Secrets](nil),
 		Variables:  NewConfSection[conf.Variables](nil),
 		Bazaar:     NewConfSection[conf.Bazaar](nil),
@@ -113,7 +108,6 @@ func NewAppConf() *AppConf {
 		Snippet:    NewConfSection[conf.Snpt](nil),
 		OIDC:       conf.NewOIDC(),
 		m:          &sync.RWMutex{},
-		userLock:   &sync.RWMutex{},
 	}
 }
 
@@ -253,18 +247,6 @@ func (conf *AppConf) SetUILayout(uiLayout *conf.UILayout) {
 	conf.UILayout.Store(uiLayout)
 }
 
-func (conf *AppConf) GetUser() *conf.User {
-	conf.userLock.RLock()
-	defer conf.userLock.RUnlock()
-	return conf.User
-}
-
-func (conf *AppConf) SetUser(user *conf.User) {
-	conf.userLock.Lock()
-	defer conf.userLock.Unlock()
-	conf.User = user
-}
-
 func InitConf() {
 	if err := recoverEncryptedAssetCleanupOperations(); err != nil {
 		logging.LogFatalf(logging.ExitCodeFileSysErr, "recover encrypted asset cleanup failed: %s", err)
@@ -314,7 +296,7 @@ func InitConf() {
 			logging.LogErrorf("load conf [%s] failed: %s", confPath, err)
 		} else {
 			recordPersistedConf(data)
-			// 解析失败时保留已成功写入的字段；未导出字段（m、userLock）与未触及的导出字段保持 NewAppConf() 初值。
+			// 解析失败时保留已成功写入的字段；未导出字段（m）与未触及的导出字段保持 NewAppConf() 初值。
 			if err = gulu.JSON.UnmarshalJSON(data, Conf); err != nil {
 				logging.LogWarnf("parse conf failed, parsed fields retained: %s", err)
 			} else {
@@ -398,7 +380,6 @@ func InitConf() {
 	}
 	// 已有工作空间缺失的配置段按升级前的行为补全，其余规则由 normalizeAppConf 统一处理。
 	Conf.FileTree.Store(normalizeFileTreeDefaultIcon(Conf.FileTree.Load(), confFileExists))
-	Conf.OCR.Store(normalizeOCRConfig(Conf.OCR.Load(), confFileExists))
 	isNewWorkspace := nil == Conf.System.Load()
 	if Conf.Api.Load() == nil {
 		api := conf.NewAPI()
@@ -456,8 +437,6 @@ func InitConf() {
 	}
 	Conf.Appearance.Load().Lang = Conf.Lang
 
-	util.CurrentCloudRegion = Conf.CloudRegion
-
 	if !isNewWorkspace {
 		cmp := semver.Compare("v"+util.Ver, "v"+Conf.System.Load().KernelVersion)
 		if 0 < cmp {
@@ -470,13 +449,6 @@ func InitConf() {
 	}
 	projectSystemEnvironment(Conf.System.Load())
 
-	if "" != Conf.UserData {
-		Conf.SetUser(loadUserFromConf())
-	}
-
-	if util.ContainerDocker == util.Container {
-		Conf.Sync.Load().Perception = false
-	}
 	if boxes, listErr := ListNotebooks(); listErr == nil {
 		prepareOnboardingForEmptyWorkspace(Conf.Onboarding.Load(), util.ReadOnly, len(boxes))
 	}
@@ -582,10 +554,6 @@ func InitConf() {
 	}
 
 	util.SetNetworkProxy(Conf.System.Load().NetworkProxy.String(), Conf.System.Load().NetworkProxy.IsSystem())
-
-	go util.InitPandoc(Conf.Export.Load().PandocBin)
-	go util.InitTesseract()
-	InitOCR()
 }
 
 func normalizeFileTreeDefaultIcon(fileTree *conf.FileTree, confFileExists bool) *conf.FileTree {
@@ -775,8 +743,7 @@ func closeKernel(ctx context.Context, force, setCurrentWorkspace bool, execInsta
 	}
 	defer unlockSync()
 	if !force {
-		if confSyncSnapshot.Enabled && 3 != confSyncSnapshot.Mode &&
-			((IsSubscriber() && conf.ProviderSiYuan == confSyncSnapshot.Provider) || conf.ProviderSiYuan != confSyncSnapshot.Provider) {
+		if confSyncSnapshot.Enabled && 3 != confSyncSnapshot.Mode {
 			diagnostic.Stage("exit sync")
 			if checkSync(false, true, false) {
 				if err := syncDataLockedContext(ctx, true, false); err != nil {
@@ -847,8 +814,6 @@ func closeKernel(ctx context.Context, force, setCurrentWorkspace bool, execInsta
 	sql.CloseDatabase()
 	diagnostic.Stage("close push queue")
 	closePushQueue()
-	diagnostic.Stage("save asset texts")
-	util.SaveAssetsTexts()
 	diagnostic.Stage("clear workspace temp")
 	clearWorkspaceTemp(installPkgPath)
 	diagnostic.Stage("clear corrupted notebooks")
@@ -876,8 +841,6 @@ func closeKernel(ctx context.Context, force, setCurrentWorkspace bool, execInsta
 
 	diagnostic.Stage("wait for frontend events")
 	time.Sleep(500 * time.Millisecond)
-	diagnostic.Stage("close sync websocket")
-	closeSyncWebSocket()
 	exitFinished = true
 	return
 }
@@ -1136,7 +1099,7 @@ func (conf *AppConf) GetClosedBoxes() (ret []*Box) {
 
 func (conf *AppConf) Language(num int) (ret string) {
 	ret = conf.language(num)
-	ret = strings.ReplaceAll(ret, "${accountServer}", util.GetCloudAccountServer())
+	ret = strings.ReplaceAll(ret, "${accountServer}", util.CommunityServer)
 	return
 }
 
@@ -1169,26 +1132,12 @@ func InitBoxes() {
 	logging.LogInfof("tree/block count [%d/%d]", treenode.CountTrees(), blockCount)
 }
 
+// IsSubscriber 恒为真，社区版不校验订阅状态。
 func IsSubscriber() bool {
 	return true
-	// u := Conf.GetUser()
-	// return nil != u && (-1 == u.UserSiYuanProExpireTime || 0 < u.UserSiYuanProExpireTime) && 0 == u.UserSiYuanSubscriptionStatus
-}
-
-func IsPaidUser() bool {
-	if IsSubscriber() {
-		return true
-	}
-
-	u := Conf.GetUser()
-	if nil == u {
-		return false
-	}
-	return 1 == u.UserSiYuanOneTimePayStatus
 }
 
 const (
-	MaskedUserData       = ""
 	MaskedAccessAuthCode = "*******"
 )
 
@@ -1208,7 +1157,6 @@ func GetMaskedConf() (ret *AppConf, err error) {
 		return
 	}
 
-	ret.UserData = MaskedUserData
 	ret.MCPOAuth = ""
 	ret.CookieKey = ""
 	if "" != ret.AccessAuthCode {
@@ -1239,9 +1187,6 @@ func HideConfSecret(c *AppConf) {
 	c.MCPOAuth = ""
 	c.CookieKey = ""
 	c.Api.Store(&conf.API{})
-	if nil != c.Export.Load() {
-		c.Export.Load().PandocBin = ""
-	}
 	c.Flashcard.Store(&conf.Flashcard{})
 	c.ServerAddrs = []string{}
 	c.Publish.Store(&conf.Publish{})
@@ -1339,7 +1284,6 @@ func clearWorkspaceTemp(preserveInstallPkgPath string) {
 	os.RemoveAll(filepath.Join(util.TempDir, "export"))
 	os.RemoveAll(filepath.Join(util.TempDir, "import"))
 	os.RemoveAll(filepath.Join(util.TempDir, "convert"))
-	os.RemoveAll(filepath.Join(util.TempDir, "pandoc"))
 	os.RemoveAll(filepath.Join(util.TempDir, "repo"))
 	ClearRichClipboard()
 	os.RemoveAll(filepath.Join(util.TempDir, "os"))

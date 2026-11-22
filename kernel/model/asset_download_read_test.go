@@ -114,7 +114,6 @@ func TestDeferredAssetReadAndDirectoryExport(t *testing.T) {
 	}
 	Conf.FileTree.Store(conf.NewFileTree())
 	Conf.Sync.Load().Local = &conf.Local{Endpoint: remote}
-	Conf.User = &conf.User{UserId: "asset-test", UserSiYuanOneTimePayStatus: 1}
 	Conf.Sync.Load().Provider, Conf.Sync.Load().CloudName, Conf.Sync.Load().Enabled = conf.ProviderLocal, "main", true
 	Conf.Sync.Load().Local.Endpoint, Conf.Sync.Load().AssetDownloadMode = remote, 1
 	Conf.Repo.Load().Key = key

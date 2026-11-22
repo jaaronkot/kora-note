@@ -44,20 +44,6 @@ type GetBazaarPackageRatingsRequest struct {
 	PackageNames []string `json:"packageNames"`
 	NamesError   error    `json:"-"`
 }
-type GetBazaarPackageUserRatingsRequest struct {
-	PackageType  string   `json:"packageType" api:"trim"`
-	PackageNames []string `json:"packageNames"`
-	NamesError   error    `json:"-"`
-}
-type GetBazaarPackageRatingRequest struct {
-	PackageType string `json:"packageType" api:"trim"`
-	PackageName string `json:"packageName" api:"trim"`
-}
-type SetBazaarPackageRatingRequest struct {
-	PackageType string  `json:"packageType" api:"trim"`
-	PackageName string  `json:"packageName" api:"trim"`
-	Rating      float64 `json:"rating"`
-}
 type GetBazaarPackageREADMERequest struct {
 	RepoURL     string `json:"repoURL" api:"trim"`
 	RepoHash    string `json:"repoHash" api:"trim"`
@@ -187,15 +173,6 @@ type BazaarREADMEData struct {
 type BazaarRatingsData struct {
 	Ratings              map[string]*BazaarPackageRating `json:"ratings"`
 	EligiblePackageNames []string                        `json:"eligiblePackageNames"`
-}
-type BazaarUserRatingsData struct {
-	UserRatings          map[string]int `json:"userRatings"`
-	EligiblePackageNames []string       `json:"eligiblePackageNames"`
-}
-type BazaarRatingData struct {
-	Rating          *BazaarPackageRating `json:"rating,omitempty"`
-	RatingAvailable bool                 `json:"ratingAvailable"`
-	UserRating      int                  `json:"userRating"`
 }
 type BazaarRatingError struct {
 	ErrorCode string `json:"errorCode" api:"enum=bazaarRatingRateLimited|bazaarPackagePending"`
@@ -399,48 +376,6 @@ type BazaarNotifications struct {
 	SelectAllIncompleteTip *bool `json:"selectAllIncompleteTip,omitempty"` // 编辑器全选不完整提示，nil 时默认启用
 	FormatPainterTip       *bool `json:"formatPainterTip,omitempty"`       // 格式刷启用和退出提示，nil 时默认启用
 }
-type BazaarRatingResult struct {
-	success *BazaarRatingData
-	failure *BazaarRatingError
-}
-
-func NewBazaarRatingResult(data BazaarRatingData) BazaarRatingResult {
-	return BazaarRatingResult{success: &data}
-}
-func NewBazaarRatingResultError(data BazaarRatingError) BazaarRatingResult {
-	return BazaarRatingResult{failure: &data}
-}
-func (data BazaarRatingResult) MarshalJSON() ([]byte, error) {
-	if data.success != nil {
-		return json.Marshal(data.success)
-	}
-	if data.failure != nil {
-		return json.Marshal(data.failure)
-	}
-	return nil, errors.New("bazaar response variant is not set")
-}
-
-type BazaarUserRatingsResult struct {
-	success *BazaarUserRatingsData
-	failure *BazaarRatingError
-}
-
-func NewBazaarUserRatingsResult(data BazaarUserRatingsData) BazaarUserRatingsResult {
-	return BazaarUserRatingsResult{success: &data}
-}
-func NewBazaarUserRatingsResultError(data BazaarRatingError) BazaarUserRatingsResult {
-	return BazaarUserRatingsResult{failure: &data}
-}
-func (data BazaarUserRatingsResult) MarshalJSON() ([]byte, error) {
-	if data.success != nil {
-		return json.Marshal(data.success)
-	}
-	if data.failure != nil {
-		return json.Marshal(data.failure)
-	}
-	return nil, errors.New("bazaar response variant is not set")
-}
-
 type BazaarLocalInstallResult struct {
 	success *BazaarLocalInstallData
 	failure *BazaarLocalInstallError
@@ -465,10 +400,6 @@ func (data BazaarLocalInstallResult) MarshalJSON() ([]byte, error) {
 func bazaarPayloadSchema(b *schemaBuilder, t reflect.Type, input bool) (*Schema, error) {
 	var members []reflect.Type
 	switch t {
-	case reflect.TypeFor[BazaarRatingResult]():
-		members = []reflect.Type{reflect.TypeFor[BazaarRatingData](), reflect.TypeFor[BazaarRatingError]()}
-	case reflect.TypeFor[BazaarUserRatingsResult]():
-		members = []reflect.Type{reflect.TypeFor[BazaarUserRatingsData](), reflect.TypeFor[BazaarRatingError]()}
 	case reflect.TypeFor[BazaarLocalInstallResult]():
 		members = []reflect.Type{reflect.TypeFor[BazaarLocalInstallData](), reflect.TypeFor[BazaarLocalInstallError]()}
 	default:
@@ -578,58 +509,6 @@ func init() {
 				break
 			}
 			request.PackageNames = append(request.PackageNames, value)
-		}
-		return request, nil
-	}
-	GetBazaarPackageUserRatings.decodeRequest = func(reader io.Reader) (request GetBazaarPackageUserRatingsRequest, err error) {
-		fields, err := bazaarRequestFields(reader, "/api/bazaar/getBazaarPackageUserRatings")
-		if err != nil {
-			return request, err
-		}
-		if request.PackageType, err = requestFieldString(fields, "packageType", true, true); err != nil {
-			return request, err
-		}
-		items, parseErr := legacyField[[]json.RawMessage](fields, "packageNames", "Array", true)
-		if parseErr != nil {
-			return request, parseErr
-		}
-		request.PackageNames = make([]string, 0, len(items))
-		for _, item := range items {
-			var value string
-			if string(item) == "null" || json.Unmarshal(item, &value) != nil {
-				request.NamesError = errors.New("Field [packageNames]: each element should be of type [String]")
-				break
-			}
-			request.PackageNames = append(request.PackageNames, value)
-		}
-		return request, nil
-	}
-	GetBazaarPackageRating.decodeRequest = func(reader io.Reader) (request GetBazaarPackageRatingRequest, err error) {
-		fields, err := bazaarRequestFields(reader, "/api/bazaar/getBazaarPackageRating")
-		if err != nil {
-			return request, err
-		}
-		if request.PackageType, err = requestFieldString(fields, "packageType", true, true); err != nil {
-			return request, err
-		}
-		if request.PackageName, err = requestFieldString(fields, "packageName", true, true); err != nil {
-			return request, err
-		}
-		return request, nil
-	}
-	SetBazaarPackageRating.decodeRequest = func(reader io.Reader) (request SetBazaarPackageRatingRequest, err error) {
-		fields, err := bazaarRequestFields(reader, "/api/bazaar/setBazaarPackageRating")
-		if err != nil {
-			return request, err
-		}
-		if request.PackageType, err = requestFieldString(fields, "packageType", true, true); err != nil {
-			return request, err
-		}
-		if request.PackageName, err = requestFieldString(fields, "packageName", true, true); err != nil {
-			return request, err
-		}
-		if request.Rating, err = legacyField[float64](fields, "rating", "Number", true); err != nil {
-			return request, err
 		}
 		return request, nil
 	}

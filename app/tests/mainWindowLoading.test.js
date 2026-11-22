@@ -224,9 +224,9 @@ if (process.versions.electron && process.type === "browser") {
             if (pathname === "/base.css") {
                 response.setHeader("Content-Type", "text/css");
                 response.end(css);
-            } else if (pathname === "/stage/icon.svg") {
-                response.setHeader("Content-Type", "image/svg+xml");
-                response.end(fs.readFileSync(path.join(__dirname, "../stage/icon.svg")));
+            } else if (pathname === "/stage/icon.png") {
+                response.setHeader("Content-Type", "image/png");
+                response.end(fs.readFileSync(path.join(__dirname, "../stage/icon.png")));
             } else if (pathname.endsWith("/index.html")) {
                 response.setHeader("Content-Type", "text/html");
                 response.end(templates[pathname.includes("desktop") ? "desktop" : "app"]);

@@ -21,7 +21,6 @@ import {setSettingsWindowHost} from "./windowContext";
 import {refreshSettingConfig} from "./sync";
 import {openSettingDialog} from "../index";
 import {switchSettingTab} from "../search/dialog";
-import {withMountedBazaar} from "../bazaarTab";
 import {appearanceConfigApi, refreshAppearance} from "../tabs/appearanceRuntime";
 import {Setting} from "../../plugin/Setting";
 import {bindMenuKeydown} from "../../menus/Menu";
@@ -29,7 +28,6 @@ import {globalClickHideMenu} from "../../menus/menuClick";
 import {isAbove} from "../../util/zIndex";
 import {windowMouseMove} from "../../boot/globalEvent/mousemove";
 import {hideTooltip, initTooltips} from "../../dialog/tooltip";
-import {applyCloudUserState} from "../tabs/accountUi";
 import {updateServerAddresses} from "../tabs/accessRuntime";
 import {installPluginStorageFetchAppId} from "../../util/fetchAppId";
 import {createSettingsPluginApp} from "../../plugin/settingsApp";
@@ -115,14 +113,6 @@ const initialize = async () => {
             const {openChatGPTProvider} = await import("../tabs/ai/aiProviderUi");
             if (isActive()) { openChatGPTProvider(); }
         }
-        if (next.readme) {
-            const {type, from, resource} = next.readme;
-            await withMountedBazaar(({bazaar, renderReadme}) => {
-                if (!isActive()) return;
-                bazaar.switchBazaarTab(host.app, type, from);
-                renderReadme(type, from, resource);
-            });
-        }
     };
     listen("siyuan-settings-command", (_event, next: ISettingsCommand) => {
         command = next;
@@ -161,7 +151,6 @@ const initialize = async () => {
             case "progress": progressLoading(data); break;
             case "downloadProgress": downloadProgress(data.data); break;
             case "syncing": processSync(data); break;
-            case "setCloudUser": applyCloudUserState(data.data.user, data.data.userName); break;
             case "setServerAddrs": updateServerAddresses(data.data); break;
         }
     }});
@@ -176,8 +165,7 @@ const initialize = async () => {
     window.siyuan.isPublish = response.data.isPublish;
     await loadDesktopHostConnection();
     if (!isActive()) return;
-    const [user, emoji] = await Promise.all([
-        fetchSyncPost("/api/setting/getCloudUser", {cached: true}),
+    const [emoji] = await Promise.all([
         fetchSyncPost("/api/system/getEmojiConf", {}),
         runtime.refreshNotebooks(),
         new Promise<void>(resolve => getLocalStorage(resolve)),
@@ -191,7 +179,6 @@ const initialize = async () => {
     if (!window.siyuan.languages || !window.DOMPurify) {
         throw new Error("Could not load settings window dependencies");
     }
-    window.siyuan.user = user.data && "userId" in user.data ? user.data : null;
     if (Array.isArray(emoji.data)) {
         window.siyuan.emojis = emoji.data;
     }

@@ -240,7 +240,7 @@ func TestStructuredTitlesEncryptedArchiveRoundTrip(t *testing.T) {
 		original[document.ID] = structuredTitlesCiphertext(t, document)
 	}
 	Conf.Export.Load().IncludeSubDocs, Conf.Export.Load().AddTitle = true, true
-	_, markdownURI := ExportPandocConvertZipWithOptions([]string{root.ID}, "", ".md", nil)
+	_, markdownURI := ExportArchiveZipWithOptions([]string{root.ID}, ".md", nil)
 	_, markdown := readStructuredTitlesEncryptedArchive(t, markdownURI)
 	for _, document := range documents {
 		matches := 0

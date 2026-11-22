@@ -654,12 +654,6 @@ export type AVViewSortInput = { "column"?: string | null; "dateEndpoint"?: "star
 
 export type AVViewTableColumn = { "align"?: "" | "left" | "center" | "right"; "calc"?: AVFieldCalc; "desc"?: string; "hidden": boolean; "id": string; "pin": boolean; "width": string; "wrap": boolean; } | ({ "align"?: "" | "left" | "center" | "right"; "calc"?: AVFieldCalc; "pin": boolean; "width": string; } & { "desc"?: never; "hidden"?: never; "id"?: never; "wrap"?: never; });
 
-export type AccountLoginData = { "needCaptcha": string | null; "token": string | null; "userName": string | null; };
-
-export type AccountLoginRequestInput = { "captcha": string; "cloudRegion": number; "userName": string; "userPassword": string; };
-
-export type ActivationCodeRequestInput = { "data": string; };
-
 export type AddAttributeViewBlocksRequestInput = { "avID": string; "blockID"?: string | null; "groupID"?: string | null; "ignoreDefaultFill"?: boolean | null; "previousID"?: string | null; "srcs": Array<AVBlockSourceInput>; "viewID"?: string | null; };
 
 export type AddAttributeViewKeyRequestInput = { "avID": string; "blockID"?: string | null; "keyID": string; "keyIcon": string; "keyName": string; "keyType": string; "previousKeyID": string; };
@@ -671,8 +665,6 @@ export type AppendBlockRequestInput = { "data": string; "dataType": string; "par
 export type AppendHeadingChildrenRequestInput = { "childrenDOM": string; "id": string; };
 
 export type AssetAnnotationData = { "data": string; };
-
-export type AssetCloudUploadRequestInput = { "id": string; "ignorePushMsg"?: boolean | null; };
 
 export type AssetContent = { "content": string; "ext": string; "hSize": string; "id": string; "name": string; "path": string; "size": number; "updated": number; };
 
@@ -686,15 +678,9 @@ export type AssetDocumentRequestInput = { "id": string; };
 
 export type AssetInsertCoverData = { "succFiles": Array<AssetUploadSuccess> | null; "succMap": Record<string, string> | null; };
 
-export type AssetOCRData = { "ocrJSON": Array<Record<string, string> | null> | null; "text": string; };
-
-export type AssetOCRTextRequestInput = { "path"?: string | null; };
-
 export type AssetPathData = { "path": string; };
 
 export type AssetPathRequestInput = { "path": string; };
-
-export type AssetPathsCloudUploadRequestInput = { "ignorePushMsg"?: boolean | null; "paths": Array<string>; };
 
 export type AssetPathsData = { "paths": Array<string> | null; };
 
@@ -709,8 +695,6 @@ export type AssetRelinkMappingInput = { "newPath": string; "oldPath": string; };
 export type AssetRenameData = { "newPath": string; };
 
 export type AssetStatData = { "created": number; "downloaded"?: false; "hCreated": string; "hSize": string; "hUpdated": string; "size": number; "updated": number; };
-
-export type AssetTextData = { "text": string; };
 
 export type AssetUnusedItem = { "blockIDs"?: Array<string>; "item": string; "name": string; "path"?: string; };
 
@@ -824,21 +808,11 @@ export type BazaarPackagesData = { "packages": Array<BazaarPackage | null> | nul
 
 export type BazaarREADMEData = { "html": string; };
 
-export type BazaarRatingData = { "rating"?: BazaarPackageRating; "ratingAvailable": boolean; "userRating": number; };
-
-export type BazaarRatingError = { "errorCode": "bazaarRatingRateLimited" | "bazaarPackagePending"; };
-
-export type BazaarRatingResult = (BazaarRatingData & { "errorCode"?: never; }) | (BazaarRatingError & { "rating"?: never; "ratingAvailable"?: never; "userRating"?: never; });
-
 export type BazaarRatingsData = { "eligiblePackageNames": Array<string> | null; "ratings": Record<string, BazaarPackageRating | null> | null; };
 
 export type BazaarStatusBar = { "msgDataSyncDisabled": boolean; "msgTaskAssetDatabaseIndexCommitDisabled": boolean; "msgTaskDatabaseIndexCommitDisabled": boolean; "msgTaskHistoryDatabaseIndexCommitDisabled": boolean; "msgTaskHistoryGenerateFileDisabled": boolean; "version": number; };
 
 export type BazaarUpdatedData = { "icons": Array<BazaarPackageDetail | null> | null; "plugins": Array<BazaarPackageDetail | null> | null; "templates": Array<BazaarPackageDetail | null> | null; "themes": Array<BazaarPackageDetail | null> | null; "widgets": Array<BazaarPackageDetail | null> | null; };
-
-export type BazaarUserRatingsData = { "eligiblePackageNames": Array<string> | null; "userRatings": Record<string, number> | null; };
-
-export type BazaarUserRatingsResult = (BazaarUserRatingsData & { "errorCode"?: never; }) | (BazaarRatingError & { "eligiblePackageNames"?: never; "userRatings"?: never; });
 
 export type BlockBreadcrumbChildren = { "hasMore": boolean; "items": Array<BlockPath | null> | null; };
 
@@ -875,8 +849,6 @@ export type BlockPath = { "children": Array<BlockPath | null> | null; "documentT
 export type BlockQueryRequestInput = { "id": string; "ids"?: Array<string> | null; "notebook"?: string | null; };
 
 export type BlockRelevantData = { "nextID": string; "parentID": string; "previousID": string; };
-
-export type BlockReminderRequestInput = { "id": string; "timed": string; };
 
 export type BlockSiblingData = { "next": string; "parent": string; "previous": string; };
 
@@ -936,8 +908,6 @@ export type ChatGPTLogoutResult = { "revoked": boolean; };
 
 export type ChatGPTTransferRequestInput = { "accountID"?: string; "data"?: string; "password": string; };
 
-export type CheckActivationCodeRequestInput = { "data": string; };
-
 export type CheckBlockRefRequestInput = { "deletedIDs"?: Array<string>; "exactIDs"?: Array<string>; "id"?: string | null; "ids"?: Array<string>; "notebook"?: string | null; "paths"?: Array<string>; "scope"?: string; };
 
 export type CheckBlocksExistRequestInput = { "id"?: string | null; "ids": Array<JSONValue>; "notebook"?: string | null; };
@@ -950,7 +920,7 @@ export type ChildBlock = { "content"?: string; "id": string; "markdown"?: string
 
 export type CleanupRichTextRequestInput = { "batch": string; "groups": Array<string>; };
 
-export type ClearSyncProviderConfigData = { "enabled": boolean; "local"?: SyncLocal; "s3"?: SyncS3; "webdav"?: SyncWebDAV; };
+export type ClearSyncProviderConfigData = { "enabled": boolean; "local"?: SyncLocal; "webdav"?: SyncWebDAV; };
 
 export type ClearSyncProviderConfigRequestInput = { "provider": number; };
 
@@ -959,14 +929,6 @@ export type ClipboardFile = { "isDir": boolean; "name": string; "path": string; 
 export type ClipboardPathRequestInput = { "path": string; };
 
 export type CloseNotebookRequestInput = { "notebook": string; };
-
-export type CloudBackup = { "hSize": string; "saveDir": string; "size": number; "updated": string; };
-
-export type CloudReminderRequestInput = { "content": string; "id": string; "timed": string; };
-
-export type CloudSpaceData = { "backup": CloudBackup | null; "hAssetSize": string; "hExchangeSize": string; "hSize": string; "hTotalSize": string; "hTrafficAPIGet": string; "hTrafficAPIPut": string; "hTrafficDownloadSize": string; "hTrafficUploadSize": string; "sync": CloudSync | null; };
-
-export type CloudSync = { "cloudName": string; "hSize": string; "saveDir": string; "size": number; "updated": string; };
 
 export type CloudSyncDir = { "cloudName": string; "hSize": string; "saveDir": string; "size": number; "updated": string; };
 
@@ -1192,8 +1154,6 @@ export type ExportBrowserHTMLRequestInput = { "folder": string; "html": string; 
 
 export type ExportDocumentsMarkdownRequestInput = { "addTitle"?: boolean | null; "blockEmbedMode"?: number | null; "blockRefMode"?: number | null; "blockRefTextLeft"?: string | null; "blockRefTextRight"?: string | null; "fileAnnotationRefMode"?: number | null; "headingNumber"?: boolean | null; "ids": Array<string>; "includeRelatedDocs"?: boolean | null; "includeSubDocs"?: boolean | null; "inlineMemo"?: boolean | null; "markdownYFM"?: boolean | null; "removeAssetsID"?: boolean | null; "tagCloseMarker"?: string | null; "tagOpenMarker"?: string | null; };
 
-export type ExportDocxRequestInput = { "id": string; "merge"?: boolean | null; "mergeContentHeadingMode"?: string | null; "mergeDocHeadingMode"?: string | null; "removeAssets": boolean; "savePath": string; };
-
 export type ExportFileData = { "file": string; };
 
 export type ExportFolderRequestInput = { "folder": string; };
@@ -1402,13 +1362,9 @@ export type GetBazaarIconRequestInput = { "keyword"?: string | null; };
 
 export type GetBazaarPackageREADMERequestInput = { "packageType": string; "repoHash": string; "repoURL": string; };
 
-export type GetBazaarPackageRatingRequestInput = { "packageName": string; "packageType": string; };
-
 export type GetBazaarPackageRatingsRequestInput = { "packageNames": Array<string>; "packageType": string; };
 
 export type GetBazaarPackageRequestInput = { "frontend"?: string | null; "packageName": string; "packageType": string; };
-
-export type GetBazaarPackageUserRatingsRequestInput = { "packageNames": Array<string>; "packageType": string; };
 
 export type GetBazaarPluginRequestInput = { "frontend": string; "keyword"?: string | null; };
 
@@ -1492,7 +1448,7 @@ export type GraphTypeFilterInput = { "blockquote"?: boolean | null; "callout"?: 
 
 export type HTMLClipboardPreflight = { "converted": boolean; "dom"?: string; "normalizedHTML"?: string; "useHTML": boolean; };
 
-export type HTMLClipboardRequestInput = { "dom": string; "mathML"?: string | null; "notebook"?: string | null; "office"?: string | null; "officeMathHTML"?: string | null; "preflight"?: boolean | null; "preparedHTML"?: boolean | null; "preserveSourceFormat"?: boolean | null; "skipBase64Assets"?: boolean | null; "skipInlineSVGAssets"?: boolean | null; "skipLocalAssets"?: boolean | null; "text"?: string | null; "wps"?: string | null; };
+export type HTMLClipboardRequestInput = { "dom": string; "notebook"?: string | null; "preflight"?: boolean | null; "preparedHTML"?: boolean | null; "preserveSourceFormat"?: boolean | null; "skipBase64Assets"?: boolean | null; "skipInlineSVGAssets"?: boolean | null; "skipLocalAssets"?: boolean | null; "text"?: string | null; "wps"?: string | null; };
 
 export type HTMLData = { "html": string; };
 
@@ -1514,8 +1470,6 @@ export type HistoryItemsRequestInput = { "created": string; "notebook"?: string 
 
 export type HistoryPathRequestInput = { "historyPath": string; };
 
-export type ImageOCRTextData = { "failed": boolean; "text": string; };
-
 export type ImportAutoDocument = { "token"?: string; "type": "document"; };
 
 export type ImportAutoNotebook = { "notebook": Notebook | null; "type": "notebook"; };
@@ -1531,8 +1485,6 @@ export type ImportMarkdownRequestInput = { "localPath": string; "notebook": stri
 export type ImportNotebookArchiveRequestInput = { "file": Blob; "key"?: Blob; "password": string; };
 
 export type ImportNotebookCryptoBackupRequestInput = { "file": Blob; "password"?: string; };
-
-export type ImportOCRModelsRequestInput = { "detector": Blob; "detectorConfig": Blob; "recognizer": Blob; "recognizerConfig": Blob; };
 
 export type ImportRepoKeyRequestInput = { "key": string; };
 
@@ -1639,8 +1591,6 @@ export type LocalGraphRequestInput = { "conf"?: GraphConfigurationFieldsInput; "
 export type LocalGraphResult = { "box": string; "conf": LocalGraphConf; "id": string; "links": Array<GraphLink | null> | null; "nodes": Array<GraphNode | null> | null; "reqId": JSONValue; };
 
 export type LockScreenRequestInput = { "lockScreenMode": number; };
-
-export type Login2faEnvelope = { "code": number; "data": ({ "code": number; "msg": string; } & { [key: string]: JSONValue }) | null; "msg": string; };
 
 export type MCPOAuthClient = { "id": string; "name": string; "redirectURI": string; };
 
@@ -1768,18 +1718,6 @@ export type NotificationData = { "id": string; };
 
 export type NotificationRequestInput = { "msg": string; "timeout"?: number | null; };
 
-export type OCRAIModel = { "id": string; "name": string; "provider": string; };
-
-export type OCRConfigData = { "aiModels": Array<OCRAIModel> | null; "config": SettingOCR; "models": Array<OCRModel> | null; "providers": Array<OCRProviderState> | null; };
-
-export type OCRModel = { "builtIn": boolean; "id": string; "name": string; };
-
-export type OCRProviderState = { "available": boolean; "id": string; };
-
-export type OCRThresholds = { "box": number | null; "detection": number | null; "recognition": number | null; };
-
-export type OCRThresholdsInput = { "box": number | null; "detection": number | null; "recognition": number | null; };
-
 export type ObsidianAnalysisRequestInput = { "localPath": string; };
 
 export type ObsidianImportRequestInput = { "notebookName": string; "taskID": string; };
@@ -1804,15 +1742,11 @@ export type OutlineStorageRequestInput = { "docID": string; };
 
 export type OutlineStorageSetRequestInput = { "docID": string; "val": { [key: string]: JSONValue }; };
 
-export type PandocData = { "path": string; };
-
-export type PandocRequestInput = { "args": Array<string>; "dir"?: string | null; };
-
 export type PatchRepoSettingInput = { "indexRetentionDays"?: number | null; "retentionIndexesDaily"?: number | null; };
 
-export type PatchSettingRequestInput = { "ai"?: SettingAIInput | null; "appearance"?: SettingAppearanceInput | null; "bazaar"?: SettingBazaarInput | null; "editor"?: SettingEditorInput | null; "export"?: SettingExportInput | null; "fileTree"?: SettingFileTreeInput | null; "flashcard"?: SettingFlashcardInput | null; "keymap"?: { [key: string]: JSONValue }; "ocr"?: SettingOCRInput | null; "publish"?: SettingPublishInput | null; "repo"?: PatchRepoSettingInput | null; "search"?: SettingSearchInput | null; "secrets"?: SettingSecretsInput | null; "snippet"?: SettingSnptInput | null; "sync"?: PatchSyncSettingInput | null; "system"?: PatchSystemSettingInput | null; "variables"?: SettingVariablesInput | null; };
+export type PatchSettingRequestInput = { "ai"?: SettingAIInput | null; "appearance"?: SettingAppearanceInput | null; "bazaar"?: SettingBazaarInput | null; "editor"?: SettingEditorInput | null; "export"?: SettingExportInput | null; "fileTree"?: SettingFileTreeInput | null; "flashcard"?: SettingFlashcardInput | null; "keymap"?: { [key: string]: JSONValue }; "publish"?: SettingPublishInput | null; "repo"?: PatchRepoSettingInput | null; "search"?: SettingSearchInput | null; "secrets"?: SettingSecretsInput | null; "snippet"?: SettingSnptInput | null; "sync"?: PatchSyncSettingInput | null; "system"?: PatchSystemSettingInput | null; "variables"?: SettingVariablesInput | null; };
 
-export type PatchSyncSettingInput = { "assetDownloadMode"?: number | null; "cloudName"?: string | null; "enabled"?: boolean | null; "generateConflictDoc"?: boolean | null; "interval"?: number | null; "lan"?: SyncLANRequestInput | null; "local"?: SyncLocalInput | null; "mode"?: number | null; "perception"?: boolean | null; "s3"?: SyncS3Input | null; "webdav"?: SyncWebDAVInput | null; };
+export type PatchSyncSettingInput = { "assetDownloadMode"?: number | null; "cloudName"?: string | null; "enabled"?: boolean | null; "generateConflictDoc"?: boolean | null; "interval"?: number | null; "lan"?: SyncLANRequestInput | null; "local"?: SyncLocalInput | null; "mode"?: number | null; "webdav"?: SyncWebDAVInput | null; };
 
 export type PatchSystemSettingInput = { "autoLaunch2"?: number | null; "encryptedNotebookFollowSystemLock"?: boolean | null; "lockScreenMode"?: number | null; "networkProxy"?: NetworkProxyInput | null; "networkServe"?: boolean | null; "networkServeTLS"?: boolean | null; "settingsWindow"?: boolean | null; };
 
@@ -1897,8 +1831,6 @@ export type RemoveEncryptedBoxAssetsRequestInput = { "notebook": string; "paths"
 export type RemoveFileRequestInput = { "app"?: string | null; "path": string; };
 
 export type RemoveRepoTagSnapshotRequestInput = { "tag": string; };
-
-export type RemoveShorthandsRequestInput = { "ids": Array<string>; };
 
 export type RemoveTagRequestInput = { "label": string; };
 
@@ -2104,8 +2036,6 @@ export type SetAppearanceRequestInput = { "bodyGradient"?: SettingBodyGradientIn
 
 export type SetAssetAnnotationRequestInput = { "baseData"?: string | null; "data": string; "path": string; };
 
-export type SetAssetOCRTextRequestInput = { "path": string; "text": string; };
-
 export type SetAttrViewContextFilterRequestInput = { "avID": string; "blockID": string; "keyID"?: string | null; };
 
 export type SetAttrViewFiltersRequestInput = { "avID": string; "blockID": string; "data": Array<AVViewFilterInput | null>; };
@@ -2115,8 +2045,6 @@ export type SetAttrViewGroupRequestInput = { "avID": string; "blockID": string; 
 export type SetAttrViewSortsRequestInput = { "avID": string; "blockID": string; "data": Array<AVViewSortInput | null>; };
 
 export type SetAttributeViewBlockAttrRequestInput = { "avID": string; "itemID"?: string | null; "keyID": string; "rowID"?: string | null; "value": AVValueInput; };
-
-export type SetBazaarPackageRatingRequestInput = { "packageName": string; "packageType": string; "rating": number; };
 
 export type SetBazaarRequestInput = { "batchUpdateExcluded"?: Record<string, Record<string, boolean> | null> | null; "compatibilityFilters"?: Record<string, SettingBazaarCompatibilityFilterInput | null> | null; "petalDisabled"?: boolean | null; "trust"?: boolean | null; };
 
@@ -2132,7 +2060,7 @@ export type SetEditorRequestInput = { "allowHTMLBLockScript"?: boolean | null; "
 
 export type SetEntryVisibilityRequestInput = { "active"?: string | null; "profiles"?: Array<SettingEntryVisibilityProfileInput | null> | null; "version"?: number | null; };
 
-export type SetExportRequestInput = { "addTitle"?: boolean | null; "blockEmbedMode"?: number | null; "blockRefMode"?: number | null; "blockRefTextLeft"?: string | null; "blockRefTextRight"?: string | null; "fileAnnotationRefMode"?: number | null; "headingNumber"?: boolean | null; "imageWatermarkDesc"?: string | null; "imageWatermarkStr"?: string | null; "includeRelatedDocs"?: boolean | null; "includeSubDocs"?: boolean | null; "inlineMemo"?: boolean | null; "markdownYFM"?: boolean | null; "pandocBin"?: string | null; "pandocParams"?: string | null; "paragraphBeginningSpace"?: boolean | null; "pdfFooter"?: string | null; "pdfWatermarkDesc"?: string | null; "pdfWatermarkStr"?: string | null; "removeAssetsID"?: boolean | null; "tagCloseMarker"?: string | null; "tagOpenMarker"?: string | null; };
+export type SetExportRequestInput = { "addTitle"?: boolean | null; "blockEmbedMode"?: number | null; "blockRefMode"?: number | null; "blockRefTextLeft"?: string | null; "blockRefTextRight"?: string | null; "fileAnnotationRefMode"?: number | null; "headingNumber"?: boolean | null; "imageWatermarkDesc"?: string | null; "imageWatermarkStr"?: string | null; "includeRelatedDocs"?: boolean | null; "includeSubDocs"?: boolean | null; "inlineMemo"?: boolean | null; "markdownYFM"?: boolean | null; "paragraphBeginningSpace"?: boolean | null; "pdfFooter"?: string | null; "pdfWatermarkDesc"?: string | null; "pdfWatermarkStr"?: string | null; "removeAssetsID"?: boolean | null; "tagCloseMarker"?: string | null; "tagOpenMarker"?: string | null; };
 
 export type SetFiletreeRequestInput = { "allowCreateDeeper"?: boolean | null; "alwaysSelectOpenedFile"?: boolean | null; "boxDocEnabled"?: boolean | null; "closeTabOnDoubleClick"?: boolean | null; "closeTabsOnStart"?: boolean | null; "closeWindowOnLastTabClosed"?: boolean | null; "createDocAtTop"?: boolean | null; "docCreateSaveBox"?: string | null; "docCreateSavePath"?: string | null; "docCreateTemplatePath"?: string | null; "docIconClickMode"?: number | null; "docTreeBatchSize"?: number | null; "largeFileWarningSize"?: number | null; "maxListCount"?: number | null; "maxOpenTabCount"?: number | null; "noSplitScreenWhenOpenTab"?: boolean | null; "openFilesUseCurrentTab"?: boolean | null; "parentDocTitleClickMode"?: number | null; "recentDocsMaxListCount"?: number | null; "recentDocsSort"?: string | null; "refCreateSaveBox"?: string | null; "refCreateSavePath"?: string | null; "removeDocWithoutConfirm"?: boolean | null; "shorthandSaveBox"?: string | null; "shorthandSavePath"?: string | null; "sort"?: number | null; "tabStartupMode"?: number | null; "useSVGDefaultIcon"?: boolean | null; "useSingleLineSave"?: boolean | null; };
 
@@ -2169,8 +2097,6 @@ export type SetSnapshotMemoRequestInput = { "id": string; "memo": string; };
 export type SetSnippetRequestInput = { "revision"?: string | null; "snippets": Array<SnippetInput>; };
 
 export type SetSyncLocalRequestInput = { "local": SyncLocalInput; };
-
-export type SetSyncS3RequestInput = { "s3": SyncS3Input; };
 
 export type SetSyncWebDAVRequestInput = { "webdav": SyncWebDAVInput; };
 
@@ -2258,8 +2184,6 @@ export type SettingCapabilityPolicy = { "default": string; "overrides": Record<s
 
 export type SettingCapabilityPolicyInput = { "default"?: string | null; "overrides"?: Record<string, string> | null; };
 
-export type SettingCloudUserRequestInput = { "cached"?: boolean; "token"?: string | null; };
-
 export type SettingDecision = { "apiKey": string; "enabled": boolean; "endpoint": string; "name": string; "profiles": Record<string, SettingDecisionProfile | null> | null; "provider": string; "timeout": number; };
 
 export type SettingDecisionInput = { "apiKey"?: string | null; "enabled"?: boolean | null; "endpoint"?: string | null; "name"?: string | null; "profiles"?: Record<string, SettingDecisionProfileInput | null> | null; "provider"?: string | null; "timeout"?: number | null; };
@@ -2294,9 +2218,9 @@ export type SettingEntryVisibilityProfile = { "defaults"?: "simple" | "full"; "e
 
 export type SettingEntryVisibilityProfileInput = { "defaults"?: "simple" | "full"; "entries"?: Record<string, boolean> | null; "id"?: string | null; "name"?: string | null; "orders"?: Record<string, Array<string> | null> | null; };
 
-export type SettingExport = { "addTitle": boolean; "blockEmbedMode": number; "blockRefMode": number; "blockRefTextLeft": string; "blockRefTextRight": string; "fileAnnotationRefMode": number; "headingNumber": boolean | null; "imageWatermarkDesc": string; "imageWatermarkStr": string; "includeRelatedDocs": boolean; "includeSubDocs": boolean; "inlineMemo": boolean; "markdownYFM": boolean; "pandocBin": string; "pandocParams": string; "paragraphBeginningSpace": boolean; "pdfFooter": string; "pdfWatermarkDesc": string; "pdfWatermarkStr": string; "removeAssetsID": boolean; "tagCloseMarker": string; "tagOpenMarker": string; };
+export type SettingExport = { "addTitle": boolean; "blockEmbedMode": number; "blockRefMode": number; "blockRefTextLeft": string; "blockRefTextRight": string; "fileAnnotationRefMode": number; "headingNumber": boolean | null; "imageWatermarkDesc": string; "imageWatermarkStr": string; "includeRelatedDocs": boolean; "includeSubDocs": boolean; "inlineMemo": boolean; "markdownYFM": boolean; "paragraphBeginningSpace": boolean; "pdfFooter": string; "pdfWatermarkDesc": string; "pdfWatermarkStr": string; "removeAssetsID": boolean; "tagCloseMarker": string; "tagOpenMarker": string; };
 
-export type SettingExportInput = { "addTitle"?: boolean | null; "blockEmbedMode"?: number | null; "blockRefMode"?: number | null; "blockRefTextLeft"?: string | null; "blockRefTextRight"?: string | null; "fileAnnotationRefMode"?: number | null; "headingNumber"?: boolean | null; "imageWatermarkDesc"?: string | null; "imageWatermarkStr"?: string | null; "includeRelatedDocs"?: boolean | null; "includeSubDocs"?: boolean | null; "inlineMemo"?: boolean | null; "markdownYFM"?: boolean | null; "pandocBin"?: string | null; "pandocParams"?: string | null; "paragraphBeginningSpace"?: boolean | null; "pdfFooter"?: string | null; "pdfWatermarkDesc"?: string | null; "pdfWatermarkStr"?: string | null; "removeAssetsID"?: boolean | null; "tagCloseMarker"?: string | null; "tagOpenMarker"?: string | null; };
+export type SettingExportInput = { "addTitle"?: boolean | null; "blockEmbedMode"?: number | null; "blockRefMode"?: number | null; "blockRefTextLeft"?: string | null; "blockRefTextRight"?: string | null; "fileAnnotationRefMode"?: number | null; "headingNumber"?: boolean | null; "imageWatermarkDesc"?: string | null; "imageWatermarkStr"?: string | null; "includeRelatedDocs"?: boolean | null; "includeSubDocs"?: boolean | null; "inlineMemo"?: boolean | null; "markdownYFM"?: boolean | null; "paragraphBeginningSpace"?: boolean | null; "pdfFooter"?: string | null; "pdfWatermarkDesc"?: string | null; "pdfWatermarkStr"?: string | null; "removeAssetsID"?: boolean | null; "tagCloseMarker"?: string | null; "tagOpenMarker"?: string | null; };
 
 export type SettingFileTree = { "allowCreateDeeper": boolean; "alwaysSelectOpenedFile": boolean; "boxDocEnabled": boolean | null; "closeTabOnDoubleClick": boolean; "closeTabsOnStart": boolean; "closeWindowOnLastTabClosed": boolean | null; "createDocAtTop": boolean | null; "docCreateSaveBox": string; "docCreateSavePath": string; "docCreateTemplatePath": string; "docIconClickMode": number; "docTreeBatchSize": number | null; "largeFileWarningSize": number; "maxListCount": number; "maxOpenTabCount": number; "noSplitScreenWhenOpenTab": boolean; "openFilesUseCurrentTab": boolean; "parentDocTitleClickMode": number; "recentDocsMaxListCount": number; "recentDocsSort": string; "refCreateSaveBox": string; "refCreateSavePath": string; "removeDocWithoutConfirm": boolean; "shorthandSaveBox": string; "shorthandSavePath": string; "sort": number; "tabStartupMode": number | null; "useSVGDefaultIcon": boolean | null; "useSingleLineSave": boolean; };
 
@@ -2317,8 +2241,6 @@ export type SettingImageGenerationInput = { "modelId"?: string | null; "outputFo
 export type SettingIssue = { "field": string; "message": string; "severity": string; };
 
 export type SettingKeymapRequestInput = { "data": { [key: string]: JSONValue }; };
-
-export type SettingLogin2faRequestInput = { "code": string; "token": string; };
 
 export type SettingMCP = { "exposurePolicy": SettingCapabilityPolicy | null; "servers": Array<SettingMCPServer> | null; };
 
@@ -2347,10 +2269,6 @@ export type SettingModelInput = { "contextLength"?: number | null; "displayName"
 export type SettingNotifications = { "browserCompatibility": boolean; "docTreeMaxList": boolean; "formatPainterTip"?: boolean; "selectAllIncompleteTip"?: boolean; "selectAllTip"?: boolean; "tagMaxList": boolean; "workspaceNotSSD": boolean; };
 
 export type SettingNotificationsInput = { "browserCompatibility"?: boolean | null; "docTreeMaxList"?: boolean | null; "formatPainterTip"?: boolean | null; "selectAllIncompleteTip"?: boolean | null; "selectAllTip"?: boolean | null; "tagMaxList"?: boolean | null; "workspaceNotSSD"?: boolean | null; };
-
-export type SettingOCR = { "aiModelId": string; "auto": boolean; "model": string; "provider": string; "reasoningEffort": string; "showEmpty": boolean; "showError": boolean; "showText"?: boolean; "thresholds": OCRThresholds; };
-
-export type SettingOCRInput = { "aiModelId"?: string | null; "auto": boolean; "model": string; "provider": string; "reasoningEffort"?: string | null; "showEmpty"?: boolean | null; "showError"?: boolean | null; "showText"?: boolean | null; "thresholds"?: OCRThresholdsInput | null; };
 
 export type SettingPDFTheme = { "annoColor": string; "dark": string; "light": string; };
 
@@ -2404,10 +2322,6 @@ export type SettingTaskState = { "revision": number; "tasks": Array<SettingTask>
 
 export type SettingThemeRequestInput = { "appearanceMode"?: string | null; "modes"?: Array<number> | null; "theme"?: string | null; };
 
-export type SettingUser = { "userAvatarURL": string; "userCreateTime": string; "userHomeBImgURL": string; "userId": string; "userIntro": string; "userName": string; "userNickname": string; "userSiYuanAssetSize": number; "userSiYuanOneTimePayStatus": number; "userSiYuanPointExchangeRepoSize": number; "userSiYuanProExpireTime": number; "userSiYuanRepoSize": number; "userSiYuanSubscriptionPlan": number; "userSiYuanSubscriptionStatus": number; "userSiYuanSubscriptionType": number; "userTitles": Array<SettingUserTitle | null> | null; "userToken": string; "userTokenExpireTime": string; "userTrafficAPIGet": number; "userTrafficAPIPut": number; "userTrafficDownload": number; "userTrafficTime": number; "userTrafficUpload": number; };
-
-export type SettingUserTitle = { "desc": string; "icon": string; "name": string; };
-
 export type SettingVariable = { "name": string; "value": string; };
 
 export type SettingVariableInput = { "name"?: string | null; "value"?: string | null; };
@@ -2417,16 +2331,6 @@ export type SettingVariables = { "items": Array<SettingVariable | null> | null; 
 export type SettingVariablesInput = { "items"?: Array<SettingVariableInput | null> | null; };
 
 export type SettingsWindowRequestInput = { "settingsWindow": boolean; };
-
-export type Shorthand = { "hCreated": string; "oId": string; "shorthandContent": string; "shorthandDesc": string; "shorthandFrom": number; "shorthandMd": string; "shorthandTitle": string; "shorthandURL": string; };
-
-export type ShorthandPage = { "pagination": ShorthandPagination; "shorthands": Array<Shorthand | null>; };
-
-export type ShorthandPagination = { "paginationPageCount": number; "paginationPageNums": Array<number> | null; "paginationRecordCount": number; };
-
-export type ShorthandsData = { "code": number; "data": ShorthandPage; "msg": string; };
-
-export type ShorthandsRequestInput = { "page": number; };
 
 export type Snippet = { "content": string; "disabledInPublish": boolean; "enabled": boolean; "id": string; "name": string; "type": string; };
 
@@ -2490,21 +2394,15 @@ export type SyncNameRequestInput = { "name": string; };
 
 export type SyncOnlineKernel = { "hostname": string; "id": string; "os": string; "ver": string; };
 
-export type SyncProviderConfigRulesData = { "endpointBucketWarning": boolean; "requiredFields": Array<string>; };
+export type SyncProviderConfigRulesData = { "requiredFields": Array<string>; };
 
-export type SyncProviderConfigRulesRequestInput = { "bucket"?: string; "endpoint"?: string; "provider": number; };
+export type SyncProviderConfigRulesRequestInput = { "endpoint"?: string; "provider": number; };
 
 export type SyncProviderExportData = { "name": string; "zip": string; };
 
 export type SyncProviderImportRequestInput = { "file"?: Blob; };
 
 export type SyncProviderRequestInput = { "completeAssets"?: boolean | null; "provider": number; };
-
-export type SyncS3 = { "accessKey": string; "bucket": string; "concurrentReqs": number; "endpoint": string; "pathStyle": boolean; "region": string; "secretKey": string; "skipTlsVerify": boolean; "timeout": number; };
-
-export type SyncS3Data = { "s3": SyncS3 | null; };
-
-export type SyncS3Input = { "accessKey"?: string | null; "bucket"?: string | null; "concurrentReqs"?: number | null; "endpoint"?: string | null; "pathStyle"?: boolean | null; "region"?: string | null; "secretKey"?: string | null; "skipTlsVerify"?: boolean | null; "timeout"?: number | null; };
 
 export type SyncSourceState = { "cloudCreated": number; "cloudDevice": string; "cloudFiles": number; "cloudID": string; "localFiles": number; "localID": string; "overwriteFiles": number; "pending": boolean; "removeFiles": number; "source": string; "uploadFiles": number; };
 
@@ -2520,7 +2418,7 @@ export type SystemAPITokenRequestInput = { "token": string; };
 
 export type SystemAccessAuthCodeRequestInput = { "accessAuthCode": string; };
 
-export type SystemAppConf = { "accessAuthCode": string; "ai": SettingAI | null; "api": SystemAPI | null; "appearance": SettingAppearance | null; "bazaar": SettingBazaar | null; "cloudRegion": number; "cookieKey": string; "dataIndexState": number; "editor": SettingEditor | null; "export": SettingExport | null; "fileTree": SettingFileTree | null; "flashcard": SettingFlashcard | null; "graph": SystemGraph | null; "keymap": { [key: string]: JSONValue } | null; "lang": string; "langs": Array<SystemLang | null> | null; "logLevel": string; "mcpOAuth": string; "notebookCrypto": SystemNotebookCrypto | null; "ocr": SettingOCR | null; "oidc": SystemOIDC | null; "onboarding": SystemOnboarding | null; "publish": SettingPublish | null; "readonly": boolean; "repo": SystemRepo | null; "search": SettingSearch | null; "secrets": SettingSecrets | null; "serverAddrs": Array<string> | null; "showChangelog": boolean; "snippet": SettingSnpt | null; "stat": SystemStat | null; "sync": SystemSync | null; "system": SystemSystem | null; "tag": SystemTag | null; "uiLayout": { [key: string]: JSONValue } | null; "userData": string; "variables": SettingVariables | null; };
+export type SystemAppConf = { "accessAuthCode": string; "ai": SettingAI | null; "api": SystemAPI | null; "appearance": SettingAppearance | null; "bazaar": SettingBazaar | null; "cloudRegion": number; "cookieKey": string; "dataIndexState": number; "editor": SettingEditor | null; "export": SettingExport | null; "fileTree": SettingFileTree | null; "flashcard": SettingFlashcard | null; "graph": SystemGraph | null; "keymap": { [key: string]: JSONValue } | null; "lang": string; "langs": Array<SystemLang | null> | null; "logLevel": string; "mcpOAuth": string; "notebookCrypto": SystemNotebookCrypto | null; "oidc": SystemOIDC | null; "onboarding": SystemOnboarding | null; "publish": SettingPublish | null; "readonly": boolean; "repo": SystemRepo | null; "search": SettingSearch | null; "secrets": SettingSecrets | null; "serverAddrs": Array<string> | null; "showChangelog": boolean; "snippet": SettingSnpt | null; "stat": SystemStat | null; "sync": SystemSync | null; "system": SystemSystem | null; "tag": SystemTag | null; "uiLayout": { [key: string]: JSONValue } | null; "variables": SettingVariables | null; };
 
 export type SystemAppearanceData = { "appearance": SettingAppearance | null; };
 
@@ -2630,11 +2528,9 @@ export type SystemRepo = { "indexRetentionDays": number; "key": string | null; "
 
 export type SystemRuntimeInfoData = { "text": string; };
 
-export type SystemS3 = { "accessKey": string; "bucket": string; "concurrentReqs": number; "endpoint": string; "pathStyle": boolean; "region": string; "secretKey": string; "skipTlsVerify": boolean; "timeout": number; };
-
 export type SystemStat = { "assetsSize": number; "blockCount": number; "cAssetsSize": number; "cBlockCount": number; "cDataSize": number; "cTreeCount": number; "dataSize": number; "treeCount": number; };
 
-export type SystemSync = { "assetDownloadMode": number; "cloudName": string; "enabled": boolean; "generateConflictDoc": boolean; "interval": number; "lan": SystemLANSync | null; "lastResult": number; "local": SystemLocal | null; "mode": number; "perception": boolean; "provider": number; "s3": SystemS3 | null; "stat": string; "synced": number; "webdav": SystemWebDAV | null; };
+export type SystemSync = { "assetDownloadMode": number; "cloudName": string; "enabled": boolean; "generateConflictDoc": boolean; "interval": number; "lan": SystemLANSync | null; "lastResult": number; "local": SystemLocal | null; "mode": number; "provider": number; "stat": string; "synced": number; "webdav": SystemWebDAV | null; };
 
 export type SystemSystem = { "appDir": string; "autoLaunch2": number; "confDir": string; "container": string; "dataDir": string; "disabledFeatures": Array<string> | null; "downloadInstallPkg": boolean; "encryptedNotebookFollowSystemLock": boolean; "homeDir": string; "id": string; "isMicrosoftStore": boolean; "kernelVersion": string; "lockScreenMode": number; "microsoftDefenderExcluded": boolean; "name": string; "networkProxy": SystemNetworkProxy | null; "networkServe": boolean; "networkServeTLS": boolean; "os": string; "osPlatform": string; "safeMode": boolean; "settingsWindow": boolean; "updateChannel"?: string; "workspaceDir": string; };
 
@@ -2694,11 +2590,9 @@ export type TemplatePlan = { "count": number; "id": string; "nodes": Array<Templ
 
 export type TemplatePlanNode = { "depth": number; "hPath": string; "id": string; "parentID": string; "title": string; };
 
+export type TestSyncProviderData = { "kind": string; "msg": string; };
+
 export type TestSyncProviderLocalRequestInput = { "local": SyncLocalInput; };
-
-export type TestSyncProviderS3Data = { "kind": string; "msg": string; };
-
-export type TestSyncProviderS3RequestInput = { "s3": SyncS3Input; };
 
 export type TestSyncProviderWebDAVRequestInput = { "cloudName"?: string; "webdav": SyncWebDAVInput; };
 
@@ -3089,41 +2983,6 @@ export interface APIGETRoutes {
 }
 
 export interface APIPOSTRoutes {
-    "/api/account/checkActivationcode": {
-        request: CheckActivationCodeRequestInput;
-        response: { "code": 0; "data": null; "msg": string; } | { "code": -1 | 1; "data": { "closeTimeout": number; } | null | null; "msg": string; };
-        body: "json";
-        /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
-        authorization?: readonly ["authenticated","admin","writable"];
-    };
-    "/api/account/deactivate": {
-        request: EmptyRequestInput;
-        response: { "code": 0; "data": null; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
-        body: "none";
-        /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
-        authorization?: readonly ["authenticated","admin","writable"];
-    };
-    "/api/account/login": {
-        request: AccountLoginRequestInput;
-        response: { "code": 0; "data": AccountLoginData | null; "msg": string; } | { "code": -1 | 1 | 10; "data": { "closeTimeout": number; } | null | AccountLoginData | null; "msg": string; };
-        body: "json";
-        /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
-        authorization?: readonly ["authenticated","admin","writable"];
-    };
-    "/api/account/startFreeTrial": {
-        request: EmptyRequestInput;
-        response: { "code": 0; "data": null; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
-        body: "none";
-        /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
-        authorization?: readonly ["authenticated","admin","writable"];
-    };
-    "/api/account/useActivationcode": {
-        request: ActivationCodeRequestInput;
-        response: { "code": 0; "data": null; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
-        body: "json";
-        /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
-        authorization?: readonly ["authenticated","admin","writable"];
-    };
     "/api/ai/agent/browserCapabilityResult": {
         request: AIBrowserCapabilityResultRequestInput;
         response: { "code": 0; "data": null; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
@@ -3605,24 +3464,6 @@ export interface APIPOSTRoutes {
         /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
         authorization?: readonly ["authenticated","admin","writable"];
     };
-    /**
-     * 手动调用设备选择的 OCR AI 模型识别本地 assets/ 图片，不使用会话、工具。
-     * 未保存独立模型且本地提供商仍被选中时兼容智能体模型；显式模型失效时返回错误，不回退。
-     * path 保留 box 查询参数以隔离笔记本资源；拒绝加密资源和外部图片地址。
-     * 支持 PNG、JPEG、GIF、WebP，并将 BMP、TIFF 转为 PNG、HEIC/HEIF 转为 JPEG；其他格式返回错误。
-     * 保留原图分辨率，原始文件和发送图片均限制为 20 MiB、发送图片限制为四千万像素；HEIF 遵循预览解码限制。
-     * 支持现有 AI 生成协议，受 AI 功能开关、管理员权限和只读模式限制。
-     * 请求上限为两分钟，提供商配置的更短超时仍生效；模型不支持图片时返回错误，不降级为纯文本请求。
-     * 成功将完整文本（含换行和空白，图片无文字时可为空）保存到现有 OCR 存储并更新索引。
-     * 失败、取消、拒绝或截断时保留已有文本；不返回虚构的坐标和置信度。
-     */
-    "/api/ai/ocr": {
-        request: AssetPathRequestInput;
-        response: { "code": 0; "data": AssetTextData; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
-        body: "json";
-        /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
-        authorization?: readonly ["authenticated","admin","writable"];
-    };
     "/api/ai/reindexEmbedding": {
         request: EmptyRequestInput;
         response: { "code": 0; "data": null; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
@@ -3768,19 +3609,6 @@ export interface APIPOSTRoutes {
         authorization?: readonly ["authenticated"];
     };
     /**
-     * 保留已有 text 字段；无文本、缺失 path 和加密资源返回空字符串。
-     * failed 来自实际识别失败，不由空文本推断；取消和不支持的图片不记为失败。
-     * 失败状态仅在当前内核运行期间保留最近 1024 个资源，成功识别或保存文本后清除，不写入 OCR 数据文件。
-     * 加密资源始终返回 failed=false；笔记本资源身份保留 box 参数，显示参数和片段不改变状态身份。
-     */
-    "/api/asset/getImageOCRText": {
-        request: AssetOCRTextRequestInput;
-        response: { "code": 0; "data": ImageOCRTextData; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
-        body: "json";
-        /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
-        authorization?: readonly ["authenticated","admin","writable"];
-    };
-    /**
      * 顺序读取零起始的 I420 帧，响应为 no-store 的二进制；错误返回 HTTP 422 的标准 JSON 信封。
      */
     "/api/asset/getLivePhotoFrame": {
@@ -3815,13 +3643,6 @@ export interface APIPOSTRoutes {
         /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
         authorization?: readonly ["authenticated","admin"];
     };
-    "/api/asset/getOCRConfig": {
-        request: EmptyRequestInput;
-        response: { "code": 0; "data": OCRConfigData; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
-        body: "json";
-        /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
-        authorization?: readonly ["authenticated","admin"];
-    };
     /**
      * 扫描失败返回标准错误，不将失败表示为成功的空列表。
      * keyword 可省略、为 null 或空白；非空时按完整文件名进行不区分大小写的字面量包含匹配。
@@ -3848,13 +3669,6 @@ export interface APIPOSTRoutes {
         /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
         authorization?: readonly ["authenticated","admin"];
     };
-    "/api/asset/importOCRModels": {
-        request: ImportOCRModelsRequestInput;
-        response: { "code": 0; "data": OCRModel; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
-        body: "multipart";
-        /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
-        authorization?: readonly ["authenticated","admin","writable"];
-    };
     "/api/asset/insertCover": {
         request: InsertCoverRequestInput;
         response: { "code": 0; "data": AssetInsertCoverData; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
@@ -3862,21 +3676,12 @@ export interface APIPOSTRoutes {
         /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
         authorization?: readonly ["authenticated","admin","writable"];
     };
+    /**
+     * 上传提示生命周期使用可选请求头 X-SiYuan-App-ID 定向；无标识时广播，保留 ignorePushMsg 语义。
+     */
     "/api/asset/insertLocalAssets": {
         request: InsertLocalAssetsRequestInput;
         response: { "code": 0; "data": AssetUploadData; "msg": string; } | { "code": -1; "data": ({ "closeTimeout": number; } & { "errFiles"?: never; "failedFiles"?: never; "succFiles"?: never; "succMap"?: never; }) | null | (AssetUploadData & { "closeTimeout"?: never; }); "msg": string; };
-        body: "json";
-        /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
-        authorization?: readonly ["authenticated","admin","writable"];
-    };
-    /**
-     * 始终使用当前设备选择的提供商，内核可在无界面的环境中识别。
-     * ai 使用设备保存的 aiModelId，返回原样文本和空 ocrJSON，不虚构坐标；本地提供商保持 TSV 数据。
-     * 不自动回退到另一提供商；取消、模型或推理错误不覆盖已有文本，加密笔记本不参与 OCR。
-     */
-    "/api/asset/ocr": {
-        request: AssetPathRequestInput;
-        response: { "code": 0; "data": AssetOCRData; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
         body: "json";
         /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
         authorization?: readonly ["authenticated","admin","writable"];
@@ -3962,20 +3767,6 @@ export interface APIPOSTRoutes {
         /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
         authorization?: readonly ["authenticated","admin","writable"];
     };
-    "/api/asset/setImageOCRText": {
-        request: SetAssetOCRTextRequestInput;
-        response: { "code": 0; "data": null; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
-        body: "json";
-        /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
-        authorization?: readonly ["authenticated","admin","writable"];
-    };
-    "/api/asset/setOCRConfig": {
-        request: SettingOCRInput;
-        response: { "code": 0; "data": SettingOCR; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
-        body: "json";
-        /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
-        authorization?: readonly ["authenticated","admin","writable"];
-    };
     /**
      * 按需生成 H.264/AAC 兼容预览，不修改原件，不同步缓存；输入限制为 64 MiB、十秒、600 帧和 4096×2160 像素。
      * path 为相对资源 URL，路径中的百分号编码只解码一次，box 等查询参数保持原有资源解析语义。
@@ -4003,26 +3794,6 @@ export interface APIPOSTRoutes {
         request: UploadAssetRequestInput;
         response: { "code": 0; "data": AssetUploadData; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
         body: "multipart";
-        /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
-        authorization?: readonly ["authenticated","admin","writable"];
-    };
-    /**
-     * 上传提示生命周期使用可选请求头 X-SiYuan-App-ID 定向；无标识时广播，状态栏仍全局更新。
-     */
-    "/api/asset/uploadCloud": {
-        request: AssetCloudUploadRequestInput;
-        response: { "code": 0; "data": null; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
-        body: "json";
-        /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
-        authorization?: readonly ["authenticated","admin","writable"];
-    };
-    /**
-     * 上传提示生命周期使用可选请求头 X-SiYuan-App-ID 定向；无标识时广播，保留 ignorePushMsg 语义。
-     */
-    "/api/asset/uploadCloudByAssetsPaths": {
-        request: AssetPathsCloudUploadRequestInput;
-        response: { "code": 0; "data": null; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
-        body: "json";
         /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
         authorization?: readonly ["authenticated","admin","writable"];
     };
@@ -4585,23 +4356,9 @@ export interface APIPOSTRoutes {
         /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
         authorization?: readonly ["authenticated","admin"];
     };
-    "/api/bazaar/getBazaarPackageRating": {
-        request: GetBazaarPackageRatingRequestInput;
-        response: { "code": 0; "data": BazaarRatingResult; "msg": string; } | { "code": -1 | 1; "data": { "closeTimeout": number; } | null | BazaarRatingResult; "msg": string; };
-        body: "json";
-        /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
-        authorization?: readonly ["authenticated","admin"];
-    };
     "/api/bazaar/getBazaarPackageRatings": {
         request: GetBazaarPackageRatingsRequestInput;
         response: { "code": 0; "data": BazaarRatingsData; "msg": string; } | { "code": -1 | 1; "data": { "closeTimeout": number; } | null; "msg": string; };
-        body: "json";
-        /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
-        authorization?: readonly ["authenticated","admin"];
-    };
-    "/api/bazaar/getBazaarPackageUserRatings": {
-        request: GetBazaarPackageUserRatingsRequestInput;
-        response: { "code": 0; "data": BazaarUserRatingsResult; "msg": string; } | { "code": -1 | 1; "data": { "closeTimeout": number; } | null | BazaarUserRatingsResult; "msg": string; };
         body: "json";
         /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
         authorization?: readonly ["authenticated","admin"];
@@ -4744,13 +4501,6 @@ export interface APIPOSTRoutes {
         body: "multipart";
         /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
         authorization?: readonly ["authenticated","admin","writable"];
-    };
-    "/api/bazaar/setBazaarPackageRating": {
-        request: SetBazaarPackageRatingRequestInput;
-        response: { "code": 0; "data": BazaarRatingResult; "msg": string; } | { "code": -1 | 1; "data": { "closeTimeout": number; } | null | BazaarRatingResult; "msg": string; };
-        body: "json";
-        /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
-        authorization?: readonly ["authenticated","admin"];
     };
     "/api/bazaar/uninstallBazaarIcon": {
         request: UninstallBazaarIconRequestInput;
@@ -5258,13 +5008,6 @@ export interface APIPOSTRoutes {
         /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
         authorization?: readonly ["authenticated","admin","writable"];
     };
-    "/api/block/setBlockReminder": {
-        request: BlockReminderRequestInput;
-        response: { "code": 0; "data": null; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
-        body: "json";
-        /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
-        authorization?: readonly ["authenticated","admin","writable"];
-    };
     /**
      * refID 指定引用块，defID 指定定义块；includeChildren 控制标题或列表的子块范围。
      * originalToEmbed 省略或为 false 时在原定义位置保留引用，为 true 时替换为查询已移动定义 ID 的嵌入块。
@@ -5396,37 +5139,9 @@ export interface APIPOSTRoutes {
         /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
         authorization?: readonly ["authenticated","admin"];
     };
-    "/api/cloud/getCloudSpace": {
-        request: EmptyRequestInput;
-        response: { "code": 0; "data": CloudSpaceData; "msg": string; } | { "code": -1 | 1; "data": { "closeTimeout": number; } | null; "msg": string; };
-        body: "none";
-        /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
-        authorization?: readonly ["authenticated","admin"];
-    };
-    "/api/cloud/setCloudReminder": {
-        request: CloudReminderRequestInput;
-        response: { "code": 0; "data": null; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
-        body: "json";
-        /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
-        authorization?: readonly ["authenticated","admin","writable"];
-    };
-    "/api/convert/pandoc": {
-        request: PandocRequestInput;
-        response: { "code": 0; "data": PandocData; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
-        body: "json";
-        /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
-        authorization?: readonly ["authenticated","admin","writable"];
-    };
     "/api/export/copyExportFile": {
         request: CopyExportFileRequestInput;
         response: { "code": 0; "data": null; "msg": string; } | { "code": -1 | -2; "data": { "closeTimeout": number; } | null; "msg": string; };
-        body: "json";
-        /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
-        authorization?: readonly ["authenticated","admin","writable"];
-    };
-    "/api/export/export2Liandi": {
-        request: ExportIDRequestInput;
-        response: { "code": 0; "data": null; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
         body: "json";
         /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
         authorization?: readonly ["authenticated","admin","writable"];
@@ -5435,13 +5150,6 @@ export interface APIPOSTRoutes {
         request: ExportAsFileRequestInput;
         response: { "code": 0; "data": ExportFileData; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
         body: "multipart";
-        /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
-        authorization?: readonly ["authenticated","admin"];
-    };
-    "/api/export/exportAsciiDoc": {
-        request: ExportIDRequestInput;
-        response: { "code": 0; "data": ExportNamedZipData; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
-        body: "json";
         /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
         authorization?: readonly ["authenticated","admin"];
     };
@@ -5476,20 +5184,6 @@ export interface APIPOSTRoutes {
     "/api/export/exportDataInFolder": {
         request: ExportFolderRequestInput;
         response: { "code": 0; "data": ExportNameData; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
-        body: "json";
-        /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
-        authorization?: readonly ["authenticated","admin"];
-    };
-    "/api/export/exportDocx": {
-        request: ExportDocxRequestInput;
-        response: { "code": 0; "data": ExportPathData; "msg": string; } | { "code": -1 | 1; "data": { "closeTimeout": number; } | null; "msg": string; };
-        body: "json";
-        /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
-        authorization?: readonly ["authenticated","admin"];
-    };
-    "/api/export/exportEPUB": {
-        request: ExportIDRequestInput;
-        response: { "code": 0; "data": ExportNamedZipData; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
         body: "json";
         /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
         authorization?: readonly ["authenticated","admin"];
@@ -5540,13 +5234,6 @@ export interface APIPOSTRoutes {
         /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
         authorization?: readonly ["authenticated","admin"];
     };
-    "/api/export/exportMediaWiki": {
-        request: ExportIDRequestInput;
-        response: { "code": 0; "data": ExportNamedZipData; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
-        body: "json";
-        /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
-        authorization?: readonly ["authenticated","admin"];
-    };
     /**
      * Markdown 导出按各文档的标题编号开关和编辑器编号格式添加编号，不修改源文档。
      */
@@ -5581,27 +5268,6 @@ export interface APIPOSTRoutes {
         /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
         authorization?: readonly ["authenticated","admin"];
     };
-    "/api/export/exportODT": {
-        request: ExportIDRequestInput;
-        response: { "code": 0; "data": ExportNamedZipData; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
-        body: "json";
-        /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
-        authorization?: readonly ["authenticated","admin"];
-    };
-    "/api/export/exportOPML": {
-        request: ExportIDRequestInput;
-        response: { "code": 0; "data": ExportNamedZipData; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
-        body: "json";
-        /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
-        authorization?: readonly ["authenticated","admin"];
-    };
-    "/api/export/exportOrgMode": {
-        request: ExportIDRequestInput;
-        response: { "code": 0; "data": ExportNamedZipData; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
-        body: "json";
-        /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
-        authorization?: readonly ["authenticated","admin"];
-    };
     /**
      * 导出图片或 PDF 预览时，可选的 keepJSEmbed: true 保留脚本嵌入占位，默认不保留。
      * 内核不执行脚本；调用方须遵守安全模式限制，并等待异步渲染完成后再导出。
@@ -5611,20 +5277,6 @@ export interface APIPOSTRoutes {
     "/api/export/exportPreviewHTML": {
         request: ExportPreviewHTMLRequestInput;
         response: { "code": 0; "data": ExportPreviewHTMLData; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
-        body: "json";
-        /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
-        authorization?: readonly ["authenticated","admin"];
-    };
-    "/api/export/exportRTF": {
-        request: ExportIDRequestInput;
-        response: { "code": 0; "data": ExportNamedZipData; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
-        body: "json";
-        /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
-        authorization?: readonly ["authenticated","admin"];
-    };
-    "/api/export/exportReStructuredText": {
-        request: ExportIDRequestInput;
-        response: { "code": 0; "data": ExportNamedZipData; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
         body: "json";
         /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
         authorization?: readonly ["authenticated","admin"];
@@ -5653,13 +5305,6 @@ export interface APIPOSTRoutes {
     "/api/export/exportTempContent": {
         request: ExportTempContentRequestInput;
         response: { "code": 0; "data": ExportURLData; "msg": string; } | { "code": -1 | 1; "data": { "closeTimeout": number; } | null; "msg": string; };
-        body: "json";
-        /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
-        authorization?: readonly ["authenticated","admin"];
-    };
-    "/api/export/exportTextile": {
-        request: ExportIDRequestInput;
-        response: { "code": 0; "data": ExportNamedZipData; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
         body: "json";
         /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
         authorization?: readonly ["authenticated","admin"];
@@ -6589,27 +6234,6 @@ export interface APIPOSTRoutes {
         /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
         authorization?: readonly ["authenticated","admin","writable"];
     };
-    "/api/inbox/getShorthand": {
-        request: TrimmedIDRequestInput;
-        response: { "code": 0; "data": Shorthand | null; "msg": string; } | { "code": -1 | 1; "data": { "closeTimeout": number; } | null; "msg": string; };
-        body: "json";
-        /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
-        authorization?: readonly ["authenticated","admin"];
-    };
-    "/api/inbox/getShorthands": {
-        request: ShorthandsRequestInput;
-        response: { "code": 0; "data": ShorthandsData | null; "msg": string; } | { "code": -1 | 1; "data": { "closeTimeout": number; } | null; "msg": string; };
-        body: "json";
-        /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
-        authorization?: readonly ["authenticated","admin"];
-    };
-    "/api/inbox/removeShorthands": {
-        request: RemoveShorthandsRequestInput;
-        response: { "code": 0; "data": null; "msg": string; } | { "code": -1 | 1; "data": { "closeTimeout": number; } | null; "msg": string; };
-        body: "json";
-        /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
-        authorization?: readonly ["authenticated","admin","writable"];
-    };
     /**
      * 标准 Markdown 复制按文档标题编号开关和编辑器编号格式添加编号，局部导出保留原文档编号。
      */
@@ -6665,7 +6289,7 @@ export interface APIPOSTRoutes {
     };
     /**
      * 返回内置 MCP 服务端 OAuth 的公开地址、开关和预注册客户端列表，不返回凭证摘要或客户端密钥。
-     * 要求管理员权限；服务端 OAuth 与思源连接外部 MCP 的客户端 OAuth 配置相互独立，默认关闭。
+     * 要求管理员权限；服务端 OAuth 与 KoraNote 连接外部 MCP 的客户端 OAuth 配置相互独立，默认关闭。
      * OAuth 使用授权码与 PKCE S256，支持 client_secret_basic 和 client_secret_post，不支持动态注册。
      * 访问令牌最长有效一小时；offline_access 刷新令牌轮换并在授权后三十天过期，重放会撤销同一授权。
      * OAuth 令牌只用于 /mcp，不能用于管理接口或其他内核 API，且不会解锁加密笔记本。
@@ -7741,26 +7365,6 @@ export interface APIPOSTRoutes {
         /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
         authorization?: readonly ["authenticated"];
     };
-    /**
-     * `cached: true` 仅返回内存中的账户，未登录时返回 null。
-     * 此模式忽略 token，不联网、不等待同步或切换资源来源；缓存结果不代表云端凭据仍然有效。
-     * 省略 cached 或传入 false 时执行账户恢复和令牌刷新；非管理员在两种模式下均得到 null。
-     * 客户端可先读取缓存完成初始化，再刷新账户，并通过 setCloudUser 主通道事件接收账户变化。
-     */
-    "/api/setting/getCloudUser": {
-        request: SettingCloudUserRequestInput;
-        response: { "code": 0; "data": SettingUser | null; "msg": string; } | { "code": -1 | 1 | 255; "data": { "closeTimeout": number; } | null | SettingUser | null; "msg": string; };
-        body: "json";
-        /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
-        authorization?: readonly ["authenticated"];
-    };
-    "/api/setting/getPandocBin": {
-        request: EmptyRequestInput;
-        response: { "code": 0; "data": string; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
-        body: "none";
-        /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
-        authorization?: readonly ["authenticated","admin"];
-    };
     "/api/setting/getPublish": {
         request: EmptyRequestInput;
         response: { "code": 0; "data": SettingPublishData; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
@@ -7778,21 +7382,6 @@ export interface APIPOSTRoutes {
         body: "json";
         /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
         authorization?: readonly ["authenticated"];
-    };
-    "/api/setting/login2faCloudUser": {
-        request: SettingLogin2faRequestInput;
-        response: Login2faEnvelope | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
-        body: "json";
-        /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
-        authorization?: readonly ["authenticated","admin","writable"];
-        output: "directJSON";
-    };
-    "/api/setting/logoutCloudUser": {
-        request: EmptyRequestInput;
-        response: { "code": 0; "data": null; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
-        body: "none";
-        /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
-        authorization?: readonly ["authenticated","admin","writable"];
     };
     /**
      * 保留省略字段，成功后客户端重新读取配置；通知不包含密码或密钥。
@@ -7908,6 +7497,12 @@ export interface APIPOSTRoutes {
         /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
         authorization?: readonly ["authenticated","admin","writable"];
     };
+    /**
+     * `cached: true` 仅返回内存中的账户，未登录时返回 null。
+     * 此模式忽略 token，不联网、不等待同步或切换资源来源；缓存结果不代表云端凭据仍然有效。
+     * 省略 cached 或传入 false 时执行账户恢复和令牌刷新；非管理员在两种模式下均得到 null。
+     * 客户端可先读取缓存完成初始化，再刷新账户，并通过 setCloudUser 主通道事件接收账户变化。
+     */
     "/api/setting/setEmoji": {
         request: SettingEmojiRequestInput;
         response: { "code": 0; "data": null; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
@@ -8265,7 +7860,7 @@ export interface APIPOSTRoutes {
         authorization?: readonly ["authenticated","admin"];
     };
     /**
-     * 清除 provider 为 2（S3）、3（WebDAV）或 4（本地文件系统）的配置并同步落盘。
+     * 清除 provider 为 3（WebDAV）或 4（本地文件系统）的配置并同步落盘。
      * 清除当前服务时先验证资源及历史快照完整性，再关闭同步；失败时保留原配置，不删除本地或云端数据。
      * 响应包含当前同步开关及被清除服务的默认配置；其他服务配置、仓库密钥和下载模式保持不变。
      */
@@ -8294,13 +7889,6 @@ export interface APIPOSTRoutes {
         body: "json";
         /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
         authorization?: readonly ["authenticated","admin","writable"];
-    };
-    "/api/sync/exportSyncProviderS3": {
-        request: EmptyRequestInput;
-        response: { "code": 0; "data": SyncProviderExportData; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
-        body: "none";
-        /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
-        authorization?: readonly ["authenticated","admin"];
     };
     "/api/sync/exportSyncProviderWebDAV": {
         request: EmptyRequestInput;
@@ -8344,8 +7932,8 @@ export interface APIPOSTRoutes {
         authorization?: readonly ["authenticated","admin"];
     };
     /**
-     * 返回服务类型 2（S3）、3（WebDAV）或 4（本地文件系统）的共用必填清单。
-     * endpoint、bucket 可省略；仅 S3 返回 Endpoint 可能让对象键多出前缀的提示，提示不阻断保存或同步。
+     * 返回服务类型 3（WebDAV）或 4（本地文件系统）的共用必填清单。
+     * endpoint 可省略；本接口不做来源探测，提示不阻断保存或同步。
      * 此接口只做内存中的静态判定，不读取或保存用户配置，不接收凭据，不访问云端或文件系统。
      * 未知服务返回 code -1；规则提示不替代保存时的完整校验和资源来源保护。只读模式下也可调用。
      */
@@ -8366,13 +7954,6 @@ export interface APIPOSTRoutes {
         request: EmptyRequestInput;
         response: { "code": 0; "data": SyncSourceState; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
         body: "none";
-        /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
-        authorization?: readonly ["authenticated","admin","writable"];
-    };
-    "/api/sync/importSyncProviderS3": {
-        request: SyncProviderImportRequestInput;
-        response: { "code": 0; "data": SyncS3Data; "msg": string; } | { "code": -1; "data": ({ "closeTimeout": number; } & { "s3"?: never; }) | null | (SyncS3Data & { "closeTimeout"?: never; }); "msg": string; };
-        body: "multipart";
         /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
         authorization?: readonly ["authenticated","admin","writable"];
     };
@@ -8469,13 +8050,6 @@ export interface APIPOSTRoutes {
         /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
         authorization?: readonly ["authenticated","admin","writable"];
     };
-    "/api/sync/setSyncPerception": {
-        request: SyncEnabledRequestInput;
-        response: { "code": 0; "data": null; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
-        body: "json";
-        /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
-        authorization?: readonly ["authenticated","admin","writable"];
-    };
     /**
      * completeAssets 为 true 时，在切换来源前从原提供商下载缺失的当前资源和历史快照内容；
      * 省略、null 与 false 保留只检查完整性的行为。补齐过程保留下载模式和恢复密钥，失败时保留原提供商。
@@ -8500,16 +8074,6 @@ export interface APIPOSTRoutes {
         authorization?: readonly ["authenticated","admin","writable"];
     };
     /**
-     * 保存同步配置；省略协议时含点域名使用 HTTPS，IP 和单标签主机使用 HTTP，显式协议保持不变。
-     */
-    "/api/sync/setSyncProviderS3": {
-        request: SetSyncS3RequestInput;
-        response: { "code": 0; "data": SyncS3Data; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
-        body: "json";
-        /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
-        authorization?: readonly ["authenticated","admin","writable"];
-    };
-    /**
      * 保存有效的 HTTP(S) 地址；地址不能为空，省略协议时含点域名使用 HTTPS，IP 和单标签主机使用 HTTP。
      * 显式协议保持不变，保留协议占位符兼容。
      * 用户名和密码允许为空以支持匿名访问；校验失败保留原配置，更换来源仍须补齐资源和历史快照。
@@ -8523,39 +8087,25 @@ export interface APIPOSTRoutes {
     };
     /**
      * 只探测候选配置：端点必须是已有目录且不能与工作空间重叠。
-     * 在独占临时目录中写入、读回比对并尽力删除探针，不读取或保存同步配置；kind 沿用 S3 的 ok/config/network 语义。
+     * 在独占临时目录中写入、读回比对并尽力删除探针，不读取或保存同步配置；kind 为 ok/config/network 三种。
      * 只读模式可调用，不修改快照或同步开关。删除失败只记脱敏日志，不改变探测结果。
      */
     "/api/sync/testSyncProviderLocal": {
         request: TestSyncProviderLocalRequestInput;
-        response: { "code": 0; "data": TestSyncProviderS3Data; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
-        body: "json";
-        /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
-        authorization?: readonly ["authenticated","admin"];
-    };
-    /**
-     * 使用请求中的候选配置探测云端：写入探针对象、按前缀列举并比对、尽力删除探针，不读取或保存用户配置。
-     * 请求字段与保存接口一致；缺少必填项或地址无效时同样返回 code 0，由 kind 为 config 表示，避免与网络故障混淆。
-     * kind 为 ok 表示写入与列举指向同一个对象键；config 表示可确定的配置错误；network 表示网络或服务端不可达，无法判定配置。
-     * 探测会在桶内创建再删除 repo/objects/.s/siyuan-probe-<随机值>-probe，需要该前缀的写入与列举权限；未删除的探针会作为未引用对象被云端清理回收。
-     * 只读模式下也可调用，不修改已有快照或同步开关。
-     */
-    "/api/sync/testSyncProviderS3": {
-        request: TestSyncProviderS3RequestInput;
-        response: { "code": 0; "data": TestSyncProviderS3Data; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
+        response: { "code": 0; "data": TestSyncProviderData; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
         body: "json";
         /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
         authorization?: readonly ["authenticated","admin"];
     };
     /**
      * 只探测候选配置：验证端点为集合，创建独占探针目录并写入、读回比对，最后尽力删除。
-     * 不读取或保存同步配置，不修改快照或同步开关；只读模式可调用。kind 沿用 S3 的 ok/config/network 语义。
+     * 不读取或保存同步配置，不修改快照或同步开关；只读模式可调用。kind 为 ok/config/network 三种。
      * cloudName 可省略；指定时在该云端目录的 siyuan/repo 下探测，省略时使用独占的随机云端目录并尽力删除。
      * 上传失败后同样尝试清理；删除失败只记脱敏日志，不改变探测结果。需要集合查询、目录创建、读写和删除权限。
      */
     "/api/sync/testSyncProviderWebDAV": {
         request: TestSyncProviderWebDAVRequestInput;
-        response: { "code": 0; "data": TestSyncProviderS3Data; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
+        response: { "code": 0; "data": TestSyncProviderData; "msg": string; } | { "code": -1; "data": { "closeTimeout": number; } | null; "msg": string; };
         body: "json";
         /** 服务器路由要求；资源权限与笔记本租约仍由内核校验 */
         authorization?: readonly ["authenticated","admin"];
@@ -8584,7 +8134,7 @@ export interface APIPOSTRoutes {
     /**
      * 无需参数，要求管理员权限并允许只读模式，以当前内核进程身份诊断 data 目录的遍历。
      * text 为 JSON Lines，比较标准库和原始目录项，不读取正文、不写入工作空间、不下载或解密资源。
-     * 首行包含思源版本、容器和移动端提供的系统版本，便于关联 Android/SDK 及具体内核版本。
+     * 首行包含 KoraNote 版本、容器和移动端提供的系统版本，便于关联 Android/SDK 及具体内核版本。
      * Android/Linux 使用 4/8/32 KiB 缓冲区执行三轮；每轮至多 20000 个目录、100000 个目录项及 100 条详情。
      * 包含运行版本、UID、文件系统类型、零 inode、路径差异、目录变化及读取错误；路径相对于 data。
      * 不支持原始目录读取的平台返回 rawSupported=false，不将未执行的比较视为通过。
@@ -8808,7 +8358,7 @@ export interface APIPOSTRoutes {
     };
     /**
      * 导入前按启动和设置接口的相同规则规范化编辑器、导出、文档树、搜索和闪卡偏好，并同步保存。
-     * 同时导入外观及界面语言、OCR、代码片段总开关和普通变量；这些配置段缺失或为 null 时保留当前值。
+     * 同时导入外观及界面语言、代码片段总开关和普通变量；这些配置段缺失或为 null 时保留当前值。
      * 主题、图标和代码片段内容等独立资源不随设置包迁移，外观资源列表使用目标工作空间的可用资源。
      * 账号、API token、同步、锁屏密码、数据仓库和加密笔记本密钥保持不变；沿用本机代理及更新通道。
      * ChatGPT 账户引用从本机工作空间绑定加载，忽略导入文件中的引用；本机绑定读取失败时中止导入。

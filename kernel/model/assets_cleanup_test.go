@@ -490,7 +490,7 @@ func TestUnusedAssetsExcludesEncryptedNotebook(t *testing.T) {
 
 func TestAndroidNotificationAssetDeletionPaths(t *testing.T) {
 	boxID, docPath := setupUnusedAssetWorkspace(t)
-	for _, name := range []string{"assets/android-notification-texts.txt", "assets/sub/android-notification-texts.txt", "assets/other-android-notification-texts.txt", boxID + "/assets/android-notification-texts.txt", "assets/ocr-texts.json"} {
+	for _, name := range []string{"assets/android-notification-texts.txt", "assets/sub/android-notification-texts.txt", "assets/other-android-notification-texts.txt", boxID + "/assets/android-notification-texts.txt"} {
 		p := filepath.Join(util.DataDir, filepath.FromSlash(name))
 		if err := os.MkdirAll(filepath.Dir(p), 0755); err != nil {
 			t.Fatal(err)
@@ -529,7 +529,7 @@ func TestAndroidNotificationAssetDeletionPaths(t *testing.T) {
 	if err := os.Remove(p); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.Symlink(filepath.Join(util.DataDir, "assets", "ocr-texts.json"), p); err != nil {
+	if err := os.Symlink(filepath.Join(util.DataDir, "assets", "other-android-notification-texts.txt"), p); err != nil {
 		t.Skipf("symlink unavailable: %v", err)
 	}
 	if _, _, err := ResolveUnusedDataAssetPath("assets/android-notification-texts.txt"); err == nil {

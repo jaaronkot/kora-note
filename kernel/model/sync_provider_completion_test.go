@@ -46,13 +46,13 @@ func TestSyncProviderCompletionPreservesHistory(t *testing.T) {
 			// 保留缺失历史内容的状态，覆盖配置恢复后已经显示全部下载的情况。
 			Conf.Sync.Load().AssetDownloadMode = mode
 			key := append([]byte(nil), Conf.Repo.Load().Key...)
-			if err = SetSyncProvider(conf.ProviderS3, false); err == nil {
+			if err = SetSyncProvider(conf.ProviderWebDAV, false); err == nil {
 				t.Fatal("legacy request unexpectedly downloaded missing content")
 			}
-			if err = SetSyncProvider(conf.ProviderS3, true); err != nil {
+			if err = SetSyncProvider(conf.ProviderWebDAV, true); err != nil {
 				t.Fatal(err)
 			}
-			if Conf.Sync.Load().Provider != conf.ProviderS3 || Conf.Sync.Load().AssetDownloadMode != mode || !bytes.Equal(Conf.Repo.Load().Key, key) {
+			if Conf.Sync.Load().Provider != conf.ProviderWebDAV || Conf.Sync.Load().AssetDownloadMode != mode || !bytes.Equal(Conf.Repo.Load().Key, key) {
 				t.Fatal("completion changed the mode or recovery key")
 			}
 			if incomplete, err := partial.HasIncompleteSnapshots(); err != nil || incomplete {
@@ -103,7 +103,7 @@ func TestSyncProviderCompletionFailurePreservesSource(t *testing.T) {
 				t.Fatal(err)
 			}
 			key := append([]byte(nil), Conf.Repo.Load().Key...)
-			if err = SetSyncProvider(conf.ProviderS3, true); err == nil {
+			if err = SetSyncProvider(conf.ProviderWebDAV, true); err == nil {
 				t.Fatal("failed completion allowed source change")
 			}
 			if Conf.Sync.Load().Provider != conf.ProviderLocal || Conf.Sync.Load().AssetDownloadMode != 1 || !bytes.Equal(Conf.Repo.Load().Key, key) {
@@ -184,12 +184,12 @@ func TestSyncProviderCompletionHistoricalDocument(t *testing.T) {
 			if files, err := deferredSyncAssets(); err != nil || len(files) != 0 {
 				t.Fatalf("unexpected deferred resources: %v %v", files, err)
 			}
-			if err = SetSyncProvider(conf.ProviderS3, true); (err == nil) != available {
+			if err = SetSyncProvider(conf.ProviderWebDAV, true); (err == nil) != available {
 				t.Fatalf("unexpected historical completion result: %v", err)
 			}
 			provider := conf.ProviderLocal
 			if available {
-				provider = conf.ProviderS3
+				provider = conf.ProviderWebDAV
 				if data, err := repo.OpenFile(oldFile); err != nil || string(data) != "historical document contents" {
 					t.Fatalf("historical document unavailable: %q %v", data, err)
 				}
@@ -210,7 +210,7 @@ func TestSyncProviderCompletionOfflineCompleteRepo(t *testing.T) {
 		t.Fatal(err)
 	}
 	Conf.Sync.Load().Enabled = false
-	if err := SetSyncProvider(conf.ProviderS3, true); err != nil {
+	if err := SetSyncProvider(conf.ProviderWebDAV, true); err != nil {
 		t.Fatalf("complete repository should switch without cloud access: %v", err)
 	}
 	if incomplete, err := partial.HasIncompleteSnapshots(); err != nil || incomplete {

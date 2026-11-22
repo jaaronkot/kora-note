@@ -102,7 +102,7 @@ func TestSyncDNSRetryFlushResult(t *testing.T) {
 func TestFormatRepoDNSError(t *testing.T) {
 	previousConf, previousLangs := Conf, util.Langs
 	t.Cleanup(func() { Conf, util.Langs = previousConf, previousLangs })
-	Conf = &AppConf{Lang: "en", Sync: NewConfSection(&conf.Sync{Provider: conf.ProviderS3})}
+	Conf = &AppConf{Lang: "en", Sync: NewConfSection(&conf.Sync{Provider: conf.ProviderWebDAV})}
 	util.Langs = map[string]map[int]string{"en": {408: "check DNS settings", 24: "network timeout"}}
 	for _, test := range []struct{ message, want string }{
 		{"lookup example.com: no such host", "check DNS settings"},

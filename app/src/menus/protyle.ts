@@ -1,4 +1,3 @@
-import {createImageOCRMenu} from "./imageOCRMenu";
 import {toggleMenu, IMenuSession} from "./menuToggle";
 import {escapeHtmlTextAndAttr} from "../util/escape";
 import type {FileTreeGetDocRequestInput} from "../types/api";
@@ -1435,7 +1434,6 @@ export const imgMenu = (protyle: IProtyle, range: Range, assetElement: HTMLEleme
                 }
             }).element);
         }
-        window.siyuan.menus.menu.append(new MenuItem(createImageOCRMenu(imgElement, protyle.notebookId)).element);
         window.siyuan.menus.menu.append(new MenuItem({
             id: "alignCenter",
             icon: "iconAlignCenter",

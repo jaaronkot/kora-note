@@ -22,18 +22,8 @@ import (
 
 // syncSourceIdentity excludes encryption keys, credentials and transport options.
 func syncSourceIdentity(provider int, c *cloud.Conf) string {
-	dir := c.Dir
-	if provider == conf.ProviderS3 {
-		dir = ""
-	}
-	identity := []string{fmt.Sprint(provider), dir}
+	identity := []string{fmt.Sprint(provider), c.Dir}
 	switch provider {
-	case conf.ProviderSiYuan:
-		identity = append(identity, c.Server, c.UserID)
-	case conf.ProviderS3:
-		if c.S3 != nil {
-			identity = append(identity, c.S3.Endpoint, c.S3.Bucket)
-		}
 	case conf.ProviderWebDAV:
 		if c.WebDAV != nil {
 			identity = append(identity, c.WebDAV.Endpoint, c.WebDAV.Username)

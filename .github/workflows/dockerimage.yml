@@ -62,7 +62,6 @@ jobs:
             scripts/docker-onnx-build.sh
             scripts/docker-onnx-toolchain.cmake
             scripts/test_docker_release.py
-            scripts/testdata/docker-ocr
           sparse-checkout-cone-mode: false
           persist-credentials: false
 
@@ -145,7 +144,6 @@ jobs:
             scripts/docker-onnx-build.sh
             scripts/docker-onnx-toolchain.cmake
             scripts/verify-docker-release.py
-            scripts/testdata/docker-ocr
           sparse-checkout-cone-mode: false
           persist-credentials: false
 
@@ -224,7 +222,7 @@ jobs:
           fi
           echo "image=$IMAGE_REPOSITORY@$DIGEST" >> "$GITHUB_OUTPUT"
 
-      - name: Verify platform kernel and real OCR
+      - name: Verify platform kernel
         env:
           RELEASE_IMAGE: ${{ steps.build.outputs.image }}
           RELEASE_VERSION: ${{ needs.prepare.outputs.version }}

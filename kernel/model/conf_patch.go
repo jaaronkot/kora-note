@@ -168,14 +168,6 @@ func ApplySyncSettingPatch(patch []byte) ([]Issue, error) {
 	if next.Provider != old.Provider {
 		return nil, errors.New("use setSyncProvider to change the sync provider")
 	}
-	if util.ContainerDocker == util.Container {
-		next.Perception = false
-	}
-	if _, present := requested["s3"]; present || !reflect.DeepEqual(old.S3, next.S3) {
-		if err = validateSyncS3(next.S3); err != nil {
-			return nil, err
-		}
-	}
 	if _, present := requested["webdav"]; present || !reflect.DeepEqual(old.WebDAV, next.WebDAV) {
 		if err = validateSyncWebDAV(next.WebDAV); err != nil {
 			return nil, err
@@ -190,9 +182,6 @@ func ApplySyncSettingPatch(patch []byte) ([]Issue, error) {
 		}
 	}
 	if old.CloudName != next.CloudName {
-		if old.Provider == conf.ProviderS3 {
-			return nil, errors.New(Conf.Language(131))
-		}
 		if !cloud.IsValidCloudDirName(next.CloudName) {
 			return nil, errors.New(Conf.Language(37))
 		}
@@ -210,7 +199,6 @@ func ApplySyncSettingPatch(patch []byte) ([]Issue, error) {
 		next.Stat = removeLANSyncTrafficStat(next.Stat)
 	}
 	sourceChanged := old.CloudName != next.CloudName ||
-		(old.Provider == conf.ProviderS3 && (next.S3.Endpoint != old.S3.Endpoint || next.S3.Bucket != old.S3.Bucket)) ||
 		(old.Provider == conf.ProviderWebDAV && (next.WebDAV.Endpoint != old.WebDAV.Endpoint || next.WebDAV.Username != old.WebDAV.Username)) ||
 		(old.Provider == conf.ProviderLocal && filepath.Clean(next.Local.Endpoint) != filepath.Clean(old.Local.Endpoint))
 	if sourceChanged {
@@ -226,9 +214,6 @@ func ApplySyncSettingPatch(patch []byte) ([]Issue, error) {
 	if err != nil {
 		return nil, err
 	}
-	if util.ContainerDocker == util.Container {
-		next.Perception = false
-	}
 	next = conf.NormalizeSync(next)
 	if old.LAN != nil && old.LAN.Enabled && !next.LAN.Enabled {
 		next.Stat = removeLANSyncTrafficStat(next.Stat)
@@ -241,13 +226,6 @@ func ApplySyncSettingPatch(patch []byte) ([]Issue, error) {
 	refreshLANSyncManager()
 	if old.Interval != next.Interval {
 		planSyncAfter(time.Duration(next.Interval) * time.Second)
-	}
-	if old.Perception != next.Perception {
-		if next.Perception {
-			connectSyncWebSocket()
-		} else {
-			closeSyncWebSocket()
-		}
 	}
 	return issues, nil
 }

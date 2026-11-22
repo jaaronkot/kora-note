@@ -96,10 +96,6 @@ body.body--harmony {
   padding-top: var(--ios-window-safe-top, 0px);
   height: max(calc(32px + var(--ios-window-safe-top, 0px)), var(--ios-window-controls-height, 0px));
   align-items: flex-start;
-
-  #toolbarVIP {
-    align-self: center;
-  }
 }
 
 :root[data-ios-window-controls] #status {

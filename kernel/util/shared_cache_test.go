@@ -5,17 +5,10 @@
 package util
 
 import (
-	"context"
-	"fmt"
-	"net/http"
-	"net/http/httptest"
 	"os"
 	"path/filepath"
-	"strings"
 	"sync"
-	"sync/atomic"
 	"testing"
-	"time"
 )
 
 func TestNativeEmojiCacheReplacementAndConcurrentReads(t *testing.T) {
@@ -67,87 +60,4 @@ func TestNativeEmojiCacheReplacementAndConcurrentReads(t *testing.T) {
 		})
 	}
 	group.Wait()
-}
-
-func TestRhyCacheSnapshotsAndConcurrentRefresh(t *testing.T) {
-	rhyResultLock.Lock()
-	oldResult, oldTime := cachedRhyResult, rhyResultCacheTime
-	rhyResultLock.Unlock()
-	rhyBazaarHashLock.RLock()
-	oldHash := rhyBazaarHash
-	rhyBazaarHashLock.RUnlock()
-	oldContainer := Container
-	oldDuration := RhyCacheDuration
-	Container = ContainerDocker
-	t.Cleanup(func() {
-		Container = oldContainer
-		rhyResultLock.Lock()
-		cachedRhyResult, rhyResultCacheTime = oldResult, oldTime
-		rhyResultLock.Unlock()
-		rhyBazaarHashLock.Lock()
-		rhyBazaarHash = oldHash
-		rhyBazaarHashLock.Unlock()
-	})
-	var count atomic.Int32
-	var fail atomic.Bool
-	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if fail.Load() {
-			w.WriteHeader(http.StatusUnauthorized)
-			return
-		}
-		w.Header().Set("Content-Type", "application/json")
-		if n := count.Add(1); n == 1 {
-			fmt.Fprint(w, `{"bazaar":"hash-1","removed":true,"checksums":{"file":"first"}}`)
-		} else {
-			fmt.Fprintf(w, `{"bazaar":"hash-%d","checksums":{"file":"updated"}}`, n)
-		}
-	}))
-	defer server.Close()
-	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
-	defer cancel()
-	first, err := getRhyResult0(ctx, server.URL)
-	if err != nil {
-		t.Fatal(err)
-	}
-	second, err := getRhyResult0(ctx, server.URL)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if first["bazaar"] != "hash-1" || first["checksums"].(map[string]any)["file"] != "first" || second["removed"] != nil {
-		t.Fatal("cache refresh modified an existing snapshot or retained removed fields")
-	}
-	fail.Store(true)
-	if _, err = getRhyResult0(ctx, server.URL); err == nil {
-		t.Fatal("failed refresh was accepted")
-	}
-	cached, err := GetRhyResult(ctx, false)
-	if err != nil || cached["bazaar"] != second["bazaar"] {
-		t.Fatal("failed refresh replaced the valid cache")
-	}
-	fail.Store(false)
-	var group sync.WaitGroup
-	group.Go(func() {
-		for range 25 {
-			if _, err := getRhyResult0(ctx, server.URL); err != nil {
-				t.Error(err)
-				return
-			}
-		}
-	})
-	for range 8 {
-		group.Go(func() {
-			for range 100 {
-				result, err := GetRhyResult(ctx, false)
-				if err != nil || !strings.HasPrefix(result["bazaar"].(string), "hash-") {
-					t.Errorf("invalid cached result: %#v err=%v", result, err)
-					return
-				}
-				syncRhyBazaarHashFromResult(result)
-			}
-		})
-	}
-	group.Wait()
-	if first["bazaar"] != "hash-1" || RhyCacheDuration != oldDuration {
-		t.Fatal("concurrent refresh modified a snapshot or global duration")
-	}
 }

@@ -938,7 +938,7 @@ func clearTempFiles(count *int, size *int64) {
 	heif.ClearMemoryCache("")
 	LivePhotoPreviews.Clear("")
 	for _, name := range []string{
-		"assets-cache", "bazaar", "export", "import", "convert", "pandoc", "os", "base64", "install", "thumbnails", "repo", "clipboard",
+		"assets-cache", "bazaar", "export", "import", "convert", "os", "base64", "install", "thumbnails", "repo", "clipboard",
 	} {
 		clearTempDir(filepath.Join(util.TempDir, name), count, size)
 	}

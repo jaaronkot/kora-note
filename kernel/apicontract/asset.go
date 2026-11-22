@@ -6,7 +6,6 @@ package apicontract
 
 import (
 	"encoding/json"
-	"errors"
 	"io"
 	"mime/multipart"
 	"reflect"
@@ -33,15 +32,6 @@ type RemoveEncryptedBoxAssetsRequest struct {
 	Paths    []string `json:"paths"`
 }
 
-type AssetOCRTextRequest struct {
-	Path *string `json:"path" api:"optional"`
-}
-
-type SetAssetOCRTextRequest struct {
-	Path string `json:"path"`
-	Text string `json:"text"`
-}
-
 // RenameAssetRequest 重命名普通笔记本资源，并同步字面量及百分号编码的文档、数据库引用。
 // 引用及成功返回的 newPath 保留查询参数和片段；源资源解析失败返回 -1 和 5000 毫秒错误提示。
 // 加密笔记本资源仍拒绝重命名；空名称或与原文件名相同的名称保留成功但 newPath 为空的响应。
@@ -63,16 +53,6 @@ type SetAssetAnnotationRequest struct {
 	Path     string  `json:"path"`
 	Data     string  `json:"data"`
 	BaseData *string `json:"baseData,omitempty" api:"optional"`
-}
-
-type AssetCloudUploadRequest struct {
-	IgnorePushMsg bool   `json:"ignorePushMsg" api:"optional,nullable"`
-	ID            string `json:"id"`
-}
-
-type AssetPathsCloudUploadRequest struct {
-	Paths         []string `json:"paths"`
-	IgnorePushMsg bool     `json:"ignorePushMsg" api:"optional,nullable"`
 }
 
 // InsertLocalAssetsRequest 在 fromHTMLPaste 为 true 时上传剪贴板引用的本地资源。
@@ -108,18 +88,6 @@ type AssetStatData struct {
 
 type AssetTextData struct {
 	Text string `json:"text"`
-}
-
-type ImageOCRTextData struct {
-	Text   string `json:"text"`
-	Failed bool   `json:"failed"`
-}
-
-// AssetOCRData 的列名沿用 Tesseract TSV 表头，所有提供商的单元格均为文本。
-// AI 提供商仅返回原样 text，ocrJSON 为空数组，不生成坐标或置信度。
-type AssetOCRData struct {
-	Text    string              `json:"text"`
-	OCRJSON []map[string]string `json:"ocrJSON"`
 }
 
 type AssetRenameData struct {
@@ -182,16 +150,5 @@ func init() {
 		}
 		_ = json.Unmarshal(fromHTMLPaste, &request.FromHTMLPaste)
 		return request, nil
-	}
-	AssetUploadCloudByAssetsPaths.decodeRequest = func(reader io.Reader) (request AssetPathsCloudUploadRequest, err error) {
-		fields, err := blockRequestFields(reader, "/api/asset/uploadCloudByAssetsPaths")
-		if err != nil {
-			return request, err
-		}
-		if len(fields["paths"]) == 0 || string(fields["paths"]) == "null" {
-			return request, errors.New("[paths] is required")
-		}
-		err = decodeRequestFields(reflect.ValueOf(&request).Elem(), fields)
-		return request, err
 	}
 }

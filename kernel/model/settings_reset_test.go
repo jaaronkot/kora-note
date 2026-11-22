@@ -52,7 +52,6 @@ func settingsResetTestEnvironment(t *testing.T) {
 	Conf.AccessAuthCode = "screen-lock"
 	Conf.CookieKey = "cookie-signing-key"
 	Conf.MCPOAuth = "encrypted-oauth"
-	Conf.UserData = "encrypted-account"
 	Conf.Api.Store(conf.NewAPI())
 	Conf.Api.Load().Token = "preserved-token"
 	Conf.AI.Store(conf.NewAI())
@@ -110,7 +109,7 @@ func TestSettingsResetPreservesDataAndProtectedConfiguration(t *testing.T) {
 			t.Fatal("retention and language must be preserved")
 		}
 		if Conf.NotebookCrypto != protected.NotebookCrypto || Conf.Api.Load() != protected.Api.Load() || Conf.AccessAuthCode != protected.AccessAuthCode ||
-			Conf.CookieKey != protected.CookieKey || Conf.MCPOAuth != protected.MCPOAuth || Conf.UserData != protected.UserData ||
+			Conf.CookieKey != protected.CookieKey || Conf.MCPOAuth != protected.MCPOAuth ||
 			Conf.Snippet.Load() != protected.Snippet.Load() || Conf.AI.Load() != protected.AI.Load() ||
 			Conf.Bazaar.Load().Trust != protected.Bazaar.Load().Trust || Conf.Bazaar.Load().PetalDisabled != protected.Bazaar.Load().PetalDisabled ||
 			Conf.OIDC != protected.OIDC || Conf.Secrets.Load() != protected.Secrets.Load() || Conf.Sync.Load() != protected.Sync.Load() || Conf.Repo.Load() != protected.Repo.Load() {

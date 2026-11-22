@@ -70,7 +70,6 @@ func setupDeferredAssetAPIWorkspace(t *testing.T, symlinkWorkspace bool, plainCo
 	model.Conf.Sync.Load().Provider, model.Conf.Sync.Load().CloudName, model.Conf.Sync.Load().Enabled = conf.ProviderLocal, "main", true
 	model.Conf.Sync.Load().Local = &conf.Local{Endpoint: remote}
 	model.Conf.Sync.Load().AssetDownloadMode, model.Conf.Repo.Load().Key = 1, key
-	model.Conf.SetUser(&conf.User{UserId: "asset-api-test", UserSiYuanOneTimePayStatus: 1})
 	util.StatusBarCfg.Store(&util.StatusBar{MsgDataSyncDisabled: true})
 	util.WorkspaceDir = filepath.Join(base, "partial")
 	util.DataDir, util.RepoDir = filepath.Join(util.WorkspaceDir, "data"), filepath.Join(util.WorkspaceDir, "repo")
@@ -269,7 +268,6 @@ func testDeferredAssetAPIAuthorizationAndMetadata(t *testing.T, symlinkWorkspace
 			t.Fatalf("authorized request failed to retrieve content: %d %s", recorder.Code, recorder.Body.String())
 		}
 		model.Conf.Sync.Load().Enabled = false
-		model.Conf.SetUser(nil)
 		recorder = request(model.RoleAdministrator, "/api/file/getFile", map[string]string{"path": "data/assets/plain.bin"})
 		if recorder.Code != http.StatusOK || !bytes.Equal(recorder.Body.Bytes(), files["assets/plain.bin"]) {
 			t.Fatalf("cached asset unavailable offline: %d %s", recorder.Code, recorder.Body.String())

@@ -1440,9 +1440,6 @@ export const paste = async (protyle: IProtyle, event: (ClipboardEvent | DragEven
             let preparedHTML = false;
             const conversionContext = {
                 text: textPlain,
-                mathML,
-                office,
-                officeMathHTML,
                 wps,
                 preserveSourceFormat,
             };

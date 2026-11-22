@@ -26,20 +26,6 @@ const guides = [
         filterTerms: ["搜索框左侧的筛选图标", "菜单中", "分别或同时", "默认不勾选", "按包类型保存", "不影响已下载和更新列表"],
         releaseTerms: ["首次收录时间", "缺失或无效的时间排在末尾"],
     },
-    {
-        language: "zh-TW",
-        file: "guide/20211226090932-5lcq56f/20211226115423-d5z1joq/20211226121109-f060fkg/20211226121326-v5kpxfp.sy",
-        section: "20211226121625-afma4ct",
-        filterTerms: ["搜尋框左側的篩選圖示", "選單中", "分別或同時", "預設不勾選", "按套件類型儲存", "不影響已下載和更新清單"],
-        releaseTerms: ["首次收錄時間", "缺失或無效的時間排在末尾"],
-    },
-    {
-        language: "ja",
-        file: "guide/20240530133126-axarxgx/20240530101000-4qitucx/20240530101000-xr22qn8/20240530101000-bpj42r0.sy",
-        section: "20240530101000-foh7a5f",
-        filterTerms: ["検索欄の左にあるフィルターアイコン", "メニューを開き", "個別に、または同時に", "初期状態では無効", "パッケージの種類ごとに保存", "ダウンロード済み一覧と更新一覧には影響しません"],
-        releaseTerms: ["初回掲載日時", "日時が欠けているか無効なパッケージは末尾"],
-    },
 ];
 
 test("marketplace release sorting and compatibility filters have complete translated labels", () => {

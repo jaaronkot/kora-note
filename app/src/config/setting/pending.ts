@@ -18,7 +18,7 @@ export const trackSettingSave = <T>(promise: Promise<T>): Promise<T> => {
 
 export const trackSettingRequest = <T>(url: string, promise: Promise<T>, usageStatistics = false): Promise<T> =>
     !usageStatistics &&
-    /^\/api\/(setting\/(set|patch)|asset\/setOCRConfig$|storage\/(setLocalStorage|setLocalStorageVal|removeLocalStorageVal|removeLocalStorageVals)$|system\/set|graph\/(setGraphConf|resetGraph|resetLocalGraph|getGraph|getLocalGraph)$)/.test(url)
+    /^\/api\/(setting\/(set|patch)|storage\/(setLocalStorage|setLocalStorageVal|removeLocalStorageVal|removeLocalStorageVals)$|system\/set|graph\/(setGraphConf|resetGraph|resetLocalGraph|getGraph|getLocalGraph)$)/.test(url)
         ? trackSettingSave(promise) : promise;
 
 export const flushSettingSaves = async (previousFailures = failures) => {

@@ -340,16 +340,14 @@ func NormalizeSync(sync *Sync) *Sync {
 	if sync.AssetDownloadMode < 0 || sync.AssetDownloadMode > 1 {
 		sync.AssetDownloadMode = 0
 	}
+	// 早期版本配置中的服务提供者已移除，回退到 WebDAV，避免工作空间无法加载。
+	if ProviderWebDAV != sync.Provider && ProviderLocal != sync.Provider {
+		sync.Provider = ProviderWebDAV
+	}
 	if 0 == sync.Mode {
 		sync.Mode = 1
 	}
 	sync.Interval = max(30, min(60*60*12, sync.Interval))
-	if nil == sync.S3 {
-		sync.S3 = &S3{PathStyle: true, SkipTlsVerify: true}
-	}
-	sync.S3.Endpoint = util.NormalizeEndpoint(sync.S3.Endpoint)
-	sync.S3.Timeout = util.NormalizeTimeout(sync.S3.Timeout)
-	sync.S3.ConcurrentReqs = util.NormalizeConcurrentReqs(sync.S3.ConcurrentReqs, ProviderS3)
 	if nil == sync.WebDAV {
 		sync.WebDAV = &WebDAV{SkipTlsVerify: true}
 	}
@@ -415,21 +413,6 @@ func NormalizeGraph(graph *Graph) *Graph {
 	}
 	graph.NormalizeMaxBlocks()
 	return graph
-}
-
-// NormalizeOCR 将已合并的内置模型名称转换为当前名称；缺失配置的默认来源由加载入口决定。
-func NormalizeOCR(ocr *OCR) *OCR {
-	if ocr == nil {
-		ocr = NewOCR()
-	}
-	if ocr.ShowText == nil {
-		ocr.ShowText = new(true)
-	}
-	if "small" == ocr.Model {
-		// 内置模型统一为 Tiny，自行导入的模型仍保留内容摘要标识。
-		ocr.Model = "tiny"
-	}
-	return ocr
 }
 
 // NormalizeAI 补全人工智能配置并对齐模型标识；密钥解密由加载入口负责。

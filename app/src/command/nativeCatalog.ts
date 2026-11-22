@@ -1,10 +1,10 @@
 export const DESKTOP_COMMAND_PANEL_GENERAL_KEYS = [
-    "addToDatabase", "fileTree", "outline", "bookmark", "tag", "dailyNote", "inbox", "backlinks",
-    "graphView", "globalGraph", "closeAll", "closeLeft", "closeOthers", "closeRight", "closeTab",
+    "addToDatabase", "fileTree", "outline", "bookmark", "tag", "backlinks",
+    "graphView", "closeAll", "closeLeft", "closeOthers", "closeRight", "closeTab",
     "closeUnmodified", "config", "dataHistory", "editReadonly", "enter", "enterBack", "globalSearch", "goBack",
     "goForward", "goToEditTabNext", "goToEditTabPrev", "goToTab1", "goToTab2", "goToTab3", "goToTab4",
     "goToTab5", "goToTab6", "goToTab7", "goToTab8", "goToTab9", "goToTabNext", "goToTabPrev", "lockScreen",
-    "mainMenu", "move", "newFile", "recentDocs", "replace", "riffCard", "search", "selectOpen1", "syncNow",
+    "mainMenu", "move", "newFile", "recentDocs", "replace", "search", "selectOpen1", "syncNow",
     "splitLR", "splitMoveB", "splitMoveR", "splitTB", "switchLeftDock", "switchRightDock", "switchBottomDock",
     "tabToWindow", "stickSearch", "toggleDock", "toggleLeftDockPanel", "toggleRightDockPanel",
     "toggleBottomDockPanel", "unsplitAll", "unsplit", "recentClosed", "increaseEditorFontSize",
@@ -12,9 +12,9 @@ export const DESKTOP_COMMAND_PANEL_GENERAL_KEYS = [
 ] as const;
 
 export const MOBILE_COMMAND_PANEL_GENERAL_KEYS = [
-    "addToDatabase", "fileTree", "outline", "bookmark", "tag", "dailyNote", "inbox", "backlinks",
+    "addToDatabase", "fileTree", "outline", "bookmark", "tag", "backlinks",
     "dataHistory", "editReadonly", "enter", "enterBack", "globalSearch", "lockScreen", "mainMenu", "move",
-    "newFile", "recentDocs", "replace", "riffCard", "search", "selectOpen1", "syncNow", "increaseEditorFontSize",
+    "newFile", "recentDocs", "replace", "search", "selectOpen1", "syncNow", "increaseEditorFontSize",
     "decreaseEditorFontSize", "resetEditorFontSize", "previousDatabaseRow", "nextDatabaseRow",
 ] as const;
 

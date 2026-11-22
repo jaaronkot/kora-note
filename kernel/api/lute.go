@@ -78,9 +78,6 @@ var html2BlockDOM = contractHandler(apicontract.HTML2BlockDOM, func(c *gin.Conte
 		return apicontract.Failure[apicontract.HTMLClipboardData](-1, err.Error())
 	}
 	text := request.Text
-	mathML := request.MathML
-	office := request.Office
-	officeMathHTML := request.OfficeMathHTML
 	wps := request.WPS
 	skipLocalAssets := request.SkipLocalAssets
 	skipBase64Assets := request.SkipBase64Assets
@@ -92,15 +89,7 @@ var html2BlockDOM = contractHandler(apicontract.HTML2BlockDOM, func(c *gin.Conte
 	luteEngine.SetHTMLTag2TextMark(true)
 	luteEngine.SetHTML2MarkdownAttrs([]string{"alias", "memo", "bookmark", "custom-*"})
 	luteEngine.SetLatexMath(model.MathDelimiterCompatibilityEnabled())
-	dom, useHTML := prepareHTMLClipboardContent(luteEngine, dom, text, mathML, office, officeMathHTML, wps,
-		preserveSourceFormat, preparedHTML, convertClipboardMath, convertOfficeHTMLClipboardMath)
-	if !useHTML {
-		if preflight {
-			return apicontract.Success(apicontract.HTMLClipboardPrepared(apicontract.HTMLClipboardPreflight{Converted: true, DOM: &dom, UseHTML: false}))
-		} else {
-			return apicontract.Success(apicontract.HTMLClipboardText(dom))
-		}
-	}
+	dom = prepareHTMLClipboardContent(dom, text, wps, preserveSourceFormat, preparedHTML)
 	if preflight {
 		skipLocalAssets = true
 		skipBase64Assets = true
@@ -330,41 +319,17 @@ func limitHTML2BlockDOMRequestBody(c *gin.Context, maxBytes int64) {
 	c.Request.Body = http.MaxBytesReader(c.Writer, c.Request.Body, maxBytes)
 }
 
-type clipboardMathConverter func(mathML, office, wps string) (markdown string, converted bool)
-type officeHTMLClipboardMathConverter func(officeMathHTML string) (markdown string, converted bool)
-
-func prepareHTMLClipboardContent(luteEngine *lute.Lute, dom, text, mathML, office, officeMathHTML, wps string,
-	preserveSourceFormat, preparedHTML bool, mathConverter clipboardMathConverter,
-	officeHTMLMathConverter officeHTMLClipboardMathConverter) (resolvedDOM string, useHTML bool) {
+func prepareHTMLClipboardContent(dom, text, wps string, preserveSourceFormat, preparedHTML bool) string {
 	if preparedHTML {
-		return dom, true
-	}
-	resolvedDOM, useHTML = resolveHTMLClipboardContent(luteEngine, dom, mathML, office, officeMathHTML, wps,
-		mathConverter, officeHTMLMathConverter)
-	if !useHTML {
-		return resolvedDOM, false
+		return dom
 	}
 	// 将 Word 和 WPS 批注转换为行级备注 https://github.com/siyuan-note/siyuan/issues/18748
-	resolvedDOM = normalizeWPSComments(resolvedDOM, text, wps)
-	resolvedDOM = normalizeMSWordComments(resolvedDOM)
+	dom = normalizeWPSComments(dom, text, wps)
+	dom = normalizeMSWordComments(dom)
 	if !preserveSourceFormat {
-		resolvedDOM = matchHTMLClipboardElements(resolvedDOM)
+		dom = matchHTMLClipboardElements(dom)
 	}
-	return resolvedDOM, true
-}
-
-func resolveHTMLClipboardContent(luteEngine *lute.Lute, dom, mathML, office, officeMathHTML, wps string,
-	mathConverter clipboardMathConverter, officeHTMLMathConverter officeHTMLClipboardMathConverter) (resolvedDOM string, useHTML bool) {
-	// 将 Word 和 WPS 公式转换为可编辑公式 https://github.com/siyuan-note/siyuan/issues/18747
-	if markdown, converted := mathConverter(mathML, office, wps); converted {
-		luteEngine.SetInlineMath(true)
-		return luteEngine.Md2BlockDOM(markdown, false), false
-	}
-	if markdown, converted := officeHTMLMathConverter(officeMathHTML); converted {
-		luteEngine.SetInlineMath(true)
-		return luteEngine.Md2BlockDOM(markdown, false), false
-	}
-	return dom, true
+	return dom
 }
 
 func normalizeMSWordComments(dom string) string {

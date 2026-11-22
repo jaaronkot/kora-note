@@ -501,10 +501,6 @@ var exportConf = contractHandler(apicontract.SystemExportConf, func(c *gin.Conte
 		clonedConf.Editor.Load().FontFamilyDisplay = ""
 		clonedConf.Editor.Load().NormalizeFontFamilies()
 	}
-	if nil != clonedConf.Export.Load() {
-		clonedConf.Export.Load().PandocBin = ""
-	}
-	clonedConf.UserData = ""
 	clonedConf.AccessAuthCode = ""
 	if nil != clonedConf.System.Load() {
 		clonedConf.System.Load().NetworkProxy = &conf.NetworkProxy{}
@@ -693,7 +689,6 @@ var importConf = contractHandler(apicontract.SystemImportConf, func(c *gin.Conte
 		return
 	}
 	importAppearance := importedConf.Appearance.Load() != nil
-	importOCR := importedConf.OCR.Load() != nil
 	importSnippet := importedConf.Snippet.Load() != nil
 	importVariables := importedConf.Variables.Load() != nil
 	// 导入的旧版配置与启动加载执行相同的格式迁移。
@@ -733,9 +728,6 @@ var importConf = contractHandler(apicontract.SystemImportConf, func(c *gin.Conte
 		appearance.Lang = util.LangToBCP47(appearance.Lang)
 		model.Conf.Lang = appearance.Lang
 		model.Conf.Appearance.Store(appearance)
-	}
-	if importOCR {
-		model.Conf.OCR.Store(importedConf.OCR.Load())
 	}
 	if importSnippet {
 		model.Conf.Snippet.Store(importedConf.Snippet.Load())

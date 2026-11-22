@@ -22,7 +22,7 @@ func TestConfigurationDefaultsAndNormalizationArePure(t *testing.T) {
 	})
 	construct := func() []any {
 		return []any{NewEditor(), NewFileTree(), NewAPI(), NewAI(), NewSystem(), NewAppearance(), NewSync(),
-			NewExport(), NewSearch(), NewFlashcard(), NewRepo(), NewOCR(), NewPublish(), NewBazaar(), NewSnpt(),
+			NewExport(), NewSearch(), NewFlashcard(), NewRepo(), NewPublish(), NewBazaar(), NewSnpt(),
 			NewSecrets(), NewVariables(), NewOIDC(), NewGraph(), NewStat(), NewTag(), NewNotebookCrypto()}
 	}
 	before, err := json.Marshal(construct())

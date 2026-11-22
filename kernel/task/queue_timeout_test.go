@@ -46,7 +46,7 @@ func TestTimedOutTaskRemainsTrackedUntilHandlerCompletes(t *testing.T) {
 	finishFirst := sync.OnceFunc(func() { close(release) })
 	finishSecond := sync.OnceFunc(func() { close(secondRelease) })
 	t.Cleanup(func() { finishFirst(); finishSecond(); requireTaskCount(t, 0) })
-	AppendTaskWithTimeout(OCRImage, 10*time.Millisecond, func() { close(started); <-release })
+	AppendTaskWithTimeout(HistoryGenerateFile, 10*time.Millisecond, func() { close(started); <-release })
 	queueLock.Lock()
 	taskQueue[0].Created = time.Now().Add(-time.Second)
 	queueLock.Unlock()
@@ -55,7 +55,7 @@ func TestTimedOutTaskRemainsTrackedUntilHandlerCompletes(t *testing.T) {
 		t.Fatal("eligible task was not dequeued")
 	}
 	// 出队到启动之间同样需要参与去重。
-	AppendTask(OCRImage, func() {})
+	AppendTask(HistoryGenerateFile, func() {})
 	requireTaskCount(t, 1)
 	returned := make(chan struct{})
 	go func() { execTask(first); close(returned) }()
@@ -69,7 +69,7 @@ func TestTimedOutTaskRemainsTrackedUntilHandlerCompletes(t *testing.T) {
 	case <-time.After(5 * time.Second):
 		t.Fatal("queue wait did not time out")
 	}
-	AppendTask(OCRImage, func() {})
+	AppendTask(HistoryGenerateFile, func() {})
 	requireTaskCount(t, 1)
 	second := &Task{Action: ReloadTag, Timeout: time.Hour, Handler: reflect.ValueOf(func() {
 		close(secondStarted)
@@ -104,7 +104,7 @@ func TestConcurrentTaskAdmissionIsAtomic(t *testing.T) {
 	isolateTaskQueue(t)
 	var wait sync.WaitGroup
 	for range 64 {
-		wait.Go(func() { AppendTask(OCRImage, func() {}) })
+		wait.Go(func() { AppendTask(HistoryGenerateFile, func() {}) })
 	}
 	wait.Wait()
 	if count := len(getCurrentTasks()); count != 1 {
@@ -114,6 +114,6 @@ func TestConcurrentTaskAdmissionIsAtomic(t *testing.T) {
 
 func TestTaskHandlerPanicReleasesTracking(t *testing.T) {
 	isolateTaskQueue(t)
-	execTask(&Task{Action: OCRImage, Timeout: time.Second, Handler: reflect.ValueOf(func() { panic("handler failure") })})
+	execTask(&Task{Action: HistoryGenerateFile, Timeout: time.Second, Handler: reflect.ValueOf(func() { panic("handler failure") })})
 	requireTaskCount(t, 0)
 }

@@ -11,7 +11,6 @@ import (
 	"path/filepath"
 	"sync/atomic"
 
-	"github.com/siyuan-community/siyuan/kernel/conf"
 	"github.com/siyuan-community/siyuan/kernel/util"
 	"github.com/siyuan-note/dejavu"
 	"github.com/siyuan-note/filelock"
@@ -44,25 +43,6 @@ func syncCloudAlreadyApplied(repoPath, latestID string) (bool, error) {
 		return false, nil
 	}
 	return nil == err && string(latestSync) == latestID, err
-}
-
-func syncDataFromCloud() {
-	confSyncSnapshot := Conf.LoadSync()
-
-	defer logging.Recover()
-	if !confSyncSnapshot.Perception || conf.ProviderSiYuan != confSyncSnapshot.Provider || !checkSync(false, false, false) {
-		return
-	}
-	scope := lanSyncScope()
-	latestID := getSyncCloudLatestID()
-	if "" == latestID {
-		// 预读失败时仍使用完整合并，并由正常同步流程处理错误和重试。
-		if scope == lanSyncScope() {
-			syncData(false, false)
-		}
-		return
-	}
-	syncDataFromRemote(scope, latestID)
 }
 
 func syncDataFromRemote(scope, latestID string) {

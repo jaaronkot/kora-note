@@ -1,7 +1,6 @@
 import {mobileInputDialog} from "../../dialog/mobileInputDialog";
 import {mobileConfirmDialog} from "../../dialog/mobileConfirmDialog";
 import type {SettingTabBuilder} from "../setting/builder";
-import {registerAccountGroup} from "./accountUi";
 import {Constants} from "../../constants";
 import {fetchPost, fetchSyncPost} from "../../util/fetch";
 import {showMessage} from "../../dialog/message";
@@ -74,8 +73,6 @@ const registerSyncGroup = (tab: SettingTabBuilder) => {
         desc: window.siyuan.languages.syncProviderTip,
         afterMount: mountSyncProvider,
         options: [
-            {value: 0, label: "SiYuan"},
-            {value: 2, label: "S3"},
             {value: 3, label: "WebDAV"},
             ...(["std", "docker"].includes(window.siyuan.config.system.container) ? [{value: 4, label: window.siyuan.languages.localFileSystem}] : []),
         ],
@@ -90,11 +87,6 @@ const registerSyncGroup = (tab: SettingTabBuilder) => {
         keywords: getSyncProviderConfigRowKeywords(),
         // 初始隐藏：渲染时按与配置区相同的条件决定是否显示，避免首帧闪烁
         html: () => '<div id="syncProviderConfigRow" class="b3-label config-item fn__none"></div>',
-    });
-    group.slot({
-        key: "cloudSpace",
-        keywords: [window.siyuan.languages.cloudStorage, window.siyuan.languages.trafficStat, window.siyuan.languages.backup],
-        html: () => '<div id="cloudSpace" class="b3-label config-item"></div>',
     });
     group.switch("sync.enabled", {
         title: window.siyuan.languages.cloudSync,
@@ -128,10 +120,6 @@ const registerSyncGroup = (tab: SettingTabBuilder) => {
         min: 30,
         max: 43200,
         unit: window.siyuan.languages.second,
-    });
-    group.switch("sync.perception", {
-        title: window.siyuan.languages.syncPerception,
-        desc: window.siyuan.languages.syncPerceptionTip,
     });
     group.switch("sync.lan.enabled", {
         title: window.siyuan.languages.lanSync,
@@ -344,7 +332,6 @@ const mountRepoKey = (root: HTMLElement) => {
 };
 
 export const registerSyncTab = (tab: SettingTabBuilder) => {
-    registerAccountGroup(tab);
     registerSyncGroup(tab);
     registerRepoGroup(tab);
 };

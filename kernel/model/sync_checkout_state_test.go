@@ -307,8 +307,8 @@ func TestSyncCheckoutControllersReleaseAdmissionBeforePreparing(t *testing.T) {
 	for _, path := range []string{
 		"/api/sync/performSync", "/api/sync/performBootSync", "/api/sync/getSyncSourceState",
 		"/api/sync/setCloudSyncDir", "/api/sync/removeCloudSyncDir", "/api/sync/setSyncProvider",
-		"/api/sync/setSyncProviderS3", "/api/sync/setSyncProviderWebDAV", "/api/sync/setSyncProviderLocal",
-		"/api/sync/importSyncProviderS3", "/api/sync/importSyncProviderWebDAV", "/api/sync/clearSyncProviderConfig",
+		"/api/sync/setSyncProviderWebDAV", "/api/sync/setSyncProviderLocal",
+		"/api/sync/importSyncProviderWebDAV", "/api/sync/clearSyncProviderConfig",
 		"/api/notebook/enableEncryptedNotebooks",
 	} {
 		for _, entry := range []struct {

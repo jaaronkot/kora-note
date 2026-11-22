@@ -118,25 +118,8 @@ func lanSyncScope() string {
 	confSyncSnapshot := Conf.LoadSync()
 
 	cloudName := confSyncSnapshot.CloudName
-	if conf.ProviderS3 == confSyncSnapshot.Provider {
-		// S3 只使用存储桶定位仓库，v1 作用域中的目录槽位固定为存储桶名。
-		cloudName = ""
-		if nil != confSyncSnapshot.S3 {
-			cloudName = confSyncSnapshot.S3.Bucket
-		}
-	}
 	base := fmt.Sprintf("v1:%d:%s", confSyncSnapshot.Provider, cloudName)
 	switch confSyncSnapshot.Provider {
-	case conf.ProviderSiYuan:
-		userID := ""
-		if user := Conf.GetUser(); nil != user {
-			userID = user.UserId
-		}
-		return fmt.Sprintf("%s:%d:%s", base, util.CurrentCloudRegion, userID)
-	case conf.ProviderS3:
-		if nil != confSyncSnapshot.S3 {
-			return fmt.Sprintf("%s:%s:%s:%s", base, confSyncSnapshot.S3.Endpoint, confSyncSnapshot.S3.Bucket, confSyncSnapshot.S3.Region)
-		}
 	case conf.ProviderWebDAV:
 		if nil != confSyncSnapshot.WebDAV {
 			return fmt.Sprintf("%s:%s", base, confSyncSnapshot.WebDAV.Endpoint)

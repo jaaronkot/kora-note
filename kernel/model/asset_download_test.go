@@ -15,7 +15,6 @@ import (
 	"github.com/siyuan-community/siyuan/kernel/util"
 	"github.com/siyuan-note/dejavu"
 	"github.com/siyuan-note/dejavu/cloud"
-	"github.com/siyuan-note/dejavu/entity"
 )
 
 func prepareAssetDownloadRepoTest(t *testing.T) (*dejavu.Repo, *dejavu.Repo, string) {
@@ -60,7 +59,6 @@ func prepareAssetDownloadRepoTest(t *testing.T) (*dejavu.Repo, *dejavu.Repo, str
 		Conf.Search.Store(confSectionValue3)
 	}
 	Conf.Sync.Load().Local = &conf.Local{Endpoint: remote}
-	Conf.SetUser(&conf.User{UserId: "asset-test", UserSiYuanOneTimePayStatus: 1})
 	Conf.Sync.Load().Provider, Conf.Sync.Load().CloudName, Conf.Sync.Load().Enabled = conf.ProviderLocal, "main", true
 	Conf.Sync.Load().Local.Endpoint, Conf.Sync.Load().AssetDownloadMode = remote, 1
 	Conf.Repo.Load().Key = key
@@ -223,7 +221,6 @@ func TestAssetDownloadUsesLocalSnapshotChunksWhileLoggedOut(t *testing.T) {
 		t.Fatal("snapshot chunk download unexpectedly materialized workspace content")
 	}
 	Conf.Sync.Load().Enabled = false
-	Conf.SetUser(nil)
 	if err = EnsureAssetLocal(assetPath); err != nil {
 		t.Fatalf("offline local chunks were not reused: %v", err)
 	}
@@ -233,7 +230,7 @@ func TestAssetDownloadUsesLocalSnapshotChunksWhileLoggedOut(t *testing.T) {
 	}
 }
 
-func TestAssetDownloadFullModeWhileLoggedOut(t *testing.T) {
+func TestAssetDownloadFullModeWhileOffline(t *testing.T) {
 	for _, available := range []bool{false, true} {
 		t.Run(map[bool]string{false: "missing-chunks", true: "local-chunks"}[available], func(t *testing.T) {
 			_, partial, _ := prepareAssetDownloadRepoTest(t)
@@ -247,12 +244,11 @@ func TestAssetDownloadFullModeWhileLoggedOut(t *testing.T) {
 				}
 			}
 			Conf.Sync.Load().Enabled = false
-			Conf.SetUser(nil)
 			if err = SetSyncAssetDownloadMode(0); (err == nil) != available {
 				t.Fatalf("unexpected offline completion result: %v", err)
 			}
-			if Conf.GetUser() != nil || Conf.Sync.Load().Enabled {
-				t.Fatal("offline completion changed the session or enabled sync")
+			if Conf.Sync.Load().Enabled {
+				t.Fatal("offline completion enabled sync")
 			}
 			if !available {
 				if Conf.Sync.Load().AssetDownloadMode != 1 {
@@ -273,28 +269,5 @@ func TestAssetDownloadFullModeWhileLoggedOut(t *testing.T) {
 				t.Fatalf("offline completion changed resource content: %q, %v", data, readErr)
 			}
 		})
-	}
-}
-
-func TestAssetDownloadScopeIdentity(t *testing.T) {
-	key := []byte("0123456789abcdef0123456789abcdef")
-	c := &cloud.Conf{Dir: "main", S3: &cloud.ConfS3{Endpoint: "https://storage.invalid", Bucket: "first"}}
-	scope := assetDownloadScope(conf.ProviderS3, c, key)
-	c.Dir = "bucket-display-name"
-	c.S3.Timeout = 120
-	if got := assetDownloadScope(conf.ProviderS3, c, key); got != scope {
-		t.Fatal("connection/display settings changed the S3 resource identity")
-	}
-	c.S3.Bucket = "second"
-	if got := assetDownloadScope(conf.ProviderS3, c, key); got == scope {
-		t.Fatal("different S3 buckets share an identity")
-	}
-	c.S3.Bucket = "first"
-	key[0] ^= 1
-	if got := assetDownloadScope(conf.ProviderS3, c, key); got == scope {
-		t.Fatal("different repository keys share an identity")
-	}
-	if !repoFileNeedsDownload(&entity.File{Chunks: []string{"invalid"}}) {
-		t.Fatal("malformed chunk metadata marked complete")
 	}
 }

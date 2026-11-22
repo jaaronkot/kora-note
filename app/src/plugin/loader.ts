@@ -288,7 +288,16 @@ const mountPlugin = (plugin: Plugin) => {
                     document.getElementById("menuPluginTopBar")?.after(element);
                 }
             } else if (!isWindow()) {
-                document.querySelector("#" + (element.getAttribute("data-location") === "right" ? "barPlugins" : "drag")).before(element);
+                // 顶栏不再有插件入口按钮，插件图标直接挂在拖拽区右侧或左侧。
+                const anchor = document.getElementById("drag");
+                if (!anchor) {
+                    return;
+                }
+                if (element.getAttribute("data-location") === "right") {
+                    anchor.insertAdjacentElement("afterend", element);
+                } else {
+                    anchor.before(element);
+                }
             }
         });
     }

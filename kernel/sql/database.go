@@ -1017,16 +1017,10 @@ func buildBlockFromNodeWithHeadingParent(n *ast.Node, tree *parse.Tree, headingP
 		length = utf8.RuneCountInString(fcontent)
 	} else if n.IsContainerBlock() {
 		markdown = treenode.ExportNodeStdMd(n, luteEngine)
-		if !treenode.IsNodeOCRed(n) {
-			util.PushNodeOCRQueue(n)
-		}
-		content = nodeStaticContent(n, nil, true, indexAssetPath.Load(), true, true, true)
+		content = nodeStaticContent(n, nil, true, indexAssetPath.Load(), true, true)
 
 		fc := treenode.FirstLeafBlock(n)
-		if !treenode.IsNodeOCRed(fc) {
-			util.PushNodeOCRQueue(fc)
-		}
-		fcontent = nodeStaticContent(fc, nil, true, false, true, true, true)
+		fcontent = nodeStaticContent(fc, nil, true, false, true, true)
 
 		parentID = n.Parent.ID
 		if headingParent != nil { // 如果在标题块下方，则将标题块作为父节点
@@ -1035,10 +1029,7 @@ func buildBlockFromNodeWithHeadingParent(n *ast.Node, tree *parse.Tree, headingP
 		length = utf8.RuneCountInString(fcontent)
 	} else {
 		markdown = treenode.ExportNodeStdMd(n, luteEngine)
-		if !treenode.IsNodeOCRed(n) {
-			util.PushNodeOCRQueue(n)
-		}
-		content = nodeStaticContent(n, nil, true, indexAssetPath.Load(), true, true, true)
+		content = nodeStaticContent(n, nil, true, indexAssetPath.Load(), true, true)
 
 		parentID = n.Parent.ID
 		if headingParent != nil {

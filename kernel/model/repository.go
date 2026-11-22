@@ -1252,9 +1252,6 @@ func PurgeCloud() (err error) {
 	msg := Conf.Language(223)
 	util.PushEndlessProgress(msg)
 	defer util.PushClearProgress()
-
-	handleCloudError := cloudRepoErrorHandler()
-	defer func() { handleCloudError(err) }()
 	repo, err := newCloudRepositoryWithAssetSourceLocked()
 	if err != nil {
 		return
@@ -1579,25 +1576,9 @@ func DownloadCloudSnapshot(tag, id string) (err error) {
 		err = errors.New(Conf.Language(26))
 		return
 	}
-
-	handleCloudError := cloudRepoErrorHandler()
-	defer func() { handleCloudError(err) }()
 	repo, err := newCloudRepositoryWithAssetSourceLocked()
 	if err != nil {
 		return
-	}
-
-	switch Conf.Sync.Load().Provider {
-	case conf.ProviderSiYuan:
-		if !IsSubscriber() {
-			util.PushErrMsg(Conf.Language(29), 5000)
-			return
-		}
-	case conf.ProviderWebDAV, conf.ProviderS3, conf.ProviderLocal:
-		if !IsPaidUser() {
-			util.PushErrMsg(Conf.Language(214), 5000)
-			return
-		}
 	}
 
 	defer util.PushClearProgress()
@@ -1619,33 +1600,15 @@ func DownloadCloudSnapshot(tag, id string) (err error) {
 }
 
 func UploadCloudSnapshot(tag, id string) (err error) {
-	confSyncSnapshot := Conf.LoadSync()
-
 	assetDownloadSourceMu.RLock()
 	defer assetDownloadSourceMu.RUnlock()
 	if 1 > len(Conf.Repo.Load().Key) {
 		err = errors.New(Conf.Language(26))
 		return
 	}
-
-	handleCloudError := cloudRepoErrorHandler()
-	defer func() { handleCloudError(err) }()
 	repo, err := newCloudRepositoryWithAssetSourceLocked()
 	if err != nil {
 		return
-	}
-
-	switch confSyncSnapshot.Provider {
-	case conf.ProviderSiYuan:
-		if !IsSubscriber() {
-			util.PushErrMsg(Conf.Language(29), 5000)
-			return
-		}
-	case conf.ProviderWebDAV, conf.ProviderS3, conf.ProviderLocal:
-		if !IsPaidUser() {
-			util.PushErrMsg(Conf.Language(214), 5000)
-			return
-		}
 	}
 
 	util.PushEndlessProgress(Conf.Language(116))
@@ -1656,16 +1619,6 @@ func UploadCloudSnapshot(tag, id string) (err error) {
 			err = fmt.Errorf(Conf.Language(84), Conf.Language(154))
 			return
 		}
-		if conf.ProviderSiYuan == confSyncSnapshot.Provider && errors.Is(err, dejavu.ErrCloudStorageSizeExceeded) {
-			u := Conf.GetUser()
-			msg := fmt.Sprintf(Conf.Language(43), humanize.BytesCustomCeil(uint64(u.UserSiYuanRepoSize), 2))
-			if 2 == u.UserSiYuanSubscriptionPlan {
-				msg = fmt.Sprintf(Conf.Language(68), humanize.BytesCustomCeil(uint64(u.UserSiYuanRepoSize), 2))
-			}
-			err = fmt.Errorf(Conf.Language(84), msg)
-			return
-		}
-		handleCloudError(err)
 		err = fmt.Errorf(Conf.Language(84), formatRepoErrorMsg(err))
 		return
 	}
@@ -1682,25 +1635,9 @@ func RemoveCloudRepoTag(tag string) (err error) {
 		err = errors.New(Conf.Language(26))
 		return
 	}
-
-	handleCloudError := cloudRepoErrorHandler()
-	defer func() { handleCloudError(err) }()
 	repo, err := newCloudRepositoryWithAssetSourceLocked()
 	if err != nil {
 		return
-	}
-
-	switch Conf.Sync.Load().Provider {
-	case conf.ProviderSiYuan:
-		if !IsSubscriber() {
-			util.PushErrMsg(Conf.Language(29), 5000)
-			return
-		}
-	case conf.ProviderWebDAV, conf.ProviderS3, conf.ProviderLocal:
-		if !IsPaidUser() {
-			util.PushErrMsg(Conf.Language(214), 5000)
-			return
-		}
 	}
 
 	err = repo.RemoveCloudRepoTag(tag)
@@ -1718,28 +1655,12 @@ func GetCloudRepoTagSnapshots() (ret []*dejavu.Log, err error) {
 		err = errors.New(Conf.Language(26))
 		return
 	}
-
-	handleCloudError := cloudRepoErrorHandler()
-	defer func() { handleCloudError(err) }()
 	repo, err := newCloudRepositoryWithAssetSourceLocked()
 	if err != nil {
 		return
 	}
 
-	switch Conf.Sync.Load().Provider {
-	case conf.ProviderSiYuan:
-		if !IsSubscriber() {
-			util.PushErrMsg(Conf.Language(29), 5000)
-			return
-		}
-	case conf.ProviderWebDAV, conf.ProviderS3, conf.ProviderLocal:
-		if !IsPaidUser() {
-			util.PushErrMsg(Conf.Language(214), 5000)
-			return
-		}
-	}
-
-	logs, err := repo.GetCloudRepoTagLogsCached(&cloudRepoSnapshotCache, map[string]any{eventbus.CtxPushMsg: eventbus.CtxPushMsgToStatusBar})
+	logs, err := repo.GetCloudRepoTagLogs(map[string]any{eventbus.CtxPushMsg: eventbus.CtxPushMsgToStatusBar})
 	if err != nil {
 		return
 	}
@@ -1762,36 +1683,16 @@ func GetCloudRepoSnapshotsByTime(page int, startTime, endTime int64) (ret []*dej
 		err = errors.New(Conf.Language(26))
 		return
 	}
-
-	handleCloudError := cloudRepoErrorHandler()
-	defer func() { handleCloudError(err) }()
 	repo, err := newCloudRepositoryWithAssetSourceLocked()
 	if err != nil {
 		return
-	}
-
-	switch Conf.Sync.Load().Provider {
-	case conf.ProviderSiYuan:
-		if !IsSubscriber() {
-			util.PushErrMsg(Conf.Language(29), 5000)
-			return
-		}
-	case conf.ProviderWebDAV, conf.ProviderS3, conf.ProviderLocal:
-		if !IsPaidUser() {
-			util.PushErrMsg(Conf.Language(214), 5000)
-			return
-		}
 	}
 
 	if 1 > page {
 		page = 1
 	}
 
-	load, err := repo.NewCloudRepoLogLoader(&cloudRepoSnapshotCache)
-	if err != nil {
-		return
-	}
-	logs, pageCount, totalCount, err := cloudRepoSnapshotsByTime(page, startTime, endTime, load)
+	logs, pageCount, totalCount, err := cloudRepoSnapshotsByTime(page, startTime, endTime, repo.GetCloudRepoLogs)
 	if err != nil {
 		return
 	}
@@ -2037,13 +1938,6 @@ func formatSyncRepoErrorMsg(err error) string {
 	if errors.Is(err, context.Canceled) {
 		return Conf.Language(433)
 	}
-	if conf.ProviderSiYuan == Conf.Sync.Load().Provider && errors.Is(err, dejavu.ErrCloudStorageSizeExceeded) {
-		u := Conf.GetUser()
-		if 2 == u.UserSiYuanSubscriptionPlan {
-			return fmt.Sprintf(Conf.Language(68), humanize.BytesCustomCeil(uint64(u.UserSiYuanRepoSize), 2))
-		}
-		return fmt.Sprintf(Conf.Language(43), humanize.BytesCustomCeil(uint64(u.UserSiYuanRepoSize), 2))
-	}
 	return fmt.Sprintf(Conf.Language(80), formatRepoErrorMsg(err))
 }
 
@@ -2062,9 +1956,6 @@ func syncRepoDownloadWithDecision(decisions []SyncSourceDecision) (err error) {
 		err = errors.New(msg)
 		return
 	}
-
-	handleCloudError := cloudRepoErrorHandler()
-	defer func() { handleCloudError(err) }()
 	repo, err := newSyncRepository()
 	if err != nil {
 		planSyncAfter(fixSyncInterval)
@@ -2170,9 +2061,6 @@ func syncRepoUploadWithDecision(decisions []SyncSourceDecision) (err error) {
 		err = errors.New(msg)
 		return
 	}
-
-	handleCloudError := cloudRepoErrorHandler()
-	defer func() { handleCloudError(err) }()
 	repo, err := newSyncRepository()
 	if err != nil {
 		planSyncAfter(fixSyncInterval)
@@ -2270,9 +2158,6 @@ func bootSyncRepo(complete func(error)) (scheduled bool, err error) {
 		err = errors.New(msg)
 		return
 	}
-
-	handleCloudError := cloudRepoErrorHandler()
-	defer func() { handleCloudError(err) }()
 	repo, err := newSyncRepository()
 	if err != nil {
 		recordAutoSyncFailure(err)
@@ -2417,9 +2302,6 @@ func syncRepoWithContext(ctx context.Context, exit, byHand bool) (cloudPublished
 		err = errors.New(msg)
 		return
 	}
-
-	handleCloudError := cloudRepoErrorHandler()
-	defer func() { handleCloudError(err) }()
 	repo, err := newSyncRepository()
 	if err != nil {
 		recordAutoSyncFailure(err)
@@ -2464,8 +2346,6 @@ func syncRepoWithContext(ctx context.Context, exit, byHand bool) (cloudPublished
 }
 
 func syncIndexedRepo(repo *dejavu.Repo, exit, byHand bool, start time.Time, indexElapsed time.Duration, skipCloudPreflight bool, prefetchTraffic *dejavu.DownloadTrafficStat) (cloudPublished bool, err error) {
-	handleCloudError := cloudRepoErrorHandler()
-	defer func() { handleCloudError(err) }()
 	if !exit {
 		checkoutTask := startSyncCheckout(repo)
 		defer checkoutTask.finish(repo, &err)
@@ -2665,7 +2545,7 @@ func processSyncMergeResult(exit, byHand bool, mergeResult *dejavu.MergeResult, 
 	changedAttributeViewPaths := map[string]bool{}
 	var upsertTrees int
 	// 可能需要重新加载部分功能
-	var needReloadFlashcard, needReloadInlineStyles, needReloadOcrTexts, needReloadPlugin, needReloadSnippet bool
+	var needReloadFlashcard, needReloadInlineStyles, needReloadPlugin, needReloadSnippet bool
 	reloadPluginSet := hashset.New()     // 插件代码变更 data/plugins/
 	dataChangePluginSet := hashset.New() // 插件存储数据变更 data/storage/petal/
 	needUnindexBoxes, needIndexBoxes := map[string]bool{}, map[string]bool{}
@@ -2677,10 +2557,6 @@ func processSyncMergeResult(exit, byHand bool, mergeResult *dejavu.MergeResult, 
 		}
 		if strings.HasPrefix(file.Path, "/storage/riff/") {
 			needReloadFlashcard = true
-		}
-
-		if strings.HasPrefix(file.Path, "/assets/ocr-texts.json") {
-			needReloadOcrTexts = true
 		}
 
 		if strings.HasSuffix(file.Path, "/.siyuan/conf.json") {
@@ -2755,10 +2631,6 @@ func processSyncMergeResult(exit, byHand bool, mergeResult *dejavu.MergeResult, 
 		}
 		if strings.HasPrefix(file.Path, "/storage/riff/") {
 			needReloadFlashcard = true
-		}
-
-		if strings.HasPrefix(file.Path, "/assets/ocr-texts.json") {
-			needReloadOcrTexts = true
 		}
 
 		if strings.HasSuffix(file.Path, "/.siyuan/conf.json") {
@@ -2858,10 +2730,6 @@ func processSyncMergeResult(exit, byHand bool, mergeResult *dejavu.MergeResult, 
 		LoadFlashcards()
 	}
 
-	if needReloadOcrTexts {
-		util.LoadAssetsTexts()
-	}
-
 	if needReloadPlugin {
 		PushReloadPlugin(uninstallPluginSet, unloadPluginSet, reloadPluginSet, dataChangePluginSet, "",
 			DataChangeReasonSync)
@@ -2896,10 +2764,6 @@ func processSyncMergeResult(exit, byHand bool, mergeResult *dejavu.MergeResult, 
 	if removedEncryptedBox {
 		sql.FlushQueue()
 	}
-	if !exit && ocrModelFilesChanged(upserts, removes) {
-		notifyOCRModelsChanged()
-	}
-
 	// 需要确认恢复记录时，索引更新必须在当前调用内完成
 	if needFullReindex(upsertTrees) && (len(immediateIndex) == 0 || !immediateIndex[0]) {
 		FullReindex(false)
@@ -3183,8 +3047,6 @@ func newCloudRepositoryWithAssetSourceLocked() (*dejavu.Repo, error) {
 	confSyncSnapshot := Conf.LoadSync()
 	var err error
 	switch confSyncSnapshot.Provider {
-	case conf.ProviderS3:
-		err = validateSyncS3(confSyncSnapshot.S3)
 	case conf.ProviderWebDAV:
 		err = validateSyncWebDAV(confSyncSnapshot.WebDAV)
 	case conf.ProviderLocal:
@@ -3214,13 +3076,6 @@ func newRepositoryWithAssetSourceLocked() (ret *dejavu.Repo, err error) {
 
 	var cloudRepo cloud.Cloud
 	switch confSyncSnapshot.Provider {
-	case conf.ProviderSiYuan:
-		cloudRepo = cloud.NewSiYuan(&cloud.BaseCloud{Conf: cloudConf})
-	case conf.ProviderS3:
-		// 显式注入 SiYuan UA，覆盖 aws SDK 默认 UA（含架构、Go 版本、SDK 版本等冗余信息），便于 S3 服务端按 SiYuan/ 前缀识别加白名单
-		s3HTTPClient := httpclient.NewUserAgentClient(httpclient.NewTransport(cloudConf.S3.SkipTlsVerify))
-		s3HTTPClient.Timeout = time.Duration(cloudConf.S3.Timeout) * time.Second
-		cloudRepo = cloud.NewS3(&cloud.BaseCloud{Conf: cloudConf}, s3HTTPClient)
 	case conf.ProviderWebDAV:
 		webdavClient := gowebdav.NewClient(cloudConf.WebDAV.Endpoint, cloudConf.WebDAV.Username, cloudConf.WebDAV.Password)
 		logging.LogInfof("WebDAV sync endpoint [%s], directory [%q]", safeWebDAVEndpoint(cloudConf.WebDAV.Endpoint), cloudConf.Dir)
@@ -3249,7 +3104,6 @@ func newRepositoryWithAssetSourceLocked() (ret *dejavu.Repo, err error) {
 		DeviceID: confSystemSnapshot.ID, DeviceName: confSystemSnapshot.Name, DeviceOS: confSystemSnapshot.OS,
 		AESKey: confRepoSnapshot.Key, IgnoreLines: ignoreLines, Cloud: cloudRepo,
 		IgnoreRulePath: syncIgnoreRulePath, HiddenDirectoryNames: []string{".siyuan"},
-		OnCloudIndexList: newSyncCloudIndexListObserver(scope, confSyncSnapshot.Provider),
 		PathFilter: func(info os.FileInfo, absPath string) (bool, error) {
 			return syncPathFilter(dataDir, info, absPath)
 		},
@@ -3257,15 +3111,6 @@ func newRepositoryWithAssetSourceLocked() (ret *dejavu.Repo, err error) {
 	if err != nil {
 		logging.LogErrorf("init data repo failed: %s", err)
 		return
-	}
-	if confSyncSnapshot.Provider == conf.ProviderSiYuan && Conf.GetUser() == nil {
-		stored, readErr := dejavu.ReadAssetDownloadScope(assetDownloadStatePath(), confRepoSnapshot.Key)
-		if readErr != nil {
-			return nil, readErr
-		}
-		if stored != "" {
-			scope = stored
-		}
 	}
 	ret.SetCheckoutHooks(documentAddressingCheckoutHooks(ret))
 	if err = ret.ConfigureSyncSource(syncSourceIdentity(confSyncSnapshot.Provider, cloudConf)); err != nil {
@@ -3496,41 +3341,18 @@ func subscribeRepoEvents() {
 
 func buildCloudConf() (ret *cloud.Conf, err error) {
 	sync := Conf.Sync.Load()
-	if conf.ProviderS3 != sync.Provider && !cloud.IsValidCloudDirName(sync.CloudName) {
+	if !cloud.IsValidCloudDirName(sync.CloudName) {
 		logging.LogWarnf("invalid cloud repo name, rename it to [main]")
 		sync = UpdateSyncConf(func(s *conf.Sync) { s.CloudName = "main" })
 	}
 
-	userId, token, availableSize := "0", "", int64(1024*1024*1024*1024*2)
-	if u := Conf.GetUser(); u != nil && conf.ProviderSiYuan == sync.Provider {
-		userId = u.UserId
-		token = u.UserToken
-		availableSize = u.GetCloudRepoAvailableSize()
-	}
-
 	ret = &cloud.Conf{
 		Dir:           sync.CloudName,
-		UserID:        userId,
-		Token:         token,
-		AvailableSize: availableSize,
-		Server:        util.GetCloudServer(),
+		UserID:        "0",
+		AvailableSize: int64(1024 * 1024 * 1024 * 1024 * 2),
 	}
 
 	switch sync.Provider {
-	case conf.ProviderSiYuan:
-		ret.Endpoint = util.GetCloudSyncServer()
-	case conf.ProviderS3:
-		ret.S3 = &cloud.ConfS3{
-			Endpoint:       sync.S3.Endpoint,
-			AccessKey:      sync.S3.AccessKey,
-			SecretKey:      sync.S3.SecretKey,
-			Bucket:         sync.S3.Bucket,
-			Region:         sync.S3.Region,
-			PathStyle:      sync.S3.PathStyle,
-			SkipTlsVerify:  sync.S3.SkipTlsVerify,
-			Timeout:        sync.S3.Timeout,
-			ConcurrentReqs: sync.S3.ConcurrentReqs,
-		}
 	case conf.ProviderWebDAV:
 		ret.WebDAV = &cloud.ConfWebDAV{
 			Endpoint:       sync.WebDAV.Endpoint,
@@ -3566,72 +3388,4 @@ type Sync struct {
 	Updated   string `json:"updated"`
 	CloudName string `json:"cloudName"` // 云端同步数据存放目录名
 	SaveDir   string `json:"saveDir"`   // 本地同步数据存放目录路径
-}
-
-func GetCloudSpace() (s *Sync, b *Backup, hSize, hAssetSize, hTotalSize, hExchangeSize, hTrafficUploadSize, hTrafficDownloadSize, hTrafficAPIGet, hTrafficAPIPut string, err error) {
-	stat, err := getCloudSpace()
-	if err != nil {
-		err = errors.New(Conf.Language(30) + " " + err.Error())
-		return
-	}
-
-	syncSize := stat.Sync.Size
-	syncUpdated := stat.Sync.Updated
-	s = &Sync{
-		Size:    syncSize,
-		HSize:   "-",
-		Updated: syncUpdated,
-	}
-
-	backupSize := stat.Backup.Size
-	backupUpdated := stat.Backup.Updated
-	b = &Backup{
-		Size:    backupSize,
-		HSize:   "-",
-		Updated: backupUpdated,
-	}
-
-	assetSize := stat.AssetSize
-	totalSize := syncSize + backupSize + assetSize
-	hAssetSize = "-"
-	hSize = "-"
-	hTotalSize = "-"
-	hExchangeSize = "-"
-	hTrafficUploadSize = "-"
-	hTrafficDownloadSize = "-"
-	hTrafficAPIGet = "-"
-	hTrafficAPIPut = "-"
-	if conf.ProviderSiYuan == Conf.Sync.Load().Provider {
-		s.HSize = humanize.BytesCustomCeil(uint64(syncSize), 2)
-		b.HSize = humanize.BytesCustomCeil(uint64(backupSize), 2)
-		hAssetSize = humanize.BytesCustomCeil(uint64(assetSize), 2)
-		hSize = humanize.BytesCustomCeil(uint64(totalSize), 2)
-		if u := Conf.GetUser(); nil != u {
-			hTotalSize = humanize.BytesCustomCeil(uint64(u.UserSiYuanRepoSize), 2)
-			hExchangeSize = humanize.BytesCustomCeil(uint64(u.UserSiYuanPointExchangeRepoSize), 2)
-			hTrafficUploadSize = humanize.BytesCustomCeil(uint64(u.UserTrafficUpload), 2)
-			hTrafficDownloadSize = humanize.BytesCustomCeil(uint64(u.UserTrafficDownload), 2)
-			hTrafficAPIGet = humanize.SIWithDigits(u.UserTrafficAPIGet, 2, "")
-			hTrafficAPIPut = humanize.SIWithDigits(u.UserTrafficAPIPut, 2, "")
-		}
-	}
-	return
-}
-
-func getCloudSpace() (stat *cloud.Stat, err error) {
-	assetDownloadSourceMu.RLock()
-	defer assetDownloadSourceMu.RUnlock()
-	handleCloudError := cloudRepoErrorHandler()
-	defer func() { handleCloudError(err) }()
-	repo, err := newCloudRepositoryWithAssetSourceLocked()
-	if err != nil {
-		return
-	}
-
-	stat, err = repo.GetCloudRepoStat()
-	if err != nil {
-		logging.LogErrorf("get cloud repo stat failed: %s", err)
-		return
-	}
-	return
 }

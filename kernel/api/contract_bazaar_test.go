@@ -163,81 +163,6 @@ func TestBazaarContractInputCompatibility(t *testing.T) {
 			return err
 		})
 	})
-	t.Run("getBazaarPackageUserRatings", func(t *testing.T) {
-		legacy := func(c *gin.Context) (result *gulu.Result) {
-			ret := gulu.Ret.NewResult()
-			defer func() { result = ret }()
-
-			arg, ok := legacyJSONArg(c, ret)
-			if !ok {
-				return
-			}
-
-			var pkgType string
-			var packageNamesArg []any
-			if !legacyParseArgs(arg, ret,
-				legacyBind("packageType", &pkgType, true, true),
-				legacyBind("packageNames", &packageNamesArg, true, false),
-			) {
-				return
-			}
-			return
-		}
-		checkLegacyInputCompatibility(t, "/api/bazaar/getBazaarPackageUserRatings", `{"packageType":"plugins","packageNames":[]}`, legacy, func(body []byte) error {
-			_, err := apicontract.GetBazaarPackageUserRatings.Decode(bytes.NewReader(body))
-			return err
-		})
-	})
-	t.Run("getBazaarPackageRating", func(t *testing.T) {
-		legacy := func(c *gin.Context) (result *gulu.Result) {
-			ret := gulu.Ret.NewResult()
-			defer func() { result = ret }()
-
-			arg, ok := legacyJSONArg(c, ret)
-			if !ok {
-				return
-			}
-
-			var pkgType, packageName string
-			if !legacyParseArgs(arg, ret,
-				legacyBind("packageType", &pkgType, true, true),
-				legacyBind("packageName", &packageName, true, true),
-			) {
-				return
-			}
-			return
-		}
-		checkLegacyInputCompatibility(t, "/api/bazaar/getBazaarPackageRating", `{"packageType":"plugins","packageName":" valid "}`, legacy, func(body []byte) error {
-			_, err := apicontract.GetBazaarPackageRating.Decode(bytes.NewReader(body))
-			return err
-		})
-	})
-	t.Run("setBazaarPackageRating", func(t *testing.T) {
-		legacy := func(c *gin.Context) (result *gulu.Result) {
-			ret := gulu.Ret.NewResult()
-			defer func() { result = ret }()
-
-			arg, ok := legacyJSONArg(c, ret)
-			if !ok {
-				return
-			}
-
-			var pkgType, packageName string
-			var ratingArg float64
-			if !legacyParseArgs(arg, ret,
-				legacyBind("packageType", &pkgType, true, true),
-				legacyBind("packageName", &packageName, true, true),
-				legacyBind("rating", &ratingArg, true, false),
-			) {
-				return
-			}
-			return
-		}
-		checkLegacyInputCompatibility(t, "/api/bazaar/setBazaarPackageRating", `{"packageType":"plugins","packageName":" valid ","rating":3}`, legacy, func(body []byte) error {
-			_, err := apicontract.SetBazaarPackageRating.Decode(bytes.NewReader(body))
-			return err
-		})
-	})
 	t.Run("getBazaarPackageREADME", func(t *testing.T) {
 		legacy := func(c *gin.Context) (result *gulu.Result) {
 			ret := gulu.Ret.NewResult()
@@ -834,7 +759,6 @@ func TestBazaarContractHTTPFailures(t *testing.T) {
 	}{
 		{"getBazaarPackageRatings", `{"packageType":"bad","packageNames":[null]}`, getBazaarPackageRatings, 1, "Invalid package type"},
 		{"getBazaarPackageRatings", `{"packageType":"plugins","packageNames":[null]}`, getBazaarPackageRatings, -1, "Field [packageNames]: each element should be of type [String]"},
-		{"setBazaarPackageRating", `{"packageType":"plugins","packageName":"valid","rating":2.5}`, setBazaarPackageRating, 1, "Rating must be an integer from 0 to 5"},
 		{"installBazaarTheme", `{"repoURL":"url","repoHash":"hash","packageName":"name","mode":null}`, installBazaarTheme, -1, "Fields [mode] and [modeOS] must be provided together"},
 		{"installBazaarTheme", `{"repoURL":"url","repoHash":"hash","packageName":"name","mode":null,"modeOS":false}`, installBazaarTheme, -1, "Field [mode] is required"},
 		{"installBazaarTheme", `{"repoURL":"url","repoHash":"hash","packageName":"name","mode":2,"modeOS":false}`, installBazaarTheme, -1, "Field [mode] must be 0 or 1"},

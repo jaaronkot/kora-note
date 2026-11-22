@@ -114,19 +114,6 @@ fetchPost("/api/setting/setAI", {mcp: {unknown: true}});
 fetchPost("/api/setting/setAI", {mcp: {servers: [{env: {KEY: false}}]}});
 // @ts-expect-error 主题模式的规范调用使用数字数组。
 fetchPost("/api/setting/setTheme", {theme: "theme", modes: [false]});
-fetchPost("/api/setting/login2faCloudUser", {token: "token", code: "123456"}, response => {
-    const outerCode: number = response.code;
-    if (response.data && "msg" in response.data) {
-        const cloudCode: number = response.data.code;
-        const message: string = response.data.msg;
-        const token: JSONValue = response.data.token;
-        // @ts-expect-error 云端扩展字段在使用前必须检查类型。
-        const tokenString: string = response.data.token;
-        void [cloudCode, message, token, tokenString];
-    }
-    void outerCode;
-});
-
 fetchPost("/api/filetree/getDoc", {id: "document", notebook: "box", querySubTypes: {heading: {h1: true}}}, response => {
     if (response.code === 0) {
         const content: string = response.data.content;
@@ -166,7 +153,6 @@ fetchPost("/api/asset/statAsset", {path: "assets/example.txt"}, response => {
         void downloaded;
     }
 });
-fetchPost("/api/asset/getImageOCRText", {path: null});
 // @ts-expect-error 批量上传文件必须为二进制数组。
 fetchPost("/api/asset/upload", new ContractFormData({"file[]": ["example.txt"]}));
 // @ts-expect-error 附件地址必须为字符串。
@@ -229,21 +215,10 @@ fetchPost("/api/sync/setSyncLAN", {enabled: true, maxConcurrentReqs: 2.5}, respo
     const peers: number = response.data.connectedPeers;
     void peers;
 });
-fetchPost("/api/sync/setSyncProviderS3", {s3: {endpoint: "https://example.invalid", pathStyle: true}});
 // @ts-expect-error 同步开关只接受布尔值。
 fetchPost("/api/sync/setSyncEnable", {enabled: "true"});
-// @ts-expect-error 同步配置中的超时不是字符串。
-fetchPost("/api/sync/setSyncProviderS3", {s3: {timeout: "30"}});
 fetchPost("/api/sync/importSyncProviderWebDAV", new ContractFormData({file: new Blob()}));
 
-fetchPost("/api/bazaar/getBazaarPackageRating", {packageType: "plugin", packageName: "example"}, response => {
-    if (response.data && "rating" in response.data && response.data.rating) {
-        const distribution: [number, number, number, number, number] = response.data.rating.distribution;
-        void distribution;
-    }
-});
-// @ts-expect-error 集市评分参数必须为数值。
-fetchPost("/api/bazaar/setBazaarPackageRating", {packageType: "plugin", packageName: "example", rating: "5"});
 // @ts-expect-error 集市包名列表只能包含字符串。
 fetchPost("/api/bazaar/getBazaarPackageRatings", {packageType: "plugin", packageNames: [1]});
 fetchPost("/api/bazaar/installLocalBazaarPackage", new ContractFormData({file: new Blob(), overwrite: "true"}));

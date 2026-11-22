@@ -40,7 +40,6 @@ type PatchSettingRequest struct {
 	System     *PatchSystemSetting  `json:"system" api:"optional"`
 	Sync       *PatchSyncSetting    `json:"sync" api:"optional"`
 	Repo       *PatchRepoSetting    `json:"repo" api:"optional"`
-	OCR        *SettingOCR          `json:"ocr" api:"optional"`
 	Bazaar     *SettingBazaar       `json:"bazaar" api:"optional"`
 	Publish    *SettingPublish      `json:"publish" api:"optional"`
 	Snippet    *SettingSnpt         `json:"snippet" api:"optional"`
@@ -70,7 +69,7 @@ func init() {
 		}
 		for namespace, patch := range fields {
 			switch namespace {
-			case "editor", "export", "fileTree", "search", "appearance", "flashcard", "ai", "secrets", "variables", "keymap", "system", "sync", "repo", "ocr", "bazaar", "publish", "snippet":
+			case "editor", "export", "fileTree", "search", "appearance", "flashcard", "ai", "secrets", "variables", "keymap", "system", "sync", "repo", "bazaar", "publish", "snippet":
 			default:
 				return r, errors.New("unsupported settings namespace")
 			}
@@ -124,11 +123,9 @@ type PatchSyncSetting struct {
 	Enabled             *bool           `json:"enabled" api:"optional"`
 	Interval            *int            `json:"interval" api:"optional"`
 	Mode                *int            `json:"mode" api:"optional"`
-	Perception          *bool           `json:"perception" api:"optional"`
 	GenerateConflictDoc *bool           `json:"generateConflictDoc" api:"optional"`
 	AssetDownloadMode   *int            `json:"assetDownloadMode" api:"optional"`
 	CloudName           *string         `json:"cloudName" api:"optional"`
-	S3                  *SyncS3         `json:"s3" api:"optional"`
 	WebDAV              *SyncWebDAV     `json:"webdav" api:"optional"`
 	Local               *SyncLocal      `json:"local" api:"optional"`
 	LAN                 *SyncLANRequest `json:"lan" api:"optional"`

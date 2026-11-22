@@ -107,8 +107,7 @@ func TestHideConfSecretMasksIncompleteNotebookCryptoAsDisabled(t *testing.T) {
 func TestHideConfSecretHidesAbsolutePaths(t *testing.T) {
 	appConf := NewAppConf()
 	appConf.Export.Store(&conf.Export{
-		AddTitle:  true,
-		PandocBin: `C:\Users\alice\SiYuan\temp\pandoc\bin\pandoc.exe`,
+		AddTitle: true,
 	})
 	appConf.System.Store(&conf.System{
 		KernelVersion: "3.3.0",
@@ -121,9 +120,6 @@ func TestHideConfSecretHidesAbsolutePaths(t *testing.T) {
 
 	HideConfSecret(appConf)
 
-	if "" != appConf.Export.Load().PandocBin {
-		t.Fatalf("pandoc path was not hidden: %q", appConf.Export.Load().PandocBin)
-	}
 	if !appConf.Export.Load().AddTitle {
 		t.Fatal("functional export settings should be preserved")
 	}

@@ -49,17 +49,11 @@ import {getBazaarBatchUpdate, renderBazaarInstall} from "./bazaar/installTask";
 import {bazaarConfigApi} from "./bazaar/runtime";
 import {isBazaarBatchUpdateExcluded} from "./bazaar/batchUpdatePreference";
 import {
-    bindRatingUserChange,
     genCardRatingHTML,
-    genRatePackageActionHTML,
     genReadmeRatingHTML,
     getRatingKey,
     loadDownloadedRatings,
-    loadDownloadedUserRatings,
-    loadReadmeRating,
     loadUpdatedRatings,
-    refreshVisibleRatingUI,
-    syncRatingUser,
 } from "./bazaar/rating";
 import {
     filterBazaarPackagesByThemeMode,
@@ -98,9 +92,6 @@ export const mountBazaarTab = (root: HTMLElement, keywords?: string, app?: App) 
         if (app) {
             bazaar.bindEvent(app);
         }
-    }
-    if (syncRatingUser(bazaar)) {
-        refreshVisibleRatingUI(bazaar);
     }
     if (keywords) {
         switchSettingPanelSubTab(root, keywords, [
@@ -145,8 +136,6 @@ export const bazaar = {
     _pluginGlobalRequestID: 0,
     _lastGlobalPluginSettledRevision: -1,
     _globalPluginStateUnsubscribe: undefined as (() => void) | undefined,
-    _ratingUserID: "",
-    _ratingUserChangeHandler: undefined as (() => void) | undefined,
     _bazaarCardRenderStates: new Map<Element, IBazaarCardRenderState>(),
     _activateMount(element: HTMLElement, force = false) {
         if (!force && this.element === element) {
@@ -725,7 +714,6 @@ ${primaryAction ? '<div class="fn__hr"></div>' : ""}
         </div>
     </div>
     <div class="b3-card__actions b3-card__actions--right">
-        ${genRatePackageActionHTML(ratingLoaded, bazaar._data.userRatings.get(ratingKey))}
         ${bazaar._genIncompatibleChipHTML(available, "bazaar", bazaarType)}
         ${bazaar._genDeprecatedChipHTML(available)}
         ${bazaar._genFundingHTML(installed.preferredFunding, false)}
@@ -984,7 +972,6 @@ ${primaryAction ? '<div class="fn__hr"></div>' : ""}
     </div>
     <div class="b3-card__actions b3-card__actions--right">
         ${publishSwitchHTML}
-        ${genRatePackageActionHTML(bazaar._data.downloadedRatingKeys.has(ratingKey), bazaar._data.userRatings.get(ratingKey))}
         ${bazaar._genIncompatibleChipHTML(bazaarItem, "installed", bazaarType)}
         ${bazaar._genDeprecatedChipHTML(bazaarItem)}
         ${bazaar._genFundingHTML(bazaarItem.preferredFunding, false)}
@@ -1030,7 +1017,6 @@ type="checkbox">
                 bazaar._syncPluginGlobalSwitch();
             }
             loadDownloadedRatings(bazaar, bazaarType, packageItems);
-            loadDownloadedUserRatings(bazaar, bazaarType, packageItems);
             bazaar._loadDownloadedDeprecations(bazaarType, app);
             const sideElement = bazaar.element.querySelector("#configBazaarReadme.config__view--show .item__side");
             // 仅刷新「已下载」详情，避免通过 URI 打开的在线详情被本地数据覆盖
@@ -1070,12 +1056,6 @@ type="checkbox">
         deprecationTypesLoading: new Set<TBazaarType>(),
         downloadedRatingKeys: new Set<string>(),
         ratings: new Map<string, IBazaarRating>(),
-        userRatings: new Map<string, number>(),
-        userRatingKeys: new Set<string>(),
-        userRatingLoadingKeys: new Set<string>(),
-        userRatingSubmittingKeys: new Set<string>(),
-        userRatingSubmitRequestIDs: new Map<string, number>(),
-        userRatingBatchRequestIDs: new Map<string, number>(),
         ratingBatchRequestIDs: new Map<TBazaarType, number>(),
         ratingMutationVersions: new Map<string, number>(),
         details: new Map<string, IBazaarPackageDetail>(),
@@ -1310,7 +1290,6 @@ type="checkbox">
             });
         }
         readmeElement.classList.add("config__view--show");
-        loadReadmeRating(bazaar, bazaarType, displayData.name, from);
         if (needsPackageDetail) {
             bazaar._fetchPackageDetail(bazaarType, data.name, (packageDetail) => {
                 if (!readmeElement.classList.contains("config__view--show")) {
@@ -1843,8 +1822,6 @@ type="checkbox">
         this._updateState = "idle";
         this._updateRequestID++;
         this._data.details.clear();
-        syncRatingUser(this);
-        bindRatingUserChange(this);
         const mount = this._captureMount();
         BAZAAR_PACKAGE_TYPES.forEach((type) => {
             this._data.update[type] = [];

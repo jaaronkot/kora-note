@@ -284,8 +284,7 @@ func (p *assetRelinkPlan) failAll(err error) {
 }
 
 func (p *assetRelinkPlan) scanMetadata(roots []string) error {
-	ocrMappings := make([]util.AssetTextRelinkMapping, len(p.items))
-	for i, item := range p.items {
+	for _, item := range p.items {
 		if err := p.checkContext(); err != nil {
 			return err
 		}
@@ -314,25 +313,8 @@ func (p *assetRelinkPlan) scanMetadata(roots []string) error {
 		if err = p.scanAnnotation(oldAbs, newAbs); err != nil {
 			p.fail(item, err.Error())
 		}
-		if item.reason == "" {
-			ocrMappings[i] = util.AssetTextRelinkMapping{OldPath: rule.oldPath, NewPath: rule.newPath}
-		}
 	}
 	p.oldPath, p.newPath = "", ""
-	var err error
-	p.ocrPlan, err = util.PrepareAssetTextRelinks(ocrMappings)
-	if err != nil {
-		return err
-	}
-	for i, result := range p.ocrPlan.Results {
-		if !result.Exists && result.Reason == "" {
-			continue
-		}
-		item := p.items[i]
-		p.result.References = append(p.result.References, apicontract.AssetReference{OldPath: item.rule.oldPath,
-			Type: "ocr", Path: "assets/ocr-texts.json", Reference: item.rule.oldPath, Replacement: item.rule.newPath,
-			Relinkable: result.Reason == "", Reason: result.Reason})
-	}
 	return nil
 }
 
@@ -424,15 +406,7 @@ func (p *assetRelinkPlan) apply() (err error) {
 			files = append(files, file)
 		}
 	}
-	var ocrSelected []int
-	if p.ocrPlan != nil {
-		for i, result := range p.ocrPlan.Results {
-			if result.Changed && p.items[i].reason == "" {
-				ocrSelected = append(ocrSelected, i)
-			}
-		}
-	}
-	if len(files) == 0 && len(ocrSelected) == 0 {
+	if len(files) == 0 {
 		return nil
 	}
 	if err = p.checkContext(); err != nil {
@@ -523,29 +497,6 @@ func (p *assetRelinkPlan) apply() (err error) {
 		if writeErr := util.WriteFileIfUnchanged(file.path, nil, file.after); writeErr != nil {
 			failed(items, writeErr)
 		} else {
-			count(items)
-		}
-	}
-	if len(ocrSelected) > 0 {
-		if err = p.checkContext(); err != nil {
-			return err
-		}
-		selected := ocrSelected[:0]
-		for _, i := range ocrSelected {
-			if p.items[i].reason == "" {
-				selected = append(selected, i)
-			}
-		}
-		changed, writeErr := p.ocrPlan.Save(historyDir, selected)
-		if writeErr != nil {
-			for _, i := range selected {
-				p.fail(p.items[i], writeErr.Error())
-			}
-		} else if len(changed) > 0 {
-			items := map[*assetRelinkItem]bool{}
-			for _, i := range changed {
-				items[p.items[i]] = true
-			}
 			count(items)
 		}
 	}

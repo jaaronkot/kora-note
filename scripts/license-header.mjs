@@ -231,7 +231,7 @@ export const planHeader = (file, text) => {
 const REMOVAL_SUFFIXES = new Set([".ts", ".tsx", ".js", ".mjs", ".cjs", ".scss", ".css", ".py", ".ps1", ".sh", ".html", ".vue"]);
 
 // 构建产物与上游二进制目录不参与检查。
-const REMOVAL_EXCLUDED_PREFIXES = ["app/stage/", "app/pandoc/"];
+const REMOVAL_EXCLUDED_PREFIXES = ["app/stage/"];
 
 const suffixOf = file => file.slice(file.lastIndexOf(".")).toLowerCase();
 

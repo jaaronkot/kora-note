@@ -40,7 +40,6 @@ import (
 	"github.com/siyuan-community/siyuan/kernel/treenode"
 	"github.com/siyuan-community/siyuan/kernel/util"
 	"github.com/siyuan-note/filelock"
-	"github.com/siyuan-note/httpclient"
 	"github.com/siyuan-note/logging"
 )
 
@@ -1012,9 +1011,6 @@ func SearchAssetsByNamePage(keyword string, exts []string, match *AssetSearchMat
 
 		// 只返回有匹配的资源
 		metadataHitCount := metadataHits[asset.Path]
-		if includeMetadata && strings.TrimSpace(keyword) != "" {
-			metadataHitCount += assetMetadataTextHits(util.GetAssetText(asset.Path), keywords)
-		}
 		if 1 > hitNameCount+hitPathCount+metadataHitCount {
 			return false
 		}
@@ -1439,177 +1435,6 @@ func getAssetAbsPath(relativePath string, includeEncrypted bool) (absPath string
 	return deferredAssetPath(relativePath, "", includeEncrypted)
 }
 
-// UploadAssets2CloudWithApp 将块资源上传提示限定到发起实例；空标识保留广播。
-func UploadAssets2CloudWithApp(id string, ignorePushMsg bool, app string) (count int, err error) {
-	if !IsSubscriber() {
-		return
-	}
-
-	tree, err := LoadTreeByBlockID(id)
-	if err != nil {
-		return
-	}
-
-	node := treenode.GetNodeInTree(tree, id)
-	if nil == node {
-		err = ErrBlockNotFound
-		return
-	}
-
-	nodes := []*ast.Node{node}
-	if ast.NodeHeading == node.Type {
-		nodes = append(nodes, treenode.HeadingChildren(node)...)
-	}
-
-	var assets []string
-	for _, n := range nodes {
-		assets = append(assets, getAssetsLinkDests(n, false)...)
-		assets = append(assets, getQueryEmbedNodesAssetsLinkDests(n)...)
-	}
-	assets = gulu.Str.RemoveDuplicatedElem(assets)
-	count, err = uploadAssets2CloudWithApp(assets, bizTypeUploadAssets, ignorePushMsg, app)
-	if err != nil {
-		return
-	}
-	return
-}
-
-// UploadAssets2CloudByAssetsPathsWithApp 在同一实例显示、更新和清除本次上传的提示。
-func UploadAssets2CloudByAssetsPathsWithApp(assetPaths []string, ignorePushMsg bool, app string) (count int, err error) {
-	if !IsSubscriber() {
-		return
-	}
-
-	count, err = uploadAssets2CloudWithApp(assetPaths, bizTypeUploadAssets, ignorePushMsg, app)
-	return
-}
-
-const (
-	bizTypeUploadAssets  = "upload-assets"
-	bizTypeExport2Liandi = "export-liandi"
-)
-
-// uploadAssets2Cloud 将资源文件上传到云端图床。
-func uploadAssets2Cloud(assetPaths []string, bizType string, ignorePushMsg bool) (count int, err error) {
-	return uploadAssets2CloudWithApp(assetPaths, bizType, ignorePushMsg, "")
-}
-
-func uploadAssets2CloudWithApp(assetPaths []string, bizType string, ignorePushMsg bool, app string) (count int, err error) {
-	var uploadAbsAssets []string
-	for _, assetPath := range assetPaths {
-		var absPath string
-		absPath, err = GetAssetAbsPath(assetPath)
-		if err != nil {
-			logging.LogWarnf("get asset [%s] abs path failed: %s", assetPath, err)
-			return
-		}
-		if "" == absPath {
-			logging.LogErrorf("not found asset [%s]", assetPath)
-			continue
-		}
-
-		uploadAbsAssets = append(uploadAbsAssets, absPath)
-	}
-
-	uploadAbsAssets = gulu.Str.RemoveDuplicatedElem(uploadAbsAssets)
-	if 1 > len(uploadAbsAssets) {
-		return
-	}
-
-	logging.LogInfof("uploading [%d] assets", len(uploadAbsAssets))
-
-	var msgId string
-	if !ignorePushMsg {
-		msgId = util.PushMsgWithApp(app, fmt.Sprintf(Conf.Language(27), len(uploadAbsAssets)), 3000)
-		defer util.PushClearMsgWithApp(app, msgId)
-	}
-	if loadErr := LoadUploadToken(); nil != loadErr {
-		util.PushMsgWithApp(app, loadErr.Error(), 5000)
-		return
-	}
-
-	limitSize := uint64(3 * 1024 * 1024) // 3MB
-	if IsSubscriber() {
-		limitSize = 10 * 1024 * 1024 // 10MB
-	}
-
-	// metaType 为服务端 Filemeta.FILEMETA_TYPE，这里只有两个值：
-	//
-	//	5: SiYuan，表示为 SiYuan 上传图床
-	//	4: Client，表示作为客户端分享发布帖子时上传的文件
-	var metaType = "5"
-	if bizTypeUploadAssets == bizType {
-		metaType = "5"
-	} else if bizTypeExport2Liandi == bizType {
-		metaType = "4"
-	}
-
-	pushErrMsgCount := 0
-	var completedUploadAssets []string
-	for _, absAsset := range uploadAbsAssets {
-		if err = ensureReadableAssetLocal(absAsset); err != nil {
-			return count, err
-		}
-		fi, statErr := os.Stat(absAsset)
-		if nil != statErr {
-			logging.LogErrorf("stat file [%s] failed: %s", absAsset, statErr)
-			return count, statErr
-		}
-
-		if limitSize < uint64(fi.Size()) {
-			logging.LogWarnf("file [%s] larger than limit size [%s], ignore uploading it", absAsset, humanize.IBytes(limitSize))
-			if 3 > pushErrMsgCount {
-				msg := fmt.Sprintf(Conf.Language(247), filepath.Base(absAsset), humanize.IBytes(limitSize))
-				util.PushErrMsgWithApp(app, msg, 30000)
-			}
-			pushErrMsgCount++
-			continue
-		}
-
-		if !ignorePushMsg {
-			msg := fmt.Sprintf(Conf.Language(27), html.EscapeString(absAsset))
-			util.PushStatusBar(msg)
-			util.PushUpdateMsgWithApp(app, msgId, msg, 3000)
-		}
-
-		requestResult := gulu.Ret.NewResult()
-		request := httpclient.NewCloudFileRequest2m()
-		resp, reqErr := request.
-			SetSuccessResult(requestResult).
-			SetFile("file[]", absAsset).
-			SetCookies(&http.Cookie{Name: "symphony", Value: uploadToken}).
-			SetHeader("meta-type", metaType).
-			SetHeader("biz-type", bizType).
-			Post(util.GetCloudServer() + "/apis/siyuan/upload?ver=" + util.Ver)
-		if nil != reqErr {
-			logging.LogErrorf("upload assets failed: %s", reqErr)
-			return count, ErrFailedToConnectCloudServer
-		}
-
-		if 401 == resp.StatusCode {
-			err = errors.New(Conf.Language(31))
-			return
-		}
-
-		if 0 != requestResult.Code {
-			logging.LogErrorf("upload assets failed: %s", requestResult.Msg)
-			err = fmt.Errorf(Conf.Language(94), requestResult.Msg)
-			return
-		}
-
-		absAsset = filepath.ToSlash(absAsset)
-		relAsset := absAsset[strings.Index(absAsset, "assets/"):]
-		completedUploadAssets = append(completedUploadAssets, relAsset)
-		logging.LogInfof("uploaded asset [%s]", relAsset)
-		count++
-	}
-
-	if 0 < len(completedUploadAssets) {
-		logging.LogInfof("uploaded [%d] assets", len(completedUploadAssets))
-	}
-	return
-}
-
 func RemoveUnusedAssets() (ret []string, err error) {
 	ret = []string{}
 	verify, release, err := beginOrdinaryAssetCleanup()
@@ -1670,7 +1495,6 @@ func RemoveUnusedAssets() (ret []string, err error) {
 	sql.BatchRemoveAssetsQueue(hashes)
 	for _, item := range unusedAssets {
 		cache.RemoveAssetHashByPath(item.Item)
-		util.RemoveAssetText(item.Item)
 		if util.IsMobileContainer() {
 			HandleAssetsRemoveEvent(filepath.Join(util.DataDir, item.Item))
 		}
@@ -1722,8 +1546,6 @@ func RemoveUnusedAsset(p string) (ret string, err error) {
 	if util.IsMobileContainer() {
 		HandleAssetsRemoveEvent(absPath)
 	}
-
-	util.RemoveAssetText(relativePath)
 
 	IncSync()
 
@@ -1890,11 +1712,6 @@ func RenameAsset(oldPath, newName string) (newPath string, err error) {
 
 			util.PushEndlessProgress(fmt.Sprintf(Conf.Language(111), util.EscapeHTML(entry.Name())))
 		}
-	}
-
-	if ocrText := util.GetAssetText(oldCleanPath); "" != ocrText {
-		// 图片重命名后 ocr-texts.json 需要更新 https://github.com/siyuan-note/siyuan/issues/12974
-		util.SetAssetText(newPath, ocrText)
 	}
 
 	if hasSya {
@@ -2146,12 +1963,6 @@ func UnusedAssets(sorted bool) (ret []*UnusedItem, err error) {
 
 	var toRemoves []string
 	for asset := range assetsPathMap {
-		if strings.HasSuffix(asset, "ocr-texts.json") {
-			// 排除 OCR 结果文本
-			toRemoves = append(toRemoves, asset)
-			continue
-		}
-
 		if strings.HasSuffix(asset, "android-notification-texts.txt") {
 			// 排除 Android 通知文本
 			toRemoves = append(toRemoves, asset)

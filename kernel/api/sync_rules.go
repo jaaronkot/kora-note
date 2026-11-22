@@ -18,29 +18,19 @@ func getSyncProviderConfigRulesContract(_ *gin.Context, request apicontract.Sync
 	if len(fields) == 0 {
 		return apicontract.Failure[apicontract.SyncProviderConfigRulesData](-1, "invalid sync provider")
 	}
-	return apicontract.Success(apicontract.SyncProviderConfigRulesData{
-		RequiredFields:        fields,
-		EndpointBucketWarning: request.Provider == conf.ProviderS3 && conf.S3EndpointIncludesBucketOrPath(request.Endpoint, request.Bucket),
-	})
-}
-
-var testSyncProviderS3 = contractHandler(apicontract.TestSyncProviderS3, testSyncProviderS3Contract)
-
-func testSyncProviderS3Contract(_ *gin.Context, request apicontract.TestSyncProviderS3Request) apicontract.Response[apicontract.TestSyncProviderS3Data] {
-	kind, msg := model.TestSyncProviderS3((*conf.S3)(&request.S3))
-	return apicontract.Success(apicontract.TestSyncProviderS3Data{Kind: kind, Msg: msg})
+	return apicontract.Success(apicontract.SyncProviderConfigRulesData{RequiredFields: fields})
 }
 
 var testSyncProviderWebDAV = contractHandler(apicontract.TestSyncProviderWebDAV, testSyncProviderWebDAVContract)
 
-func testSyncProviderWebDAVContract(_ *gin.Context, request apicontract.TestSyncProviderWebDAVRequest) apicontract.Response[apicontract.TestSyncProviderS3Data] {
+func testSyncProviderWebDAVContract(_ *gin.Context, request apicontract.TestSyncProviderWebDAVRequest) apicontract.Response[apicontract.TestSyncProviderData] {
 	kind, msg := model.TestSyncProviderWebDAV((*conf.WebDAV)(&request.WebDAV), request.CloudName)
-	return apicontract.Success(apicontract.TestSyncProviderS3Data{Kind: kind, Msg: msg})
+	return apicontract.Success(apicontract.TestSyncProviderData{Kind: kind, Msg: msg})
 }
 
 var testSyncProviderLocal = contractHandler(apicontract.TestSyncProviderLocal, testSyncProviderLocalContract)
 
-func testSyncProviderLocalContract(_ *gin.Context, request apicontract.TestSyncProviderLocalRequest) apicontract.Response[apicontract.TestSyncProviderS3Data] {
+func testSyncProviderLocalContract(_ *gin.Context, request apicontract.TestSyncProviderLocalRequest) apicontract.Response[apicontract.TestSyncProviderData] {
 	kind, msg := model.TestSyncProviderLocal((*conf.Local)(&request.Local))
-	return apicontract.Success(apicontract.TestSyncProviderS3Data{Kind: kind, Msg: msg})
+	return apicontract.Success(apicontract.TestSyncProviderData{Kind: kind, Msg: msg})
 }

@@ -13,7 +13,7 @@ import {getIconByType} from "../../editor/getIcon";
 import {enterBack, iframeMenu, tableMenu, videoMenu, zoomOut} from "../../menus/protyle";
 import {foldBlocksRecursively, foldHeadingGroup, setFold, toggleListFold} from "../util/blockFold";
 import {MenuItem} from "../../menus/Menu";
-import {copySubMenu, openAttr, openFileAttr, openWechatNotify} from "../../menus/commonMenuItem";
+import {copySubMenu, openAttr, openFileAttr} from "../../menus/commonMenuItem";
 import {
     copyPlainText,
     isDisabledFeature,
@@ -82,7 +82,6 @@ import {mathRender} from "../render/mathRender";
 import {duplicateBlock} from "../wysiwyg/commonHotkey";
 import {isEncryptedBox, movePathTo, useShell} from "../../util/pathName";
 import {hintMoveBlock} from "../hint/extend";
-import {makeCard, quickMakeCard} from "../../card/makeCard";
 import {transferBlockRef} from "../../menus/block";
 import {isMobile} from "../../util/functions";
 import {AIActions} from "../../ai/actions";
@@ -116,7 +115,6 @@ import {openMobileFileById} from "../../mobile/editor";
 /// #endif
 /// #if !MOBILE
 import {openFileById} from "../../editor/util";
-import {getDockByType} from "../../layout/tabUtil";
 import * as path from "path";
 /// #endif
 import {showMessage} from "../../dialog/message";
@@ -1420,17 +1418,6 @@ export class Gutter {
                     addEditorToDatabase(protyle, getEditorRange(selectsElement[0]));
                 }
             }).element);
-            // 加密笔记本和禁用人工智能的渠道不暴露该菜单：避免受保护内容外泄，并确保渠道包不提供智能体入口。
-            if (!isEncryptedBox(protyle.notebookId) && !isDisabledFeature("ai")) {
-                window.siyuan.menus.menu.append(new MenuItem({
-                    id: "addToAgent",
-                    icon: "iconSend",
-                    label: window.siyuan.languages.addToAgent,
-                    click: () => {
-                        addBlockToAgent(Array.from(selectsElement).map(item => item.getAttribute("data-node-id")));
-                    }
-                }).element);
-            }
             window.siyuan.menus.menu.append(new MenuItem({
                 id: "delete",
                 label: window.siyuan.languages.delete,
@@ -1476,39 +1463,6 @@ export class Gutter {
             this.genWidths(selectsElement, protyle);
             this.genHeights(selectsElement, protyle);
         }
-        if (!window.siyuan.config.readonly && !isEncryptedBox(protyle.notebookId)) {
-            window.siyuan.menus.menu.append(new MenuItem({
-                id: "separator_quickMakeCard",
-                type: "separator"
-            }).element);
-            const allCardsMade = !selectsElement.some(item => !(item.getAttribute(Constants.CUSTOM_RIFF_DECKS) || "").includes(Constants.QUICK_DECK_ID) && item.getAttribute("data-type") !== "NodeThematicBreak");
-            window.siyuan.menus.menu.append(new MenuItem({
-                id: allCardsMade ? "removeCard" : "quickMakeCard",
-                label: allCardsMade ? window.siyuan.languages.removeCard : window.siyuan.languages.quickMakeCard,
-                accelerator: window.siyuan.config.keymap.editor.general.quickMakeCard.custom,
-                icon: "iconRiffCard",
-                click() {
-                    quickMakeCard(protyle, selectsElement);
-                }
-            }).element);
-            window.siyuan.menus.menu.append(new MenuItem({
-                id: "addToDeck",
-                label: window.siyuan.languages.addToDeck,
-                icon: "iconRiffCard",
-                ignore: !window.siyuan.config.flashcard.deck,
-                click() {
-                    const ids: string[] = [];
-                    selectsElement.forEach(item => {
-                        if (item.getAttribute("data-type") === "NodeThematicBreak") {
-                            return;
-                        }
-                        ids.push(item.getAttribute("data-node-id"));
-                    });
-                    makeCard(protyle.app, ids);
-                }
-            }).element);
-        }
-
         if (protyle) {
             emitOpenMenu({
                 type: "click-blockicon",
@@ -2076,19 +2030,6 @@ export class Gutter {
             }).element);
         }
         this.appendAddToDatabaseMenu(protyle, nodeElement);
-        if (!protyle.disabled) {
-            // 加密笔记本和禁用人工智能的渠道不暴露该菜单：避免受保护内容外泄，并确保渠道包不提供智能体入口。
-            if (!isEncryptedBox(protyle.notebookId) && !isDisabledFeature("ai")) {
-                window.siyuan.menus.menu.append(new MenuItem({
-                    id: "addToAgent",
-                    icon: "iconSend",
-                    label: window.siyuan.languages.addToAgent,
-                    click: () => {
-                        addBlockToAgent([nodeElement.getAttribute("data-node-id")]);
-                    }
-                }).element);
-            }
-        }
         if (allowRemoval) {
             window.siyuan.menus.menu.append(new MenuItem({
                 id: "delete",
@@ -2971,42 +2912,6 @@ export class Gutter {
         }
         if (type !== "NodeThematicBreak" || !protyle.disabled) {
             window.siyuan.menus.menu.append(new MenuItem({id: "separator_4", type: "separator"}).element);
-        }
-        if (window.siyuan.config.cloudRegion === 0 &&
-            !["NodeThematicBreak", "NodeBlockQueryEmbed", "NodeIFrame", "NodeHTMLBlock", "NodeWidget", "NodeVideo", "NodeAudio", "NodeCustomBlock"].includes(type) &&
-            getContenteditableElement(nodeElement)?.textContent.trim() !== "" &&
-            (type !== "NodeCodeBlock" || (type === "NodeCodeBlock" && !nodeElement.getAttribute("data-subtype")))) {
-            window.siyuan.menus.menu.append(new MenuItem({
-                id: "wechatReminder",
-                icon: "iconMp",
-                label: window.siyuan.languages.wechatReminder,
-                ignore: window.siyuan.config.readonly,
-                click() {
-                    openWechatNotify(nodeElement);
-                }
-            }).element);
-        }
-        if (type !== "NodeThematicBreak" && !window.siyuan.config.readonly && !isEncryptedBox(protyle.notebookId)) {
-            const isCardMade = (nodeElement.getAttribute(Constants.CUSTOM_RIFF_DECKS) || "").includes(Constants.QUICK_DECK_ID);
-            window.siyuan.menus.menu.append(new MenuItem({
-                id: isCardMade ? "removeCard" : "quickMakeCard",
-                icon: "iconRiffCard",
-                label: isCardMade ? window.siyuan.languages.removeCard : window.siyuan.languages.quickMakeCard,
-                accelerator: window.siyuan.config.keymap.editor.general.quickMakeCard.custom,
-                click() {
-                    quickMakeCard(protyle, [nodeElement]);
-                }
-            }).element);
-            window.siyuan.menus.menu.append(new MenuItem({
-                id: "addToDeck",
-                label: window.siyuan.languages.addToDeck,
-                ignore: !window.siyuan.config.flashcard.deck,
-                icon: "iconRiffCard",
-                click() {
-                    makeCard(protyle.app, [id]);
-                }
-            }).element);
-            window.siyuan.menus.menu.append(new MenuItem({id: "separator_5", type: "separator"}).element);
         }
 
         if (!isEmbedMenu && protyle) {
@@ -4116,57 +4021,3 @@ data-type="fold"${viewOccurrenceID ? ` data-view-occurrence-id="${encodeURICompo
             Math.max(viewportRect.left, paneRect.left) - gutterRect.left}px)`;
     }
 }
-
-// 仅声明调用所需的最小接口，避免在 gutter 中 import AgentChat 类而引入
-// gutter → AgentChat → platformUtils → compatibility → gutter 的循环依赖（TDZ）。
-interface AgentChatLike {
-    insertBlockMentions: (mentions: Array<{ id: string; label: string }>) => void;
-}
-
-// 将选中的块以区块引用形式追加到智能体会话发送框末尾，等价于拖拽块到发送框或在框内搜索选块。
-export const addBlockToAgent = async (blockIds: string[]) => {
-    const ids = blockIds.filter(Boolean);
-    if (ids.length === 0) {
-        return;
-    }
-    // 用 getRefText API 并行获取每个块的引用文本作为 label（与输入框搜索、拖拽一致），失败时回退到 blockId。
-    // Promise.all 按输入顺序返回结果，确保多选块的引用顺序稳定。
-    const mentions = await Promise.all(ids.map(async (id) => {
-        let label = id;
-        try {
-            const resp = await fetchSyncPost("/api/block/getRefText", {id});
-            if (resp.code === 0 && resp.data) {
-                label = resp.data;
-            }
-        } catch {
-            label = id;
-        }
-        return {id, label};
-    }));
-    /// #if MOBILE
-    const {insertMobileAgentMentions} = await import("../../mobile/agent/MobileAgentChat");
-    insertMobileAgentMentions(window.siyuan.ws.app, mentions);
-    /// #else
-    const dock = getDockByType("agentChat");
-    if (!dock) {
-        return;
-    }
-    // 智能体面板首次打开前 dock.data.agentChat 是占位值（非 AgentChat 实例）。
-    const isReady = (m: unknown): m is AgentChatLike =>
-        !!m && typeof (m as AgentChatLike).insertBlockMentions === "function";
-    let agentChat = dock.data.agentChat;
-    // 实例未就绪（面板从未打开）或面板被折叠时，先 toggleModel 打开/展开：
-    // show=true 既会同步 new AgentChat() 构造常驻实例，也会把折叠的面板重新展开。
-    const dockItem = document.querySelector(".dock__item[data-type=\"agentChat\"]");
-    const isCollapsed = !dockItem || !dockItem.classList.contains("dock__item--active");
-    if (!isReady(agentChat) || isCollapsed) {
-        dock.toggleModel("agentChat", true);
-        agentChat = dock.data.agentChat;
-    }
-    if (!isReady(agentChat)) {
-        // 极端情况下实例仍未就绪，放弃插入避免报错。
-        return;
-    }
-    agentChat.insertBlockMentions(mentions);
-    /// #endif
-};

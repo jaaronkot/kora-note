@@ -41,7 +41,7 @@ func TestMarkdownArchiveIncludesImagesAfterLiteralFence(t *testing.T) {
 	writeAssetDownloadDocumentTest(t, source)
 	sql.IndexTreeQueue(source)
 	sql.FlushQueue()
-	_, zipPath := ExportPandocConvertZipWithOptions([]string{source.ID}, "", ".md", &ExportOptions{})
+	_, zipPath := ExportArchiveZipWithOptions([]string{source.ID}, ".md", &ExportOptions{})
 	archive := openExportArchive(t, zipPath)
 	defer archive.Close()
 	for _, asset := range assets {

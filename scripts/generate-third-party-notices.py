@@ -74,27 +74,6 @@ BUNDLED_COMPONENTS = [
         "Desktop runtime; Electron also ships LICENSES.chromium.html for Chromium and its dependencies",
     ),
     (
-        "ONNX Runtime",
-        "1.24.3 (Windows, Linux, Apple Silicon, Android, HarmonyOS), 1.23.2 (Intel macOS), 1.24.2 (iOS)",
-        "MIT",
-        "https://github.com/microsoft/onnxruntime",
-        "Native CPU OCR runtime; license and dependency notices in app/stage/ocr/ONNXRUNTIME-LICENSE and ONNXRUNTIME-THIRD-PARTY-NOTICES.txt; desktop libraries also include their corresponding notices",
-    ),
-    (
-        "Microsoft Visual C++ Runtime",
-        "14.x from the release builder's licensed Visual Studio redist",
-        "Microsoft Visual Studio Software License Terms",
-        "https://learn.microsoft.com/en-us/visualstudio/releases/2022/redistribution#visual-c-runtime-files",
-        "Windows OCR runtime directories include unmodified app-local CRT DLLs, MICROSOFT-VC-RUNTIME-NOTICE.txt, and vc-runtime-files.json with the exact file digests",
-    ),
-    (
-        "PaddleOCR PP-OCRv6 Tiny ONNX models",
-        "Pinned revisions in scripts/ocr-assets.json",
-        "Apache-2.0",
-        "https://huggingface.co/collections/PaddlePaddle/pp-ocrv6",
-        "app/stage/ocr/models/; license text in app/stage/ocr/PADDLEOCR-LICENSE",
-    ),
-    (
         "DOMPurify",
         "3.3.3",
         "Apache-2.0 OR MPL-2.0",
@@ -438,13 +417,6 @@ BUNDLED_COMPONENTS = [
         "app/stage/protyle/js/lute/lute.min.js",
     ),
     (
-        "Pandoc",
-        "3.5",
-        "GPL-2.0-or-later",
-        "https://github.com/jgm/pandoc",
-        "app/pandoc/*.zip",
-    ),
-    (
         "SQLite",
         "3.53.1 amalgamation",
         "Public Domain",
@@ -731,18 +703,6 @@ def collect_retained_comments():
                 comments.append(normalized)
         if comments:
             notices.append((path.relative_to(REPO_ROOT).as_posix(), "\n\n".join(comments)))
-    return notices
-
-
-def collect_pandoc_notices():
-    archive = APP_ROOT / "pandoc" / "pandoc-windows-amd64.zip"
-    with zipfile.ZipFile(archive) as pandoc_zip:
-        names = set(pandoc_zip.namelist())
-        notices = []
-        for name in ("COPYING.rtf", "COPYRIGHT.txt"):
-            if name not in names:
-                raise RuntimeError(f"{archive} does not contain {name}")
-            notices.append((f"{archive.relative_to(REPO_ROOT).as_posix()}!/{name}", pandoc_zip.read(name).decode("utf-8")))
     return notices
 
 
@@ -1063,10 +1023,6 @@ def render_notices(runtime_packages, go_modules):
             lines.extend(code_block(content))
             lines.append("")
     for local_path, content in collect_local_notices():
-        lines.extend([f"### {local_path}", ""])
-        lines.extend(code_block(content))
-        lines.append("")
-    for local_path, content in collect_pandoc_notices():
         lines.extend([f"### {local_path}", ""])
         lines.extend(code_block(content))
         lines.append("")

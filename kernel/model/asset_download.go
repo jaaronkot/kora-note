@@ -35,18 +35,8 @@ func assetDownloadStateExists() (bool, error) {
 
 // assetDownloadScope 只绑定资源来源，不将令牌、超时或并发等连接选项作为仓库身份。
 func assetDownloadScope(provider int, c *cloud.Conf, key []byte) string {
-	dir := c.Dir
-	if provider == conf.ProviderS3 {
-		dir = ""
-	}
-	identity := []string{fmt.Sprint(provider), dir, fmt.Sprintf("%x", sha256.Sum256(key))}
+	identity := []string{fmt.Sprint(provider), c.Dir, fmt.Sprintf("%x", sha256.Sum256(key))}
 	switch provider {
-	case conf.ProviderSiYuan:
-		identity = append(identity, c.Server, c.UserID)
-	case conf.ProviderS3:
-		if c.S3 != nil {
-			identity = append(identity, c.S3.Endpoint, c.S3.Bucket)
-		}
 	case conf.ProviderWebDAV:
 		if c.WebDAV != nil {
 			identity = append(identity, c.WebDAV.Endpoint, c.WebDAV.Username)
@@ -99,18 +89,8 @@ func validateAssetDownloadSourceScope(scope string) error {
 func checkAssetDownloadAccess() error {
 	confSyncSnapshot := Conf.LoadSync()
 
-	if confSyncSnapshot == nil || !confSyncSnapshot.Enabled || Conf.GetUser() == nil {
+	if confSyncSnapshot == nil || !confSyncSnapshot.Enabled {
 		return errors.New(Conf.Language(376))
-	}
-	switch confSyncSnapshot.Provider {
-	case conf.ProviderSiYuan:
-		if !IsSubscriber() {
-			return errors.New(Conf.Language(376))
-		}
-	case conf.ProviderS3, conf.ProviderWebDAV, conf.ProviderLocal:
-		if !IsPaidUser() {
-			return errors.New(Conf.Language(376))
-		}
 	}
 	return nil
 }
@@ -158,9 +138,7 @@ func EnsureAssetLocal(absPath string) error {
 				return repoErr
 			}
 			var downloaded bool
-			handleCloudError := cloudRepoErrorHandler()
 			if downloaded, err = repo.EnsureAsset(rel, newSyncContext()); err != nil {
-				handleCloudError(err)
 				return fmt.Errorf("%s: %w", Conf.Language(376), err)
 			}
 			if downloaded {
@@ -215,9 +193,7 @@ func EnsureAssetPrefixLocal(absPrefix string) error {
 			}
 		}
 		var downloaded bool
-		handleCloudError := cloudRepoErrorHandler()
 		if downloaded, err = repo.EnsureAsset(file.Path, newSyncContext()); err != nil {
-			handleCloudError(err)
 			return fmt.Errorf("%s: %w", Conf.Language(376), err)
 		}
 		if downloaded {
@@ -251,9 +227,7 @@ func ensureAllSyncAssets() error {
 	if err != nil {
 		return err
 	}
-	handleCloudError := cloudRepoErrorHandler()
 	if err = repo.EnsureAllAssets(newSyncContext()); err != nil {
-		handleCloudError(err)
 		return fmt.Errorf("%s: %w", Conf.Language(376), err)
 	}
 	return nil
@@ -339,9 +313,7 @@ func ensureCompleteSyncAssets(onIncomplete func()) error {
 	if err = checkAssetDownloadAccess(); err != nil {
 		return err
 	}
-	handleCloudError := cloudRepoErrorHandler()
 	if err = repo.EnsureAllSnapshotChunks(newSyncContext()); err != nil {
-		handleCloudError(err)
 		if onIncomplete != nil {
 			logIncompleteSyncSnapshot(repo)
 		}
@@ -418,9 +390,7 @@ func openRepoFileWithAssets(repo *dejavu.Repo, file *entity.File) ([]byte, error
 	if err = checkAssetDownloadAccess(); err != nil {
 		return nil, err
 	}
-	handleCloudError := cloudRepoErrorHandler()
 	if err = repo.EnsureFileChunks(file, newSyncContext()); err != nil {
-		handleCloudError(err)
 		return nil, fmt.Errorf("%s: %w", Conf.Language(376), err)
 	}
 	return repo.OpenFile(file)
@@ -462,9 +432,7 @@ func ensureRepoSnapshotComplete(repo *dejavu.Repo, indexID string) error {
 		if err := checkAssetDownloadAccess(); err != nil {
 			return err
 		}
-		handleCloudError := cloudRepoErrorHandler()
 		err := repo.EnsureFileChunks(file, newSyncContext())
-		handleCloudError(err)
 		return err
 	})
 }

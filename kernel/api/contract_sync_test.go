@@ -31,7 +31,6 @@ func syncTestConfiguration(t *testing.T) {
 	previous, previousReadonly, previousTemp := model.Conf, util.ReadOnly, util.TempDir
 	model.Conf = model.NewAppConf()
 	model.Conf.Sync.Store(conf.NewSync())
-	model.Conf.Sync.Load().S3 = &conf.S3{}
 	model.Conf.Sync.Load().WebDAV = &conf.WebDAV{}
 	util.ReadOnly = true
 	util.TempDir = t.TempDir()
@@ -73,9 +72,9 @@ func TestAPIContractSyncProviderConfigCompatibility(t *testing.T) {
 			t.Fatal(err)
 		}
 		encoded, _ := gulu.JSON.MarshalJSON(object)
-		expected := &conf.S3{}
+		expected := &conf.WebDAV{}
 		expectedErr := gulu.JSON.UnmarshalJSON(encoded, expected)
-		request, err := apicontract.SetSyncProviderS3.Decode(strings.NewReader(`{"s3":` + raw + `}`))
+		request, err := apicontract.SetSyncProviderWebDAV.Decode(strings.NewReader(`{"webdav":` + raw + `}`))
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -83,8 +82,8 @@ func TestAPIContractSyncProviderConfigCompatibility(t *testing.T) {
 			if request.ConfigError() == nil || request.ConfigError().Error() != expectedErr.Error() {
 				t.Fatalf("config error changed: %v != %v", request.ConfigError(), expectedErr)
 			}
-		} else if request.ConfigError() != nil || !reflect.DeepEqual((*conf.S3)(&request.S3), expected) {
-			t.Fatalf("config changed: %+v != %+v (%v)", request.S3, expected, request.ConfigError())
+		} else if request.ConfigError() != nil || !reflect.DeepEqual((*conf.WebDAV)(&request.WebDAV), expected) {
+			t.Fatalf("config changed: %+v != %+v (%v)", request.WebDAV, expected, request.ConfigError())
 		}
 	}
 }
@@ -96,8 +95,8 @@ func TestAPIContractSyncHTTPResponses(t *testing.T) {
 	for path, handler := range map[string]gin.HandlerFunc{
 		"getBootSync": getBootSync, "getSyncInfo": getSyncInfo, "getSyncLANStatus": getSyncLANStatus,
 		"performSync": performSync, "setSyncMode": setSyncMode, "setSyncInterval": setSyncInterval,
-		"setSyncAssetDownloadMode": setSyncAssetDownloadMode, "setSyncProviderS3": setSyncProviderS3,
-		"setSyncProviderWebDAV": setSyncProviderWebDAV, "setSyncProviderLocal": setSyncProviderLocal,
+		"setSyncAssetDownloadMode": setSyncAssetDownloadMode,
+		"setSyncProviderWebDAV":    setSyncProviderWebDAV, "setSyncProviderLocal": setSyncProviderLocal,
 		"setSyncProvider": setSyncProvider,
 	} {
 		engine.POST("/api/sync/"+path, handler)
@@ -116,15 +115,11 @@ func TestAPIContractSyncHTTPResponses(t *testing.T) {
 		{"setSyncProvider", `{"provider":0.9}`, 0, 0},
 		{"setSyncProvider", `{"provider":0,"completeAssets":true}`, 0, 0},
 		{"setSyncProvider", `{"provider":2,"completeAssets":"true"}`, -1, 0},
-		{"setSyncProviderS3", `{"s3":null}`, -1, 0},
-		{"setSyncProviderS3", `{"s3":{"timeout":1.5}}`, -1, 5000},
 		{"setSyncProviderWebDAV", `{"webdav":{"username":false}}`, -1, 5000},
 		{"setSyncProviderWebDAV", `{"webdav":{"endpoint":" "}}`, -1, 5000},
 		{"setSyncProviderWebDAV", `{"webdav":{"endpoint":"ftp://example.com"}}`, -1, 5000},
 		{"setSyncProviderLocal", `{"local":{"endpoint":" "}}`, -1, 5000},
 		{"setSyncProviderLocal", `{"local":{"timeout":1.5}}`, -1, 5000},
-		{"setSyncProviderS3", `{"s3":{"bucket":"","endpoint":" example "}}`, -1, 5000},
-		{"setSyncProviderS3", `{"s3":{"bucket":"notes","endpoint":" example ","accessKey":"key","secretKey":"secret","region":"auto"}}`, 0, 0},
 		{"setSyncProviderWebDAV", `{"webdav":{"endpoint":" example ","username":" user "}}`, 0, 0},
 		{"setSyncProviderWebDAV", `{"webdav":{"endpoint":"https://example.com","username":"","password":""}}`, 0, 0},
 	} {
@@ -179,7 +174,6 @@ func TestAPIContractSyncBootRole(t *testing.T) {
 func TestAPIContractSyncPermissionBeforeBody(t *testing.T) {
 	syncTestConfiguration(t)
 	for path, handler := range map[string]gin.HandlerFunc{
-		"/api/sync/setSyncProviderS3":       setSyncProviderS3,
 		"/api/sync/clearSyncProviderConfig": clearSyncProviderConfig,
 		"/api/sync/setSyncProvider":         setSyncProvider,
 		"/api/sync/getSyncSourceState":      getSyncSourceState,
@@ -217,7 +211,7 @@ func TestAPIContractSyncProviderMultipart(t *testing.T) {
 	for _, entry := range []struct {
 		name    string
 		handler gin.HandlerFunc
-	}{{"importSyncProviderS3", importSyncProviderS3}, {"importSyncProviderWebDAV", importSyncProviderWebDAV}} {
+	}{{"importSyncProviderWebDAV", importSyncProviderWebDAV}} {
 		engine := gin.New()
 		path := "/api/sync/" + entry.name
 		engine.POST(path, entry.handler)
@@ -258,14 +252,12 @@ func TestAPIContractSyncProviderMultipart(t *testing.T) {
 
 func TestAPIContractSyncProviderExportContents(t *testing.T) {
 	syncTestConfiguration(t)
-	model.Conf.Sync.Load().S3 = &conf.S3{Endpoint: " endpoint ", AccessKey: "key", SecretKey: " secret ", Bucket: "bucket", Region: "auto", Timeout: 35}
 	model.Conf.Sync.Load().WebDAV = &conf.WebDAV{Endpoint: " endpoint ", Password: " password ", Timeout: 36}
 	for _, entry := range []struct {
 		name     string
 		handler  gin.HandlerFunc
 		expected func() []byte
 	}{
-		{"exportSyncProviderS3", exportSyncProviderS3, func() []byte { return syncMarshal(t, model.Conf.Sync.Load().S3) }},
 		{"exportSyncProviderWebDAV", exportSyncProviderWebDAV, func() []byte { return syncMarshal(t, model.Conf.Sync.Load().WebDAV) }},
 	} {
 		expected := entry.expected()
@@ -310,10 +302,7 @@ func TestAPIContractSyncProviderExportContents(t *testing.T) {
 			t.Fatal(err)
 		}
 		importPath := strings.Replace(path, "exportSyncProvider", "importSyncProvider", 1)
-		importHandler := importSyncProviderS3
-		if entry.name == "exportSyncProviderWebDAV" {
-			importHandler = importSyncProviderWebDAV
-		}
+		importHandler := importSyncProviderWebDAV
 		engine.POST(importPath, importHandler)
 		for _, file := range []struct {
 			name    string

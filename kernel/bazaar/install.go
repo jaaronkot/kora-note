@@ -24,7 +24,6 @@ import (
 	"golang.org/x/sync/semaphore"
 )
 
-var bazaarDownloadCloudServer = util.GetCloudServer
 var packageInstallLock = semaphore.NewWeighted(1)
 
 // downloadBazaarPackageContext 下载仓库最新 Release 中的 package.zip，每次安装独立下载，避免取消一个请求影响其他安装。
@@ -116,21 +115,6 @@ func downloadBazaarFile(repoURLHash, filePath string) (data []byte, err error) {
 	return data, nil
 }
 
-// incPackageDownloads 增加集市包下载次数
-func incPackageDownloads(repoURL, packageName, systemID string) {
-	if "" == systemID {
-		return
-	}
-	repo := strings.TrimPrefix(repoURL, "https://github.com/")
-	u := bazaarDownloadCloudServer() + "/apis/siyuan/bazaar/addBazaarPackageDownloadCount"
-	httpclient.NewCloudRequest30s().SetBody(
-		map[string]any{
-			"systemID":    systemID,
-			"repo":        repo,
-			"packageName": packageName,
-		}).Post(u)
-}
-
 // InstallPackageWithOptions 将在线包替换也纳入目标版本校验。
 func InstallPackageWithOptions(repoURL, repoHash, repoRef, installPath, systemID, pkgType, packageName string, update bool, options PackageInstallOptions) (*PackageInstallResult, error) {
 	if err := options.check(); err != nil {
@@ -170,7 +154,6 @@ func InstallPackageWithOptions(repoURL, repoHash, repoRef, installPath, systemID
 		logging.LogWarnf("set package [%s] folder mtime failed: %s", packageName, err)
 	}
 
-	go incPackageDownloads(repoURL, packageName, systemID)
 	return result, nil
 }
 

@@ -18,12 +18,9 @@ func TestExportRequiredFieldCompatibility(t *testing.T) {
 			t.Fatalf("field error changed: %s: %v", entry.body, err)
 		}
 	}
-	request, err := ExportDocx.Decode(strings.NewReader(`{"id":" id ","savePath":" path ","removeAssets":false,"merge":null,"mergeDocHeadingMode":" untouched "}`))
-	if err != nil || request.ID != "id" || request.SavePath != "path" || request.Merge || request.MergeDocHeadingMode != " untouched " {
-		t.Fatalf("docx normalization changed: %+v %v", request, err)
-	}
-	if _, err := ExportDocx.Decode(strings.NewReader(`{"id":"id","savePath":"path","removeAssets":null}`)); err == nil || err.Error() != "Field [removeAssets] is required" {
-		t.Fatal(err)
+	request, err := ExportNotebookSY.Decode(strings.NewReader(`{"id":" id "}`))
+	if err != nil || request.ID != "id" {
+		t.Fatalf("normalization changed: %+v %v", request, err)
 	}
 }
 

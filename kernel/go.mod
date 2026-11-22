@@ -49,7 +49,6 @@ require (
 	github.com/jaypipes/ghw v0.25.0
 	github.com/jinzhu/copier v0.4.0
 	github.com/json-iterator/go v1.1.12
-	github.com/kballard/go-shellquote v0.0.0-20180428030007-95032a82bc51
 	github.com/klauspost/compress v1.19.2
 	github.com/klippa-app/go-pdfium v1.19.8
 	github.com/lxzan/gws v1.10.1
@@ -68,7 +67,7 @@ require (
 	github.com/pkoukk/tiktoken-go-loader v0.0.2
 	github.com/r3labs/sse/v2 v2.10.0
 	github.com/radovskyb/watcher v1.0.7
-	github.com/richardlehane/mscfb v1.0.7
+	github.com/richardlehane/mscfb v1.0.7 // indirect
 	github.com/rqlite/sql v0.0.0-20260224021119-1b2524a41372
 	github.com/sabhiram/go-gitignore v0.0.0-20210923224102-525f6e181f06
 	github.com/samber/lo v1.53.0
@@ -128,32 +127,12 @@ require (
 require (
 	dario.cat/mergo v1.0.2 // indirect
 	dmitri.shuralyov.com/font/woff2 v0.0.0-20180220214647-957792cbbdab // indirect
-	github.com/BurntSushi/toml v1.6.0 // indirect
 	github.com/JalfResi/justext v0.0.0-20221106200834-be571e3e3052 // indirect
 	github.com/Masterminds/goutils v1.1.1 // indirect
 	github.com/Masterminds/semver/v3 v3.5.0 // indirect
 	github.com/advancedlogic/GoOse v0.0.0-20231203033844-ae6b36caf275 // indirect
-	github.com/alex-ant/gomath v0.0.0-20160516115720-89013a210a82 // indirect
 	github.com/andybalholm/brotli v1.2.3 // indirect
 	github.com/andybalholm/cascadia v1.3.4 // indirect
-	github.com/aws/aws-sdk-go-v2 v1.43.5 // indirect
-	github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.7.17 // indirect
-	github.com/aws/aws-sdk-go-v2/config v1.32.36 // indirect
-	github.com/aws/aws-sdk-go-v2/credentials v1.19.35 // indirect
-	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.18.36 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/configsources v1.4.36 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.7.36 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/v4a v1.4.37 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.13.16 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/checksum v1.9.29 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.13.36 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.19.37 // indirect
-	github.com/aws/aws-sdk-go-v2/service/s3 v1.107.1 // indirect
-	github.com/aws/aws-sdk-go-v2/service/signin v1.5.5 // indirect
-	github.com/aws/aws-sdk-go-v2/service/sso v1.33.5 // indirect
-	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.38.5 // indirect
-	github.com/aws/aws-sdk-go-v2/service/sts v1.45.5 // indirect
-	github.com/aws/smithy-go v1.27.7
 	github.com/aymerick/douceur v0.2.0 // indirect
 	github.com/bytedance/gopkg v0.1.4 // indirect
 	github.com/bytedance/sonic v1.15.2 // indirect
@@ -211,7 +190,6 @@ require (
 	github.com/pelletier/go-toml/v2 v2.4.3
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/power-devops/perfstat v0.0.0-20260805114148-88456608a4f6 // indirect
-	github.com/qiniu/go-sdk/v7 v7.27.0 // indirect
 	github.com/quic-go/qpack v0.6.0 // indirect
 	github.com/quic-go/quic-go v0.61.0 // indirect
 	github.com/refraction-networking/utls v1.8.2 // indirect
@@ -242,12 +220,13 @@ require (
 	google.golang.org/protobuf v1.36.12
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	howett.net/plist v1.0.2-0.20250314012144-ee69052608d9 // indirect
-	modernc.org/fileutil v1.4.0 // indirect
 )
 
 replace github.com/mattn/go-sqlite3 => github.com/88250/go-sqlite3 v1.14.13-0.20261023044249-ae36e402e11a
 
 replace github.com/pdfcpu/pdfcpu => github.com/88250/pdfcpu v0.3.14-0.20250424122812-f10e8d9d8d46
+
+replace github.com/siyuan-note/dejavu => ./dejavu
 
 //replace github.com/88250/lute => F:\golang\gopath\src\github.com\88250\lute
 //replace github.com/siyuan-note/dejavu => D:\88250\dejavu

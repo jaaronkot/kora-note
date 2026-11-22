@@ -1,5 +1,5 @@
 import {Constants} from "../../constants";
-import {isDisabledFeature, setStorageVal} from "../../protyle/util/compatibility";
+import {setStorageVal} from "../../protyle/util/compatibility";
 import {escapeAttr, escapeHtml} from "../../util/escape";
 import {
     getMobilePluginDockEntries,
@@ -33,10 +33,6 @@ const getBuiltInDockLabel = (dockId: MobileSidePanelBuiltInDockId) => {
             return window.siyuan.languages.tag;
         case "backlink":
             return window.siyuan.languages.backlinks;
-        case "inbox":
-            return window.siyuan.languages.inbox;
-        case "agent":
-            return window.siyuan.languages.agentChat;
     }
 };
 
@@ -52,10 +48,6 @@ const getBuiltInDockIcon = (dockId: MobileSidePanelBuiltInDockId) => {
             return "iconTag";
         case "backlink":
             return "iconLink";
-        case "inbox":
-            return "iconInbox";
-        case "agent":
-            return "iconSparkles";
     }
 };
 
@@ -93,8 +85,7 @@ const getVisibleDockIds = (
     config: IMobileSidePanelConfig,
     side: MobileSidePanelSide,
     pluginEntriesById: ReadonlyMap<string, IMobilePluginDockEntry>,
-) => config[side].filter(id => (id !== "agent" || !isDisabledFeature("ai")) &&
-    (isMobileSidePanelBuiltInDockId(id) || pluginEntriesById.has(id)));
+) => config[side].filter(id => isMobileSidePanelBuiltInDockId(id) || pluginEntriesById.has(id));
 
 const genDockItemHtml = (
     dockId: MobileSidePanelDockId,

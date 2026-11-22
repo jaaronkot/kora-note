@@ -134,7 +134,6 @@ export const createMainMenuSearch = (app: App, menuElement: HTMLElement): IMainM
     };
 
     const showSearchResult = (keywords: string, tabId: TSettingTab, result: SettingTabSearchResult) => {
-        groupsElement.classList.toggle("mobile-main-menu__groups--bazaar", tabId === "bazaar");
         menuElement.querySelectorAll<HTMLElement>(".mobile-setting-menu__result").forEach((item) => {
             if (item.dataset.name !== tabId) {
                 if (item.childElementCount > 0 || !item.classList.contains("fn__none")) {
@@ -158,7 +157,6 @@ export const createMainMenuSearch = (app: App, menuElement: HTMLElement): IMainM
         if (!keywords || matches.size === 0) {
             selectedTabId = undefined;
             searchMountQueue.invalidate();
-            groupsElement.classList.remove("mobile-main-menu__groups--bazaar");
             clearSettingTabResults(menuElement);
             return;
         }
@@ -182,7 +180,6 @@ export const createMainMenuSearch = (app: App, menuElement: HTMLElement): IMainM
         searchMountQueue.invalidate();
         searchElement.value = "";
         setSearchVisible(false);
-        groupsElement.classList.remove("mobile-main-menu__groups--bazaar");
         clearSettingTabResults(menuElement);
         filterMainMenu(menuElement, "");
         groupsElement.scrollTop = 0;

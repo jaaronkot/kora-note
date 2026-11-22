@@ -26,7 +26,7 @@ func TestConfAllSectionsShareStartupAndWriteNormalization(t *testing.T) {
 		"appearance":{"closeButtonBehavior":5},"sync":{"interval":1,"assetDownloadMode":7},
 		"system":{"autoLaunch2":9,"lockScreenMode":3},"flashcard":{"reviewMode":7},
 		"search":{"limit":1000000},"fileTree":{"maxListCount":1000000,"largeFileWarningSize":1000000},
-		"repo":{"indexRetentionDays":100000},"ocr":{"provider":"tesseract","model":"tiny"},
+		"repo":{"indexRetentionDays":100000},
 		"ai":{"agent":{"maxToolCallRounds":-7,"confirmTimeout":-9,"temperature":-3,"maxCompletionTokens":-2}}
 	}`)
 	startup := NewAppConf()

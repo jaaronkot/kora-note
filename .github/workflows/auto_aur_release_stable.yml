@@ -71,7 +71,6 @@ jobs:
           license=("AGPL-3.0-or-later")
           options=("!strip" "!debug")
           depends=("fuse2")
-          optdepends=('pandoc: docx export')
           source=("https://github.com/siyuan-note/siyuan/releases/download/v\${pkgver}/siyuan-\${pkgver}-linux.AppImage")
           sha256sums=('SKIP')
 

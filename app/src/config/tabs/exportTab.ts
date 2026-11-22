@@ -1,12 +1,4 @@
-import {escapeHtmlTextAndAttr} from "../../util/escape";
-/// #if !BROWSER
-import {ipcRenderer} from "electron";
-import {useShell} from "../../util/pathName";
-/// #endif
 import type {SettingTabBuilder} from "../setting/builder";
-import {Constants} from "../../constants";
-import {exportConfigApi} from "./exportRuntime";
-import {fetchPost} from "../../util/fetch";
 
 const registerExportReferencesGroup = (tab: SettingTabBuilder) => {
     const group = tab.group("references", window.siyuan.languages.configGroupReferences);
@@ -138,78 +130,9 @@ const registerExportImagesGroup = (tab: SettingTabBuilder) => {
     });
 };
 
-/// #if !BROWSER
-const registerExportPandocGroup = (tab: SettingTabBuilder) => {
-    const group = tab.group("pandoc", window.siyuan.languages.configGroupPandoc);
-
-    group.stack({
-        key: "pandocBin",
-        keywords: [
-            window.siyuan.languages.export19,
-            window.siyuan.languages.export20,
-            window.siyuan.languages.reset,
-            window.siyuan.languages.config,
-        ],
-        afterMount: mountExportPandocStack,
-    }, (stack) => {
-        const pandocBinLabel = window.siyuan.config.export.pandocBin ?
-            escapeHtmlTextAndAttr(window.siyuan.config.export.pandocBin) : `${window.siyuan.languages.builtIn} Pandoc`;
-        stack.title(`${window.siyuan.languages.export19}<span class="fn__space"></span><a href="javascript:void(0)" id="pandocBinPathDisplay" style="word-break: break-all">${pandocBinLabel}</a>`);
-        stack.button({
-            id: "pandocBinReset",
-            label: window.siyuan.languages.reset,
-            icon: "iconUndo",
-        });
-        stack.desc(window.siyuan.languages.export20);
-        stack.button({
-            id: "pandocBinChooser",
-            label: window.siyuan.languages.config,
-            icon: "iconSettings",
-        });
-    });
-    group.textBlock("export.pandocParams", {
-        spellcheck: false,
-        title: window.siyuan.languages.export25,
-        desc: window.siyuan.languages.export26,
-        mode: "textarea",
-    });
-};
-
-const mountExportPandocStack = (root: HTMLElement) => {
-    root.querySelector("#pandocBinReset")?.addEventListener("click", () => {
-        exportConfigApi.patch("export.pandocBin", "");
-    });
-    root.querySelector("#pandocBinPathDisplay")?.addEventListener("click", () => {
-        if (window.siyuan.config.export.pandocBin) {
-            useShell("showItemInFolder", window.siyuan.config.export.pandocBin);
-            return;
-        }
-        fetchPost("/api/setting/getPandocBin", {}, (response) => {
-            if (response.data) {
-                useShell("showItemInFolder", response.data);
-            }
-        });
-    });
-    root.querySelector("#pandocBinChooser")?.addEventListener("click", async () => {
-        const localPath = await ipcRenderer.invoke(Constants.SIYUAN_GET, {
-            cmd: "showOpenDialog",
-            defaultPath: window.siyuan.config.system.homeDir,
-            properties: ["openFile", "showHiddenFiles"],
-        });
-        if (!localPath.filePaths.length) {
-            return;
-        }
-        exportConfigApi.patch("export.pandocBin", localPath.filePaths[0]);
-    });
-};
-/// #endif
-
 export const registerExportTab = (tab: SettingTabBuilder) => {
     registerExportReferencesGroup(tab);
     registerExportFormatGroup(tab);
     registerExportPdfGroup(tab);
     registerExportImagesGroup(tab);
-    /// #if !BROWSER
-    registerExportPandocGroup(tab);
-    /// #endif
 };

@@ -17,7 +17,7 @@ func TestToolDescriptionsExplainOverlappingOperations(t *testing.T) {
 	}{
 		{DocumentTool, []string{"block.get", "block.get_kramdown", "export", "search_docs", "title", "notebook names", "name/alias/memo", "search.fulltext", "sql.query", "128 visible direct child", "truncation"}},
 		{BlockTool, []string{"document", "sql.query", "export", "scope checks"}},
-		{ExportTool, []string{"block.get/get_kramdown", "md/html/preview return text", "Only docx uses output"}},
+		{ExportTool, []string{"block.get/get_kramdown", "md/html/preview return text"}},
 		{SystemTool, []string{"workspace.info", "workspace.list", "RFC3339"}},
 		{WorkspaceTool, []string{"system.workspace", "validity", "container"}},
 		{HistoryTool, []string{"repo.file_get/file_open", "history paths", "repository file IDs", "entire document", "overwriting its current content", "not an individual block"}},
@@ -49,7 +49,6 @@ func TestToolParameterDescriptionsMatchHandlers(t *testing.T) {
 		description string
 		want        []string
 	}{
-		{"export.output", ExportTool.InputSchema.Properties["output"].Description, []string{"directory", "only for docx", "ignored", "absolute", "working directory", "filename"}},
 		{"http_request.headers", HTTPRequestTool.InputSchema.Properties["headers"].Description, []string{"strings, numbers or booleans", "Null, arrays and nested objects", "entire request"}},
 		{"bazaar.frontend", BazaarTool.InputSchema.Properties["frontend"].Description, []string{"desktop-window", "browser-mobile", "compatibility", "not the kernel host"}},
 		{"image.detail", ImageTool.InputSchema.Properties["detail"].Description, []string{"analyze only", "auto", "low", "high", "Omitted defaults to auto", "provider"}},

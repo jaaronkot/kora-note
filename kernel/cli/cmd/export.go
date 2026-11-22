@@ -93,33 +93,6 @@ var exportPreviewCmd = &cobra.Command{
 	},
 }
 
-var exportDocxCmd = &cobra.Command{
-	Use:   "docx --id <id> --output <file>",
-	Short: "Export as Word (.docx)",
-	RunE: func(cmd *cobra.Command, args []string) error {
-		id, _ := cmd.Flags().GetString("id")
-		output, _ := cmd.Flags().GetString("output")
-		if id == "" {
-			return fmt.Errorf("--id is required")
-		}
-		if output == "" {
-			return fmt.Errorf("--output is required for docx")
-		}
-
-		if dryRun {
-			fmt.Printf("[dry-run] Would export docx for document %s to %s\n", id, output)
-			return nil
-		}
-
-		fullPath, err := model.ExportDocx(id, output, false, false)
-		if err != nil {
-			return err
-		}
-		fmt.Println(fullPath)
-		return nil
-	},
-}
-
 var exportSYCmd = &cobra.Command{
 	Use:   "sy --id <id> [--output <file>]",
 	Short: "Export as .sy.zip",
@@ -139,7 +112,7 @@ var exportSYCmd = &cobra.Command{
 			return nil
 		}
 
-		_, zipPath := model.ExportPandocConvertZip([]string{id}, "", ".sy")
+		_, zipPath := model.ExportArchiveZip([]string{id}, ".sy")
 		resultPath, err := materializeExportArtifact(zipPath, output)
 		if err != nil {
 			return err
@@ -170,7 +143,7 @@ var exportMdZipCmd = &cobra.Command{
 			return nil
 		}
 
-		_, zipPath := model.ExportPandocConvertZip([]string{id}, "", ".md")
+		_, zipPath := model.ExportArchiveZip([]string{id}, ".md")
 		resultPath, err := materializeExportArtifact(zipPath, output)
 		if err != nil {
 			return err
@@ -240,9 +213,6 @@ func init() {
 	exportPreviewCmd.Flags().String("id", "", "block ID")
 	exportPreviewCmd.Flags().String("output", "", "output file path (default: stdout)")
 
-	exportDocxCmd.Flags().String("id", "", "block ID")
-	exportDocxCmd.Flags().String("output", "", "output file path (required)")
-
 	exportSYCmd.Flags().String("id", "", "block ID")
 	exportSYCmd.Flags().String("output", "", "output file path (default: print temp path)")
 
@@ -255,7 +225,6 @@ func init() {
 	exportCmd.AddCommand(exportMdCmd)
 	exportCmd.AddCommand(exportHTMLCmd)
 	exportCmd.AddCommand(exportPreviewCmd)
-	exportCmd.AddCommand(exportDocxCmd)
 	exportCmd.AddCommand(exportSYCmd)
 	exportCmd.AddCommand(exportMdZipCmd)
 	exportCmd.AddCommand(exportDataCmd)

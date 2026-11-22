@@ -90,7 +90,7 @@ func TestExportMarkdownReferenceScope(t *testing.T) {
 			if scenario.selectTarget {
 				ids = append(ids, target.ID)
 			}
-			_, zipPath := ExportPandocConvertZip(ids, "", ".md")
+			_, zipPath := ExportArchiveZip(ids, ".md")
 			archive := openExportArchive(t, zipPath)
 			md := markdownArchiveDocument(t, archive, "Source")
 			if got := strings.Count(md, "]: "); got != scenario.wantFootnotes {
@@ -130,7 +130,7 @@ func TestExportMarkdownFootnoteLinksToEarlierDocument(t *testing.T) {
 	for _, tree := range []*parse.Tree{first, source, external} {
 		writeAssetDownloadDocumentTest(t, tree)
 	}
-	zipPath := exportPandocConvertZip0(archiveExportOptions{
+	zipPath := exportArchiveZip0(archiveExportOptions{
 		Config: resolveExportOptions(nil), BoxID: boxID, BaseFolderName: "Ordered",
 		DocPaths: []string{first.Path, source.Path}, Ext: ".md",
 	})
@@ -163,7 +163,7 @@ func TestExportMarkdownFootnoteAssetsAndCrossNotebook(t *testing.T) {
 	if err := os.WriteFile(assetPath, []byte("footnote image"), 0644); err != nil {
 		t.Fatal(err)
 	}
-	_, zipPath := ExportPandocConvertZip([]string{source.ID}, "", ".md")
+	_, zipPath := ExportArchiveZip([]string{source.ID}, ".md")
 	archive := openExportArchive(t, zipPath)
 	md := markdownArchiveDocument(t, archive, "Source")
 	if !strings.Contains(md, "[^1]:") || !strings.Contains(md, "Target") || !strings.Contains(md, "assets/footnote.png") {
@@ -195,7 +195,7 @@ func TestExportMarkdownFootnoteDeferredAsset(t *testing.T) {
 	if _, err := os.Stat(filepath.Join(util.DataDir, "assets", "file.bin")); !os.IsNotExist(err) {
 		t.Fatalf("fixture asset must start deferred: %v", err)
 	}
-	_, zipPath := ExportPandocConvertZip([]string{source.ID}, "", ".md")
+	_, zipPath := ExportArchiveZip([]string{source.ID}, ".md")
 	archive := openExportArchive(t, zipPath)
 	if got := readArchiveFile(t, archive, "assets/file.bin"); got != "version one" {
 		t.Fatalf("deferred footnote asset was not exported: %q", got)
@@ -218,7 +218,7 @@ func TestExportMarkdownFootnotesRespectCryptoBoundary(t *testing.T) {
 	if refs.contains(target.ID, sourceBox) {
 		t.Fatal("export membership bypassed the crypto boundary")
 	}
-	_, zipPath := ExportPandocConvertZip([]string{source.ID}, "", ".md")
+	_, zipPath := ExportArchiveZip([]string{source.ID}, ".md")
 	archive := openExportArchive(t, zipPath)
 	md := markdownArchiveDocument(t, archive, "Source")
 	if strings.Contains(md, "Private") || strings.Contains(md, ".md#") {
@@ -241,7 +241,7 @@ func TestExportMarkdownOtherReferenceModes(t *testing.T) {
 			for _, tree := range []*parse.Tree{source, target} {
 				writeAssetDownloadDocumentTest(t, tree)
 			}
-			_, zipPath := ExportPandocConvertZip([]string{source.ID}, "", ".md")
+			_, zipPath := ExportArchiveZip([]string{source.ID}, ".md")
 			md := markdownArchiveDocument(t, openExportArchive(t, zipPath), "Source")
 			if strings.Contains(md, "[^") || strings.Contains(md, "Target.md") || !strings.Contains(md, "reference") {
 				t.Fatalf("unexpected reference mode %d output: %s", mode, md)
@@ -276,7 +276,7 @@ func TestExportMarkdownCalloutTitleReferences(t *testing.T) {
 					sql.IndexTreeQueue(tree)
 				}
 				sql.FlushQueue()
-				_, zipPath := ExportPandocConvertZip([]string{source.ID}, "", ".md")
+				_, zipPath := ExportArchiveZip([]string{source.ID}, ".md")
 				archive := openExportArchive(t, zipPath)
 				md := markdownArchiveDocument(t, archive, "Source")
 				if !strings.Contains(md, "> [!NOTE] ") || !strings.Contains(md, "Callout body") || strings.Contains(md, `data-type="block-ref"`) {

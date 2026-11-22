@@ -20,24 +20,9 @@ import (
 )
 
 var (
-	bazaarMemMu        sync.RWMutex
-	bazaarCacheRhyHash string                         // bazaar hash，发生变更时清空以下缓存
-	stageIndexCache    = make(map[string]*StageIndex) // pkgType -> 集市包索引
+	bazaarMemMu     sync.RWMutex
+	stageIndexCache = make(map[string]*StageIndex) // pkgType -> 集市包索引
 )
-
-func applyRhyBazaarHash(ctx context.Context) {
-	bazaarHash := util.GetRhyBazaarHash(ctx)
-	if "" == bazaarHash {
-		return
-	}
-	bazaarMemMu.Lock()
-	defer bazaarMemMu.Unlock()
-	if bazaarCacheRhyHash != "" && bazaarHash != bazaarCacheRhyHash {
-		clear(stageIndexCache)
-		logging.LogInfof("rhy bazaar hash changed, clearing bazaar caches")
-	}
-	bazaarCacheRhyHash = bazaarHash
-}
 
 type StageBazaarResult struct {
 	StageIndex      *StageIndex               // stage 索引
@@ -53,11 +38,10 @@ var onlineCheckFlight singleflight.Group
 var bazaarRatingsPrefetching atomic.Bool
 
 var (
-	applyBazaarCacheHash = applyRhyBazaarHash
-	bazaarOnlineLoader   = isBazaarOnline
-	stageIndexLoader     = getStageIndex
-	bazaarStatsLoader    = getBazaarStats
-	bazaarRatingsLoader  = getBazaarRatings
+	bazaarOnlineLoader  = isBazaarOnline
+	stageIndexLoader    = getStageIndex
+	bazaarStatsLoader   = getBazaarStats
+	bazaarRatingsLoader = getBazaarRatings
 )
 
 // getStageAndBazaar 获取 stage 索引和 bazaar 索引，相同 pkgType 的并发调用会合并为一次实际请求 (single-flight)
@@ -202,9 +186,8 @@ func isBazaarOnline0() (ret bool) {
 	return
 }
 
-// getStageIndexFromCache 仅从缓存获取 stage 索引，无缓存时返回 nil（读前根据 util 已同步的 bazaar hash 视情况清理缓存）
-func getStageIndexFromCache(ctx context.Context, pkgType string) *StageIndex {
-	applyBazaarCacheHash(ctx)
+// getStageIndexFromCache 仅从缓存获取 stage 索引，无缓存时返回 nil
+func getStageIndexFromCache(_ context.Context, pkgType string) *StageIndex {
 	bazaarMemMu.RLock()
 	defer bazaarMemMu.RUnlock()
 	return stageIndexCache[pkgType]
@@ -217,18 +200,10 @@ func getStageIndex(ctx context.Context, pkgType string) (ret *StageIndex, err er
 		return
 	}
 
-	bazaarHash := util.GetRhyBazaarHash(ctx)
-	if "" == bazaarHash {
-		logging.LogErrorf("bazaar hash unavailable (rhy missing or invalid bazaar field)")
-		err = errors.New("bazaar hash not available")
-		return
-	}
 	ret = &StageIndex{}
 
 	// 使用 githubClient 获取 stage 索引文件内容
-	reader, _, reqErr := githubClient.Repositories.DownloadContents(githubContext, "siyuan-note", "bazaar", "stage/"+pkgType+".json", &github.RepositoryContentGetOptions{
-		Ref: bazaarHash,
-	})
+	reader, _, reqErr := githubClient.Repositories.DownloadContents(githubContext, "siyuan-note", "bazaar", "stage/"+pkgType+".json", &github.RepositoryContentGetOptions{})
 	if nil != reqErr {
 		logging.LogErrorf("get community stage index [stage/%s.json] failed: %s", pkgType, reqErr)
 		err = reqErr
@@ -310,8 +285,7 @@ type bazaarStats struct {
 }
 
 // getBazaarStatsFromCache 仅从缓存获取集市包统计信息，无缓存时返回 nil
-func getBazaarStatsFromCache(ctx context.Context) (ret map[string]*bazaarStats) {
-	applyBazaarCacheHash(ctx)
+func getBazaarStatsFromCache(_ context.Context) (ret map[string]*bazaarStats) {
 	index, _ := getBazaarIndexFromCache()
 	return bazaarStatsFromIndex(index)
 }

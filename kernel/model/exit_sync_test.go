@@ -14,51 +14,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/gorilla/websocket"
 	"github.com/siyuan-community/siyuan/kernel/conf"
 	"github.com/siyuan-community/siyuan/kernel/util"
 )
-
-func TestExitSyncPreservesExistingPerceptionNotification(t *testing.T) {
-	previousConf, previousConnection := Conf, webSocketConn
-	Conf = NewAppConf()
-	Conf.Sync.Store(conf.NewSync())
-	Conf.Sync.Load().Mode, Conf.Sync.Load().Perception = 1, true
-	t.Cleanup(func() { Conf, webSocketConn = previousConf, previousConnection })
-	notified := make(chan string, 1)
-	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		connection, err := (&websocket.Upgrader{}).Upgrade(w, r, nil)
-		if err != nil {
-			t.Error(err)
-			return
-		}
-		defer connection.Close()
-		var message struct {
-			Cmd string `json:"cmd"`
-		}
-		if err = connection.ReadJSON(&message); err != nil {
-			t.Error(err)
-			return
-		}
-		notified <- message.Cmd
-	}))
-	defer server.Close()
-	connection, _, err := websocket.DefaultDialer.Dial("ws"+server.URL[len("http"):], nil)
-	if err != nil {
-		t.Fatal(err)
-	}
-	defer connection.Close()
-	webSocketConn = connection
-	finishSyncPerception(true, nil, false)
-	select {
-	case command := <-notified:
-		if command != "synced" {
-			t.Fatal(command)
-		}
-	case <-time.After(time.Second):
-		t.Fatal("exit stopped notifying other devices")
-	}
-}
 
 func TestExitSyncCancellationPreservesLocalData(t *testing.T) {
 	prepareSyncDirectoryTest(t)
@@ -66,9 +24,7 @@ func TestExitSyncCancellationPreservesLocalData(t *testing.T) {
 	util.StatusBarCfg.Store(&util.StatusBar{MsgDataSyncDisabled: true})
 	t.Cleanup(func() { util.StatusBarCfg.Store(previousStatus) })
 	Conf.Sync.Load().Enabled = true
-	Conf.Sync.Load().Perception = false
 	Conf.Sync.Load().CloudName = "main"
-	Conf.SetUser(&conf.User{UserId: "exit-test", UserSiYuanOneTimePayStatus: 1})
 	if err := os.MkdirAll(util.DataDir, 0755); err != nil {
 		t.Fatal(err)
 	}
@@ -87,7 +43,8 @@ func TestExitSyncCancellationPreservesLocalData(t *testing.T) {
 		<-r.Context().Done()
 	}))
 	defer server.Close()
-	Conf.Sync.Load().S3.Endpoint = server.URL
+	Conf.Sync.Load().Provider = conf.ProviderWebDAV
+	Conf.Sync.Load().WebDAV = &conf.WebDAV{Endpoint: server.URL}
 	previousErrors, previousResult := autoSyncErrCount.Load(), BootSyncSucc.Load()
 	previousDNS := lastDNSFlushTime
 	pendingSync.mu.Lock()
@@ -212,9 +169,8 @@ func TestExitSyncCancelsUploadOnlyBeforeCleanup(t *testing.T) {
 			previousStatus := util.StatusBarCfg.Load()
 			util.StatusBarCfg.Store(&util.StatusBar{MsgDataSyncDisabled: true})
 			t.Cleanup(func() { util.StatusBarCfg.Store(previousStatus) })
-			Conf.Sync.Load().Enabled, Conf.Sync.Load().Perception = true, false
+			Conf.Sync.Load().Enabled = true
 			Conf.Sync.Load().CloudName = "main"
-			Conf.SetUser(&conf.User{UserId: "upload-exit-test", UserSiYuanOneTimePayStatus: 1})
 			previousResult, previousErrors := BootSyncSucc.Load(), autoSyncErrCount.Load()
 			BootSyncSucc.Store(-1)
 			t.Cleanup(func() {
@@ -247,7 +203,8 @@ func TestExitSyncCancelsUploadOnlyBeforeCleanup(t *testing.T) {
 			}))
 			defer server.Close()
 			defer server.CloseClientConnections()
-			Conf.Sync.Load().S3.Endpoint = server.URL
+			Conf.Sync.Load().Provider = conf.ProviderWebDAV
+			Conf.Sync.Load().WebDAV = &conf.WebDAV{Endpoint: server.URL}
 			done, finished := make(chan error, 1), make(chan struct{})
 			go func() {
 				defer close(finished)

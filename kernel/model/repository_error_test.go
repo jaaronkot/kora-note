@@ -8,7 +8,6 @@ import (
 	"errors"
 	"fmt"
 	"html"
-	"sync"
 	"testing"
 
 	"github.com/siyuan-community/siyuan/kernel/conf"
@@ -34,7 +33,7 @@ func TestFormatSyncRepoErrorMsg(t *testing.T) {
 		}
 	})
 
-	for _, provider := range []int{conf.ProviderSiYuan, conf.ProviderLocal, conf.ProviderS3, conf.ProviderWebDAV} {
+	for _, provider := range []int{conf.ProviderLocal, conf.ProviderWebDAV} {
 		for _, plan := range []float64{-1, 0, 2} {
 			for _, repoErr := range []error{
 				dejavu.ErrCloudStorageSizeExceeded,
@@ -43,18 +42,10 @@ func TestFormatSyncRepoErrorMsg(t *testing.T) {
 			} {
 				t.Run(fmt.Sprintf("%d/%g/%s", provider, plan, repoErr), func(t *testing.T) {
 					Conf = &AppConf{
-						userLock: &sync.RWMutex{},
-						Lang:     lang,
-						Sync:     NewConfSection(&conf.Sync{Provider: provider}),
-						User:     &conf.User{UserSiYuanRepoSize: 8 * 1000 * 1000 * 1000, UserSiYuanSubscriptionPlan: plan},
+						Lang: lang,
+						Sync: NewConfSection(&conf.Sync{Provider: provider}),
 					}
 					want := "Sync failed: " + html.EscapeString(repoErr.Error()) + " (Provider: " + conf.ProviderToStr(provider) + ")"
-					if provider == conf.ProviderSiYuan && errors.Is(repoErr, dejavu.ErrCloudStorageSizeExceeded) {
-						want = "Cloud quota exceeded [8 GB]"
-						if plan == 2 {
-							want = "Subscribe to upgrade cloud quota [8 GB]"
-						}
-					}
 					if got := formatSyncRepoErrorMsg(repoErr); got != want {
 						t.Fatalf("got %q, want %q", got, want)
 					}

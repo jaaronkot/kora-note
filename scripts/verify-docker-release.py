@@ -6,14 +6,13 @@ from pathlib import Path
 import re
 import subprocess
 import time
-import unicodedata
 import urllib.error
 import urllib.request
 import uuid
 
 
 PLATFORMS = ("linux/amd64", "linux/arm64", "linux/arm/v7", "linux/arm/v8")
-CHECKS = {"licenses", "version", "model-load", "chinese", "latin", "blank", "worker-failure", "notebook"}
+CHECKS = {"licenses", "version", "notebook"}
 DIGEST = re.compile(r"sha256:[0-9a-f]{64}")
 # 与 app/package.json 的版本一致：正式版为 x.y.z，预发行版追加 -alpha.1、-beta.2 或 -rc.3。
 VERSION = re.compile(r"[0-9]+\.[0-9]+\.[0-9]+(?:-(?:alpha|beta|rc)(?:\.[0-9A-Za-z]+)*)?")
@@ -50,21 +49,6 @@ def manifests(index, expected=PLATFORMS):
     return result
 
 
-def normalized(text):
-    return "".join(unicodedata.normalize("NFKC", text).split()).casefold()
-
-
-def validate_rows(output, expected):
-    rows = json.loads(output)
-    if not isinstance(rows, list) or any(not isinstance(row, dict) or not isinstance(row.get("text"), str) for row in rows):
-        raise ValueError("Invalid OCR response")
-    if expected is None:
-        if rows:
-            raise ValueError("Blank image produced OCR text")
-    elif normalized(expected) not in normalized("".join(row["text"] for row in rows)):
-        raise ValueError(f"Expected OCR text {expected!r}, received {rows!r}")
-
-
 class KernelAPIError(ValueError):
     def __init__(self, endpoint, result):
         super().__init__(f"Kernel API failed: {endpoint}: {result}")
@@ -99,7 +83,7 @@ def wait_notebook_ready(base, token, notebook, timeout):
             time.sleep(min(1, remaining))
 
 
-def verify_notebook(image, platform, version, timeout, fail_ocr, diagnostics=None):
+def verify_notebook(image, platform, version, timeout, diagnostics=None):
     # 只使用本次测试创建的容器和卷，所有读写均发生在临时工作空间。
     name = "siyuan-docker-smoke-" + uuid.uuid4().hex
     volume, token = name + "-workspace", uuid.uuid4().hex
@@ -108,7 +92,7 @@ def verify_notebook(image, platform, version, timeout, fail_ocr, diagnostics=Non
         run(["docker", "run", "--rm", "-i", "--platform", platform, "--entrypoint", "/bin/sh",
              "--mount", f"type=volume,src={volume},dst=/siyuan/workspace", image, "-ec",
              "mkdir -p /siyuan/workspace/conf; cat > /siyuan/workspace/conf/conf.json"],
-            input=json.dumps({"api": {"token": token}, "ocr": {"auto": False}}))
+            input=json.dumps({"api": {"token": token}}))
         run(["docker", "run", "-d", "--name", name, "--platform", platform,
              "--mount", f"type=volume,src={volume},dst=/siyuan/workspace",
              "-p", "127.0.0.1::6806", image, "serve", "--port=6806", "--safe-mode",
@@ -132,15 +116,14 @@ def verify_notebook(image, platform, version, timeout, fail_ocr, diagnostics=Non
             time.sleep(2)
         if request(base, "/api/system/version", token) != version:
             raise ValueError("HTTP kernel version differs from release version")
-        fail_ocr()
-        notebook = request(base, "/api/notebook/createNotebook", token, {"name": "Docker OCR smoke"})
+        notebook = request(base, "/api/notebook/createNotebook", token, {"name": "Docker smoke"})
         wait_notebook_ready(base, token, notebook["notebook"]["id"], timeout)
         block = request(base, "/api/filetree/createDocByParent", token,
                         {"notebook": notebook["notebook"]["id"], "parentID": None,
                          "id": time.strftime("%Y%m%d%H%M%S") + "-" + uuid.uuid4().hex[:7],
-                         "title": {"format": "plain", "text": "Docker smoke"}, "markdown": "Docker OCR smoke 123"})
+                         "title": {"format": "plain", "text": "Docker smoke"}, "markdown": "Docker smoke 123"})
         data = request(base, "/api/block/getBlockKramdown", token, {"id": block["id"]})
-        if "Docker OCR smoke 123" not in data["kramdown"]:
+        if "Docker smoke 123" not in data["kramdown"]:
             raise ValueError("Notebook write/read verification failed")
     except Exception:
         # 删除临时容器前保留启动日志和退出状态，采集失败不能覆盖原始验收错误。
@@ -161,58 +144,28 @@ def verify_notebook(image, platform, version, timeout, fail_ocr, diagnostics=Non
         run(["docker", "volume", "rm", volume], check=False)
 
 
-def verify_platform(repository, digest, platform, version, fixtures, timeout, diagnostics=None):
+def verify_platform(repository, digest, platform, version, timeout, diagnostics=None):
     started = time.monotonic()
     image = repository + "@" + digest
-    architecture = platform.split("/")[1]
-    runtime = "/opt/siyuan/stage/ocr/runtime/linux-" + architecture
-    worker = runtime + "/siyuan-ocr"
     prefix = ["docker", "run", "--rm", "--platform", platform]
     checks = []
     run(["docker", "pull", "--platform", platform, image], timeout=900)
-    # 辅助程序的动态链接由实际模型加载和识别验证，避免 musl 的 ldd 在 ARM32 模拟环境中误判。
-    shell = f"test -s LICENSE && test -s THIRD_PARTY_NOTICES.md && test -s {runtime}/LICENSE " \
-            f"&& test -s {runtime}/ThirdPartyNotices.txt && test -s {runtime}/onnx-toolchain.txt " \
-            f"&& test -x {worker} && ldd {runtime}/libonnxruntime.so"
+    shell = "test -s LICENSE && test -s THIRD_PARTY_NOTICES.md"
     run(prefix + ["--entrypoint", "/bin/sh", image, "-ec", shell])
     checks.append("licenses")
     output = run(prefix + ["--entrypoint", "/opt/siyuan/kernel", image, "--version"]).stdout
     if not re.search(r"\bversion\s+" + re.escape(version) + r"(?![\w.-])", output):
         raise ValueError(f"Unexpected kernel version: {output}")
     checks.append("version")
-    worker_name = "siyuan-docker-ocr-" + uuid.uuid4().hex
-    prefix += ["--name", worker_name, "-i", "--mount", f"type=bind,src={fixtures.resolve()},dst=/fixtures,readonly",
-               "--entrypoint", worker, image]
-    config = {"library": runtime + "/libonnxruntime.so", "directory": "/opt/siyuan/stage/ocr/models/tiny"}
-    try:
-        for name, expected in (("model-load", None), ("chinese", "思源笔记"), ("latin", "SiYuan OCR 123"), ("blank", None)):
-            payload = {"config": config, "image": "" if name == "model-load" else f"/fixtures/{name}.png"}
-            result = run(prefix, input=json.dumps(payload), timeout=timeout)
-            validate_rows(result.stdout, expected)
-            checks.append(name)
-
-        # 模拟辅助进程加载失败，再验证已启动的内核仍可读写普通文档。
-        def fail_ocr():
-            bad = {"config": {**config, "library": runtime + "/missing-onnxruntime.so"}, "image": ""}
-            failure = run(prefix, input=json.dumps(bad), timeout=timeout, check=False)
-            if not failure.returncode or "missing-onnxruntime.so" not in failure.stderr:
-                raise ValueError("Missing OCR runtime did not produce the expected failure")
-            checks.append("worker-failure")
-
-        verify_notebook(image, platform, version, timeout, fail_ocr, diagnostics)
-        checks.append("notebook")
-    finally:
-        run(["docker", "rm", "-f", worker_name], check=False)
+    verify_notebook(image, platform, version, timeout, diagnostics)
+    checks.append("notebook")
     return {"platform": platform, "digest": digest, "checks": checks, "seconds": round(time.monotonic() - started, 3)}
 
 
-def verify(image, version, fixtures, report_path, timeout, *, platform=None, provenance=None):
+def verify(image, version, report_path, timeout, *, platform=None, provenance=None):
     repository, separator, digest = image.partition("@")
     if not separator or not DIGEST.fullmatch(digest):
         raise ValueError("Verification requires an immutable image digest")
-    for name in ("chinese", "latin", "blank"):
-        if not (fixtures / f"{name}.png").is_file():
-            raise ValueError(f"Missing OCR fixture: {name}")
     expected = (platform,) if platform else PLATFORMS
     index = manifests(json.loads(run(["docker", "buildx", "imagetools", "inspect", image, "--raw"]).stdout), expected)
     report = {"image": image, "version": version, "status": "running", "platforms": [], **(provenance or {})}
@@ -220,7 +173,7 @@ def verify(image, version, fixtures, report_path, timeout, *, platform=None, pro
         for platform in expected:
             print(f"Verifying {platform} in Docker", flush=True)
             diagnostics = report_path.parent / "diagnostics" / platform.replace("/", "-")
-            report["platforms"].append(verify_platform(repository, index[platform], platform, version, fixtures, timeout,
+            report["platforms"].append(verify_platform(repository, index[platform], platform, version, timeout,
                                                        diagnostics=diagnostics))
         report["status"] = "passed"
     except Exception as error:
@@ -320,7 +273,6 @@ def main():
     parser.add_argument("--image")
     parser.add_argument("--version", required=True)
     parser.add_argument("--report", type=Path, required=True)
-    parser.add_argument("--fixtures", type=Path, default=Path(__file__).parent / "testdata/docker-ocr")
     parser.add_argument("--timeout", type=int, default=240)
     parser.add_argument("--platform", choices=PLATFORMS)
     parser.add_argument("--repository")
@@ -341,7 +293,7 @@ def main():
     if args.command != "assemble" and not args.image:
         parser.error("Expected an immutable --image")
     if args.command == "verify":
-        verify(args.image, args.version, args.fixtures, args.report, args.timeout,
+        verify(args.image, args.version, args.report, args.timeout,
                platform=args.platform, provenance=provenance if args.platform else None)
     elif args.command == "assemble":
         if not re.fullmatch(r"[a-z0-9][a-z0-9./_-]*", args.repository or "") \

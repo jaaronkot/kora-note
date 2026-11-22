@@ -462,7 +462,7 @@ func TestBrowserCapabilityEffects(t *testing.T) {
 			t.Errorf("read-only export action %q must not require confirmation or create a snapshot", action)
 		}
 	}
-	if !needsConfirm("export", "docx", nil) || !needsLocalSnapshot("export", "docx") {
+	if !needsConfirm("export", "md-zip", nil) || !needsLocalSnapshot("export", "md-zip") {
 		t.Fatal("file-producing export actions must retain confirmation and snapshot protection")
 	}
 }

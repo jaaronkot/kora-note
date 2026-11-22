@@ -20,7 +20,6 @@ import {
     getBazaarTypeByTab,
     isBazaarPackageType,
 } from "./packageConfig";
-import {openRatingDialog, refreshVisibleRatingUI, syncRatingUser} from "./rating";
 import {getSettingsWindowHost} from "../setting/windowContext";
 import {
     beginBazaarInstall,
@@ -96,16 +95,6 @@ const handleDownloadedTab: TBazaarActionHandler = (context, target) => {
 const ACTION_HANDLERS = {
     "skip-batch-update": (({controller, pkgType, packageName}, target) => {
         if (pkgType && packageName) void controller._toggleBatchUpdatePreference(pkgType, packageName, target);
-        return HANDLED;
-    }) satisfies TBazaarActionHandler,
-    "rate-package": ((context) => {
-        const {controller, packageSource, packageName, pkgType, installedItem, pkgItem} = context;
-        const packageInstalled = Boolean(installedItem) ||
-            (packageSource === "bazaar" && pkgItem?.installed === true);
-        if (!pkgType || !packageName || !isBazaarPackageRatingEditable(packageSource, packageInstalled)) {
-            return CONTINUE;
-        }
-        openRatingDialog(controller, pkgType, packageName);
         return HANDLED;
     }) satisfies TBazaarActionHandler,
     "copy-funding": ((context, target) => {
@@ -562,9 +551,6 @@ const bindBazaarClickEvent = (
     mount: IBazaarMountSnapshot,
 ) => {
     controller.element.firstElementChild.addEventListener("click", (event: MouseEvent) => {
-        if (syncRatingUser(controller)) {
-            refreshVisibleRatingUI(controller);
-        }
         const eventTarget = event.target as HTMLElement;
         const context = resolveClickContext(controller, app, mount, eventTarget);
         let target = eventTarget;

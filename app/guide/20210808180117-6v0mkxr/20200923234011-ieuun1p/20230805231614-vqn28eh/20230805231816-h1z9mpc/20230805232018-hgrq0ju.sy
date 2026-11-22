@@ -6,7 +6,7 @@
 		"id": "20230805232018-hgrq0ju",
 		"title": "Connect with third-party cloud storage",
 		"type": "doc",
-		"updated": "20261024163429"
+		"updated": "20261120163610"
 	},
 	"Children": [
 		{
@@ -29,12 +29,12 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20260614133312-dxwim99",
-				"updated": "20260614133312"
+				"updated": "20261120163610"
 			},
 			"Children": [
 				{
 					"Type": "NodeText",
-					"Data": "In addition to SiYuan's official cloud sync, you can connect to third-party cloud storage services for data synchronization. This approach is suitable for:"
+					"Data": "You can connect to third-party cloud storage services for data synchronization. This approach is suitable for:"
 				}
 			]
 		},
@@ -44,7 +44,7 @@
 			"ListData": {},
 			"Properties": {
 				"id": "20260614133312-d2f03yi",
-				"updated": "20260614133312"
+				"updated": "20261120163610"
 			},
 			"Children": [
 				{
@@ -56,7 +56,7 @@
 					},
 					"Properties": {
 						"id": "20260614133312-ql46bcm",
-						"updated": "20260614133312"
+						"updated": "20261120163610"
 					},
 					"Children": [
 						{
@@ -64,7 +64,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20260614133312-af51bwd",
-								"updated": "20260614133312"
+								"updated": "20261120163610"
 							},
 							"Children": [
 								{
@@ -84,7 +84,7 @@
 					},
 					"Properties": {
 						"id": "20260614133312-rk4eqw6",
-						"updated": "20260614133312"
+						"updated": "20261120163610"
 					},
 					"Children": [
 						{
@@ -92,40 +92,12 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20260614133312-qm8vpa2",
-								"updated": "20260614133312"
+								"updated": "20261120163610"
 							},
 							"Children": [
 								{
 									"Type": "NodeText",
 									"Data": "Having specific requirements for data storage location"
-								}
-							]
-						}
-					]
-				},
-				{
-					"ID": "20260614133312-nwk9jn4",
-					"Type": "NodeListItem",
-					"ListData": {
-						"BulletChar": 42,
-						"Marker": "Kg=="
-					},
-					"Properties": {
-						"id": "20260614133312-nwk9jn4",
-						"updated": "20260614133312"
-					},
-					"Children": [
-						{
-							"ID": "20260614133312-dletsri",
-							"Type": "NodeParagraph",
-							"Properties": {
-								"id": "20260614133312-dletsri",
-								"updated": "20260614133312"
-							},
-							"Children": [
-								{
-									"Type": "NodeText",
-									"Data": "Needing more storage capacity than the official cloud provides"
 								}
 							]
 						}
@@ -138,12 +110,12 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20260614133312-3i5705h",
-				"updated": "20260614133312"
+				"updated": "20261120163610"
 			},
 			"Children": [
 				{
 					"Type": "NodeText",
-					"Data": "Three third-party storage options are currently supported:"
+					"Data": "Two third-party storage options are currently supported:"
 				}
 			]
 		},
@@ -158,7 +130,7 @@
 			"Properties": {
 				"colgroup": "||",
 				"id": "20260614133312-b58qzau",
-				"updated": "20260614133312"
+				"updated": "20261120163610"
 			},
 			"Children": [
 				{
@@ -198,42 +170,6 @@
 											"Data": "Recommended For"
 										}
 									]
-								}
-							]
-						}
-					]
-				},
-				{
-					"Type": "NodeTableRow",
-					"Data": "tr",
-					"Children": [
-						{
-							"Type": "NodeTableCell",
-							"Data": "td",
-							"Children": [
-								{
-									"Type": "NodeText",
-									"Data": "S3-compatible object storage"
-								}
-							]
-						},
-						{
-							"Type": "NodeTableCell",
-							"Data": "td",
-							"Children": [
-								{
-									"Type": "NodeText",
-									"Data": "Good performance, supports large capacity"
-								}
-							]
-						},
-						{
-							"Type": "NodeTableCell",
-							"Data": "td",
-							"Children": [
-								{
-									"Type": "NodeText",
-									"Data": "Large data volumes, faster sync speeds"
 								}
 							]
 						}
@@ -318,12 +254,12 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20260614133312-4p5ipnw",
-				"updated": "20260614133312"
+				"updated": "20261120163610"
 			},
 			"Children": [
 				{
 					"Type": "NodeText",
-					"Data": "Due to limitations of the WebDAV protocol, large data volumes may cause slow startup, slow sync, and high resource usage. S3 object storage is recommended as the preferred option."
+					"Data": "Due to limitations of the WebDAV protocol, large data volumes may cause slow startup, slow sync, and high resource usage."
 				}
 			]
 		},
@@ -347,7 +283,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20260614133312-64q99zl",
-				"updated": "20261024163013"
+				"updated": "20261120163610"
 			},
 			"Children": [
 				{
@@ -398,72 +334,9 @@
 			"ListData": {},
 			"Properties": {
 				"id": "20260614133312-idss7w5",
-				"updated": "20261024163429"
+				"updated": "20261120163610"
 			},
 			"Children": [
-				{
-					"ID": "20260614133312-4156bkr",
-					"Type": "NodeListItem",
-					"ListData": {
-						"BulletChar": 42,
-						"Marker": "Kg=="
-					},
-					"Properties": {
-						"id": "20260614133312-4156bkr",
-						"updated": "20261024163429"
-					},
-					"Children": [
-						{
-							"ID": "20260614133312-xffmzry",
-							"Type": "NodeParagraph",
-							"Properties": {
-								"id": "20260614133312-xffmzry",
-								"updated": "20261024163429"
-							},
-							"Children": [
-								{
-									"Type": "NodeTextMark",
-									"TextMarkType": "strong",
-									"TextMarkTextContent": "S3-compatible object storage services"
-								},
-								{
-									"Type": "NodeText",
-									"Data": ": such as "
-								},
-								{
-									"Type": "NodeTextMark",
-									"TextMarkType": "a",
-									"TextMarkAHref": "https://s.qiniu.com/VbQfeu",
-									"TextMarkTextContent": "Qiniu Cloud"
-								},
-								{
-									"Type": "NodeText",
-									"Data": ", "
-								},
-								{
-									"Type": "NodeTextMark",
-									"TextMarkType": "a",
-									"TextMarkAHref": "https://www.aliyun.com/product/oss?userCode=yqovuas2",
-									"TextMarkTextContent": "Alibaba Cloud OSS"
-								},
-								{
-									"Type": "NodeText",
-									"Data": ", "
-								},
-								{
-									"Type": "NodeTextMark",
-									"TextMarkType": "a",
-									"TextMarkAHref": "https://www.cloudflare.com/developer-platform/r2/",
-									"TextMarkTextContent": "Cloudflare R2"
-								},
-								{
-									"Type": "NodeText",
-									"Data": ", etc"
-								}
-							]
-						}
-					]
-				},
 				{
 					"ID": "20260614133312-rmktt2q",
 					"Type": "NodeListItem",
@@ -473,7 +346,7 @@
 					},
 					"Properties": {
 						"id": "20260614133312-rmktt2q",
-						"updated": "20260614133312"
+						"updated": "20261120163610"
 					},
 					"Children": [
 						{
@@ -481,7 +354,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20260614133312-dgda7f3",
-								"updated": "20260614133312"
+								"updated": "20261120163610"
 							},
 							"Children": [
 								{
@@ -512,7 +385,7 @@
 					},
 					"Properties": {
 						"id": "20260614133312-zz6q1xl",
-						"updated": "20260614133312"
+						"updated": "20261120163610"
 					},
 					"Children": [
 						{
@@ -520,7 +393,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20260614133312-foonsti",
-								"updated": "20260614133312"
+								"updated": "20261120163610"
 							},
 							"Children": [
 								{
@@ -543,7 +416,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20260614133312-ey2wu74",
-				"updated": "20260614133312"
+				"updated": "20261120163610"
 			},
 			"Children": [
 				{
@@ -567,7 +440,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20260614133312-icftstc",
-				"updated": "20260614133336"
+				"updated": "20261120163610"
 			},
 			"Children": [
 				{
@@ -612,7 +485,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20260614133312-lmoq2rm",
-				"updated": "20260614133312"
+				"updated": "20261120163610"
 			},
 			"Children": [
 				{
@@ -627,7 +500,7 @@
 			"ListData": {},
 			"Properties": {
 				"id": "20260614133312-3en7m5c",
-				"updated": "20260614133312"
+				"updated": "20261120163610"
 			},
 			"Children": [
 				{
@@ -639,7 +512,7 @@
 					},
 					"Properties": {
 						"id": "20260614133312-2wucnot",
-						"updated": "20260614133312"
+						"updated": "20261120163610"
 					},
 					"Children": [
 						{
@@ -647,7 +520,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20260614133312-77orkpi",
-								"updated": "20260614133312"
+								"updated": "20261120163610"
 							},
 							"Children": [
 								{
@@ -667,7 +540,7 @@
 					},
 					"Properties": {
 						"id": "20260614133312-5wos8bo",
-						"updated": "20260614133312"
+						"updated": "20261120163610"
 					},
 					"Children": [
 						{
@@ -675,7 +548,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20260614133312-crzjx3r",
-								"updated": "20260614133312"
+								"updated": "20261120163610"
 							},
 							"Children": [
 								{
@@ -695,7 +568,7 @@
 					},
 					"Properties": {
 						"id": "20260614133312-iexh1wb",
-						"updated": "20260614133312"
+						"updated": "20261120163610"
 					},
 					"Children": [
 						{
@@ -703,7 +576,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20260614133312-5qg2ivu",
-								"updated": "20260614133312"
+								"updated": "20261120163610"
 							},
 							"Children": [
 								{
