@@ -1,7 +1,7 @@
 import {genUUID} from "../util/genID";
 import {Constants} from "../constants";
 import {getHostCapabilities, sanitizeKernelHTML} from "../util/hostCapabilities";
-import {progressLoading} from "./progress";
+import {showExitIndicator} from "./exitIndicator";
 import {fetchPost} from "../util/fetch";
 
 export const initMessage = () => {
@@ -55,11 +55,11 @@ export const showMessage = (message: string, timeout = 6000, type = "info", mess
         return;
     }
 
-    // 退出期间将内核的退出和同步状态合并到进度提示，其他通知仍按原有方式展示。
+    // 退出期间将内核的退出和同步状态合并到角落浮层，其他通知仍按原有方式展示。
     if (type === "info" && document.getElementById("exitProgress") &&
         [window.siyuan.languages._kernel[95], window.siyuan.languages._kernel[81]].includes(message)) {
-        progressLoading({code: 1, msg: message === window.siyuan.languages._kernel[81] ?
-            `${window.siyuan.languages.exitWaiting} ${message}` : window.siyuan.languages.exitWaiting}, "exitProgress");
+        showExitIndicator(message === window.siyuan.languages._kernel[81] ?
+            `${window.siyuan.languages.exitWaiting} ${message}` : window.siyuan.languages.exitWaiting);
         return;
     }
 

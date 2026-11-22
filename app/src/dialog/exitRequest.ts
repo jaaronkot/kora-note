@@ -2,27 +2,14 @@ import {MobileDialog as Dialog} from "./mobileDialog";
 import {fetchSyncPost} from "../util/fetch";
 import {withFetchTimeout} from "../util/fetchTimeout";
 import {escapeHtml} from "../util/escape";
-import {progressLoading} from "./progress";
+import {hideExitIndicator, setExitIndicatorAction, showExitIndicator, updateExitIndicator} from "./exitIndicator";
 import {mobileConfirmDialog as confirmDialog} from "./mobileConfirmDialog";
-import {sanitizeKernelHTML} from "../util/hostCapabilities";
 import {isMobile} from "../util/functions";
 
 let pendingExit: Promise<void>;
 
 export const updateExitProgressStatus = (message: string) => {
-    const progress = document.getElementById("exitProgress");
-    if (!progress) {
-        return;
-    }
-    let status = progress.querySelector('[data-type="status-message"]');
-    if (!status) {
-        status = document.createElement("div");
-        status.className = "ft__breakword ft__smaller";
-        status.setAttribute("data-type", "status-message");
-        status.setAttribute("role", "status");
-        progress.querySelector('[data-type="message"]').after(status);
-    }
-    status.innerHTML = sanitizeKernelHTML(message);
+    updateExitIndicator(message);
 };
 
 // 保留退出结果的接收窗口，慢同步不会直接关闭宿主。
@@ -35,29 +22,25 @@ export const requestSystemExit = (options: {
         return pendingExit;
     }
     const languages = window.siyuan.languages;
-    const progressID = "exitProgress";
     const controller = new AbortController();
     let skipSync = false;
     let settled = false;
     let confirmation: Dialog;
-    progressLoading({code: 1, msg: languages.exitWaiting}, progressID);
+    showExitIndicator(languages.exitWaiting);
     const timer = options.force ? undefined : window.setTimeout(() => {
-        progressLoading({code: 1, msg: languages.exitWaiting}, progressID, {
-            label: languages.skipExitSync,
-            callback: () => {
-                if (settled || skipSync || confirmation) {
-                    return;
+        setExitIndicatorAction(languages.skipExitSync, () => {
+            if (settled || skipSync || confirmation) {
+                return;
+            }
+            confirmation = confirmDialog(languages.sync, escapeHtml(languages.skipExitSyncConfirm), () => {
+                if (!settled) {
+                    skipSync = true;
+                    controller.abort();
                 }
-                confirmation = confirmDialog(languages.sync, escapeHtml(languages.skipExitSyncConfirm), () => {
-                    if (!settled) {
-                        skipSync = true;
-                        controller.abort();
-                    }
-                }, () => { confirmation = undefined; }, false, undefined, languages.skipExitSync);
-            },
+            }, () => { confirmation = undefined; }, false, undefined, languages.skipExitSync);
         });
     }, 12000);
-    // 等待退出时阻止输入，避免遮罩下仍有编辑器保留焦点并接收修改。
+    // 等待退出时阻止输入，避免退出期间仍有编辑器保留焦点并接收修改。
     const blockInput = (event: Event) => {
         if (confirmation?.element.contains(event.target as Node)) {
             return;
@@ -95,12 +78,12 @@ export const requestSystemExit = (options: {
         if (!response || ![0, 1, 2].includes(response.code)) {
             throw new Error(response?.msg || languages.exitWaitFailed);
         }
-        progressLoading({code: 2, msg: ""}, progressID);
+        hideExitIndicator();
         return response;
     }).catch((error): undefined => {
         console.warn("exit request failed", error);
         // 请求失败不代表内核已经停止；保留界面供用户重试，并继续接收内核退出事件。
-        progressLoading({code: 2, msg: ""}, progressID);
+        hideExitIndicator();
         const errorDialog = new Dialog({
             disableClose: true,
             disableAnimation: true,

@@ -1,5 +1,3 @@
-import {IMAGE_OCR_MENU} from "../../menus/declarations/imageOCRMenu";
-import {declaredMenuCatalog} from "../../menus/declarations/menuDeclaration";
 import {CODE_TAB_SPACE_VALUES, getCodeTabSpacesLabel} from "../../protyle/wysiwyg/codeBlockUtil";
 import {orderGutterTurnIntoItems} from "../../protyle/gutter/turnIntoMenu";
 import {CALLOUT_PRESETS} from "../../protyle/wysiwyg/calloutType";
@@ -110,24 +108,12 @@ const sortChildren = (inheritKey?: "sortByFiletree" | "sortByParent") => [
 
 const exportChildren = () => [
     node("exportTemplate", lang("template")),
-    node("exportSiYuanZip", literal("SiYuan .sy.zip")),
+    node("exportSiYuanZip", literal("Kora Note .sy.zip")),
     node("exportMarkdown", literal("Markdown .zip")),
     node("exportImage", lang("image")),
     node("exportPDF", literal("PDF")),
-    node("exportHTML_SiYuan", literal("HTML (SiYuan)"), false),
+    node("exportHTML_SiYuan", literal("HTML (Kora Note)"), false),
     node("exportHTML_Markdown", literal("HTML (Markdown)"), false),
-    node("exportWord", literal("Word .docx")),
-    node("exportMore", lang("more"), false, [
-        node("exportReStructuredText", literal("reStructuredText"), false),
-        node("exportAsciiDoc", literal("AsciiDoc"), false),
-        node("exportTextile", literal("Textile"), false),
-        node("exportOPML", literal("OPML"), false),
-        node("exportOrgMode", literal("Org-Mode"), false),
-        node("exportMediaWiki", literal("MediaWiki"), false),
-        node("exportODT", literal("ODT"), false),
-        node("exportRTF", literal("RTF"), false),
-        node("exportEPUB", literal("EPUB"), false),
-    ]),
 ];
 
 const openChildren = () => [
@@ -142,7 +128,7 @@ const openChildren = () => [
 ];
 
 const importChildren = () => [
-    node("importSiYuanZip", literal("SiYuan .sy.zip")),
+    node("importSiYuanZip", literal("Kora Note .sy.zip")),
     node("importMarkdownZip", literal("Markdown .zip")),
     node("importMarkdownDoc", () => `Markdown ${window.siyuan.languages.doc}`),
     node("importMarkdownFolder", () => `Markdown ${window.siyuan.languages.folder}`),
@@ -154,22 +140,15 @@ const docTreeCommon = (multi = false) => [
     node("move", lang("move")),
     node("addToDatabase", lang("addToDatabase"), false),
     node("delete", lang("delete")),
-    node("riffCard", lang("riffCard"), false, [
-        node("spaceRepetition", lang("spaceRepetition")),
-        node("manage", lang("manage")),
-        node("quickMakeCard", lang("quickMakeCard")),
-        node("removeCard", lang("removeCard")),
-        node("addToDeck", lang("addToDeck")),
-    ]),
     node("openBy", lang("openBy"), true, openChildren()),
     node("export", lang("export"), true, multi ? [
-        node("exportSiYuanZip", literal("SiYuan .sy.zip")),
+        node("exportSiYuanZip", literal("Kora Note .sy.zip")),
         node("exportMarkdown", literal("Markdown .zip")),
     ] : exportChildren()),
 ];
 
 const docTreeDocument = () => {
-    const [copy, move, addToDatabase, remove, riffCard, openBy, exportEntry] = docTreeCommon();
+    const [copy, move, addToDatabase, remove, openBy, exportEntry] = docTreeCommon();
     return [
         node("openDocument", lang("openDocument")),
         node("newDocAbove", lang("newDocAbove")),
@@ -186,7 +165,6 @@ const docTreeDocument = () => {
         node("pinDoc", lang("pinDoc")),
         node("unpinDoc", lang("unpinDoc")),
         node("sort", lang("sort"), true, sortChildren("sortByParent")),
-        riffCard,
         node("search", lang("search")),
         node("replace", lang("replace")),
         separator("separator_3"),
@@ -198,8 +176,8 @@ const docTreeDocument = () => {
 };
 
 const docTreeMultiple = () => {
-    const [copy, move, addToDatabase, remove, riffCard, openBy, exportEntry] = docTreeCommon(true);
-    return [copy, move, addToDatabase, remove, node("pinDoc", lang("pinDoc")), node("unpinDoc", lang("unpinDoc")), separator("separator_1"), riffCard,
+    const [copy, move, addToDatabase, remove, openBy, exportEntry] = docTreeCommon(true);
+    return [copy, move, addToDatabase, remove, node("pinDoc", lang("pinDoc")), node("unpinDoc", lang("unpinDoc")), separator("separator_1"),
         separator("separator_2"), openBy, exportEntry];
 };
 
@@ -358,7 +336,6 @@ const gutterBase = (multi: boolean) => [
     node("cut", lang("cut")),
     node("move", lang("move")),
     node("addToDatabase", lang("addToDatabase"), false),
-    node("addToAgent", lang("addToAgent")),
     node("delete", lang("delete")),
 ];
 
@@ -369,10 +346,6 @@ const gutterMultiple = () => [
     gutterLayout(),
     gutterWidth(),
     gutterHeight(),
-    separator("separator_quickMakeCard"),
-    node("quickMakeCard", lang("quickMakeCard"), false),
-    node("removeCard", lang("removeCard"), false),
-    node("addToDeck", lang("addToDeck"), false),
 ];
 
 const gutterSingle = () => [
@@ -503,11 +476,6 @@ const gutterSingle = () => [
     gutterLayout(true),
     gutterWidth(),
     gutterHeight(),
-    separator("separator_4"),
-    node("wechatReminder", lang("wechatReminder"), false),
-    node("quickMakeCard", lang("quickMakeCard"), false),
-    node("removeCard", lang("removeCard"), false),
-    node("addToDeck", lang("addToDeck"), false),
     separator("separator_5"),
     node("updateAndCreatedAt", () => `${window.siyuan.languages.modifiedAt} / ${window.siyuan.languages.createdAt}`, false),
 ];
@@ -674,27 +642,15 @@ const statusBarCatalogSection: IEntryCatalogSection = {
 };
 
 const topBarBuiltinChildren = [
-    node("barSync", lang("syncNow")),
-    node("barDailyNote", lang("dailyNote"), true, undefined, undefined, {
-        defaultVisible: () => typeof window === "undefined" || !window.siyuan.mobile,
-        simpleDefaultVisible: true,
-        customDefaultVisible: false,
-    }),
-    node("barRiffCard", lang("riffCard"), true, undefined, undefined, {
-        defaultVisible: () => typeof window === "undefined" || !window.siyuan.mobile,
-        simpleDefaultVisible: true,
-        customDefaultVisible: false,
-    }),
+    // 云同步入口已移出顶栏、落到左侧停靠栏底端，保留目录标识以兼容已有可见性和排序配置。
+    node("barSync", lang("syncNow"), true, undefined, undefined, {fixed: true}),
     node("barBack", lang("goBack")),
     node("barForward", lang("goForward")),
     fixed("drag", lang("entryTopBarDrag")),
-    node("toolbarVIP", lang("accountDisplayVIP")),
-    node("toolbarTitle", lang("accountDisplayTitle")),
-    node("barPlugins", lang("plugin")),
-    node("barCommand", lang("commandPanel")),
-    node("barSearch", lang("globalSearch")),
+    // 命令面板与外观模式已移出顶栏，保留目录标识以兼容已有可见性和排序配置。
+    node("barCommand", lang("commandPanel"), true, undefined, undefined, {fixed: true}),
     node("barZoom", lang("zoom")),
-    node("barMode", lang("appearanceMode")),
+    node("barMode", lang("appearanceMode"), true, undefined, undefined, {fixed: true}),
     // 仅在平板原生应用中显示，保留目录标识以兼容已有可见性和排序配置。
     node("barExit", lang("safeQuit")),
 ];
@@ -708,25 +664,19 @@ const topBarCatalogSection: IEntryCatalogSection = {
 const dockBuiltinChildren = [
     node("file", lang("fileTree")),
     node("outline", lang("outline")),
+    node("graph", lang("graphView"), false),
+    node("backlink", lang("backlinks")),
     node("bookmark", lang("bookmark")),
     node("tag", lang("tag")),
-    node("backlink", lang("backlinks")),
-    node("agentChat", lang("ai")),
-    node("inbox", lang("inbox"), false),
-    node("graph", lang("graphView"), false),
-    node("globalGraph", lang("globalGraph"), false),
 ];
 
 const dockBuiltinPositions = new Map<string, TPluginDockPosition>([
     ["file", "LeftTop"],
     ["outline", "LeftTop"],
+    ["graph", "LeftTop"],
+    ["backlink", "LeftTop"],
     ["bookmark", "LeftBottom"],
     ["tag", "LeftBottom"],
-    ["backlink", "RightBottom"],
-    ["agentChat", "RightTop"],
-    ["inbox", "LeftTop"],
-    ["graph", "RightTop"],
-    ["globalGraph", "RightTop"],
 ]);
 
 const dockRuntimeTypeKeys = new Map<string, string>();
@@ -784,7 +734,6 @@ export const entryCatalog: IEntryCatalogSection[] = [
             node("pinDoc", lang("pinDoc")),
             node("unpinDoc", lang("unpinDoc")),
             node("sort", lang("sort"), true, sortChildren("sortByFiletree")),
-            node("riffCard", lang("riffCard"), false),
             node("search", lang("search")),
             node("replace", lang("replace")),
             node("cleanUnusedAssets", lang("cleanUnusedAssets")),
@@ -795,7 +744,7 @@ export const entryCatalog: IEntryCatalogSection[] = [
             node("showInFolder", lang("showInFolder")),
             node("import", lang("import"), true, importChildren()),
             node("export", lang("export"), true, [
-                node("exportSiYuanZip", literal("SiYuan .sy.zip")),
+                node("exportSiYuanZip", literal("Kora Note .sy.zip")),
                 node("exportMarkdown", literal("Markdown .zip")),
             ]),
         ],
@@ -812,7 +761,7 @@ export const entryCatalog: IEntryCatalogSection[] = [
             node("delete", lang("delete")),
             separator("separator_2"),
             node("export", lang("export"), true, [
-                node("exportSiYuanZip", literal("SiYuan .sy.zip")),
+                node("exportSiYuanZip", literal("Kora Note .sy.zip")),
                 node("exportMarkdown", literal("Markdown .zip")),
             ]),
         ],
@@ -868,14 +817,6 @@ export const entryCatalog: IEntryCatalogSection[] = [
             node("graphView", lang("graphView")),
             separator("separator_2"),
             node("attr", lang("attr")),
-            node("wechatReminder", lang("wechatReminder"), false),
-            node("riffCard", lang("riffCard"), false, [
-                node("spaceRepetition", lang("spaceRepetition"), false),
-                node("manage", lang("manage"), false),
-                node("quickMakeCard", lang("quickMakeCard"), false),
-                node("removeCard", lang("removeCard"), false),
-                node("addToDeck", lang("addToDeck"), false),
-            ]),
             node("search", lang("search")),
             node("transferBlockRef", lang("transferBlockRef")),
             separator("separator_3"),
@@ -899,8 +840,6 @@ export const entryCatalog: IEntryCatalogSection[] = [
             node("endRecord", lang("endRecord"), false),
             node("netImg2LocalAsset", lang("netImg2LocalAsset")),
             node("netAssets2LocalAssets", lang("netAssets2LocalAssets"), false),
-            node("uploadAssets2CDN", lang("uploadAssets2CDN"), false),
-            node("share2Liandi", lang("share2Liandi"), false),
             node("loadAllContent", lang("loadAllContent")),
             node("keepLazyLoad", lang("keepLazyLoad")),
             separator("separator_1"),
@@ -949,7 +888,6 @@ export const entryCatalog: IEntryCatalogSection[] = [
         label: location(lang("editor"), lang("image")),
         sortable: false,
         children: [
-            node("ocrText", lang("ocrResult"), false, undefined, false),
             node("copyAsPNG", lang("copyAsPNG"), false, undefined, false),
         ],
     },
@@ -1027,8 +965,6 @@ export const entryCatalog: IEntryCatalogSection[] = [
             node("delete", lang("delete")),
             separator("separator_2"),
             node("rename", lang("rename")),
-            // OCR 子菜单的入口、默认顺序与清空操作共用声明。
-            declaredMenuCatalog(IMAGE_OCR_MENU),
             node("alignCenter", lang("alignCenter")),
             node("alignLeft", lang("alignLeft")),
             node("width", lang("width"), true, [
@@ -1297,14 +1233,13 @@ export const refreshTopBarCatalog = (plugins: ITopBarCatalogPlugin[]) => {
         });
     });
     const dragIndex = topBarBuiltinChildren.findIndex((item) => item.key === "drag");
-    const pluginMenuIndex = topBarBuiltinChildren.findIndex((item) => item.key === "barPlugins");
+    // 顶栏不再有插件入口按钮，右侧插件图标直接排在拖拽区之后。
     topBarCatalogSection.children = [
         ...topBarBuiltinChildren.slice(0, dragIndex),
         ...leftPluginNodes,
         topBarBuiltinChildren[dragIndex],
-        ...topBarBuiltinChildren.slice(dragIndex + 1, pluginMenuIndex),
         ...rightPluginNodes,
-        ...topBarBuiltinChildren.slice(pluginMenuIndex),
+        ...topBarBuiltinChildren.slice(dragIndex + 1),
     ];
     topBarCatalogSignature = signature;
     rebuildCatalogIndexes();

@@ -16,6 +16,7 @@
 @use "component/card" as *;
 @use "business/graph" as *;
 @use "business/layout" as *;
+@use "business/exit-indicator" as *;
 @use "business/block" as *;
 @use "business/resize" as *;
 @use "util/reset" as *;

@@ -183,140 +183,26 @@ test("settings notifications update runtime configuration and refresh the regist
 });
 
 for (const mobile of [false, true]) {
-    test(`marketplace configuration and reconnection refresh mounted packages (mobile=${mobile})`, async () => {
+    test(`bazaar configuration updates the local config without touching packages (mobile=${mobile})`, async () => {
         const {parse} = require("ifdef-loader/preprocessor");
         const compiled = transpileModule(parse(readFileSync("src/config/setting/sync.ts", "utf8"),
             {MOBILE: mobile, BROWSER: mobile}, false, true), {
             compilerOptions: {module: ModuleKind.CommonJS, target: ScriptTarget.ES2021},
         }).outputText;
-        const config = {bazaar: {trust: true}, editor: {}, appearance: {}, keymap: {}};
-        let refreshed = 0;
+        const config = {bazaar: {trust: false}, editor: {}, appearance: {}, keymap: {}};
+        const next = {bazaar: {trust: true}, editor: {}, appearance: {}, keymap: {}};
         const exports = {} as {refreshSettingConfig: (namespace?: string) => Promise<void>};
         runInNewContext(compiled, {exports, window: {siyuan: {config}}, console, require: () => ({
-            fetchSyncPost: async () => ({code: 0, data: {conf: config}}),
+            fetchSyncPost: async () => ({code: 0, data: {conf: next}}),
             systemConfig: (value: unknown) => value,
             objEquals: (left: unknown, right: unknown) => JSON.stringify(left) === JSON.stringify(right),
             syncSettingTasks() {}, getSettingTabDefs: (): {id: string}[] => [],
-            refreshMountedBazaar: () => { refreshed++; },
         })});
-        await exports.refreshSettingConfig("editor");
-        assert.equal(refreshed, 0);
         await exports.refreshSettingConfig("bazaar");
-        assert.equal(refreshed, 1);
+        assert.equal(config.bazaar.trust, true);
+        config.bazaar = {trust: false};
         await exports.refreshSettingConfig();
-        assert.equal(refreshed, 2);
-    });
-
-    test(`bazaar filter changes preserve the mounted view without reloading package lists (mobile=${mobile})`, async () => {
-        const {parse} = require("ifdef-loader/preprocessor");
-        const compiled = transpileModule(parse(readFileSync("src/config/setting/sync.ts", "utf8"),
-            {MOBILE: mobile, BROWSER: mobile}, false, true), {
-            compilerOptions: {module: ModuleKind.CommonJS, target: ScriptTarget.ES2021},
-        }).outputText;
-        const config = {bazaar: {trust: true, petalDisabled: false,
-            compatibilityFilters: {plugins: {hideUnsupportedVersion: false}}}};
-        const next = JSON.parse(JSON.stringify(config)) as typeof config;
-        next.bazaar.compatibilityFilters.plugins.hideUnsupportedVersion = true;
-        let reloaded = 0;
-        let filtered = 0;
-        let remounted = 0;
-        const exports = {} as {refreshSettingConfig: (namespace?: string) => Promise<void>};
-        runInNewContext(compiled, {exports, window: {siyuan: {config}}, console, require: () => ({
-            fetchSyncPost: async () => ({code: 0, data: {conf: next}}),
-            systemConfig: (value: unknown) => value,
-            objEquals: (left: unknown, right: unknown) => JSON.stringify(left) === JSON.stringify(right),
-            syncSettingTasks() {}, getSettingTabDefs: () => [{id: "bazaar"}],
-            refreshMountedBazaar: () => { reloaded++; },
-            refreshMountedBazaarFilters: async () => {
-                assert.equal(config.bazaar.compatibilityFilters.plugins.hideUnsupportedVersion, true);
-                filtered++;
-            },
-            remountOpenSettingTab: async () => { remounted++; },
-        })});
-        await exports.refreshSettingConfig("bazaar");
-        assert.deepEqual({reloaded, filtered, remounted}, {reloaded: 0, filtered: 1, remounted: 0});
-        await exports.refreshSettingConfig("bazaar");
-        assert.deepEqual({reloaded, filtered, remounted}, {reloaded: 1, filtered: 1, remounted: 0});
-        next.bazaar = {...next.bazaar, petalDisabled: true};
-        await exports.refreshSettingConfig("bazaar");
-        assert.deepEqual({reloaded, filtered, remounted}, {reloaded: 2, filtered: 1, remounted: mobile ? 0 : 1});
-        next.bazaar = {...next.bazaar, compatibilityFilters: {plugins: {hideUnsupportedVersion: false}}};
-        await exports.refreshSettingConfig();
-        assert.deepEqual({reloaded, filtered, remounted}, {reloaded: 3, filtered: 1, remounted: mobile ? 0 : 2});
-    });
-
-    test(`bazaar batch exclusions preserve the mounted view without reloading package lists (mobile=${mobile})`, async () => {
-        const {parse} = require("ifdef-loader/preprocessor");
-        const compiled = transpileModule(parse(readFileSync("src/config/setting/sync.ts", "utf8"),
-            {MOBILE: mobile, BROWSER: mobile}, false, true), {
-            compilerOptions: {module: ModuleKind.CommonJS, target: ScriptTarget.ES2021},
-        }).outputText;
-        const config = {bazaar: {trust: true, petalDisabled: false,
-            batchUpdateExcluded: {plugins: {} as Record<string, boolean>}}};
-        const next = JSON.parse(JSON.stringify(config)) as typeof config;
-        next.bazaar.batchUpdateExcluded.plugins = {sample: true};
-        let reloaded = 0;
-        let filtered = 0;
-        let remounted = 0;
-        const exports = {} as {refreshSettingConfig: (namespace?: string) => Promise<void>};
-        runInNewContext(compiled, {exports, window: {siyuan: {config}}, console, require: () => ({
-            fetchSyncPost: async () => ({code: 0, data: {conf: next}}),
-            systemConfig: (value: unknown) => value,
-            objEquals: (left: unknown, right: unknown) => JSON.stringify(left) === JSON.stringify(right),
-            syncSettingTasks() {}, getSettingTabDefs: () => [{id: "bazaar"}],
-            refreshMountedBazaar: () => { reloaded++; },
-            refreshMountedBazaarFilters: async () => {
-                assert.deepEqual(config.bazaar.batchUpdateExcluded.plugins, {sample: true});
-                filtered++;
-            },
-            remountOpenSettingTab: async () => { remounted++; },
-        })});
-        await exports.refreshSettingConfig("bazaar");
-        assert.deepEqual({reloaded, filtered, remounted}, {reloaded: 0, filtered: 1, remounted: 0});
-        await exports.refreshSettingConfig("bazaar");
-        assert.deepEqual({reloaded, filtered, remounted}, {reloaded: 1, filtered: 1, remounted: 0});
-        next.bazaar = {...next.bazaar, petalDisabled: true};
-        await exports.refreshSettingConfig("bazaar");
-        assert.deepEqual({reloaded, filtered, remounted}, {reloaded: 2, filtered: 1, remounted: mobile ? 0 : 1});
-        next.bazaar = {...next.bazaar, batchUpdateExcluded: {plugins: {} as Record<string, boolean>}};
-        await exports.refreshSettingConfig();
-        assert.deepEqual({reloaded, filtered, remounted}, {reloaded: 3, filtered: 1, remounted: mobile ? 0 : 2});
-    });
-
-    test(`OCR notifications preserve the settings page and unrelated runtime configuration (mobile=${mobile})`, async () => {
-        const {parse} = require("ifdef-loader/preprocessor");
-        const compiled = transpileModule(parse(readFileSync("src/config/setting/sync.ts", "utf8"),
-            {MOBILE: mobile, BROWSER: mobile}, false, true), {
-            compilerOptions: {module: ModuleKind.CommonJS, target: ScriptTarget.ES2021},
-        }).outputText;
-        const editor = {fontSize: 16};
-        const appearance = {theme: "dark"};
-        const config = {ocr: {provider: "paddleocr", model: "tiny", auto: false}, editor, appearance, keymap: {}};
-        let next = {...config.ocr, auto: true};
-        let notifications = 0;
-        const remounted: string[] = [];
-        const exports = {} as {refreshSettingConfig: (namespace?: string) => Promise<void>};
-        runInNewContext(compiled, {exports, window: {siyuan: {config}}, console, require: () => ({
-            fetchSyncPost: async () => ({code: 0, data: {conf: {...config, ocr: next,
-                editor: {fontSize: 18}, appearance: {theme: "light"}}}}),
-            systemConfig: (value: unknown) => value,
-            objEquals: (left: unknown, right: unknown) => JSON.stringify(left) === JSON.stringify(right),
-            editorConfigApi: {apply: () => assert.fail("OCR must not apply editor settings")},
-            appearanceConfigApi: {apply: () => assert.fail("OCR must not apply appearance settings")},
-            syncSettingTasks() {}, getSettingTabDefs: () => [{id: "assets"}, {id: "ocr"}, {id: "appearance"}, {id: "editor"}],
-            notifyOCRChanged: () => { notifications++; },
-            remountOpenSettingTab: async (tab: string) => { remounted.push(tab); },
-        })});
-        await exports.refreshSettingConfig("ocr");
-        assert.equal(config.ocr, next);
-        assert.equal(config.editor, editor);
-        assert.equal(config.appearance, appearance);
-        assert.deepEqual(remounted, []);
-        next = {...next, auto: false};
-        await exports.refreshSettingConfig("ocr");
-        assert.equal(config.ocr.auto, false);
-        assert.deepEqual(remounted, []);
-        assert.equal(notifications, 2);
+        assert.equal(config.bazaar.trust, true);
     });
 
     test(`AI settings received from another window notify the agent model picker (mobile=${mobile})`, async () => {
@@ -370,7 +256,7 @@ for (const mobile of [false, true]) {
             fetchSyncPost: async () => ({code: 0, data: {conf: JSON.parse(JSON.stringify({...config, ai: next}))}}),
             systemConfig: (value: unknown) => value,
             objEquals: (left: unknown, right: unknown) => JSON.stringify(left) === JSON.stringify(right),
-            ...aiExports, syncSettingTasks() {}, refreshMountedBazaar() {}, remountOpenSettingTab: async () => {}, getSettingTabDefs: () => [{id: "ai"}],
+            ...aiExports, syncSettingTasks() {}, remountOpenSettingTab: async () => {}, getSettingTabDefs: () => [{id: "ai"}],
         };
         const exports = {} as {refreshSettingConfig: (namespace?: string) => Promise<void>};
         runInNewContext(compile("src/config/setting/sync.ts"), {exports, require: () => dependencies, window: windowContext, console});
@@ -408,7 +294,7 @@ for (const mobile of [false, true]) {
             fetchSyncPost: async () => failed ? {code: -1} : {code: 0, data: {conf: JSON.parse(JSON.stringify(next))}},
             systemConfig: (value: unknown) => value,
             objEquals: (left: unknown, right: unknown) => JSON.stringify(left) === JSON.stringify(right),
-            syncSettingTasks() {}, refreshMountedBazaar() {}, processSync() {}, getSettingTabDefs: () => [{id: "app"}, {id: "access"}],
+            syncSettingTasks() {}, processSync() {}, getSettingTabDefs: () => [{id: "app"}, {id: "access"}],
             remountOpenSettingTab: async (tab: string) => { remounted.push(tab); },
         })});
         await exports.refreshSettingConfig("system");
@@ -475,12 +361,12 @@ for (const mobile of [false, true]) {
         await exports.refreshSettingConfig("sync");
         assert.equal(refreshes, 1);
         icon = "#iconRefresh";
-        classes.add(mobile ? "fn__rotate" : "toolbar__item--active");
+        classes.add(mobile ? "fn__rotate" : "dock__item--syncing");
         next = {enabled: true, provider: 0};
         await exports.refreshSettingConfig("sync");
         assert.equal(refreshes, 2);
         assert.equal(config.sync.enabled, true);
         assert.equal(icon, "#iconRefresh");
-        assert.ok(classes.has(mobile ? "fn__rotate" : "toolbar__item--active"));
+        assert.ok(classes.has(mobile ? "fn__rotate" : "dock__item--syncing"));
     });
 }

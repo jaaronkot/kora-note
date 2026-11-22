@@ -15,6 +15,16 @@ import {getAllEditor, getAllModels, getAllTabs, getAllWnds} from "./getAll";
 import {Asset} from "../asset";
 import {Search} from "../search";
 import {Dock} from "./dock";
+import {mountWorkspaceMenuButton} from "./dock/workspaceButton";
+import {mountSearchButton} from "./dock/searchButton";
+import {mountSyncButton} from "./dock/syncButton";
+import {
+    hideRightDockBar,
+    moveBookmarkToLeftDock,
+    moveDockEntriesToLeftDock,
+    normalizeDockItemIcon,
+    removeGlobalGraphDock,
+} from "./dock/dockEntries";
 import {focusByRange} from "../protyle/util/selectionOffsets";
 import {hideElements} from "../protyle/ui/hideElements";
 import {hasClosestByClassName} from "../protyle/util/hasClosest";
@@ -35,7 +45,6 @@ import {afterLayoutReady} from "../plugin/loader";
 import {resolveCustomModelFactory} from "../plugin/customTabOwner";
 import {newCenterEmptyTab, resizeTabs, setTabPosition} from "./tabUtil";
 import {
-    isDisabledFeature,
     isPhablet,
     isSensitiveLayoutData,
     isSensitiveSearchConfig,
@@ -383,9 +392,8 @@ export const getAllLayout = () => {
 
 const DOCK_KEYS = ["left", "right", "bottom"] as const;
 
-// agentChat 停靠按钮：已存在则去重，不存在则按默认布局补全
-const ensureAgentChatDock = (layout: Pick<Config.IUiLayout, "left" | "right" | "bottom">) => {
-    let hasAgentChat = false;
+// 本 fork 不使用内置 Agent，停靠区不提供 agentChat 入口：已保存的布局里若有该项一并移除。
+const removeAgentChatDock = (layout: Pick<Config.IUiLayout, "left" | "right" | "bottom">) => {
     for (const key of DOCK_KEYS) {
         const sections = layout[key]?.data;
         if (!sections) {
@@ -395,39 +403,9 @@ const ensureAgentChatDock = (layout: Pick<Config.IUiLayout, "left" | "right" | "
             if (!sub) {
                 continue;
             }
-            for (let i = 0; i < sub.length; i++) {
-                if (sub[i]?.type !== "agentChat") {
-                    continue;
-                }
-                if (hasAgentChat) {
+            for (let i = sub.length - 1; i >= 0; i--) {
+                if (sub[i]?.type === "agentChat") {
                     sub.splice(i, 1);
-                    i--;
-                } else {
-                    hasAgentChat = true;
-                }
-            }
-        }
-    }
-    if (!hasAgentChat) {
-        for (const key of DOCK_KEYS) {
-            const sections = Constants.SIYUAN_EMPTY_LAYOUT[key]?.data;
-            if (!sections) {
-                continue;
-            }
-            for (let sectionIndex = 0; sectionIndex < sections.length; sectionIndex++) {
-                const sub = sections[sectionIndex];
-                if (!sub) {
-                    continue;
-                }
-                for (let itemIndex = 0; itemIndex < sub.length; itemIndex++) {
-                    const item = sub[itemIndex];
-                    if (item?.type === "agentChat") {
-                        const targetSections = layout[key]?.data;
-                        if (targetSections?.[sectionIndex]) {
-                            targetSections[sectionIndex].splice(itemIndex, 0, {...item});
-                        }
-                        return;
-                    }
                 }
             }
         }
@@ -437,11 +415,11 @@ const ensureAgentChatDock = (layout: Pick<Config.IUiLayout, "left" | "right" | "
 const initInternalDock = (dockItem: Config.IUILayoutDockTab[]) => {
     for (let index = dockItem.length - 1; index >= 0; index--) {
         const existSubItem = dockItem[index];
-        if ((window.siyuan.isPublish && (existSubItem.type === "inbox" || existSubItem.type === "agentChat")) ||
-            (isDisabledFeature("ai") && existSubItem.type === "agentChat")) {
+        if (existSubItem.type === "agentChat") {
             dockItem.splice(index, 1);
             continue;
         }
+        normalizeDockItemIcon(existSubItem);
         if (existSubItem.hotkeyLangId) {
             existSubItem.title = window.siyuan.languages[existSubItem.hotkeyLangId];
         }
@@ -449,7 +427,10 @@ const initInternalDock = (dockItem: Config.IUILayoutDockTab[]) => {
 };
 
 const JSONToDock = (json: any, app: App) => {
-    ensureAgentChatDock(json);
+    removeAgentChatDock(json);
+    removeGlobalGraphDock(json);
+    moveDockEntriesToLeftDock(json);
+    moveBookmarkToLeftDock(json);
     json.left.data.forEach((existItem: Config.IUILayoutDockTab[]) => {
         initInternalDock(existItem);
     });
@@ -463,8 +444,12 @@ const JSONToDock = (json: any, app: App) => {
     window.siyuan.layout.leftDock = new Dock({position: "Left", data: json.left, app});
     window.siyuan.layout.rightDock = new Dock({position: "Right", data: json.right, app});
     window.siyuan.layout.bottomDock = new Dock({position: "Bottom", data: json.bottom, app});
+    hideRightDockBar();
     adjustDockPadding();
     applyDockEntryVisibility();
+    mountWorkspaceMenuButton(app);
+    mountSyncButton(app);
+    mountSearchButton(app);
 };
 
 const removedTabs: Tab[] = [];
@@ -956,8 +941,7 @@ export const resizeTopBar = () => {
     }
 
     let beforeDragElement = dragElement.previousElementSibling as HTMLElement;
-    while (toolbarElement.scrollWidth > toolbarElement.clientWidth + 2 &&
-        beforeDragElement && beforeDragElement.id !== "barWorkspace") {
+    while (toolbarElement.scrollWidth > toolbarElement.clientWidth + 2 && beforeDragElement) {
         if (!beforeDragElement.classList.contains("fn__none") &&
             beforeDragElement.getAttribute("data-entry-hidden") !== "true" &&
             beforeDragElement.getAttribute("data-topbar-empty") !== "true") {
@@ -1107,7 +1091,7 @@ export const addResize = (obj: Layout | Wnd, after = true) => {
         let minSize = 232;
         Array.from(element.querySelectorAll(".file-tree")).find((item) => {
             if (item.classList.contains("sy__backlink") || item.classList.contains("sy__graph")
-                || item.classList.contains("sy__globalGraph") || item.classList.contains("sy__inbox")) {
+                || item.classList.contains("sy__globalGraph")) {
                 if (!item.classList.contains("fn__none") && !hasClosestByClassName(item, "fn__none")) {
                     minSize = 320;
                     return true;
@@ -1320,7 +1304,7 @@ export const addResize = (obj: Layout | Wnd, after = true) => {
         const previousElement = resizeElement.previousElementSibling as HTMLElement;
         const nextElement = resizeElement.nextElementSibling as HTMLElement;
         if (previousElement && nextElement) {
-            const bigType = ["graph", "inbox", "globalGraph", "backlink"];
+            const bigType = ["graph", "globalGraph", "backlink"];
             let size = 232;
             nextElement.style.transition = "none";
             previousElement.style.transition = "none";

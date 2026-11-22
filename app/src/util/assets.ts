@@ -530,7 +530,7 @@ export const setBodyHighlight = (gradient = window.siyuan.config.appearance.body
     let hue, saturation, lightness;
 
     if (name === "SiYuan") {
-        // SiYuan 专用：更艳丽的紫色
+        // 默认工作空间（目录名 SiYuan）专用：更艳丽的紫色
         hue = 280;
         saturation = 85;
         lightness = 48;

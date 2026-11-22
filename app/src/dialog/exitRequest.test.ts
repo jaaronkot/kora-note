@@ -37,15 +37,14 @@ const fixture = (mobile = false) => {
         console: {warn: () => {}},
         require: (name: string) => {
             if (name === "../util/functions") return {isMobile: () => mobile};
-            if (name === "./progress") return {progressLoading: (data: {code: number}, id: string,
-                                                               action?: {callback: () => void}) => {
-                if (data.code === 2) { activeProgress.delete(id); actions.delete(id); }
-                else {
-                    assert.equal(data.code, 1);
-                    activeProgress.add(id);
-                }
-                if (action) actions.set(id, action.callback);
-            }};
+            if (name === "./exitIndicator") return {
+                showExitIndicator: () => { activeProgress.add("exitProgress"); },
+                hideExitIndicator: () => { activeProgress.delete("exitProgress"); actions.delete("exitProgress"); },
+                updateExitIndicator: () => {},
+                setExitIndicatorAction: (_label: string, callback: () => void) => {
+                    actions.set("exitProgress", callback);
+                },
+            };
             if (name === "./mobileConfirmDialog") return {mobileConfirmDialog: (_title: string, text: string,
                 confirm: () => void, cancel: () => void, _delete: boolean, _extra: unknown, label: string) => {
                 assert.equal(label, "Skip sync and exit");
@@ -114,7 +113,7 @@ test("mobile exit failure retains an explicit cancel action while desktop retain
     }
 });
 
-test("slow exit retains endless progress and delivers success, sync failure and update confirmation", async () => {
+test("slow exit keeps the corner indicator and delivers success, sync failure and update confirmation", async () => {
     for (const code of [0, 1, 2]) {
         const state = fixture();
         const responses: unknown[] = [];

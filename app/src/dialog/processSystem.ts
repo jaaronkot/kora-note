@@ -17,7 +17,6 @@ import {MobileDialog as Dialog} from "./mobileDialog";
 import {isMobile} from "../util/functions";
 import {mobileConfirmDialog as confirmDialog} from "./mobileConfirmDialog";
 import {escapeHtml} from "../util/escape";
-import {needSubscribe} from "../util/needSubscribe";
 import {hideAllElements} from "../protyle/ui/hideElements";
 import {saveMobileLayout} from "../mobile/util/saveLayout";
 import {isInAndroid, isInHarmony, isInIOS, setStorageVal} from "../protyle/util/compatibility";
@@ -419,7 +418,7 @@ export const processSync = (data?: IWebSocketData) => {
     if (data?.code === 1) {
         window.dispatchEvent(new CustomEvent("siyuan-sync-success"));
     }
-    const syncDisabled = !window.siyuan.config.sync.enabled || (0 === window.siyuan.config.sync.provider && needSubscribe(""));
+    const syncDisabled = !window.siyuan.config.sync.enabled;
     // A configuration response started before the latest event must not overwrite its result.
     const result = lastSyncResult ?? window.siyuan.config.sync.lastResult;
     const syncIcon = syncDisabled ? "#iconCloudOff" : result === 2 ? "#iconCloudError" :
@@ -457,24 +456,24 @@ export const processSync = (data?: IWebSocketData) => {
     }
     const useElement = iconElement.querySelector("use");
     if (!data) {
-        if (iconElement.classList.contains("toolbar__item--active")) {
+        if (iconElement.classList.contains("dock__item--syncing")) {
             // 同步进行中时保持旋转状态，待同步完成后由同步结果消息更新图标 https://github.com/siyuan-note/siyuan/issues/18597
             return;
         }
-        iconElement.classList.remove("toolbar__item--active");
+        iconElement.classList.remove("dock__item--syncing");
         useElement.setAttribute("xlink:href", syncIcon);
         return;
     }
     iconElement.firstElementChild.classList.remove("fn__rotate");
     if (data.code === 0) {  // syncing
-        iconElement.classList.add("toolbar__item--active");
+        iconElement.classList.add("dock__item--syncing");
         iconElement.firstElementChild.classList.add("fn__rotate");
         useElement.setAttribute("xlink:href", "#iconRefresh");
     } else if (data.code === 2) {    // error
-        iconElement.classList.remove("toolbar__item--active");
+        iconElement.classList.remove("dock__item--syncing");
         useElement.setAttribute("xlink:href", syncIcon);
     } else if (data.code === 1) {   // success
-        iconElement.classList.remove("toolbar__item--active");
+        iconElement.classList.remove("dock__item--syncing");
         useElement.setAttribute("xlink:href", syncIcon);
     }
     /// #endif

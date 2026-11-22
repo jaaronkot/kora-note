@@ -1,7 +1,7 @@
 // 启动页窗口：端口分配、窗口创建与加载、以及 app 就绪时的提前准备。
 import {join} from "node:path";
 import {createServer} from "node:net";
-import {app, BrowserWindow, screen} from "electron";
+import {app, BrowserWindow, nativeTheme, screen} from "electron";
 import {getArg, paths, state, writeLog} from "../shared/runtime";
 import {resolveAppLanguage} from "../shared/language";
 import {errorMessage} from "../shared/errors";
@@ -25,6 +25,8 @@ const loadBootWindow: LoadBootWindow = ({
         v: paths.appVer,
         port: port as string,
         lang: lang || resolveAppLanguage(app.getPreferredSystemLanguages()),
+        // 启动页跟随系统的深浅色外观，未指定时由页面自身的媒体查询兜底。
+        theme: nativeTheme.shouldUseDarkColors ? "dark" : "light",
     };
     currentBootWindow.kernelPort = port;
     currentBootWindow.lang = lang;

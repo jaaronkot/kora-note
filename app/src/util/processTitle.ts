@@ -1,5 +1,4 @@
 import {escapeHtml} from "./escape";
-import {Constants} from "../constants";
 import {pathPosix} from "./pathName";
 
 let windowWorkspaceTitle = "";
@@ -21,28 +20,29 @@ export const getWorkspaceName = () => {
     return dir ? pathPosix().basename(dir.replace(/\\/g, "/")) : window.siyuan.languages?.workspace;
 };
 
-export const setTitle = (title: string, showVersionTitle = false, iconElement?: Element) => {
+export const setTitle = (title: string, showBrandTitle = false, iconElement?: Element) => {
     const dragElement = document.getElementById("drag");
-    const workspaceName = getWorkspaceName();
-    if (showVersionTitle) {
-        const versionTitle = `${workspaceName} - ${window.siyuan.languages.siyuanNote} v${Constants.SIYUAN_VERSION}`;
-        document.title = versionTitle;
+    const brandName = window.siyuan?.languages?.siyuanNote || "Kora Note";
+    if (showBrandTitle) {
+        document.title = brandName;
         if (!window.siyuan.config.appearance.hideToolbar && dragElement) {
-            dragElement.textContent = versionTitle;
-            dragElement.setAttribute("title", versionTitle);
+            dragElement.textContent = brandName;
+            dragElement.setAttribute("title", brandName);
         }
     } else {
         title = title.trim() || window.siyuan.languages["_kernel"][16];
-        document.title = `${title} - ${workspaceName} - ${window.siyuan.languages.siyuanNote} v${Constants.SIYUAN_VERSION}`;
+        // 顶部标题栏只显示文档名与品牌名，不带工作空间名与版本号。
+        const fullTitle = `${title} - ${brandName}`;
+        document.title = fullTitle;
         if (!window.siyuan.config.appearance.hideToolbar && dragElement) {
-            dragElement.setAttribute("title", title);
-            dragElement.innerHTML = escapeHtml(title);
+            dragElement.setAttribute("title", fullTitle);
+            dragElement.innerHTML = escapeHtml(fullTitle);
             if (iconElement) {
                 const content = document.createElement("span");
                 content.className = "toolbar__title-content";
                 const text = document.createElement("span");
                 text.className = "fn__ellipsis";
-                text.textContent = title;
+                text.textContent = fullTitle;
                 const icon = document.createElement("span");
                 icon.className = "toolbar__title-icon";
                 icon.setAttribute("aria-hidden", "true");
@@ -55,4 +55,12 @@ export const setTitle = (title: string, showVersionTitle = false, iconElement?: 
     if (windowWorkspaceTitle) {
         document.title = `${windowWorkspaceTitle} - ${document.title}`;
     }
+};
+
+// 启动时恢复的文档标题可能已经就绪，按当前聚焦标签页同步标题，避免被品牌名覆盖。
+export const syncTitleFromFocusedTab = () => {
+    const tabHeader = document.querySelector(".layout__wnd--active .layout-tab-bar .item--focus[data-type='tab-header']") ||
+        document.querySelector(".layout-tab-bar .item--focus[data-type='tab-header']");
+    const title = tabHeader?.querySelector(".item__text")?.textContent || "";
+    setTitle(title, !title, tabHeader?.querySelector(".item__icon"));
 };

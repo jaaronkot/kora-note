@@ -1,0 +1,40 @@
+// 退出提示以无模态浮层停靠在角落，不遮挡界面，也不阻断背景的滚动与手势。
+.exit-indicator {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: min(320px, calc(100vw - 16px));
+  padding: 8px 12px;
+  border-radius: var(--b3-border-radius-b);
+  border: 1px solid var(--b3-theme-surface-lighter);
+  background-color: var(--b3-theme-surface, Canvas);
+  box-shadow: var(--b3-dialog-shadow);
+  color: var(--b3-theme-on-surface);
+  font-size: var(--b3-font-size);
+  line-height: 20px;
+
+  &__body {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  &__icon {
+    flex: none;
+    width: 16px;
+    height: 16px;
+    margin-top: 2px;
+  }
+
+  &__text {
+    min-width: 0;
+    word-break: break-word;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+}
