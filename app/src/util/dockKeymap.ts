@@ -1,7 +1,7 @@
 import {getKeymapBindings, getKeymapItem, IShortcutKeymap, normalizeShortcutKey} from "./keymapBindings";
 
-const dockKeys = {fileTree: "1", outline: "2", bookmark: "3", tag: "4", dailyNote: "5", inbox: "6",
-    backlinks: "7", graphView: "8", globalGraph: "9", riffCard: "0"};
+// 面板快捷键按停靠栏图标的显示顺序编号：文件树、大纲、关系图、反向链接、收藏、标签。
+const dockKeys = {fileTree: "1", outline: "2", graphView: "3", backlinks: "4", bookmark: "5", tag: "6"};
 
 export const createDockKeymapDefaults = (platform: string): Record<keyof typeof dockKeys, IShortcutKeymap> =>
     Object.fromEntries(Object.entries(dockKeys).map(([key, digit]) => {

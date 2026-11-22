@@ -68,7 +68,7 @@ test("macOS menu loads translations from language identifiers without an i18n pa
     for (const lang of ["zh-CN", "en", "zh-CN"]) {
         const languages = readLanguages(lang);
         const menu = menuOf(buildMacAppMenuTemplate({lang, hotkey: {undo: "custom-undo"}}, languages,
-            {platform: "darwin", appName: "SiYuan"}));
+            {platform: "darwin", appName: "Kora"}));
         const edit = menu.find(item => item.role === "editMenu");
         assert.equal(edit.label, languages.edit);
         assert.equal(itemsOf(edit).find(item => item.role === "copy").label, languages.copy);

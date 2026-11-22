@@ -2,6 +2,7 @@ import {createDockKeymapDefaults} from "../../util/dockKeymap";
 import {config as configApi} from "../../config/util/configApi";
 import {keymapPayload} from "../../config/keymapPayload";
 import {mergeKeymapDefault} from "../../util/keymapBindings";
+import {migrateKeymapDefaults} from "../../util/keymapMigration";
 import {Constants} from "../../constants";
 /// #if !BROWSER
 import {sendGlobalShortcut} from "./globalShortcut";
@@ -124,6 +125,7 @@ export const correctHotkey = (app: App) => {
         Constants.SIYUAN_KEYMAP.editor.general.selectToPageEnd.custom =
             Constants.SIYUAN_KEYMAP.editor.general.selectToPageEnd.default = "⇧⌘End";
     }
+    const migratedKeymap = migrateKeymapDefaults(window.siyuan.config.keymap, window.siyuan.config.system.os);
     const matchKeymap1 = matchKeymap(Constants.SIYUAN_KEYMAP.general, "general");
     const matchKeymap2 = matchKeymap(Constants.SIYUAN_KEYMAP.editor.general, "editor", "general");
     const matchKeymap3 = matchKeymap(Constants.SIYUAN_KEYMAP.editor.insert, "editor", "insert");
@@ -141,7 +143,7 @@ export const correctHotkey = (app: App) => {
     if (!window.siyuan.config.readonly &&
         (!matchKeymap1 || !matchKeymap2 || !matchKeymap3 || !matchKeymap4 || !matchKeymap5 || !matchKeymap6 ||
             !hasKeymap1 || !hasKeymap2 || !hasKeymap3 || !hasKeymap4 || !hasKeymap5 || !hasKeymap6 ||
-            clearedDisallowedKeymap)) {
+            clearedDisallowedKeymap || migratedKeymap)) {
         /// #if !BROWSER
         ipcRenderer.send(Constants.SIYUAN_CMD, {
             cmd: "writeLog",

@@ -10,10 +10,18 @@ test("dock defaults share the main application's platform mapping", () => {
         assert.deepEqual(getSidebarKeymap(undefined, platform), {fileTree: ["⌃1"], outline: ["⌃2"]});
     }
     const defaults = createDockKeymapDefaults("win32");
-    assert.deepEqual(defaults.bookmark, {default: "⌥3", custom: "⌥3"});
-    assert.deepEqual(defaults.riffCard, {default: "⌥0", custom: "⌥0"});
+    assert.deepEqual(defaults.bookmark, {default: "⌥5", custom: "⌥5"});
+    assert.deepEqual(defaults.graphView, {default: "⌥3", custom: "⌥3"});
+    assert.deepEqual(defaults.backlinks, {default: "⌥4", custom: "⌥4"});
     defaults.fileTree.custom = "";
     assert.equal(createDockKeymapDefaults("win32").fileTree.custom, "⌥1");
+});
+
+test("面板键位按停靠栏图标的显示顺序编号", () => {
+    assert.deepEqual(Object.entries(createDockKeymapDefaults("darwin")).map(([key, item]) => [key, item.custom]), [
+        ["fileTree", "⌃1"], ["outline", "⌃2"], ["graphView", "⌃3"], ["backlinks", "⌃4"],
+        ["bookmark", "⌃5"], ["tag", "⌃6"],
+    ]);
 });
 
 test("sidebar projection retains custom bindings, multiple keys and explicit unbinding", () => {
