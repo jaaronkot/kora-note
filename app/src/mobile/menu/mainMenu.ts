@@ -5,18 +5,18 @@ import {closePanel} from "../util/closePanel";
 import {openDock} from "../dock/util";
 import {getCurrentEditor} from "../editor";
 import {newFile} from "../../util/newFile";
-import {mountHelp, newDailyNote, newEncryptedNotebook, newNotebook} from "../../util/mount";
+import {mountHelp, newEncryptedNotebook, newNotebook} from "../../util/mount";
 import {exitSiYuan, lockScreen} from "../../dialog/processSystem";
 import {openHistory} from "../../history/history";
-import {openCard} from "../../card/openCard";
 import {syncGuide} from "../../sync/syncGuide";
 import {commandPanel} from "../../boot/globalEvent/command/panel";
 import {openTopBarMenu} from "../../plugin/openTopBarMenu";
 import {openDataMigration} from "../../menus/dataMigration";
 import {openTemplateManager} from "../../template/manager";
-import {isDisabledFeature, isInMobileApp} from "../../protyle/util/compatibility";
+import {isInMobileApp} from "../../protyle/util/compatibility";
 import {getHostCapabilities} from "../../util/hostCapabilities";
 import {escapeAttr} from "../../util/escape";
+import {Constants} from "../../constants";
 import {getSettingTabDefs, settingTabToMenuId, type ISettingTabShell, type TSettingTab} from "../../config/setting/tabs";
 
 /** 主菜单条目：标记结构、可见条件与点击行为集中声明，供 HTML 生成与事件分发共用同一份标识符 */
@@ -81,7 +81,6 @@ export const MOBILE_MAIN_MENU_GROUPS: IMobileMainMenuGroup[] = [{
         dockItem("menuBookmark", "bookmark", "iconBookmark", lang("bookmark")),
         dockItem("menuTag", "tag", "iconTag", lang("tag")),
         dockItem("menuBacklink", "backlink", "iconLink", lang("backlinks")),
-        dockItem("menuInbox", "inbox", "iconInbox", lang("inbox")),
         {
             id: "menuRecent",
             icon: "iconRecentDocs",
@@ -96,16 +95,6 @@ export const MOBILE_MAIN_MENU_GROUPS: IMobileMainMenuGroup[] = [{
             label: lang("search"),
             click(app) {
                 popSearch(app);
-            },
-        },
-        {
-            id: "menuAgentChat",
-            icon: "iconSparkles",
-            label: lang("agentChat"),
-            hidden: () => isReadonly() || window.siyuan.isPublish || isDisabledFeature("ai"),
-            trailingHTML: "<span data-type=\"agent-status\" class=\"b3-menu__accelerator fn__none\"></span>",
-            click(app) {
-                void import("../agent/MobileAgentChat").then(({openMobileAgent}) => openMobileAgent(app));
             },
         },
         {
@@ -126,16 +115,6 @@ export const MOBILE_MAIN_MENU_GROUPS: IMobileMainMenuGroup[] = [{
                 const contextID = getCurrentEditor()?.protyle.block.rootID || "";
                 closePanel();
                 openTemplateManager(contextID);
-            },
-        },
-        {
-            id: "menuCard",
-            icon: "iconRiffCard",
-            label: lang("spaceRepetition"),
-            hidden: isReadonly,
-            click(app) {
-                openCard(app);
-                closePanel();
             },
         },
         {
@@ -168,14 +147,6 @@ export const MOBILE_MAIN_MENU_GROUPS: IMobileMainMenuGroup[] = [{
         label: lang("newFile"),
         click(app) {
             newFile(app);
-            closePanel();
-        },
-    }, {
-        id: "menuNewDaily",
-        icon: "iconCalendar",
-        label: lang("dailyNote"),
-        click(app) {
-            newDailyNote(app);
             closePanel();
         },
     }, {
@@ -249,8 +220,7 @@ export const MOBILE_MAIN_MENU_GROUPS: IMobileMainMenuGroup[] = [{
         id: "menuFeedback",
         icon: "iconFeedback",
         label: lang("feedback"),
-        href: () => "zh-CN" === window.siyuan.config.lang ?
-            "https://ld246.com/article/1649901726096" : "https://liuyun.io/article/1686530886208",
+        href: () => Constants.PROJECT_ISSUES_URL,
     }],
 }];
 

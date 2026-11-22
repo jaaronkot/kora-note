@@ -20,10 +20,14 @@ export abstract class Constants {
     public static readonly SIYUAN_APPID: string = Math.random().toString(36).substring(8);
 
     // 服务器地址
-    public static readonly ASSETS_ADDRESS: string = "https://assets.b3logfile.com/siyuan/";
     public static readonly PROTYLE_CDN: string = "/stage/protyle";
     public static readonly UPLOAD_ADDRESS: string = "/upload";
     public static readonly SERVICE_WORKER_PATH: string = "/service-worker.js";
+
+    // 项目仓库入口
+    public static readonly PROJECT_URL: string = "https://github.com/jaaronkot/kora-note";
+    public static readonly PROJECT_ISSUES_URL: string = "https://github.com/jaaronkot/kora-note/issues";
+    public static readonly PROJECT_RELEASES_URL: string = "https://github.com/jaaronkot/kora-note/releases";
 
     // drop 事件
     public static readonly SIYUAN_DROP_FILE: string = "application/siyuan-file";
@@ -84,7 +88,6 @@ export abstract class Constants {
     public static readonly SIYUAN_TOPBAR_CONTEXT_MENU: string = "siyuan-topbar-context-menu"; // 顶栏拖拽区域右键转交渲染进程
 
     // custom
-    public static readonly CUSTOM_REMINDER_WECHAT: string = "custom-reminder-wechat";
     public static readonly CUSTOM_RIFF_DECKS: string = "custom-riff-decks";
     public static readonly CUSTOM_SY_READONLY: string = "custom-sy-readonly";
     public static readonly CUSTOM_SY_EMBED_BREADCRUMB_PARENT_PATH: string = "custom-sy-embed-breadcrumb-parent-path";
@@ -282,7 +285,6 @@ export abstract class Constants {
     public static readonly DIALOG_SYNCCHOOSEDIR = "dialog-syncchoosedir"; // 选择云端同步目录
     public static readonly DIALOG_SYNCCHOOSEDIRECTION = "dialog-syncchoosedirection"; // 选择云端同步方向
     public static readonly DIALOG_TRANSFERBLOCKREF = "dialog-transferblockref"; // 转移引用
-    public static readonly DIALOG_WECHATREMINDER = "dialog-wechatreminder"; // 微信提醒
     public static readonly DIALOG_PASSWORD = "dialog-password"; // 导入同步密钥
     public static readonly DIALOG_SETPASSWORD = "dialog-setpassword"; // 设置同步密钥
     public static readonly DIALOG_BOOTSYNCFAILED = "dialog-bootsyncfailed"; // 启动时同步数据失败
@@ -297,10 +299,9 @@ export abstract class Constants {
     public static readonly DIALOG_SAVEWORKSPACE = "dialog-saveworkspace"; // 保存工作空间
 
     // menu
-    public static readonly MENU_BAR_WORKSPACE = "barWorkspace"; // 顶栏主菜单
+    public static readonly MENU_BAR_WORKSPACE = "barWorkspace"; // 主菜单
     public static readonly MENU_BAR_PLUGIN = "topBarPlugin"; // 顶栏插件菜单
     public static readonly MENU_BAR_ZOOM = "barZoom"; // 顶栏缩放菜单
-    public static readonly MENU_BAR_MODE = "barmode"; // 顶栏外观菜单
     public static readonly MENU_BAR_MORE = "barmore"; // 顶栏更多菜单
     public static readonly MENU_BAR_ENTRY = "barEntry"; // 顶栏入口显隐菜单
     public static readonly MENU_STATUS_HELP = "statusHelp"; // 状态栏帮助菜单
@@ -398,7 +399,7 @@ export abstract class Constants {
         hi: "20210808180117-6v0mkxr",
         id: "20210808180117-6v0mkxr",
         it: "20210808180117-6v0mkxr",
-        ja: "20240530133126-axarxgx",
+        ja: "20210808180117-6v0mkxr",
         ko: "20210808180117-6v0mkxr",
         pl: "20210808180117-6v0mkxr",
         "pt-BR": "20210808180117-6v0mkxr",
@@ -409,7 +410,7 @@ export abstract class Constants {
         sr: "20210808180117-6v0mkxr",
         tr: "20210808180117-6v0mkxr",
         uk: "20210808180117-6v0mkxr",
-        "zh-TW": "20211226090932-5lcq56f",
+        "zh-TW": "20210808180117-6v0mkxr",
         "zh-CN": "20210808180117-czj9bvb",
     };
     public static readonly QUICK_DECK_ID = "20230218211946-2kw8jgx";
@@ -516,12 +517,12 @@ export abstract class Constants {
             previousDatabaseRow: {default: "", custom: ""},
             nextDatabaseRow: {default: "", custom: ""},
             openContextMenu: {default: "⌘/", custom: "⌘/"},
-            mainMenu: {default: "⌥\\", custom: "⌥\\"},
-            commandPanel: {default: "⌥⇧P", custom: "⌥⇧P"},
+            mainMenu: {default: "⌘\\", custom: "⌘\\"},
+            commandPanel: {default: "⇧⌘P", custom: "⇧⌘P"},
             increaseEditorFontSize: {default: "", custom: ""},
             decreaseEditorFontSize: {default: "", custom: ""},
             resetEditorFontSize: {default: "", custom: ""},
-            editReadonly: {default: "⇧⌘G", custom: "⇧⌘G"},
+            editReadonly: {default: "⌥⌘R", custom: "⌥⌘R"},
             syncNow: {default: "F9", custom: "F9"},
             enterBack: {default: "⌥←", custom: "⌥←"},
             enter: {default: "⌥→", custom: "⌥→"},
@@ -531,16 +532,14 @@ export abstract class Constants {
             search: {default: "⌘F", custom: "⌘F"},
             globalSearch: {default: "⌘P", custom: "⌘P"},
             stickSearch: {default: "⇧⌘F", custom: "⇧⌘F"},
-            replace: {default: "⌘R", custom: "⌘R"},
+            replace: {default: "⌥⌘F", custom: "⌥⌘F"},
             closeTab: {default: "⌘W", custom: "⌘W"},
-            agentChat: {default: "", custom: ""},
-            agentSend: {default: "⌘↩", custom: "⌘↩"},
             ...createDockKeymapDefaults("darwin"),
-            config: {default: "⌥P", custom: "⌥P"},
+            config: {default: "⌘,", custom: "⌘,"},
             dataHistory: {default: "⌥H", custom: "⌥H"},
             toggleWin: {default: "⌥M", custom: "⌥M"},
             lockScreen: {default: "⌥N", custom: "⌥N"},
-            recentDocs: {default: "⌘E", custom: "⌘E"},
+            recentDocs: {default: "⌘R", custom: "⌘R"},
             goToTab1: {default: "⌘1", custom: "⌘1"},
             goToTab2: {default: "⌘2", custom: "⌘2"},
             goToTab3: {default: "⌘3", custom: "⌘3"},
@@ -588,18 +587,17 @@ export abstract class Constants {
                 collapse: {default: "⌘↑", custom: "⌘↑"},
                 foldChildHeadings: {default: "", custom: ""},
                 foldSiblingHeadings: {default: "", custom: ""},
-                foldRecursive: {default: "⌥⌘↑", custom: "⌥⌘↑"},
+                foldRecursive: {default: "⌥⌘C", custom: "⌥⌘C"},
                 insertBottom: {default: "⌥⌘.", custom: "⌥⌘."},
                 refTab: {default: "⇧⌘.", custom: "⇧⌘."},
                 openBy: {default: "⌥,", custom: "⌥,"},
                 insertRight: {default: "⌥.", custom: "⌥."},
                 attr: {default: "⌥⌘A", custom: "⌥⌘A"},
-                quickMakeCard: {default: "⌥⌘F", custom: "⌥⌘F"},
                 refresh: {default: "F5", custom: "F5"},
                 copyBlockRef: {default: "⇧⌘C", custom: "⇧⌘C"},
-                copyProtocol: {default: "⇧⌘H", custom: "⇧⌘H"},
+                copyProtocol: {default: "⌘L", custom: "⌘L"},
                 copyBlockEmbed: {default: "⇧⌘E", custom: "⇧⌘E"},
-                copyHPath: {default: "⇧⌘P", custom: "⇧⌘P"},
+                copyHPath: {default: "⌥⌘P", custom: "⌥⌘P"},
                 undo: {default: "⌘Z", custom: "⌘Z"},
                 redo: {default: "⇧⌘Z", custom: "⇧⌘Z"},
                 rename: {default: "F2", custom: "F2"},
@@ -610,12 +608,11 @@ export abstract class Constants {
                 outline: {default: "⌥O", custom: "⌥O"},
                 backlinks: {default: "⌥B", custom: "⌥B"},
                 graphView: {default: "⌥G", custom: "⌥G"},
-                spaceRepetition: {default: "⌥F", custom: "⌥F"},
                 fullscreen: {default: "⌥Y", custom: "⌥Y"},
                 alignLeft: {default: "⌥L", custom: "⌥L"},
                 alignCenter: {default: "⌥C", custom: "⌥C"},
                 alignRight: {default: "⌥R", custom: "⌥R"},
-                editMode: {default: "⌥⌘9", custom: "⌥⌘9"},
+                editMode: {default: "⌥⌘E", custom: "⌥⌘E"},
                 insertBefore: {default: "⇧⌘B", custom: "⇧⌘B"},
                 insertAfter: {default: "⇧⌘A", custom: "⇧⌘A"},
                 insertSuperBlockLeft: {default: "", custom: ""},
@@ -658,23 +655,23 @@ export abstract class Constants {
                 lastUsed: {default: "⌥X", custom: "⌥X"},
                 ref: {default: "⌥[", custom: "⌥["},
                 kbd: {default: "⌘'", custom: "⌘'"},
-                sup: {default: "⌘H", custom: "⌘H"},
-                sub: {default: "⌘J", custom: "⌘J"},
+                sup: {default: "⌥⌘U", custom: "⌥⌘U"},
+                sub: {default: "⌥⌘D", custom: "⌥⌘D"},
                 bold: {default: "⌘B", custom: "⌘B"},
-                "inline-math": {default: "⌘M", custom: "⌘M"},
+                "inline-math": {default: "⌥⌘Q", custom: "⌥⌘Q"},
                 memo: {default: "⌥⌘M", custom: "⌥⌘M"},
                 underline: {default: "⌘U", custom: "⌘U"},
                 italic: {default: "⌘I", custom: "⌘I"},
                 mark: {default: "⌥D", custom: "⌥D"},
-                tag: {default: "⌘T", custom: "⌘T"},
+                tag: {default: "⌥⌘T", custom: "⌥⌘T"},
                 strike: {default: "⇧⌘S", custom: "⇧⌘S"},
-                "inline-code": {default: "⌘G", custom: "⌘G"},
+                "inline-code": {default: "⌘E", custom: "⌘E"},
                 link: {default: "⌘K", custom: "⌘K"},
-                check: {default: "⌘L", custom: "⌘L"},
-                "ordered-list": {default: "", custom: ""},
-                list: {default: "", custom: ""},
+                check: {default: "⌥⌘9", custom: "⌥⌘9"},
+                "ordered-list": {default: "⌥⌘8", custom: "⌥⌘8"},
+                list: {default: "⌥⌘7", custom: "⌥⌘7"},
                 mindmap: {default: "", custom: ""},
-                table: {default: "⌘O", custom: "⌘O"},
+                table: {default: "⌥⌘S", custom: "⌥⌘S"},
                 code: {default: "⇧⌘K", custom: "⇧⌘K"},
                 quote: {default: "", custom: ""},
                 calloutNote: {default: "", custom: ""},
@@ -682,7 +679,7 @@ export abstract class Constants {
                 calloutImportant: {default: "", custom: ""},
                 calloutWarning: {default: "", custom: ""},
                 calloutCaution: {default: "", custom: ""},
-                clearInline: {default: "⌘\\", custom: "⌘\\"},
+                clearInline: {default: "⌥⌘\\", custom: "⌥⌘\\"},
             },
             heading: {
                 paragraph: {default: "⌥⌘0", custom: "⌥⌘0"},
@@ -708,10 +705,10 @@ export abstract class Constants {
                 insertRowBelow: {default: "", custom: ""},
                 insertColumnLeft: {default: "", custom: ""},
                 insertColumnRight: {default: "", custom: ""},
-                moveToUp: {default: "⌥⌘T", custom: "⌥⌘T"},
-                moveToDown: {default: "⌥⌘B", custom: "⌥⌘B"},
-                moveToLeft: {default: "⌥⌘L", custom: "⌥⌘L"},
-                moveToRight: {default: "⌥⌘R", custom: "⌥⌘R"},
+                moveToUp: {default: "⌥⌘↑", custom: "⌥⌘↑"},
+                moveToDown: {default: "⌥⌘↓", custom: "⌥⌘↓"},
+                moveToLeft: {default: "⌥⌘←", custom: "⌥⌘←"},
+                moveToRight: {default: "⌥⌘→", custom: "⌥⌘→"},
                 "delete-row": {default: "⌘-", custom: "⌘-"},
                 "delete-column": {default: "⇧⌘-", custom: "⇧⌘-"}
             }
@@ -807,17 +804,23 @@ export abstract class Constants {
                     show: false,
                     icon: "iconOutline",
                     hotkeyLangId: "outline",
-                }, {
-                    type: "inbox",
-                    size: {width: 320, height: 0},
+                }], [{
+                    type: "graph",
+                    size: {width: 232, height: 0},
                     show: false,
-                    icon: "iconInbox",
-                    hotkeyLangId: "inbox",
+                    icon: "iconGraph",
+                    hotkeyLangId: "graphView",
+                }, {
+                    type: "backlink",
+                    size: {width: 232, height: 0},
+                    show: false,
+                    icon: "iconLink",
+                    hotkeyLangId: "backlinks",
                 }], [{
                     type: "bookmark",
                     size: {width: 232, height: 0},
                     show: false,
-                    icon: "iconBookmark",
+                    icon: "iconStar",
                     hotkeyLangId: "bookmark",
                 }, {
                     type: "tag",
@@ -830,33 +833,7 @@ export abstract class Constants {
         },
         right: {
             pin: true,
-            data: [
-                [{
-                    type: "agentChat",
-                    size: {width: 320, height: 0},
-                    show: false,
-                    icon: "iconSparkles",
-                    hotkeyLangId: "agentChat",
-                }, {
-                    type: "graph",
-                    size: {width: 320, height: 0},
-                    show: false,
-                    icon: "iconGraph",
-                    hotkeyLangId: "graphView",
-                }, {
-                    type: "globalGraph",
-                    size: {width: 320, height: 0},
-                    show: false,
-                    icon: "iconGlobalGraph",
-                    hotkeyLangId: "globalGraph",
-                }], [{
-                    type: "backlink",
-                    size: {width: 320, height: 0},
-                    show: false,
-                    icon: "iconLink",
-                    hotkeyLangId: "backlinks",
-                }]
-            ]
+            data: []
         }
     };
 

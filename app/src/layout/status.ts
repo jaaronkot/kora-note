@@ -79,11 +79,7 @@ export const initStatus = (isWindow = false) => {
                             label: window.siyuan.languages.feedback,
                             icon: "iconFeedback",
                             click: () => {
-                                if ("zh-CN" === window.siyuan.config.lang) {
-                                    openLink(window.siyuan.ws.app, "https://ld246.com/article/1649901726096");
-                                } else {
-                                    openLink(window.siyuan.ws.app, "https://liuyun.io/article/1686530886208");
-                                }
+                                openLink(window.siyuan.ws.app, Constants.PROJECT_ISSUES_URL);
                             }
                         }).element);
                         /// #if !BROWSER
@@ -99,14 +95,14 @@ export const initStatus = (isWindow = false) => {
                             label: window.siyuan.languages["_trayMenu"].officialWebsite,
                             icon: "iconSiYuan",
                             click: () => {
-                                openLink(window.siyuan.ws.app, "https://b3log.org/siyuan");
+                                openLink(window.siyuan.ws.app, Constants.PROJECT_URL);
                             }
                         }).element);
                         window.siyuan.menus.menu.append(new MenuItem({
                             label: window.siyuan.languages["_trayMenu"].openSource,
                             icon: "iconGithub",
                             click: () => {
-                                openLink(window.siyuan.ws.app, "https://github.com/siyuan-note/siyuan");
+                                openLink(window.siyuan.ws.app, Constants.PROJECT_URL);
                             }
                         }).element);
                         const rect = target.getBoundingClientRect();

@@ -5,8 +5,8 @@ import {paths, writeLog} from "../shared/runtime";
 import {resolveAppLanguage} from "../shared/language";
 
 const getAppleSiliconDownloadURL = (version: string): string => {
-    const packageName = `siyuan-CE-v${version}-mac-arm64.dmg`;
-    return `https://github.com/siyuan-community/siyuan/releases/download/v${version}/${packageName}`;
+    const packageName = `koranote-${version}-mac-arm64.dmg`;
+    return `https://github.com/jaaronkot/kora-note/releases/download/v${version}/${packageName}`;
 };
 
 /** 弹窗只有一个功能按钮，取消按钮排在它之后。 */
@@ -52,7 +52,7 @@ const loadAppleSiliconWarningLanguages = (requestedLanguage: string | undefined)
     }
     return {
         arm64TranslationTitle: "Install the Apple silicon version",
-        arm64TranslationMessage: "SiYuan is running the Intel version through Rosetta. This may significantly " +
+        arm64TranslationMessage: "Kora Note is running the Intel version through Rosetta. This may significantly " +
             "reduce performance. Please use the Apple silicon version",
         downloadAppleSilicon: "Download the Apple silicon version",
     };

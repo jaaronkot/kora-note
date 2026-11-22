@@ -13,30 +13,24 @@ import (
 	"time"
 
 	"github.com/siyuan-community/siyuan/kernel/conf"
-	"github.com/siyuan-community/siyuan/kernel/util"
 )
 
 func TestGetUpdatePackageURLs(t *testing.T) {
-	originalRegion := util.CurrentCloudRegion
-	t.Cleanup(func() { util.CurrentCloudRegion = originalRegion })
-	for _, region := range []int{0, 1} {
-		util.CurrentCloudRegion = region
-		for _, version := range []string{"3.8.7", "3.8.7-rc.1", "3.8.7-beta.4", "3.8.7-alpha.9"} {
-			for _, suffix := range []string{"win.exe", "win-arm64.exe", "mac.dmg", "mac-arm64.dmg"} {
-				pkgName := "siyuan-CE-v" + version + "-" + suffix
-				githubURL := "https://github.com/siyuan-community/siyuan/releases/download/v" + version + "/" + pkgName
-				want := []string{githubURL}
-				if got := getUpdatePackageURLs(pkgName, githubURL); !slices.Equal(got, want) {
-					t.Fatalf("region [%d] version [%s] package [%s]: got %v, want %v", region, version, pkgName, got, want)
-				}
+	for _, version := range []string{"3.8.7", "3.8.7-rc.1", "3.8.7-beta.4", "3.8.7-alpha.9"} {
+		for _, suffix := range []string{"win.exe", "win-arm64.exe", "mac.dmg", "mac-arm64.dmg"} {
+			pkgName := "koranote-" + version + "-" + suffix
+			githubURL := "https://github.com/jaaronkot/kora-note/releases/download/v" + version + "/" + pkgName
+			want := []string{githubURL}
+			if got := getUpdatePackageURLs(pkgName, githubURL); !slices.Equal(got, want) {
+				t.Fatalf("version [%s] package [%s]: got %v, want %v", version, pkgName, got, want)
 			}
 		}
 	}
 }
 
 func TestGetUpdatePackageURLsPreservesReleaseAssetURL(t *testing.T) {
-	const pkgName = "siyuan-CE-v3.8.7-alpha.9-win.exe"
-	const githubURL = "https://github.com/siyuan-community/siyuan/releases/download/custom-tag/" + pkgName
+	const pkgName = "koranote-3.8.7-alpha.9-win.exe"
+	const githubURL = "https://github.com/jaaronkot/kora-note/releases/download/custom-tag/" + pkgName
 	want := []string{githubURL}
 	if got := getUpdatePackageURLs(pkgName, githubURL); !slices.Equal(got, want) {
 		t.Fatalf("got %v, want %v", got, want)
@@ -58,10 +52,10 @@ func TestGitHubUpdateReleaseUsesReleaseAssetForBetaAndAlpha(t *testing.T) {
 	releases := make([]*githubRelease, 0, len(tests))
 	for _, tag := range tests {
 		version := strings.TrimPrefix(tag, "v")
-		pkgName := "siyuan-CE-v" + version + "-" + suffix
+		pkgName := "koranote-" + version + "-" + suffix
 		releases = append(releases, &githubRelease{TagName: tag, HTMLURL: "https://example.invalid/" + version,
 			Assets: []*githubReleaseAsset{{
-				Name: pkgName, BrowserDownloadURL: "https://github.com/siyuan-community/siyuan/releases/download/" + tag + "/" + pkgName,
+				Name: pkgName, BrowserDownloadURL: "https://github.com/jaaronkot/kora-note/releases/download/" + tag + "/" + pkgName,
 				Digest: "sha256:" + checksum, State: "uploaded",
 			}}})
 	}
@@ -81,12 +75,12 @@ func TestGitHubUpdateReleaseUsesReleaseAssetForBetaAndAlpha(t *testing.T) {
 			t.Fatal(err)
 		}
 		version := strings.TrimPrefix(tag, "v")
-		pkgName := "siyuan-CE-v" + version + "-" + suffix
+		pkgName := "koranote-" + version + "-" + suffix
 		pkg := release.Packages[pkgName]
 		if nil == pkg {
 			t.Fatalf("channel [%s] has no package [%s]", channel, pkgName)
 		}
-		want := []string{"https://github.com/siyuan-community/siyuan/releases/download/" + tag + "/" + pkgName}
+		want := []string{"https://github.com/jaaronkot/kora-note/releases/download/" + tag + "/" + pkgName}
 		if !slices.Equal(pkg.URLs, want) {
 			t.Fatalf("channel [%s]: got %v, want %v", channel, pkg.URLs, want)
 		}

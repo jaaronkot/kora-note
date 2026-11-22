@@ -19,7 +19,6 @@ import (
 
 	"github.com/88250/gulu"
 	"github.com/siyuan-community/siyuan/kernel/conf"
-	"github.com/siyuan-community/siyuan/kernel/util"
 	"github.com/siyuan-note/httpclient"
 	"github.com/siyuan-note/logging"
 	"golang.org/x/mod/semver"
@@ -27,8 +26,8 @@ import (
 )
 
 const (
-	githubReleasesURL            = "https://api.github.com/repos/siyuan-community/siyuan/releases?per_page=100"
-	githubReleaseURLPrefix       = "https://github.com/siyuan-community/siyuan/releases/tag/v"
+	githubReleasesURL            = "https://api.github.com/repos/jaaronkot/kora-note/releases?per_page=100"
+	githubReleaseURLPrefix       = "https://github.com/jaaronkot/kora-note/releases/tag/v"
 	githubAPIReleaseCacheSeconds = int64(6 * 60 * 60)
 	maxChecksumManifestSize      = int64(1024 * 1024)
 )
@@ -69,73 +68,10 @@ var (
 
 func getUpdateRelease(force bool) (*updateRelease, error) {
 	channel := Conf.System.Load().UpdateChannel
-	if conf.UpdateChannelStable == channel {
-		return getStableUpdateRelease(force)
-	}
 	if !isValidUpdateChannel(channel) {
 		return nil, errors.New("update channel is invalid")
 	}
 	return getGitHubUpdateRelease(channel, force)
-}
-
-func getStableUpdateRelease(force bool) (*updateRelease, error) {
-	result, err := util.GetRhyResult(context.TODO(), force)
-	if err != nil {
-		return nil, err
-	}
-	version, ok := result["ver"].(string)
-	normalizedVersion := normalizeReleaseVersion(version)
-	if !ok || !semver.IsValid(normalizedVersion) || "" != semver.Prerelease(normalizedVersion) {
-		return nil, errors.New("stable release version is invalid")
-	}
-	version = strings.TrimPrefix(normalizedVersion, "v")
-
-	release := &updateRelease{
-		Version:    version,
-		Channel:    conf.UpdateChannelStable,
-		ReleaseURL: getStableReleaseURL(result, version),
-		Packages:   map[string]*updatePackage{},
-	}
-	pkgName := currentInstallPackageName(release.Version)
-	if "" == pkgName {
-		return release, nil
-	}
-	checksum := getStablePackageChecksum(result, pkgName)
-	if "" == checksum {
-		return release, nil
-	}
-	githubURL := "https://github.com/siyuan-community/siyuan/releases/download/v" + version + "/" + pkgName
-	release.Packages[pkgName] = &updatePackage{
-		URLs:     getUpdatePackageURLs(pkgName, githubURL),
-		Checksum: checksum,
-	}
-	return release, nil
-}
-
-func getStableReleaseURL(result map[string]any, version string) string {
-	releaseURL, _ := result["release"].(string)
-	if localized, ok := result["release_"+Conf.Lang].(string); ok && "" != localized {
-		releaseURL = localized
-	} else if localized, ok = result["release_"+util.LangToLegacy(Conf.Lang)].(string); ok && "" != localized {
-		// 兼容云端 JSON 数据中历史下划线 key（release_zh_CN 等）。
-		releaseURL = localized
-	}
-	if "" == releaseURL {
-		releaseURL = githubReleaseURLPrefix + strings.TrimPrefix(version, "v")
-	}
-	return releaseURL
-}
-
-func getStablePackageChecksum(result map[string]any, pkgName string) string {
-	checksums, ok := result["checksums"].(map[string]any)
-	if !ok {
-		return ""
-	}
-	checksum, ok := checksums[pkgName].(string)
-	if !ok {
-		return ""
-	}
-	return normalizeSHA256(checksum)
 }
 
 // getUpdatePackageURLs 只返回 GitHub 地址：社区版安装包只发布在 siyuan-community 的 GitHub Releases，官方镜像没有这些安装包。
@@ -305,9 +241,9 @@ func normalizeReleaseVersion(version string) string {
 	return "v" + strings.TrimPrefix(strings.TrimSpace(version), "v")
 }
 
-// installPackageNamePrefix 是社区版安装包名称的前缀，与 cd.yml 上传到 Release 的资源名称一致。
-// 生成、解析和校验安装包名称都使用它，共用安装包目录中的官方版安装包不会被当作社区版的更新包。
-const installPackageNamePrefix = "siyuan-CE-v"
+// installPackageNamePrefix 是安装包名称的前缀，与 Release 上传的安装包资源名称一致。
+// 生成、解析和校验安装包名称都使用它，其它来源的安装包不会被当作本项目的更新包。
+const installPackageNamePrefix = "koranote-"
 
 func currentInstallPackageName(version string) string {
 	suffix := currentInstallPackageSuffix()

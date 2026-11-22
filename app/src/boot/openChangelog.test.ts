@@ -25,7 +25,7 @@ test("release changelogs always pass through a static HTML and HTTP resource pol
         }},
         "../protyle/render/highlightRender": {highlightRender: () => { rendered = content.innerHTML; }},
         "../util/functions": {isMobile: () => false},
-        "../constants": {Constants: {DIALOG_CHANGELOG: "changelog"}},
+        "../constants": {Constants: {DIALOG_CHANGELOG: "changelog", PROJECT_RELEASES_URL: "https://github.com/jaaronkot/kora-note/releases"}},
         "../util/hostCapabilities": {sanitizeKernelHTML: () => { throw new Error("local-kernel bypass used for online content"); }},
         "../util/fetchTimeout": {withFetchTimeout: (request: () => unknown) => request()},
         "../util/escape": {escapeHtml: (value: string) => value},
@@ -101,7 +101,7 @@ const setup = (shortTimeout = false) => {
         }},
         "../protyle/render/highlightRender": {highlightRender() {}},
         "../util/functions": {isMobile: () => false},
-        "../constants": {Constants: {DIALOG_CHANGELOG: "changelog"}},
+        "../constants": {Constants: {DIALOG_CHANGELOG: "changelog", PROJECT_RELEASES_URL: "https://github.com/jaaronkot/kora-note/releases"}},
         "../util/hostCapabilities": {sanitizeKernelHTML: (html: string) => html},
         "../util/fetchTimeout": {withFetchTimeout: (request: (signal: AbortSignal) => Promise<unknown>, signal: AbortSignal, ms: number) => {
             assert.equal(ms, 15000);
@@ -155,7 +155,7 @@ for (const failure of ["api", "network", "timeout", "not shown"]) {
         assert.equal(button.getAttribute("aria-busy"), null);
         assert.equal(f.dialogs.length, 1);
         assert.equal(f.dialogs[0].content.children[0].textContent, "Unavailable");
-        assert.equal(f.dialogs[0].content.children[1].href, "https://github.com/siyuan-note/siyuan/releases/tag/v3.8.10-alpha.5");
+        assert.equal(f.dialogs[0].content.children[1].href, "https://github.com/jaaronkot/kora-note/releases/tag/v3.8.10-alpha.5");
         if (failure === "timeout") {
             assert.equal(f.requests[0].signal.aborted, true);
             f.requests[0].resolve(successfulResponse);
@@ -246,7 +246,7 @@ test("changing kernel versions never shares another version's request or renders
     await pending;
     assert.equal(f.dialogs.length, 1);
     assert.equal(f.dialogs[0].content.innerHTML, "");
-    assert.equal(f.dialogs[0].content.children[1].href, "https://github.com/siyuan-note/siyuan/releases/tag/v3.8.10-alpha.6");
+    assert.equal(f.dialogs[0].content.children[1].href, "https://github.com/jaaronkot/kora-note/releases/tag/v3.8.10-alpha.6");
 });
 
 const browserCases = async (source: string, timeoutSource: string) => {
@@ -278,7 +278,7 @@ const browserCases = async (source: string, timeoutSource: string) => {
         }},
         "../protyle/render/highlightRender": {highlightRender() {}},
         "../util/functions": {isMobile: () => mobile},
-        "../constants": {Constants: {DIALOG_CHANGELOG: "changelog", SIYUAN_VERSION: "1.0.0-wrong-ui-version"}},
+        "../constants": {Constants: {DIALOG_CHANGELOG: "changelog", SIYUAN_VERSION: "1.0.0-wrong-ui-version", PROJECT_RELEASES_URL: "https://github.com/jaaronkot/kora-note/releases"}},
         "../util/hostCapabilities": {sanitizeKernelHTML: (html: string) => { localSanitizes++; return html; }},
         "../util/fetchTimeout": {withFetchTimeout: (request: (signal: AbortSignal) => Promise<unknown>, signal: AbortSignal, ms: number) => {
             check(ms === 15000, "bounded UI request");
@@ -347,7 +347,7 @@ const browserCases = async (source: string, timeoutSource: string) => {
         check(dialogs.length === before + 1, failure + " provides feedback");
         const failureDialog = dialogs.at(-1).element;
         check(failureDialog.textContent.includes("Unable to load"), failure + " has localized message");
-        check(failureDialog.querySelector("a")?.href === "https://github.com/siyuan-note/siyuan/releases/tag/v3.8.10-alpha.5", failure + " links kernel version");
+        check(failureDialog.querySelector("a")?.href === "https://github.com/jaaronkot/kora-note/releases/tag/v3.8.10-alpha.5", failure + " links kernel version");
         check(failedButton.querySelector("svg") === icon && !failedButton.disabled && !failedButton.hasAttribute("aria-busy"), failure + " restores button");
         if (failure === "timeout") {
             check(request.signal.aborted, "timeout aborts network");

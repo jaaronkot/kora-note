@@ -8,8 +8,8 @@ import {ipcRenderer} from "electron";
 import {openRemoteConnection} from "../dialog/remoteConnection";
 /// #endif
 import {openHistory} from "../history/history";
-import {getOpenNotebookCount, originalPath, pathPosix, useShell} from "../util/pathName";
-import {fetchNewDailyNote, mountHelp, newDailyNote} from "../util/mount";
+import {originalPath, pathPosix, useShell} from "../util/pathName";
+import {mountHelp} from "../util/mount";
 import {fetchPost} from "../util/fetch";
 import {Constants} from "../constants";
 import {
@@ -17,10 +17,8 @@ import {
     isInHarmony,
     isInMobileApp,
     isIPad,
-    setStorageVal,
     writeText,
 } from "../protyle/util/compatibility";
-import {openCard} from "../card/openCard";
 import {openSetting} from "../config";
 import {getAllDocks, getAllModels} from "../layout/getAll";
 import {getDockHotkey} from "../layout/dock/hotkey";
@@ -28,10 +26,8 @@ import {exportLayout} from "../layout/util";
 import {getDockByType} from "../layout/tabUtil";
 import {exitSiYuan, lockScreen} from "../dialog/processSystem";
 import {showMessage} from "../dialog/message";
-import {getFileTreeIconHTML} from "../emoji/fileTreeIcon";
 import {togglePinDock} from "./dockLayout";
 import {escapeAttr, escapeHtml} from "../util/escape";
-import {viewCards} from "../card/viewCards";
 import {Dialog} from "../dialog";
 import {openInputDialog} from "../dialog/inputDialog";
 import {confirmDialog} from "../dialog/confirmDialog";
@@ -42,6 +38,7 @@ import {openDataMigration} from "./dataMigration";
 import {openLink} from "../editor/openLink";
 import {getHostCapabilities} from "../util/hostCapabilities";
 import {openTemplateManager} from "../template/manager";
+import {createThemeModeSwitcher} from "./themeModeSwitcher";
 
 export const workspaceMenu = async (app: App, rect: DOMRect, openOnly = false, target?: Element) => {
     if (openOnly && !window.siyuan.menus.menu.element.classList.contains("fn__none") &&
@@ -67,6 +64,8 @@ export const workspaceMenu = async (app: App, rect: DOMRect, openOnly = false, t
 
                 window.siyuan.menus.menu.remove();
                 window.siyuan.menus.menu.element.setAttribute("data-name", Constants.MENU_BAR_WORKSPACE);
+                window.siyuan.menus.menu.append(createThemeModeSwitcher());
+                window.siyuan.menus.menu.append(new MenuItem({type: "separator"}).element);
                 if (!window.siyuan.config.readonly) {
                     window.siyuan.menus.menu.append(new MenuItem({
                         id: "config",
@@ -259,64 +258,6 @@ export const workspaceMenu = async (app: App, rect: DOMRect, openOnly = false, t
                 }
                 window.siyuan.menus.menu.append(new MenuItem({id: "separator_1", type: "separator"}).element);
                 if (!window.siyuan.config.readonly) {
-                    if (getOpenNotebookCount() < 2) {
-                        window.siyuan.menus.menu.append(new MenuItem({
-                            id: "dailyNote",
-                            label: window.siyuan.languages.dailyNote,
-                            icon: "iconCalendar",
-                            accelerator: window.siyuan.config.keymap.general.dailyNote.custom,
-                            click: () => {
-                                newDailyNote(app);
-                            }
-                        }).element);
-                    } else {
-                        const submenu: IMenu[] = [];
-                        window.siyuan.notebooks.forEach(item => {
-                            if (!item.closed) {
-                                submenu.push({
-                                    label: escapeHtml(item.name),
-                                    iconHTML: getFileTreeIconHTML(item.icon, "notebook", "b3-menu__icon", true),
-                                    accelerator: window.siyuan.storage[Constants.LOCAL_DAILYNOTEID] === item.id ? window.siyuan.config.keymap.general.dailyNote.custom : "",
-                                    click: () => {
-                                        fetchNewDailyNote(app, item.id);
-                                        window.siyuan.storage[Constants.LOCAL_DAILYNOTEID] = item.id;
-                                        setStorageVal(Constants.LOCAL_DAILYNOTEID, window.siyuan.storage[Constants.LOCAL_DAILYNOTEID]);
-                                    }
-                                });
-                            }
-                        });
-                        window.siyuan.menus.menu.append(new MenuItem({
-                            id: "dailyNote",
-                            label: window.siyuan.languages.dailyNote,
-                            icon: "iconCalendar",
-                            type: "submenu",
-                            submenu
-                        }).element);
-                    }
-                    if (!window.siyuan.config.readonly) {
-                        window.siyuan.menus.menu.append(new MenuItem({
-                            id: "riffCard",
-                            label: window.siyuan.languages.riffCard,
-                            type: "submenu",
-                            icon: "iconRiffCard",
-                            submenu: [{
-                                id: "spaceRepetition",
-                                iconHTML: "",
-                                label: window.siyuan.languages.spaceRepetition,
-                                accelerator: window.siyuan.config.keymap.general.riffCard.custom,
-                                click: () => {
-                                    openCard(app);
-                                }
-                            }, {
-                                id: "manage",
-                                iconHTML: "",
-                                label: window.siyuan.languages.manage,
-                                click: () => {
-                                    viewCards(app, "", window.siyuan.languages.all, "");
-                                }
-                            }],
-                        }).element);
-                    }
                     window.siyuan.menus.menu.append(new MenuItem({
                         id: "recentDocs",
                         label: window.siyuan.languages.recentDocs,
@@ -382,11 +323,7 @@ export const workspaceMenu = async (app: App, rect: DOMRect, openOnly = false, t
                     label: window.siyuan.languages.feedback,
                     icon: "iconFeedback",
                     click: () => {
-                        if ("zh-CN" === window.siyuan.config.lang) {
-                            openLink(app, "https://ld246.com/article/1649901726096");
-                        } else {
-                            openLink(app, "https://liuyun.io/article/1686530886208");
-                        }
+                        openLink(app, Constants.PROJECT_ISSUES_URL);
                     }
                 }).element);
                 /// #if !BROWSER
@@ -414,7 +351,8 @@ export const workspaceMenu = async (app: App, rect: DOMRect, openOnly = false, t
                         }
                     }).element);
                 }
-                session.show(() => window.siyuan.menus.menu.popup({x: rect.left, y: rect.bottom, h: rect.height}));
+                // 菜单锚在按钮右上方：横向从按钮右缘展开，纵向由 setPosition 在底部空间不足时向上翻转。
+                session.show(() => window.siyuan.menus.menu.popup({x: rect.right, y: rect.bottom, h: rect.height}));
                 if (openOnly) {
                     const menu = window.siyuan.menus.menu;
                     const activeElement = document.activeElement;
