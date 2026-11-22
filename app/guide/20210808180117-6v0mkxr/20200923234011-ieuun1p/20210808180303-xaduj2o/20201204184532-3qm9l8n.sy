@@ -1953,7 +1953,7 @@
 			"Children": [
 				{
 					"Type": "NodeText",
-					"Data": "Optional parameters are dict \"headers\" (dict \"Authorization\" \"Bearer ...\") \"timeout\" 5. The timeout is in seconds, up to 10. Only GET is supported; private networks and proxies are not supported. Do not put real secrets in shareable templates: keys may be synced or shared with the template. Cross-origin redirects clear custom headers. SiYuan login credentials are not attached automatically. If DNS returns a non-public address, including a proxy Fake-IP address, access is blocked. Exclude the API domain from Fake-IP or use DNS that returns real IP addresses."
+					"Data": "Optional parameters are dict \"headers\" (dict \"Authorization\" \"Bearer ...\") \"timeout\" 5. The timeout is in seconds, up to 10. Only GET is supported; private networks and proxies are not supported. Do not put real secrets in shareable templates: keys may be synced or shared with the template. Cross-origin redirects clear custom headers. Kora Note login credentials are not attached automatically. If DNS returns a non-public address, including a proxy Fake-IP address, access is blocked. Exclude the API domain from Fake-IP or use DNS that returns real IP addresses."
 				}
 			]
 		},
@@ -2104,7 +2104,7 @@
 				},
 				{
 					"Type": "NodeText",
-					"Data": " runs only when a template is inserted manually in the editor. After rendering, SiYuan first shows the complete child document tree that will be created and creates it only after confirmation; canceling inserts no template content and creates no documents. A child is always created even when a sibling has the same title; existing documents are never reused or overwritten. A single undo removes both the inserted template content and every child document created by that insertion. A single plan can create at most 128 documents, and its declared child document tree can be at most 16 levels deep. The resulting absolute file tree depth is still subject to the “Allows creation of sub-documents deeper than 7 levels” setting."
+					"Data": " runs only when a template is inserted manually in the editor. After rendering, Kora Note first shows the complete child document tree that will be created and creates it only after confirmation; canceling inserts no template content and creates no documents. A child is always created even when a sibling has the same title; existing documents are never reused or overwritten. A single undo removes both the inserted template content and every child document created by that insertion. A single plan can create at most 128 documents, and its declared child document tree can be at most 16 levels deep. The resulting absolute file tree depth is still subject to the “Allows creation of sub-documents deeper than 7 levels” setting."
 				}
 			]
 		},

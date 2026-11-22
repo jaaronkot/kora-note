@@ -166,7 +166,7 @@ const resolveRemoteKernel = (launchArguments: string[]): {
 
 const initializeProcessIdentity = (): void => {
     remote.initialize();
-    // userData 使用独立的 SiYuan-Electron 目录；getPath("userData") 会先创建空的 SiYuan 目录，因此从 appData 推算
+    // userData 使用独立的 Kora-Electron 目录；getPath("userData") 会先创建空的 Kora 目录，因此从 appData 推算
     // https://github.com/siyuan-note/siyuan/issues/3349
     app.setPath("userData", path.join(app.getPath("appData"), app.getName() + "-Electron"));
     if (process.platform === "win32") {
@@ -186,7 +186,7 @@ const ensureConfigDirectory = (confDir: string, remoteMode: boolean): boolean =>
     } catch (e) {
         console.error(e);
         writeLog("create config directory failed: " + toError(e).stack);
-        dialog.showErrorBox("创建配置目录失败 Failed to create config directory", "思源需要在用户家目录下创建配置文件夹（~/.config/siyuan），请确保该路径具有写入权限。\n\nSiYuan needs to create a configuration folder (~/.config/siyuan) in the user's home directory. Please make sure that the path has write permissions.");
+        dialog.showErrorBox("创建配置目录失败 Failed to create config directory", "Kora Note 需要在用户家目录下创建配置文件夹（~/.config/siyuan），请确保该路径具有写入权限。\n\nKora Note needs to create a configuration folder (~/.config/siyuan) in the user's home directory. Please make sure that the path has write permissions.");
         app.exit(1);
     }
     return firstOpen;

@@ -9,7 +9,7 @@ const missing = (name: string): never => {
 
 const defaultApp = {
     getVersion: () => "0.0.0",
-    getName: () => "SiYuan",
+    getName: () => "Kora",
     getPath: () => "/tmp",
     getPreferredSystemLanguages: () => ["en"],
     getLocale: () => "en",

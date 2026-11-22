@@ -49,7 +49,7 @@ const resetSystemShutdown = (ports: SystemShutdownPort[]): void => {
     state.exit.gracefulShutdown = undefined;
     state.exit.keepOpenForShutdown = false;
     cancelMarkdownQuit();
-    writeLog("system shutdown canceled because SiYuan failed to exit gracefully [ports=" + ports.join(",") + "]");
+    writeLog("system shutdown canceled because Kora Note failed to exit gracefully [ports=" + ports.join(",") + "]");
 
     const workspaces = state.workspaces as Workspace[];
     ports.forEach((port: SystemShutdownPort) => {

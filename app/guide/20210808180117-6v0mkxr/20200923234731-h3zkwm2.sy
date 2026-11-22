@@ -132,7 +132,7 @@
 				},
 				{
 					"Type": "NodeText",
-					"Data": "How does SiYuan store data?"
+					"Data": "How does Kora Note store data?"
 				}
 			]
 		},
@@ -832,7 +832,7 @@
 			"Children": [
 				{
 					"Type": "NodeText",
-					"Data": "On macOS, SiYuan will access the Desktop, Documents, and iCloud drive folders to detect whether the workspace is placed under the iCloud synchronization path. Please rest assured that SiYuan will never snoop on your personal data."
+					"Data": "On macOS, Kora Note will access the Desktop, Documents, and iCloud drive folders to detect whether the workspace is placed under the iCloud synchronization path. Please rest assured that Kora Note will never snoop on your personal data."
 				}
 			]
 		},
@@ -847,7 +847,7 @@
 			"Children": [
 				{
 					"Type": "NodeText",
-					"Data": "Is SiYuan open source?"
+					"Data": "Is Kora Note open source?"
 				}
 			]
 		},
@@ -861,7 +861,7 @@
 			"Children": [
 				{
 					"Type": "NodeText",
-					"Data": "SiYuan is completely open source, and the complete source code can be found on GitHub."
+					"Data": "Kora Note is completely open source, and the complete source code can be found on GitHub."
 				}
 			]
 		},
@@ -966,7 +966,7 @@
 								},
 								{
 									"Type": "NodeText",
-									"Data": ", so that SiYuan will automatically download The latest version of the installation package and prompts to install"
+									"Data": ", so that Kora Note will automatically download The latest version of the installation package and prompts to install"
 								}
 							]
 						}
@@ -1053,7 +1053,7 @@
 				{
 					"Type": "NodeTextMark",
 					"TextMarkType": "a",
-					"TextMarkAHref": "https://b3log.org/siyuan/",
+					"TextMarkAHref": "https://github.com/jaaronkot/kora-note",
 					"TextMarkTextContent": "Official website"
 				},
 				{
@@ -1072,7 +1072,7 @@
 			"Children": [
 				{
 					"Type": "NodeText",
-					"Data": "If a document uses a file format newer than this client supports, readable titles and icons remain visible as dimmed placeholders in the document tree. Upgrade SiYuan to open or edit these documents; you can still use the expand arrow to browse their child documents."
+					"Data": "If a document uses a file format newer than this client supports, readable titles and icons remain visible as dimmed placeholders in the document tree. Upgrade Kora Note to open or edit these documents; you can still use the expand arrow to browse their child documents."
 				}
 			]
 		},
@@ -1262,7 +1262,7 @@
 			"Children": [
 				{
 					"Type": "NodeText",
-					"Data": "Therefore, SiYuan does not automatically delete assets when content references are removed and does not provide an option to enable this behavior."
+					"Data": "Therefore, Kora Note does not automatically delete assets when content references are removed and does not provide an option to enable this behavior."
 				}
 			]
 		},
@@ -1357,7 +1357,7 @@
 			"Children": [
 				{
 					"Type": "NodeText",
-					"Data": "Before resetting, exit SiYuan normally and back up the complete workspace. If you have encrypted notebooks, also keep separate, matching encryption key backups and confirm that the master password works. Delete old cloud sync directories and snapshots only after the new sync completes, data is verified, and recovery materials are safely preserved."
+					"Data": "Before resetting, exit Kora Note normally and back up the complete workspace. If you have encrypted notebooks, also keep separate, matching encryption key backups and confirm that the master password works. Delete old cloud sync directories and snapshots only after the new sync completes, data is verified, and recovery materials are safely preserved."
 				}
 			]
 		},
@@ -1504,7 +1504,7 @@
 											"Children": [
 												{
 													"Type": "NodeText",
-													"Data": "Exit SiYuan normally and back up the complete workspace; for encrypted notebooks, also preserve matching encryption key backups and the master password"
+													"Data": "Exit Kora Note normally and back up the complete workspace; for encrypted notebooks, also preserve matching encryption key backups and the master password"
 												}
 											]
 										}
@@ -1743,7 +1743,7 @@
 			"Children": [
 				{
 					"Type": "NodeText",
-					"Data": "Origin of the name \"SiYuan\""
+					"Data": "Origin of the name \"Kora Note\""
 				}
 			]
 		},
@@ -1757,7 +1757,7 @@
 			"Children": [
 				{
 					"Type": "NodeText",
-					"Data": "The name \"SiYuan\" comes from the Chinese idiom \"饮水思源\", which means \"when drinking water, one should remember where it comes from\" and is used to describe the virtues of not forgetting one's roots and gratitude."
+					"Data": "The name \"Kora Note\" carries the meaning of the Chinese idiom \"饮水思源\", which means \"when drinking water, one should remember where it comes from\" and is used to describe the virtues of not forgetting one's roots and gratitude."
 				}
 			]
 		},
@@ -1771,7 +1771,7 @@
 			"Children": [
 				{
 					"Type": "NodeText",
-					"Data": "We hope that users of SiYuan note-taking software for knowledge management will not forget the sources and connections of their knowledge, and more importantly, will not forget to contribute to society and all of humanity with what they have learned."
+					"Data": "We hope that users of Kora Note note-taking software for knowledge management will not forget the sources and connections of their knowledge, and more importantly, will not forget to contribute to society and all of humanity with what they have learned."
 				}
 			]
 		}

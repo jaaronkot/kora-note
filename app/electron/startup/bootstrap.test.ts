@@ -38,7 +38,7 @@ const createBootstrapFixture = (t: any, {
         getPath: (name: string) => name === "home" ? root : path.join(root, name),
         getAppPath: () => path.join(root, "app"),
         getVersion: () => "9.9.9",
-        getName: () => "SiYuan",
+        getName: () => "Kora",
         isReady: () => true,
         isPackaged: false,
         commandLine: {hasSwitch: () => false, getSwitchValue: () => "", appendSwitch: () => {}},

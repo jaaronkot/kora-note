@@ -6,7 +6,7 @@
 		"id": "20260907120000-cryen01",
 		"title": "Encrypted Notebook",
 		"type": "doc",
-		"updated": "20261024164212"
+		"updated": "20261120142917"
 	},
 	"Children": [
 		{
@@ -697,7 +697,7 @@
 							"Children": [
 								{
 									"Type": "NodeText",
-									"Data": "Closing an encrypted notebook locks it. SiYuan first saves unwritten edits and file history; locking then stops new content access, waits for or cancels in-flight work, revokes application-managed key access, closes database connections, and cleans application-managed plaintext caches, temporary files, and access tokens on a best-effort basis"
+									"Data": "Closing an encrypted notebook locks it. Kora Note first saves unwritten edits and file history; locking then stops new content access, waits for or cancels in-flight work, revokes application-managed key access, closes database connections, and cleans application-managed plaintext caches, temporary files, and access tokens on a best-effort basis"
 								}
 							]
 						}
@@ -848,7 +848,7 @@
 							"Children": [
 								{
 									"Type": "NodeText",
-									"Data": "Close every encrypted notebook before changing the master password. The change only re-protects each notebook's data key and does not re-encrypt document content; after it completes, SiYuan refreshes the key backup in the workspace automatically, and you should export a new key backup immediately"
+									"Data": "Close every encrypted notebook before changing the master password. The change only re-protects each notebook's data key and does not re-encrypt document content; after it completes, Kora Note refreshes the key backup in the workspace automatically, and you should export a new key backup immediately"
 								}
 							]
 						}
@@ -932,7 +932,7 @@
 							"Children": [
 								{
 									"Type": "NodeText",
-									"Data": "SiYuan can verify the integrity of a key backup but cannot determine which backup is newest. Keep an independent, versioned key backup outside the workspace"
+									"Data": "Kora Note can verify the integrity of a key backup but cannot determine which backup is newest. Keep an independent, versioned key backup outside the workspace"
 								}
 							]
 						}
@@ -960,7 +960,7 @@
 							"Children": [
 								{
 									"Type": "NodeText",
-									"Data": "SiYuan refuses to disable encrypted notebooks while an encrypted notebook or recoverable history still depends on the current keys, preventing permanent loss of access"
+									"Data": "Kora Note refuses to disable encrypted notebooks while an encrypted notebook or recoverable history still depends on the current keys, preventing permanent loss of access"
 								}
 							]
 						}
@@ -1034,7 +1034,7 @@
 			"Children": [
 				{
 					"Type": "NodeText",
-					"Data": "When you paste content containing local attachments from a normal notebook into an unlocked encrypted notebook, SiYuan creates encrypted attachment copies and updates the pasted links. The original attachments remain unchanged for the source document."
+					"Data": "When you paste content containing local attachments from a normal notebook into an unlocked encrypted notebook, Kora Note creates encrypted attachment copies and updates the pasted links. The original attachments remain unchanged for the source document."
 				}
 			]
 		},
@@ -1233,7 +1233,7 @@
 							"Children": [
 								{
 									"Type": "NodeText",
-									"Data": "You can import .sy.zip and Markdown into an unlocked encrypted notebook; SiYuan encrypts the content before writing it to disk"
+									"Data": "You can import .sy.zip and Markdown into an unlocked encrypted notebook; Kora Note encrypts the content before writing it to disk"
 								}
 							]
 						}
@@ -1312,12 +1312,12 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20260907120000-en00049",
-								"updated": "20260908150000"
+								"updated": "20261120142917"
 							},
 							"Children": [
 								{
 									"Type": "NodeText",
-									"Data": "Export is available only while the notebook is unlocked, and exported .sy.zip, HTML, Word, PDF, Markdown, and other files are plaintext; protect, move, or delete them as ordinary sensitive files after export"
+									"Data": "Export is available only while the notebook is unlocked, and exported .sy.zip, HTML, PDF, Markdown, and other files are plaintext; protect, move, or delete them as ordinary sensitive files after export"
 								}
 							]
 						}

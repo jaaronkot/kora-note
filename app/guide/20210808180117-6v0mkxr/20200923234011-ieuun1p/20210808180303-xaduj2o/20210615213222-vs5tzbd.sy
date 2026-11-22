@@ -6,7 +6,7 @@
 		"id": "20210615213222-vs5tzbd",
 		"title": "Data history",
 		"type": "doc",
-		"updated": "20261102161000"
+		"updated": "20261120163550"
 	},
 	"Children": [
 		{
@@ -29,7 +29,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20220615120310-jq1miv3",
-				"updated": "20220615120310"
+				"updated": "20261120163550"
 			},
 			"Children": [
 				{
@@ -44,7 +44,7 @@
 			"ListData": {},
 			"Properties": {
 				"id": "20220615120310-64352xf",
-				"updated": "20261016111431"
+				"updated": "20261120163550"
 			},
 			"Children": [
 				{
@@ -56,7 +56,7 @@
 					},
 					"Properties": {
 						"id": "20220615120310-zyipokx",
-						"updated": "20261016111431"
+						"updated": "20261120163550"
 					},
 					"Children": [
 						{
@@ -64,7 +64,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220615120310-hxba93x",
-								"updated": "20261016111431"
+								"updated": "20261120163550"
 							},
 							"Children": [
 								{
@@ -78,7 +78,7 @@
 								},
 								{
 									"Type": "NodeText",
-									"Data": ". Ordinary-notebook history is plaintext; encrypted-notebook history retains ciphertext. Prefer recovery through SiYuan and check the notebook and key requirements below"
+									"Data": ". Ordinary-notebook history is plaintext; encrypted-notebook history retains ciphertext. Prefer recovery through Kora Note and check the notebook and key requirements below"
 								}
 							]
 						}
@@ -93,7 +93,7 @@
 					},
 					"Properties": {
 						"id": "20220615120310-ku0y1n6",
-						"updated": "20261016111431"
+						"updated": "20261120163550"
 					},
 					"Children": [
 						{
@@ -101,7 +101,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220615120310-qkv8ygq",
-								"updated": "20261016111431"
+								"updated": "20261120163550"
 							},
 							"Children": [
 								{
@@ -115,7 +115,7 @@
 								},
 								{
 									"Type": "NodeText",
-									"Data": "; restore snapshots through SiYuan rather than copying individual repository files into data"
+									"Data": "; restore snapshots through Kora Note rather than copying individual repository files into data"
 								}
 							]
 						}
@@ -128,7 +128,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20220615120310-qal3upv",
-				"updated": "20220830225641"
+				"updated": "20261120163550"
 			},
 			"Children": [
 				{
@@ -184,7 +184,7 @@
 			"ListData": {},
 			"Properties": {
 				"id": "20220501135308-30uwxvd",
-				"updated": "20261016112108"
+				"updated": "20261120163550"
 			},
 			"Children": [
 				{
@@ -196,7 +196,7 @@
 					},
 					"Properties": {
 						"id": "20220501135308-kwaramc",
-						"updated": "20261016112108"
+						"updated": "20261120163550"
 					},
 					"Children": [
 						{
@@ -204,7 +204,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220501135308-yr7v67z",
-								"updated": "20261016112108"
+								"updated": "20261120163550"
 							},
 							"Children": [
 								{
@@ -260,7 +260,7 @@
 					},
 					"Properties": {
 						"id": "20220501135308-1xc2m8l",
-						"updated": "20220501135308"
+						"updated": "20261120163550"
 					},
 					"Children": [
 						{
@@ -268,7 +268,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220501135308-dmnsr7d",
-								"updated": "20220501135308"
+								"updated": "20261120163550"
 							},
 							"Children": [
 								{
@@ -305,7 +305,7 @@
 					},
 					"Properties": {
 						"id": "20220501135308-z09e5tv",
-						"updated": "20220503122549"
+						"updated": "20261120163550"
 					},
 					"Children": [
 						{
@@ -313,7 +313,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220501135308-pqw5kwp",
-								"updated": "20220503122549"
+								"updated": "20261120163550"
 							},
 							"Children": [
 								{
@@ -342,7 +342,7 @@
 					},
 					"Properties": {
 						"id": "20220501135308-0iyl6a6",
-						"updated": "20220830230820"
+						"updated": "20261120163550"
 					},
 					"Children": [
 						{
@@ -350,7 +350,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220501135308-9htfn1h",
-								"updated": "20220830230820"
+								"updated": "20261120163550"
 							},
 							"Children": [
 								{
@@ -398,7 +398,7 @@
 					},
 					"Properties": {
 						"id": "20220501135308-wzazz01",
-						"updated": "20230403114455"
+						"updated": "20261120163550"
 					},
 					"Children": [
 						{
@@ -406,7 +406,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220501135308-xldpw4q",
-								"updated": "20230403114455"
+								"updated": "20261120163550"
 							},
 							"Children": [
 								{
@@ -454,7 +454,7 @@
 					},
 					"Properties": {
 						"id": "20230403114321-4rwhj6j",
-						"updated": "20240402174245"
+						"updated": "20261120163550"
 					},
 					"Children": [
 						{
@@ -462,7 +462,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20230403114321-tou7etc",
-								"updated": "20240402174245"
+								"updated": "20261120163550"
 							},
 							"Children": [
 								{
@@ -500,7 +500,7 @@
 					},
 					"Properties": {
 						"id": "20240402174218-u5vrt8y",
-						"updated": "20240402174243"
+						"updated": "20261120163550"
 					},
 					"Children": [
 						{
@@ -508,7 +508,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20240402174218-9x6w0bk",
-								"updated": "20240402174243"
+								"updated": "20261120163550"
 							},
 							"Children": [
 								{
@@ -551,7 +551,7 @@
 			"ListData": {},
 			"Properties": {
 				"id": "20220501135308-3azjqzh",
-				"updated": "20261016111431"
+				"updated": "20261120163550"
 			},
 			"Children": [
 				{
@@ -563,7 +563,7 @@
 					},
 					"Properties": {
 						"id": "20220501135308-itmzgsj",
-						"updated": "20261016111431"
+						"updated": "20261120163550"
 					},
 					"Children": [
 						{
@@ -571,7 +571,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220501135308-yvsiton",
-								"updated": "20261016111431"
+								"updated": "20261120163550"
 							},
 							"Children": [
 								{
@@ -636,7 +636,7 @@
 					},
 					"Properties": {
 						"id": "20220501135308-9uu4udf",
-						"updated": "20220501135308"
+						"updated": "20261120163550"
 					},
 					"Children": [
 						{
@@ -644,7 +644,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220501135308-5yqjh8u",
-								"updated": "20220501135308"
+								"updated": "20261120163550"
 							},
 							"Children": [
 								{
@@ -670,7 +670,8 @@
 			"ID": "20261109120000-hist02a",
 			"Type": "NodeParagraph",
 			"Properties": {
-				"id": "20261109120000-hist02a"
+				"id": "20261109120000-hist02a",
+				"updated": "20261120163550"
 			},
 			"Children": [
 				{
@@ -699,7 +700,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20220501133808-qv8l0rm",
-				"updated": "20261016111431"
+				"updated": "20261120163550"
 			},
 			"Children": [
 				{
@@ -724,12 +725,12 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20220501133808-uopvhd4",
-				"updated": "20261016111431"
+				"updated": "20261120163550"
 			},
 			"Children": [
 				{
 					"Type": "NodeText",
-					"Data": "Prefer recovery through SiYuan. For bulk recovery by manual copying, first verify the source and destination, and retain the original notebook ID, directory structure, and matching key material for encrypted notebooks. Do not copy their ciphertext into an ordinary notebook. The history directory mirrors the corresponding data paths, for example:"
+					"Data": "Prefer recovery through Kora Note. For bulk recovery by manual copying, first verify the source and destination, and retain the original notebook ID, directory structure, and matching key material for encrypted notebooks. Do not copy their ciphertext into an ordinary notebook. The history directory mirrors the corresponding data paths, for example:"
 				}
 			]
 		},
@@ -739,7 +740,7 @@
 			"ListData": {},
 			"Properties": {
 				"id": "20220501133808-aipi33o",
-				"updated": "20220831210527"
+				"updated": "20261120163550"
 			},
 			"Children": [
 				{
@@ -751,7 +752,7 @@
 					},
 					"Properties": {
 						"id": "20220501133808-wxongrk",
-						"updated": "20220501133808"
+						"updated": "20261120163550"
 					},
 					"Children": [
 						{
@@ -759,7 +760,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220501133808-tbbutzj",
-								"updated": "20220501133808"
+								"updated": "20261120163550"
 							},
 							"Children": [
 								{
@@ -793,7 +794,7 @@
 					},
 					"Properties": {
 						"id": "20220501133808-44fj5ct",
-						"updated": "20220501134016"
+						"updated": "20261120163550"
 					},
 					"Children": [
 						{
@@ -801,7 +802,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220501133808-y3c9auz",
-								"updated": "20220501134016"
+								"updated": "20261120163550"
 							},
 							"Children": [
 								{
@@ -835,7 +836,7 @@
 					},
 					"Properties": {
 						"id": "20220501133808-9qkl603",
-						"updated": "20220831210527"
+						"updated": "20261120163550"
 					},
 					"Children": [
 						{
@@ -843,7 +844,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220501133808-caf9m4c",
-								"updated": "20220831210527"
+								"updated": "20261120163550"
 							},
 							"Children": [
 								{
@@ -875,7 +876,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20220501133808-qyb1i5y",
-				"updated": "20220501133808"
+				"updated": "20261120163550"
 			},
 			"Children": [
 				{
@@ -892,7 +893,7 @@
 			},
 			"Properties": {
 				"id": "20220501133808-vpkkff8",
-				"updated": "20261016111431"
+				"updated": "20261120163550"
 			},
 			"Children": [
 				{
@@ -906,7 +907,7 @@
 					},
 					"Properties": {
 						"id": "20220501133808-u2jd9bs",
-						"updated": "20261016111431"
+						"updated": "20261120163550"
 					},
 					"Children": [
 						{
@@ -914,7 +915,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220501133808-nuxcwdm",
-								"updated": "20261016111431"
+								"updated": "20261120163550"
 							},
 							"Children": [
 								{
@@ -939,7 +940,7 @@
 								},
 								{
 									"Type": "NodeText",
-									"Data": ". Then exit SiYuan normally and back up the entire workspace, including configuration, history, the repository, and encrypted-notebook key backups, before overwriting anything"
+									"Data": ". Then exit Kora Note normally and back up the entire workspace, including configuration, history, the repository, and encrypted-notebook key backups, before overwriting anything"
 								}
 							]
 						}
@@ -956,7 +957,7 @@
 					},
 					"Properties": {
 						"id": "20220501133808-5op6pre",
-						"updated": "20261016111431"
+						"updated": "20261120163550"
 					},
 					"Children": [
 						{
@@ -964,7 +965,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220501133808-wgm1itd",
-								"updated": "20261016111431"
+								"updated": "20261120163550"
 							},
 							"Children": [
 								{
@@ -1004,7 +1005,7 @@
 					},
 					"Properties": {
 						"id": "20220501133808-te5g9yq",
-						"updated": "20261016111431"
+						"updated": "20261120163550"
 					},
 					"Children": [
 						{
@@ -1012,12 +1013,12 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220501133808-8md1hk0",
-								"updated": "20261016111431"
+								"updated": "20261120163550"
 							},
 							"Children": [
 								{
 									"Type": "NodeText",
-									"Data": "Start SiYuan, unlock any restored encrypted notebook, rebuild the index, and check the recovered documents and assets"
+									"Data": "Start Kora Note, unlock any restored encrypted notebook, rebuild the index, and check the recovered documents and assets"
 								}
 							]
 						}
@@ -1045,7 +1046,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20220615120602-mjy7por",
-				"updated": "20261016112108"
+				"updated": "20261120163550"
 			},
 			"Children": [
 				{
@@ -1095,7 +1096,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20220615120602-3fqyf3h",
-				"updated": "20261016112108"
+				"updated": "20261120163550"
 			},
 			"Children": [
 				{
@@ -1145,7 +1146,7 @@
 				},
 				{
 					"Type": "NodeText",
-					"Data": " button. Alternatively, exit SiYuan before manually deleting "
+					"Data": " button. Alternatively, exit Kora Note before manually deleting "
 				},
 				{
 					"Type": "NodeTextMark",
@@ -1202,7 +1203,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20220615120602-wipwu6g",
-				"updated": "20261016111431"
+				"updated": "20261120163550"
 			},
 			"Children": [
 				{
@@ -1243,7 +1244,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20220722002536-t7qdekm",
-				"updated": "20220722002536"
+				"updated": "20261120163550"
 			},
 			"Children": [
 				{
@@ -1258,7 +1259,7 @@
 			"ListData": {},
 			"Properties": {
 				"id": "20220722002536-oh6do47",
-				"updated": "20220722002630"
+				"updated": "20261120163550"
 			},
 			"Children": [
 				{
@@ -1270,7 +1271,7 @@
 					},
 					"Properties": {
 						"id": "20220722002536-jl5euiu",
-						"updated": "20220722002536"
+						"updated": "20261120163550"
 					},
 					"Children": [
 						{
@@ -1278,7 +1279,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220722002536-6v0g14u",
-								"updated": "20220722002536"
+								"updated": "20261120163550"
 							},
 							"Children": [
 								{
@@ -1303,7 +1304,7 @@
 					},
 					"Properties": {
 						"id": "20220722002536-vtknbv8",
-						"updated": "20220722002630"
+						"updated": "20261120163550"
 					},
 					"Children": [
 						{
@@ -1311,7 +1312,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220722002536-ebch8kx",
-								"updated": "20220722002630"
+								"updated": "20261120163550"
 							},
 							"Children": [
 								{
@@ -1341,7 +1342,7 @@
 					},
 					"Properties": {
 						"id": "20220722002536-gwbslbg",
-						"updated": "20220722002536"
+						"updated": "20261120163550"
 					},
 					"Children": [
 						{
@@ -1349,7 +1350,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220722002536-iywk7i9",
-								"updated": "20220722002536"
+								"updated": "20261120163550"
 							},
 							"Children": [
 								{
@@ -1372,7 +1373,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20220722002536-k5ij0q6",
-				"updated": "20220722002536"
+				"updated": "20261120163550"
 			},
 			"Children": [
 				{
@@ -1404,7 +1405,7 @@
 			},
 			"Properties": {
 				"id": "20220615120602-5r3nl34",
-				"updated": "20250115153528"
+				"updated": "20261120163550"
 			},
 			"Children": [
 				{
@@ -1418,7 +1419,7 @@
 					},
 					"Properties": {
 						"id": "20220615120602-a20qin2",
-						"updated": "20250115153528"
+						"updated": "20261120163550"
 					},
 					"Children": [
 						{
@@ -1426,7 +1427,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220615120602-k0xs8n5",
-								"updated": "20250115153528"
+								"updated": "20261120163550"
 							},
 							"Children": [
 								{
@@ -1475,7 +1476,7 @@
 					},
 					"Properties": {
 						"id": "20220615120602-fhbmyhz",
-						"updated": "20220615120602"
+						"updated": "20261120163550"
 					},
 					"Children": [
 						{
@@ -1483,7 +1484,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220615120602-rh4nmca",
-								"updated": "20220615120602"
+								"updated": "20261120163550"
 							},
 							"Children": [
 								{
@@ -1510,7 +1511,7 @@
 					},
 					"Properties": {
 						"id": "20220615120602-dkrrocp",
-						"updated": "20220615120840"
+						"updated": "20261120163550"
 					},
 					"Children": [
 						{
@@ -1518,7 +1519,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220615120602-4hggbdj",
-								"updated": "20220615120840"
+								"updated": "20261120163550"
 							},
 							"Children": [
 								{
@@ -1554,7 +1555,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20220615120602-dwulzmi",
-				"updated": "20261016111431"
+				"updated": "20261120163550"
 			},
 			"Children": [
 				{
@@ -1568,7 +1569,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20261024203645-1uu50u4",
-				"updated": "20261024203645"
+				"updated": "20261120163550"
 			},
 			"Children": [
 				{
@@ -1624,7 +1625,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20220615120602-13h2vpv",
-				"updated": "20260914101605"
+				"updated": "20261120163550"
 			},
 			"Children": [
 				{
@@ -1692,7 +1693,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20260914101605-ihg861m",
-				"updated": "20260914101605"
+				"updated": "20261120163550"
 			},
 			"Children": [
 				{
@@ -1706,7 +1707,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20260927191121-n45rqtj",
-				"updated": "20261024164212"
+				"updated": "20261120163550"
 			},
 			"Children": [
 				{
@@ -1720,7 +1721,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20261024164212-stfrsgs",
-				"updated": "20261024164212"
+				"updated": "20261120163550"
 			},
 			"Children": [
 				{
@@ -1752,7 +1753,7 @@
 			},
 			"Properties": {
 				"id": "20260914101605-xg5sqge",
-				"updated": "20260914101605"
+				"updated": "20261120163550"
 			},
 			"Children": [
 				{
@@ -1766,7 +1767,7 @@
 					},
 					"Properties": {
 						"id": "20260914101605-d2qjgki",
-						"updated": "20260914101605"
+						"updated": "20261120163550"
 					},
 					"Children": [
 						{
@@ -1774,7 +1775,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20260914101605-hvhwkmb",
-								"updated": "20260914101605"
+								"updated": "20261120163550"
 							},
 							"Children": [
 								{
@@ -1814,7 +1815,7 @@
 					},
 					"Properties": {
 						"id": "20260914101605-xjtvp83",
-						"updated": "20260914101605"
+						"updated": "20261120163550"
 					},
 					"Children": [
 						{
@@ -1822,7 +1823,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20260914101605-i4bzcea",
-								"updated": "20260914101605"
+								"updated": "20261120163550"
 							},
 							"Children": [
 								{
@@ -1853,7 +1854,7 @@
 					},
 					"Properties": {
 						"id": "20260914101605-mal6g06",
-						"updated": "20260914101605"
+						"updated": "20261120163550"
 					},
 					"Children": [
 						{
@@ -1861,7 +1862,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20260914101605-qmkphsk",
-								"updated": "20260914101605"
+								"updated": "20261120163550"
 							},
 							"Children": [
 								{
@@ -1892,7 +1893,7 @@
 					},
 					"Properties": {
 						"id": "20260914101605-rij64em",
-						"updated": "20260914101605"
+						"updated": "20261120163550"
 					},
 					"Children": [
 						{
@@ -1900,7 +1901,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20260914101605-5d6ebmk",
-								"updated": "20260914101605"
+								"updated": "20261120163550"
 							},
 							"Children": [
 								{
@@ -1945,12 +1946,12 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20260914101605-mzvd2cc",
-				"updated": "20260914102430"
+				"updated": "20261120163550"
 			},
 			"Children": [
 				{
 					"Type": "NodeText",
-					"Data": "Removing tags does not immediately delete snapshot data or automatically purge the repository. You can purge the local data repository separately to reclaim space; manual cloud cleanup is available only for S3, WebDAV, and local filesystem sync storage."
+					"Data": "Removing tags does not immediately delete snapshot data or automatically purge the repository. You can purge the local data repository separately to reclaim space; manual cloud cleanup is available only for WebDAV and local filesystem sync storage."
 				}
 			]
 		},
@@ -1974,7 +1975,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20220615120602-zusc5xs",
-				"updated": "20220615120602"
+				"updated": "20261120163550"
 			},
 			"Children": [
 				{
@@ -1988,7 +1989,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20261102161000-d285b6d",
-				"updated": "20261102161000"
+				"updated": "20261120163550"
 			},
 			"Children": [
 				{
@@ -2017,7 +2018,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20261016111431-bfqnv4v",
-				"updated": "20261024164212"
+				"updated": "20261120163550"
 			},
 			"Children": [
 				{
@@ -2058,7 +2059,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20261024164212-raor55s",
-				"updated": "20261024164212"
+				"updated": "20261120163550"
 			},
 			"Children": [
 				{
@@ -2073,7 +2074,7 @@
 			"ListData": {},
 			"Properties": {
 				"id": "20230422101614-mdijztr",
-				"updated": "20261016111431"
+				"updated": "20261120163550"
 			},
 			"Children": [
 				{
@@ -2085,7 +2086,7 @@
 					},
 					"Properties": {
 						"id": "20230422101614-5lwp8u3",
-						"updated": "20261011203418"
+						"updated": "20261120163550"
 					},
 					"Children": [
 						{
@@ -2093,7 +2094,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20230422101614-5kvwhn7",
-								"updated": "20261011203418"
+								"updated": "20261120163550"
 							},
 							"Children": [
 								{
@@ -2162,7 +2163,7 @@
 							"ListData": {},
 							"Properties": {
 								"id": "20230422101614-ibwplih",
-								"updated": "20230422102025"
+								"updated": "20261120163550"
 							},
 							"Children": [
 								{
@@ -2174,7 +2175,7 @@
 									},
 									"Properties": {
 										"id": "20230422101614-wqxklla",
-										"updated": "20230422102025"
+										"updated": "20261120163550"
 									},
 									"Children": [
 										{
@@ -2182,7 +2183,7 @@
 											"Type": "NodeParagraph",
 											"Properties": {
 												"id": "20230422101614-uwv2229",
-												"updated": "20230422102025"
+												"updated": "20261120163550"
 											},
 											"Children": [
 												{
@@ -2211,7 +2212,7 @@
 									},
 									"Properties": {
 										"id": "20230422101614-tgrdynv",
-										"updated": "20230422102023"
+										"updated": "20261120163550"
 									},
 									"Children": [
 										{
@@ -2219,7 +2220,7 @@
 											"Type": "NodeParagraph",
 											"Properties": {
 												"id": "20230422101614-tf542fs",
-												"updated": "20230422102023"
+												"updated": "20261120163550"
 											},
 											"Children": [
 												{
@@ -2252,7 +2253,7 @@
 					},
 					"Properties": {
 						"id": "20260914101605-an302a6",
-						"updated": "20260914102430"
+						"updated": "20261120163550"
 					},
 					"Children": [
 						{
@@ -2260,12 +2261,12 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20260914101605-eu91n0k",
-								"updated": "20260914102430"
+								"updated": "20261120163550"
 							},
 							"Children": [
 								{
 									"Type": "NodeText",
-									"Data": "When using S3, WebDAV, or a local filesystem as sync storage, use "
+									"Data": "When using WebDAV or a local filesystem as sync storage, use "
 								},
 								{
 									"Type": "NodeTextMark",
@@ -2274,7 +2275,7 @@
 								},
 								{
 									"Type": "NodeText",
-									"Data": " in the cloud pane to remove only unreferenced cloud snapshots and related data objects; pause synchronization on other devices beforehand and keep the network connection stable; this action is unavailable for SiYuan’s official cloud, so its cleanup button is hidden"
+									"Data": " in the cloud pane to remove only unreferenced cloud snapshots and related data objects; pause synchronization on other devices beforehand and keep the network connection stable; the cleanup button is shown only for services that support it"
 								}
 							]
 						}
@@ -2289,7 +2290,7 @@
 					},
 					"Properties": {
 						"id": "20230422101614-ht2yhm0",
-						"updated": "20261016111431"
+						"updated": "20261120163550"
 					},
 					"Children": [
 						{
@@ -2297,7 +2298,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20230422101614-lxjcg2j",
-								"updated": "20261016111431"
+								"updated": "20261120163550"
 							},
 							"Children": [
 								{
@@ -2358,7 +2359,7 @@
 								},
 								{
 									"Type": "NodeText",
-									"Data": "​ bypasses these checks and removes all local snapshots, including tagged ones; only consider it after these prerequisites and after exiting SiYuan normally"
+									"Data": "​ bypasses these checks and removes all local snapshots, including tagged ones; only consider it after these prerequisites and after exiting Kora Note normally"
 								}
 							]
 						}
@@ -2386,7 +2387,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20210928101257-3m7efdr",
-				"updated": "20260809160000"
+				"updated": "20261120163550"
 			},
 			"Children": [
 				{
@@ -2438,7 +2439,7 @@
 			"ListData": {},
 			"Properties": {
 				"id": "20210928101257-apwzr8j",
-				"updated": "20211222190049"
+				"updated": "20261120163550"
 			},
 			"Children": [
 				{
@@ -2450,7 +2451,7 @@
 					},
 					"Properties": {
 						"id": "20210928101257-9rghi7d",
-						"updated": "20211222190049"
+						"updated": "20261120163550"
 					},
 					"Children": [
 						{
@@ -2458,7 +2459,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20210928101257-tjmd13g",
-								"updated": "20211222190049"
+								"updated": "20261120163550"
 							},
 							"Children": [
 								{
@@ -2482,14 +2483,16 @@
 						"Marker": "Kg=="
 					},
 					"Properties": {
-						"id": "20210928101257-egaymco"
+						"id": "20210928101257-egaymco",
+						"updated": "20261120163550"
 					},
 					"Children": [
 						{
 							"ID": "20210928101257-jj2836a",
 							"Type": "NodeParagraph",
 							"Properties": {
-								"id": "20210928101257-jj2836a"
+								"id": "20210928101257-jj2836a",
+								"updated": "20261120163550"
 							},
 							"Children": [
 								{
@@ -2529,7 +2532,7 @@
 			"ListData": {},
 			"Properties": {
 				"id": "20220807180431-4175cz3",
-				"updated": "20220807180431"
+				"updated": "20261120163550"
 			},
 			"Children": [
 				{
@@ -2541,7 +2544,7 @@
 					},
 					"Properties": {
 						"id": "20220807180431-97qvi51",
-						"updated": "20220807180431"
+						"updated": "20261120163550"
 					},
 					"Children": [
 						{
@@ -2549,7 +2552,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220807180431-8hzorql",
-								"updated": "20220807180431"
+								"updated": "20261120163550"
 							},
 							"Children": [
 								{

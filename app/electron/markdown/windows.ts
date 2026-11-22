@@ -123,7 +123,7 @@ const createMarkdownWindows = ({app, BrowserWindow, ipcMain, dialog, shell, root
     const closeCrashed = async (record: MarkdownWindowRecord): Promise<boolean> => {
         if (record.crashApproved) return true;
         await host.recovery.list();
-        const decision = await dialog.showMessageBox(record.window, {type: "warning", title: "SiYuan",
+        const decision = await dialog.showMessageBox(record.window, {type: "warning", title: "Kora Note",
             message: text("markdownLoadError"), detail: text("markdownPrivacy"),
             buttons: [text("markdownKeepDraft"), text("cancel")], defaultId: 1, cancelId: 1, noLink: true});
         if (decision.response !== 0) return false;
@@ -160,7 +160,7 @@ const createMarkdownWindows = ({app, BrowserWindow, ipcMain, dialog, shell, root
         const key = ({permission: "markdownPermissionDenied", readonly: "markdownReadOnly", offline: "markdownFileOffline",
             unavailable: "markdownFileUnavailable", deleted: "markdownFileDeleted", "identity-changed": "markdownFileReplaced",
             encoding: "agentSkillEncodingTip", size: "markdownTooLarge", space: "markdownNoSpace"} as Record<string, string>)[error?.code ?? ""] || "markdownError";
-        const options: MessageBoxOptions = {type: "error", title: "SiYuan",
+        const options: MessageBoxOptions = {type: "error", title: "Kora Note",
             message: text(key), buttons: [text("confirm")], noLink: true};
         if (record) await dialog.showMessageBox(record.window, options);
         else await dialog.showMessageBox(options);
@@ -297,7 +297,7 @@ const createMarkdownWindows = ({app, BrowserWindow, ipcMain, dialog, shell, root
         try {
             await fs.access(path.join(directory, "index.html"));
         } catch {
-            await dialog.showMessageBox({type: "error", title: "SiYuan", message: text("markdownLoadError"), buttons: [text("confirm")]});
+            await dialog.showMessageBox({type: "error", title: "Kora Note", message: text("markdownLoadError"), buttons: [text("confirm")]});
             return;
         }
         if (quitting) return;
@@ -307,7 +307,7 @@ const createMarkdownWindows = ({app, BrowserWindow, ipcMain, dialog, shell, root
         catch {
             const restoredSession = restored && host.sessions.get(restored.sessionId);
             if (restoredSession) restoredSession.crashed = true;
-            await dialog.showMessageBox({type: "error", title: "SiYuan", message: text("markdownLoadError"), buttons: [text("confirm")]});
+            await dialog.showMessageBox({type: "error", title: "Kora Note", message: text("markdownLoadError"), buttons: [text("confirm")]});
             return;
         }
         if (quitting) return;
@@ -448,7 +448,7 @@ const createMarkdownWindows = ({app, BrowserWindow, ipcMain, dialog, shell, root
             // 页面加载失败时无法应答关闭命令，必须保留恢复记录并使用原生关闭保护。
             rendererUnavailable();
             focus(record);
-            await dialog.showMessageBox(window, {type: "error", title: "SiYuan",
+            await dialog.showMessageBox(window, {type: "error", title: "Kora Note",
                 message: text("markdownLoadError"), buttons: [text("confirm")], noLink: true});
         }
         return window;
@@ -467,7 +467,7 @@ const createMarkdownWindows = ({app, BrowserWindow, ipcMain, dialog, shell, root
         return task;
     };
     const messageBox = async (record: MarkdownWindowRecord, message: string, buttons: string[]): Promise<number> => (await dialog.showMessageBox(record.window,
-        {type: "question", title: "SiYuan", message, buttons, cancelId: buttons.length - 1, defaultId: buttons.length - 1, noLink: true})).response;
+        {type: "question", title: "Kora Note", message, buttons, cancelId: buttons.length - 1, defaultId: buttons.length - 1, noLink: true})).response;
     const prepareTreeOpen = (record: MarkdownWindowRecord, location: MarkdownTreeLocation): MarkdownTreeOpen | Promise<MarkdownTreeOpen> => {
         if (quitting || record.closing || record.crashed || record.treeTask || record.imageTask || record.candidate) {
             return {kind: "blocked", error: {code: "unavailable", recoverable: true}};

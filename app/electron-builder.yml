@@ -1,11 +1,10 @@
 extends: "./electron-builder-common.yml"
-productName: "SiYuan"
+productName: "Kora Note"
 appId: "org.b3log.siyuan"
 publish: null
 asar: false
 compression: "normal"
-copyright: "© 2020-present Yunnan Liandi Technology Co., Ltd."
-artifactName: "siyuan-${version}-${os}.${ext}"
+artifactName: "koranote-${version}-${os}.${ext}"
 extraMetadata:
   main: "electron-dist/main.js"
 directories:
@@ -13,8 +12,6 @@ directories:
   buildResources: "nsis-resources"
 files:
   - "electron-dist"
-afterPack: "./scripts/afterPack.js"
-beforePack: "./scripts/beforePack.js"
 extraFiles:
   - from: "../LICENSE"
     to: "LICENSE"
@@ -29,7 +26,6 @@ win:
       to: "markdown.ico"
   requestedExecutionLevel: "asInvoker"
   signtoolOptions:
-    #certificateSubjectName: "Yunnan Liandi Technology Co., Ltd."
     signingHashAlgorithms: [ 'sha256' ]
     rfc3161TimeStampServer: "http://timestamp.acs.microsoft.com/"
   target:
@@ -42,7 +38,7 @@ nsis:
   deleteAppDataOnUninstall: true
   createDesktopShortcut: true
   createStartMenuShortcut: true
-  shortcutName: "SiYuan"
+  shortcutName: "Kora Note"
   license: "../LICENSE"
   include: "nsis/installer.nsh"
   warningsAsErrors: false
@@ -55,9 +51,7 @@ extraResources:
     filter: ["v${version}/**"]
   - from: "stage"
     to: "stage"
-    filter: ["**/*", "!ocr/runtime/**/*"]
-  - from: "stage/ocr/runtime/windows-amd64"
-    to: "stage/ocr/runtime/windows-amd64"
+    filter: ["**/*"]
   - from: "guide"
     to: "guide"
     filter: "!**/{.DS_Store,.git,.gitignore,.idea}"
@@ -86,9 +80,4 @@ extraResources:
     filter: "!**/{.DS_Store,custom.css}"
   - from: "appearance/fonts"
     to: "appearance/fonts"
-    filter: "!**/{.DS_Store}"
-  - from: "pandoc/pandoc-windows-amd64.zip"
-    to: "pandoc.zip"
-  - from: "pandoc/pandoc-resources"
-    to: "pandoc-resources"
     filter: "!**/{.DS_Store}"

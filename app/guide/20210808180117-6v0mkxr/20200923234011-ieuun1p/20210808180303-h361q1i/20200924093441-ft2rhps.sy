@@ -2022,7 +2022,7 @@
 							"Children": [
 								{
 									"Type": "NodeText",
-									"Data": "Release SiYuan"
+									"Data": "Release Kora Note"
 								}
 							]
 						}
@@ -2217,7 +2217,7 @@
 			"Children": [
 				{
 					"Type": "NodeText",
-					"Data": "On desktop, hold Alt (⌥ on macOS) and click a block reference or SiYuan block link in a mind map to open it in a right split. Hold Shift and click to open it in a bottom split."
+					"Data": "On desktop, hold Alt (⌥ on macOS) and click a block reference or Kora Note block link in a mind map to open it in a right split. Hold Shift and click to open it in a bottom split."
 				}
 			]
 		},
@@ -2657,7 +2657,7 @@
 			"Children": [
 				{
 					"Type": "NodeText",
-					"Data": "It changes parent-child connectors without moving nodes or changing relationship lines. Shared trunks cannot be selected separately; with a palette enabled, they follow their parent branch color. Horizontal branches can still be selected and colored individually. SiYuan-format HTML and PDF previews use the saved style."
+					"Data": "It changes parent-child connectors without moving nodes or changing relationship lines. Shared trunks cannot be selected separately; with a palette enabled, they follow their parent branch color. Horizontal branches can still be selected and colored individually. Kora Note-format HTML and PDF previews use the saved style."
 				}
 			]
 		},
@@ -2840,7 +2840,7 @@
 			"Children": [
 				{
 					"Type": "NodeText",
-					"Data": "This does not reset the canvas background or other formatting. Appearance changes are saved with the document, support undo and redo, and are included in SiYuan-format HTML and PDF previews."
+					"Data": "This does not reset the canvas background or other formatting. Appearance changes are saved with the document, support undo and redo, and are included in Kora Note-format HTML and PDF previews."
 				}
 			]
 		},
@@ -3204,7 +3204,7 @@
 			"Children": [
 				{
 					"Type": "NodeText",
-					"Data": "SiYuan-format HTML and PDF previews display summaries. Deleting an inner summary preserves the nodes and the outer summary. Nested configurations require a newer client; older clients preserve the configuration and display the source list instead of the mind map."
+					"Data": "Kora Note-format HTML and PDF previews display summaries. Deleting an inner summary preserves the nodes and the outer summary. Nested configurations require a newer client; older clients preserve the configuration and display the source list instead of the mind map."
 				}
 			]
 		},
@@ -5059,7 +5059,7 @@
 					"TextMarkType": "block-ref",
 					"TextMarkBlockRefID": "20201204184532-3qm9l8n",
 					"TextMarkBlockRefSubtype": "s",
-					"TextMarkTextContent": "SiYuan template"
+					"TextMarkTextContent": "Kora Note template"
 				},
 				{
 					"Type": "NodeText",
@@ -5441,7 +5441,7 @@
 			"Children": [
 				{
 					"Type": "NodeText",
-					"Data": "When pasting or importing Markdown, SiYuan recognizes "
+					"Data": "When pasting or importing Markdown, Kora Note recognizes "
 				},
 				{
 					"Type": "NodeTextMark",

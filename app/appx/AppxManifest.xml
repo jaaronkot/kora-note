@@ -13,8 +13,8 @@
               Publisher="CN=087C656E-C1D9-42D8-8807-CED45A74FC0F"
               Version="3.8.10.0"/>
     <Properties>
-        <DisplayName>SiYuan</DisplayName>
-        <PublisherDisplayName>云南链滴科技有限公司</PublisherDisplayName>
+        <DisplayName>Kora Note</DisplayName>
+        <PublisherDisplayName>Kora Note</PublisherDisplayName>
         <Description>From thought to insight, with agents</Description>
         <Logo>assets\StoreLogo.png</Logo>
     </Properties>
@@ -40,10 +40,10 @@
         <rescap:Capability Name="runFullTrust"/>
     </Capabilities>
     <Applications>
-        <Application Id="SiYuan" Executable="app\SiYuan.exe" EntryPoint="Windows.FullTrustApplication">
+        <Application Id="KoraNote" Executable="app\Kora Note.exe" EntryPoint="Windows.FullTrustApplication">
             <uap:VisualElements
                     BackgroundColor="transparent"
-                    DisplayName="SiYuan"
+                    DisplayName="Kora Note"
                     Square150x150Logo="assets\Square150x150Logo.png"
                     Square44x44Logo="assets\Square44x44Logo.png"
                     Description="From thought to insight, with agents">

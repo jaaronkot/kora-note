@@ -19,7 +19,7 @@
 			"Children": [
 				{
 					"Type": "NodeText",
-					"Data": "内核 API 通过 HTTP 提供文档、内容块、资源文件等数据操作，适合脚本和外部工具集成。调用前需启动思源内核，并按接口要求使用 API Token。具体参数和示例见下方 API 文档。"
+					"Data": "内核 API 通过 HTTP 提供文档、内容块、资源文件等数据操作，适合脚本和外部工具集成。调用前需启动 Kora Note 内核，并按接口要求使用 API Token。具体参数和示例见下方 API 文档。"
 				}
 			]
 		},
@@ -35,7 +35,7 @@
 					"Type": "NodeTextMark",
 					"TextMarkType": "a",
 					"TextMarkTextContent": "API 文档",
-					"TextMarkAHref": "https://github.com/siyuan-note/siyuan/blob/dev/docs/API.zh-CN.md"
+					"TextMarkAHref": "https://github.com/jaaronkot/kora-note/blob/master/docs/API.zh-CN.md"
 				}
 			]
 		},
@@ -49,7 +49,7 @@
 			"Children": [
 				{
 					"Type": "NodeText",
-					"Data": "思源还通过 MCP 向外部客户端提供工具，连接方式和权限说明请参阅 "
+					"Data": "Kora Note 还通过 MCP 向外部客户端提供工具，连接方式和权限说明请参阅 "
 				},
 				{
 					"Type": "NodeTextMark",

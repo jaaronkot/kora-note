@@ -34,7 +34,7 @@
 			"Children": [
 				{
 					"Type": "NodeText",
-					"Data": "Widgets are small web-based tools embedded in a document. The SiYuan kernel serves their files, the editor displays them in an "
+					"Data": "Widgets are small web-based tools embedded in a document. The Kora Note kernel serves their files, the editor displays them in an "
 				},
 				{
 					"Type": "NodeTextMark",

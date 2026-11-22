@@ -47,7 +47,7 @@
 									"Type": "NodeTextMark",
 									"TextMarkType": "a",
 									"TextMarkAHref": "https://www.xiaohongshu.com/user/profile/55c48726c2bdeb631a62fa35",
-									"TextMarkTextContent": "思源笔记"
+									"TextMarkTextContent": "Kora Note"
 								}
 							]
 						}
@@ -81,7 +81,7 @@
 									"Type": "NodeTextMark",
 									"TextMarkType": "a",
 									"TextMarkAHref": "https://space.bilibili.com/1926167138",
-									"TextMarkTextContent": "思源笔记"
+									"TextMarkTextContent": "Kora Note"
 								}
 							]
 						}
@@ -115,7 +115,7 @@
 									"Type": "NodeTextMark",
 									"TextMarkType": "a",
 									"TextMarkAHref": "https://www.zhihu.com/people/dwb29c",
-									"TextMarkTextContent": "思源笔记"
+									"TextMarkTextContent": "Kora Note"
 								}
 							]
 						}
@@ -450,7 +450,7 @@
 							"Children": [
 								{
 									"Type": "NodeText",
-									"Data": "链滴 "
+									"Data": "社区 "
 								},
 								{
 									"Type": "NodeTextMark",

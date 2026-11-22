@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SiYuan</title>
+    <title>Kora Note</title>
     <link id="protyleKatexStyle" rel="stylesheet" href="../../protyle/js/katex/katex.min.css?v=0.19.0">
     <script src="../../protyle/js/pdf/pdf.min.mjs?v=6.4.299-siyuan.1" type="module"></script>
 </head>

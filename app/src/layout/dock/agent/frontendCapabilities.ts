@@ -89,7 +89,7 @@ if (!mobileFrontend && !isBrowser()) {
     registerCapability({
         id: "native/frontend/web_page_fetch",
         title: "Fetch rendered web page",
-        description: "Fetch a public HTTP/HTTPS web page using the local Electron browser, execute its JavaScript, and extract rendered content as Markdown (default) or text. Page scripts make real network requests. Uses an isolated session without your SiYuan browser cookies or login state. Use this for client-rendered pages; web_fetch uses raw HTTP without JavaScript. Available only while this desktop instance is connected. Private/internal addresses and downloads are blocked. Workers, embedded frames, WebSocket, WebRTC, and WebTransport are disabled.",
+        description: "Fetch a public HTTP/HTTPS web page using the local Electron browser, execute its JavaScript, and extract rendered content as Markdown (default) or text. Page scripts make real network requests. Uses an isolated session without your Kora Note browser cookies or login state. Use this for client-rendered pages; web_fetch uses raw HTTP without JavaScript. Available only while this desktop instance is connected. Private/internal addresses and downloads are blocked. Workers, embedded frames, WebSocket, WebRTC, and WebTransport are disabled.",
         inputSchema: {type: "object", properties: {
             url: {type: "string"}, format: {type: "string", enum: ["markdown", "text"]},
         }, required: ["url"], additionalProperties: false},
@@ -123,8 +123,8 @@ if (!mobileFrontend && !isBrowser()) {
 registerCapability({
     id: "native/frontend/open_setting",
     title: "Open settings",
-    description: mobileFrontend ? "Open SiYuan settings and optionally provide a search query." :
-        "Open SiYuan settings and optionally filter settings by a search query.",
+    description: mobileFrontend ? "Open Kora Note settings and optionally provide a search query." :
+        "Open Kora Note settings and optionally filter settings by a search query.",
     inputSchema: {type: "object", properties: {query: {type: "string"}}, additionalProperties: false},
     source: "native",
     handler: async (args, app) => {
@@ -202,8 +202,8 @@ registerCapability({
 registerCapability({
     id: "native/frontend/open_document",
     title: "Open document",
-    description: mobileFrontend ? "Open a SiYuan document by its block ID in the mobile app." :
-        "Open a SiYuan document by its block ID in the current app.",
+    description: mobileFrontend ? "Open a Kora Note document by its block ID in the mobile app." :
+        "Open a Kora Note document by its block ID in the current app.",
     inputSchema: {type: "object", properties: {id: {type: "string"}}, required: ["id"], additionalProperties: false},
     source: "native",
     handler: async (args, app) => {
@@ -237,7 +237,7 @@ registerCapability({
 registerCapability({
     id: "native/frontend/open_search",
     title: "Open search",
-    description: `Open the SiYuan ${mobileFrontend ? "mobile search interface" : "search interface"} and optionally set a query and method. Omitted values preserve the current search settings. For SQL (method=2), return complete block rows with SELECT b.* FROM blocks b, rather than projections or aggregates; express filters and LIMIT/OFFSET in SQL. Use sql.query for statistics and arbitrary columns, and sql.schema for structural search guidance. Newlines and SQL comments are preserved.`,
+    description: `Open the Kora Note ${mobileFrontend ? "mobile search interface" : "search interface"} and optionally set a query and method. Omitted values preserve the current search settings. For SQL (method=2), return complete block rows with SELECT b.* FROM blocks b, rather than projections or aggregates; express filters and LIMIT/OFFSET in SQL. Use sql.query for statistics and arbitrary columns, and sql.schema for structural search guidance. Newlines and SQL comments are preserved.`,
     inputSchema: {type: "object", properties: {
         query: {type: "string"},
         method: {type: "integer", enum: [0, 1, 2, 3, 4],

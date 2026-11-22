@@ -2,14 +2,14 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>SiYuan</title>
+    <title>Kora Note</title>
     <meta name="viewport" content="width=device-width, height=device-height, interactive-widget=overlays-content, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
     <link rel="manifest" href="/manifest.webmanifest" crossorigin="use-credentials">
 </head>
 <body class="fn__flex-column" style="background-color: #1e1e1e">
 <div id="loading" class="b3-dialog b3-dialog--open" style="padding: 0; z-index: 10;">
     <div class="b3-dialog__scrim" style="background-color: #1e1e1e"></div>
-    <img style="position: absolute;width: 24vh;height: 24vh;" src="../../icon.svg">
+    <img style="position: absolute;width: 24vh;height: 24vh;" src="../../icon.png">
 </div>
 <div class="mobile-safe-area"></div>
 <div id="mobileTopBar" class="toolbar toolbar--border mobile-topbar">
@@ -33,7 +33,6 @@
             <svg data-type="sidebar-file-tab" class="toolbar__icon toolbar__icon--active"><use xlink:href="#iconFiles"></use></svg>
             <svg data-type="sidebar-bookmark-tab" class="toolbar__icon"><use xlink:href="#iconBookmark"></use></svg>
             <svg data-type="sidebar-tag-tab" class="toolbar__icon"><use xlink:href="#iconTag"></use></svg>
-            <svg data-type="sidebar-inbox-tab" class="toolbar__icon"><use xlink:href="#iconInbox"></use></svg>
         </div>
         <svg class="toolbar__icon"><use xlink:href="#iconRight"></use></svg>
     </div>
@@ -41,7 +40,6 @@
         <div class="fn__flex-column" data-type="sidebar-file"></div>
         <div class="fn__flex-column fn__none" data-type="sidebar-bookmark"></div>
         <div class="fn__flex-column fn__none" data-type="sidebar-tag"></div>
-        <div class="fn__flex-column fn__none" data-type="sidebar-inbox"></div>
     </div>
 </div>
 <div id="sidebarRight" class="side-panel side-panel--right fn__flex-column">
@@ -49,7 +47,6 @@
         <div class="toolbar__scroll">
             <svg data-type="sidebar-outline-tab" class="toolbar__icon toolbar__icon--active"><use xlink:href="#iconOutline"></use></svg>
             <svg data-type="sidebar-backlink-tab" class="toolbar__icon"><use xlink:href="#iconLink"></use></svg>
-            <svg data-type="sidebar-agent-tab" class="toolbar__icon fn__none"><use xlink:href="#iconSparkles"></use></svg>
         </div>
         <button id="sidebarRightExit" class="toolbar__button ft__error ariaLabel fn__none" type="button">
             <svg><use xlink:href="#iconQuit"></use></svg>
@@ -59,7 +56,6 @@
     <div class="fn__flex-1 b3-list--mobile">
         <div class="fn__flex-column" data-type="sidebar-outline"></div>
         <div class="fn__flex-column fn__none" data-type="sidebar-backlink"></div>
-        <div class="fn__flex-column fn__none" data-type="sidebar-agent"></div>
     </div>
 </div>
 <div id="menu" class="b3-menu b3-menu--fullscreen"></div>
@@ -117,21 +113,6 @@
     </button>
     <button id="mobileBottomBarBacklink" class="mobile-bottom-bar__item fn__none" data-action="backlink" type="button">
         <svg><use xlink:href="#iconLink"></use></svg>
-    </button>
-    <button id="mobileBottomBarInbox" class="mobile-bottom-bar__item fn__none" data-action="inbox" type="button">
-        <svg><use xlink:href="#iconInbox"></use></svg>
-    </button>
-    <button id="mobileBottomBarAgent" class="mobile-bottom-bar__item fn__none" data-action="agent" type="button">
-        <svg><use xlink:href="#iconSparkles"></use></svg>
-    </button>
-    <button id="mobileBottomBarSpacedRepetition" class="mobile-bottom-bar__item fn__none" data-action="spacedRepetition" type="button">
-        <svg><use xlink:href="#iconRiffCard"></use></svg>
-    </button>
-    <button id="mobileBottomBarDailyNote" class="mobile-bottom-bar__item fn__none" data-action="dailyNote" type="button">
-        <svg><use xlink:href="#iconCalendar"></use></svg>
-    </button>
-    <button id="mobileBottomBarNewDailyNote" class="mobile-bottom-bar__item fn__none" data-action="newDailyNote" type="button">
-        <svg><use xlink:href="#iconCalendarPlus"></use></svg>
     </button>
     <button id="mobileBottomBarCommand" class="mobile-bottom-bar__item fn__none" data-action="command" type="button">
         <svg><use xlink:href="#iconTerminal"></use></svg>

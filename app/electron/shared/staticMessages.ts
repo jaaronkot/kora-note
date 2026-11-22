@@ -23,30 +23,30 @@ const escapeHTML = (value: unknown): string =>
 export const workspaceLockedMessage: StaticMessage = {
     titleZh: "工作空间已被锁定",
     titleEn: "The workspace is locked",
-    content: "<div>该工作空间正在被使用，请尝试在任务管理器中结束 SiYuan-Kernel 进程或者重启操作系统后再启动思源。</div>" +
-        "<div>The workspace is being used, please try to end the SiYuan-Kernel process in the task manager or restart the operating system and then start SiYuan.</div>",
+    content: "<div>该工作空间正在被使用，请尝试在任务管理器中结束 SiYuan-Kernel 进程或者重启操作系统后再启动 Kora Note。</div>" +
+        "<div>The workspace is being used, please try to end the SiYuan-Kernel process in the task manager or restart the operating system and then start Kora Note.</div>",
 };
 
 export const kernelPortUnavailableMessage: StaticMessage = {
     titleZh: "获取内核服务端口失败",
     titleEn: "Failed to Obtain Kernel Service Port",
     content: "<div>获取内核服务端口失败，请确保程序拥有网络权限并不受防火墙和杀毒软件阻止。</div>" +
-        "<div>Failed to obtain kernel service port. Please ensure SiYuan has network permissions and is not blocked by firewalls or antivirus software.</div>",
+        "<div>Failed to obtain kernel service port. Please ensure Kora Note has network permissions and is not blocked by firewalls or antivirus software.</div>",
 };
 
 export const bootTimeoutMessage: StaticMessage = {
     titleZh: "启动超时",
     titleEn: "Boot timeout",
-    content: "<div>内核启动超时，请查看 <a href=\"#\" data-log-path>工作空间/temp/siyuan.log</a> 获取详细报错信息，或尝试重启思源。</div>" +
-        "<div>Kernel boot timed out. Please check <a href=\"#\" data-log-path>workspace/temp/siyuan.log</a> for details, or try restarting SiYuan.</div>",
+    content: "<div>内核启动超时，请查看 <a href=\"#\" data-log-path>工作空间/temp/siyuan.log</a> 获取详细报错信息，或尝试重启 Kora Note。</div>" +
+        "<div>Kernel boot timed out. Please check <a href=\"#\" data-log-path>workspace/temp/siyuan.log</a> for details, or try restarting Kora Note.</div>",
 };
 
 /** 内核程序缺失时把实际查找的路径一并显示出来，便于用户确认安装位置。 */
 export const kernelProgramMissingMessage = (kernelPath: string): StaticMessage => ({
     titleZh: "内核程序丢失",
     titleEn: "Kernel program is missing",
-    content: "<div>内核程序丢失，请重新安装思源，并将思源内核程序加入杀毒软件信任列表。</div>" +
-        "<div>The kernel program is not found, please reinstall SiYuan and add the SiYuan kernel program into the trust list of your antivirus software.</div>" +
+    content: "<div>内核程序丢失，请重新安装 Kora Note，并将 Kora Note 内核程序加入杀毒软件信任列表。</div>" +
+        "<div>The kernel program is not found, please reinstall Kora Note and add the Kora Note kernel program into the trust list of your antivirus software.</div>" +
         `<div><i>${kernelPath}</i></div>`,
 });
 

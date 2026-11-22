@@ -2,7 +2,7 @@ import {MobileDialog} from "../dialog/mobileDialog";
 import {mobileConfirmDialog} from "../dialog/mobileConfirmDialog";
 import {mobileInputDialog} from "../dialog/mobileInputDialog";
 import {config as configApi} from "../config/util/configApi";
-import {isPaidUser, needSubscribe} from "../util/needSubscribe";
+import {isPaidUser} from "../util/needSubscribe";
 import {showMessage} from "../dialog/message";
 import {fetchPost, fetchSyncPost} from "../util/fetch";
 import {isMobile} from "../util/functions";
@@ -70,9 +70,6 @@ export const addCloudName = (cloudListElement: Element, cb?: (ready: boolean) =>
 
 export const bindSyncCloudListEvent = (cloudListElement: Element, cb?: (ready: boolean) => void) => {
     cloudListElement.addEventListener("click", (event) => {
-        if (window.siyuan.config.sync.provider === 2) {
-            return;
-        }
         let target = event.target as HTMLElement;
         while (target && !target.isEqualNode(cloudListElement)) {
             const type = target.getAttribute("data-type");
@@ -128,24 +125,10 @@ export const renderSyncCloudList = (cloudListElement: Element, reload = false, c
 <button class="b3-button b3-button--outline" data-type="retryCloud">${window.siyuan.languages.retry}</button>`;
         updateReady(false);
     };
-    if (provider === 2) {
-        // S3 使用配置的存储桶，不依赖列出所有存储桶的权限；实际访问错误由同步请求报告。
-        const s3 = window.siyuan.config.sync.s3;
-        const ready = !!s3 && [s3.endpoint, s3.accessKey, s3.secretKey, s3.bucket, s3.region]
-            .every(value => !!value?.trim());
-        // S3 不使用云端同步目录，仅为与其他提供商保持一致的列表样式而显示唯一的固定项
-        cloudListElement.innerHTML = ready ? `<div class="fn__hr"></div><ul class="b3-list b3-list--background" style="overflow: auto;">
-    <li class="b3-list-item b3-list-item--narrow b3-list-item--hide-action">
-        <input type="radio" name="cloudName" checked/><span class="fn__space"></span><span>${escapeHtml(s3.bucket)}</span>
-    </li>
-</ul>` : `<ul><li class="b3-list--empty">${window.siyuan.languages.cloudConfigTip}</li></ul>`;
-        updateReady(ready);
-        return;
-    }
     if (!reload && cloudListElement.querySelector("ul")) {
         return;
     }
-    const canManage = provider === 0 || provider === 4;
+    const canManage = provider === 4;
     updateReady(false);
     cloudListElement.innerHTML = '<div class="fn__flex" style="height:100%;align-items:center;justify-content:center"><span class="b3-loading" aria-hidden="true"></span></div>';
     void fetchSyncPost("/api/sync/listCloudSyncDir", {}, undefined, false).then(response => {
@@ -209,20 +192,14 @@ ${canManage ? `<span data-type="removeCloud" class="b3-tooltips b3-tooltips__w b
     }).catch(error => failed(error?.message));
 };
 
-/** S3 直接展示配置的存储桶，其他提供者通过“配置”按钮展开目录列表 */
+/** 同步目录列表默认折叠，通过「配置」按钮展开 */
 export const refreshSyncCloudDirBlock = (root: Element) => {
-    const blockElement = root.querySelector("#syncCloudDirBlock");
     const listElement = root.querySelector("#syncCloudList");
-    if (!blockElement || !listElement) {
+    if (!listElement) {
         return;
     }
-    const isS3 = window.siyuan.config.sync.provider === 2;
-    blockElement.querySelector('[data-action="config"]')?.classList.toggle("fn__none", isS3);
     listElement.innerHTML = "";
-    listElement.classList.toggle("fn__none", !isS3);
-    if (isS3) {
-        renderSyncCloudList(listElement, true);
-    }
+    listElement.classList.add("fn__none");
 };
 
 export const syncGuide = (app?: App) => {
@@ -230,28 +207,20 @@ export const syncGuide = (app?: App) => {
     if (window.siyuan.config.readonly) {
         return;
     }
-    if (app && document.querySelector("#barSync")?.classList.contains("toolbar__item--active")) {
+    if (app && document.querySelector("#barSync")?.classList.contains("dock__item--syncing")) {
         return;
     }
-    if (window.siyuan.config.sync.provider === 0 && needSubscribe()) {
-        openSyncSetting(app);
-        showMessage(window.siyuan.languages._kernel[29].replaceAll("${accountServer}", getCloudURL("")));
-        return;
-    } else if (!isPaidUser()) {
+    if (!isPaidUser()) {
         openSyncSetting(app);
         showMessage(window.siyuan.languages._kernel[214].replaceAll("${accountServer}", getCloudURL("")));
         return;
     }
-    if (!window.siyuan.config.sync.enabled && window.siyuan.config.sync.provider !== 0) {
+    if (!window.siyuan.config.sync.enabled) {
         openSyncSetting(app);
         return;
     }
     if (!window.siyuan.config.repo.key) {
         setKey(true);
-        return;
-    }
-    if (!window.siyuan.config.sync.enabled) {
-        setSync();
         return;
     }
     syncNow();

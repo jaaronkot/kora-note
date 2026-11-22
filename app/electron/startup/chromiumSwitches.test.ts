@@ -34,7 +34,7 @@ const createCommandLine = (args = []) => {
 
 const startup = (t: any, args = [], {packaged = true, remote = false} = {}) => {
     const commandLine = createCommandLine(args);
-    const argv = packaged ? ["SiYuan.exe", ...args] : ["electron.exe", "main.js", ...args];
+    const argv = packaged ? ["Kora Note.exe", ...args] : ["electron.exe", "main.js", ...args];
     resetElectronStub();
     mockElectron(t, {app: {commandLine} as unknown as App});
     t.after(resetElectronStub);

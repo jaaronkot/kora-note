@@ -106,12 +106,12 @@ export const openDataMigration = (options: IDataMigrationOptions = {}) => {
     const dialog = new Dialog({
         title: window.siyuan.languages.dataMigration,
         content: `<div class="b3-dialog__content">
-    <div class="b3-label__text">SiYuan</div>
+    <div class="b3-label__text">Kora Note</div>
     <div class="fn__hr"></div>
     <div class="b3-list b3-list--background">
         <label class="b3-list-item">
             <svg class="b3-list-item__graphic"><use xlink:href="#iconSiYuan"></use></svg>
-            <span class="b3-list-item__text">SiYuan .sy.zip</span>
+            <span class="b3-list-item__text">Kora Note .sy.zip</span>
             <input class="b3-form__upload" data-type="siyuan" type="file" accept="application/zip">
         </label>
         ${getHostCapabilities().importExport ? `<div class="b3-list-item b3-list-item--warning fn__flex-wrap data-migration__item">
@@ -144,14 +144,6 @@ export const openDataMigration = (options: IDataMigrationOptions = {}) => {
             <span class="data-migration__actions">
                 ${getImportButton("conf", "application/zip,application/json")}
                 ${getExportButton("export-conf", mode)}
-            </span>
-        </div>
-        <div class="b3-list-item fn__flex-wrap data-migration__item">
-            <svg class="b3-list-item__graphic"><use xlink:href="#iconCloud"></use></svg>
-            <span class="b3-list-item__text">S3</span>
-            <span class="data-migration__actions">
-                ${getImportButton("s3", "application/zip")}
-                ${getExportButton("export-s3", mode)}
             </span>
         </div>
         <div class="b3-list-item fn__flex-wrap data-migration__item">
@@ -291,18 +283,11 @@ export const openDataMigration = (options: IDataMigrationOptions = {}) => {
         input.value = "";
         void importConfiguration(file);
     });
-    ["s3", "webdav"].forEach((provider) => {
-        bindFileInput(provider, (file, input) => {
-            input.value = "";
-            const isS3 = provider === "s3";
-            fetchPost(isS3 ? "/api/sync/importSyncProviderS3" : "/api/sync/importSyncProviderWebDAV", new ContractFormData({file}), (response: APICallbackResponse<APIPOSTRoutes["/api/sync/importSyncProviderS3" | "/api/sync/importSyncProviderWebDAV"]["response"]>) => {
-                if ("s3" in response.data) {
-                    window.siyuan.config.sync.s3 = response.data.s3;
-                } else {
-                    window.siyuan.config.sync.webdav = response.data.webdav;
-                }
-                showMessage(window.siyuan.languages.imported);
-            });
+    bindFileInput("webdav", (file, input) => {
+        input.value = "";
+        fetchPost("/api/sync/importSyncProviderWebDAV", new ContractFormData({file}), (response: APICallbackResponse<APIPOSTRoutes["/api/sync/importSyncProviderWebDAV"]["response"]>) => {
+            window.siyuan.config.sync.webdav = response.data.webdav;
+            showMessage(window.siyuan.languages.imported);
         });
     });
 
@@ -310,7 +295,6 @@ export const openDataMigration = (options: IDataMigrationOptions = {}) => {
         const action = (event.target as HTMLElement).closest<HTMLElement>("[data-action]")?.dataset.action;
         const exports: Record<string, string> = {
             "export-conf": "/api/system/exportConf",
-            "export-s3": "/api/sync/exportSyncProviderS3",
             "export-webdav": "/api/sync/exportSyncProviderWebDAV",
         };
         if (action === "export-data") {

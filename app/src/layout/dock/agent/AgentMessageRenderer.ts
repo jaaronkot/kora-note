@@ -52,7 +52,7 @@ export const renderTodoList = (result: string): string => {
 // hasModel=false 时渲染"未配置模型"提示块替代示例，避免用户点击示例后卡死。
 export const renderWelcomeHTML = (hasModel = true, greetingKey = ""): string => {
     const L = window.siyuan.languages;
-    const greeting = escapeHtmlTextAndAttr(L[greetingKey] || L.agentWelcomeGreeting || "Hello, I am SiYuan Agent");
+    const greeting = escapeHtmlTextAndAttr(L[greetingKey] || L.agentWelcomeGreeting || "Hello, I am Kora Note Agent");
     if (!hasModel) {
         return '<div class="agent-welcome">' +
             '<div class="agent-welcome__greeting">' + greeting + "</div>" +

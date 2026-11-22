@@ -587,7 +587,7 @@
 				},
 				{
 					"Type": "NodeText",
-					"Data": " in the editor to select Live Photos from Photos. SiYuan retains the original photo and its paired video, including their original metadata."
+					"Data": " in the editor to select Live Photos from Photos. Kora Note retains the original photo and its paired video, including their original metadata."
 				}
 			]
 		},
@@ -601,7 +601,7 @@
 			"Children": [
 				{
 					"Type": "NodeText",
-					"Data": "Open the image preview on any client, then select Live Photo to play it. If the original video cannot play, SiYuan generates a compatible preview on demand. The first playback may take longer; the local cache is reused afterward and is not synchronized. The compatible preview is lossy, while the original files stay unchanged."
+					"Data": "Open the image preview on any client, then select Live Photo to play it. If the original video cannot play, Kora Note generates a compatible preview on demand. The first playback may take longer; the local cache is reused afterward and is not synchronized. The compatible preview is lossy, while the original files stay unchanged."
 				}
 			]
 		},
@@ -1069,7 +1069,7 @@
 			"Children": [
 				{
 					"Type": "NodeText",
-					"Data": "If you need to place the inserted assets in the assets folder at the same level as the document by default, you need to manually create a folder named assets first, so that SiYuan will preferentially select the assets folder to store the assets."
+					"Data": "If you need to place the inserted assets in the assets folder at the same level as the document by default, you need to manually create a folder named assets first, so that Kora Note will preferentially select the assets folder to store the assets."
 				}
 			]
 		},
@@ -1395,7 +1395,7 @@
 								},
 								{
 									"Type": "NodeText",
-									"Data": "​, so that SiYuan can directly call the "
+									"Data": "​, so that Kora Note can directly call the "
 								},
 								{
 									"Type": "NodeTextMark",
@@ -1450,7 +1450,7 @@
 							"Children": [
 								{
 									"Type": "NodeText",
-									"Data": "SiYuan"
+									"Data": "Kora Note"
 								},
 								{
 									"Type": "NodeText",
@@ -1848,7 +1848,7 @@
 							"Children": [
 								{
 									"Type": "NodeText",
-									"Data": "After exiting SiYuan, modify the file on the file system (please pay attention to the correctness of the JSON format)"
+									"Data": "After exiting Kora Note, modify the file on the file system (please pay attention to the correctness of the JSON format)"
 								}
 							]
 						}
@@ -1903,7 +1903,7 @@
 			"Children": [
 				{
 					"Type": "NodeText",
-					"Data": "Changes saved in the image result editor automatically update search indexes. After editing the JSON file outside SiYuan, rebuild the asset content index."
+					"Data": "Changes saved in the image result editor automatically update search indexes. After editing the JSON file outside Kora Note, rebuild the asset content index."
 				}
 			]
 		},

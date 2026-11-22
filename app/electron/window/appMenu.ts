@@ -30,7 +30,7 @@ type MenuContext = {platform?: NodeJS.Platform; appName?: string};
 const trayLabels = (languages: MenuLanguages): TrayMenuLabels | undefined =>
     (languages as unknown as {_trayMenu?: TrayMenuLabels})._trayMenu;
 
-const APP_NAME = "SiYuan";
+const APP_NAME = "Kora";
 
 // 前端存的快捷键是人可读符号，注册前需转换成 Electron 加速键。
 const hotKey2Electron = (key?: string): string | undefined => {
@@ -91,7 +91,7 @@ const buildMacAppMenuTemplate = (sync: AppMenuSync, languages: MenuLanguages,
     role: "appMenu",
     label: appName,
     submenu: [
-        {role: "about", label: languages.appMenuAbout || "About SiYuan"},
+        {role: "about", label: languages.appMenuAbout || "About Kora Note"},
         ...(sync.readonly ? [] : [{
             label: languages.config || "Settings",
             click: () => {
@@ -109,11 +109,11 @@ const buildMacAppMenuTemplate = (sync: AppMenuSync, languages: MenuLanguages,
             },
             ...withHotkey(sync.hotkey.toggleWin),
         },
-        {role: "hide", label: languages.appMenuHide || "Hide SiYuan"},
+        {role: "hide", label: languages.appMenuHide || "Hide Kora Note"},
         {role: "hideOthers", label: languages.appMenuHideOthers || "Hide Others"},
         {role: "unhide", label: languages.showAll || "Show All"},
         {type: "separator"},
-        {role: "quit", label: languages.appMenuQuit || "Quit SiYuan"},
+        {role: "quit", label: languages.appMenuQuit || "Quit Kora Note"},
     ],
 }, {
     role: "editMenu",
@@ -169,13 +169,13 @@ const buildMacAppMenuTemplate = (sync: AppMenuSync, languages: MenuLanguages,
         {
             label: trayLabels(languages)?.officialWebsite || "Visit official website",
             click: () => {
-                electron.shell.openExternal("https://b3log.org/siyuan");
+                electron.shell.openExternal("https://github.com/jaaronkot/kora-note");
             },
         },
         {
             label: trayLabels(languages)?.openSource || "Visit project on GitHub",
             click: () => {
-                electron.shell.openExternal("https://github.com/siyuan-note/siyuan");
+                electron.shell.openExternal("https://github.com/jaaronkot/kora-note");
             },
         },
         getDevToolsMenuItem(languages.debug || "Developer Tools", platform),

@@ -6,7 +6,7 @@
 		"id": "20260612192252-sgw2paw",
 		"title": "Command Line Interface",
 		"type": "doc",
-		"updated": "20261101194733"
+		"updated": "20261120142917"
 	},
 	"Children": [
 		{
@@ -34,7 +34,7 @@
 			"Children": [
 				{
 					"Type": "NodeText",
-					"Data": "SiYuan ships with a built-in CLI (Command Line Interface) that accesses workspace data directly, with no need to start the kernel server. It is well suited for scripting, batch management, and read/write operations on notes in conjunction with AI agents."
+					"Data": "Kora Note ships with a built-in CLI (Command Line Interface) that accesses workspace data directly, with no need to start the kernel server. It is well suited for scripting, batch management, and read/write operations on notes in conjunction with AI agents."
 				}
 			]
 		},
@@ -225,7 +225,7 @@
 							"Children": [
 								{
 									"Type": "NodeText",
-									"Data": "If the command is unavailable, check that the SiYuan app execution alias is enabled in Windows and "
+									"Data": "If the command is unavailable, check that the Kora Note app execution alias is enabled in Windows and "
 								},
 								{
 									"Type": "NodeTextMark",
@@ -243,7 +243,7 @@
 								},
 								{
 									"Type": "NodeText",
-									"Data": ". The commands above show command resolution; multiple SiYuan editions or "
+									"Data": ". The commands above show command resolution; multiple Kora Note editions or "
 								},
 								{
 									"Type": "NodeTextMark",
@@ -345,7 +345,7 @@
 								},
 								{
 									"Type": "NodeCodeBlockCode",
-									"Data": "ln -s /Applications/SiYuan.app/Contents/Resources/kernel/SiYuan-Kernel /usr/local/bin/siyuan\n"
+									"Data": "ln -s /Applications/Kora Note.app/Contents/Resources/kernel/SiYuan-Kernel /usr/local/bin/siyuan\n"
 								},
 								{
 									"Type": "NodeCodeBlockFenceCloseMarker",
@@ -5701,7 +5701,7 @@
 			"HeadingLevel": 3,
 			"Properties": {
 				"id": "20260618124055-4cmyqw3",
-				"updated": "20261016112115"
+				"updated": "20261120142917"
 			},
 			"Children": [
 				{
@@ -5773,7 +5773,7 @@
 			"Properties": {
 				"colgroup": "||",
 				"id": "20260618124055-rsogdq4",
-				"updated": "20261016112115"
+				"updated": "20261120142917"
 			},
 			"Children": [
 				{
@@ -6022,69 +6022,6 @@
 								{
 									"Type": "NodeTextMark",
 									"TextMarkType": "code",
-									"TextMarkTextContent": "export docx"
-								},
-								{
-									"Type": "NodeText",
-									"Data": "​"
-								}
-							]
-						},
-						{
-							"Type": "NodeTableCell",
-							"Data": "td",
-							"Children": [
-								{
-									"Type": "NodeText",
-									"Data": "​"
-								},
-								{
-									"Type": "NodeTextMark",
-									"TextMarkType": "code",
-									"TextMarkTextContent": "--id --output"
-								},
-								{
-									"Type": "NodeText",
-									"Data": "​"
-								}
-							]
-						},
-						{
-							"Type": "NodeTableCell",
-							"Data": "td",
-							"Children": [
-								{
-									"Type": "NodeText",
-									"Data": "Export Word ("
-								},
-								{
-									"Type": "NodeTextMark",
-									"TextMarkType": "code",
-									"TextMarkTextContent": "--output"
-								},
-								{
-									"Type": "NodeText",
-									"Data": "​ required)"
-								}
-							]
-						}
-					]
-				},
-				{
-					"Type": "NodeTableRow",
-					"Data": "tr",
-					"Children": [
-						{
-							"Type": "NodeTableCell",
-							"Data": "td",
-							"Children": [
-								{
-									"Type": "NodeText",
-									"Data": "​"
-								},
-								{
-									"Type": "NodeTextMark",
-									"TextMarkType": "code",
 									"TextMarkTextContent": "export sy"
 								},
 								{
@@ -6271,7 +6208,7 @@
 				},
 				{
 					"Type": "NodeCodeBlockCode",
-					"Data": "siyuan export md --id doc-id\nsiyuan export md --id doc-id --output ./output.md\nsiyuan export html --id doc-id --output ./output.html\nsiyuan export preview --id doc-id --output ./preview.html\nsiyuan export docx --id doc-id --output ./output.docx\nsiyuan export sy --id doc-id --output ./backup.sy.zip\nsiyuan export md-zip --id doc-id --output ./archive.zip\nsiyuan export data --output ./data-backup.zip\n"
+					"Data": "siyuan export md --id doc-id\nsiyuan export md --id doc-id --output ./output.md\nsiyuan export html --id doc-id --output ./output.html\nsiyuan export preview --id doc-id --output ./preview.html\nsiyuan export sy --id doc-id --output ./backup.sy.zip\nsiyuan export md-zip --id doc-id --output ./archive.zip\nsiyuan export data --output ./data-backup.zip\n"
 				},
 				{
 					"Type": "NodeCodeBlockFenceCloseMarker",

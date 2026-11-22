@@ -38,7 +38,7 @@
 			"Children": [
 				{
 					"Type": "NodeText",
-					"Data": "“剪藏”是指将 Web 页面上的内容复制到思源中，并尽量保持其原始格式。"
+					"Data": "“剪藏”是指将 Web 页面上的内容复制到 Kora Note 中，并尽量保持其原始格式。"
 				}
 			]
 		},
@@ -91,7 +91,7 @@
 							"Children": [
 								{
 									"Type": "NodeText",
-									"Data": "如果不需要将剪藏内容中包含的图片拉取到本地，可直接在浏览器中选择复制，然后在思源中进行粘贴"
+									"Data": "如果不需要将剪藏内容中包含的图片拉取到本地，可直接在浏览器中选择复制，然后在 Kora Note 中进行粘贴"
 								}
 							]
 						}
@@ -125,7 +125,7 @@
 									"Type": "NodeTextMark",
 									"TextMarkType": "a",
 									"TextMarkAHref": "https://ld246.com/article/1629423901669",
-									"TextMarkTextContent": "思源 Chrome 扩展"
+									"TextMarkTextContent": "Kora Note Chrome 扩展"
 								}
 							]
 						}
@@ -144,7 +144,7 @@
 			"Children": [
 				{
 					"Type": "NodeText",
-					"Data": "思源 Chrome 扩展"
+					"Data": "Kora Note Chrome 扩展"
 				}
 			]
 		},
@@ -183,7 +183,7 @@
 							"Children": [
 								{
 									"Type": "NodeText",
-									"Data": "安装扩展，并在扩展选项中填写 API token。可在思源的 "
+									"Data": "安装扩展，并在扩展选项中填写 API token。可在 Kora Note 的 "
 								},
 								{
 									"Type": "NodeTextMark",
@@ -249,7 +249,7 @@
 							"Children": [
 								{
 									"Type": "NodeText",
-									"Data": "在 Web 页面上选择需要剪藏的内容，然后在右键菜单中选择 “复制到思源(SiYuan)”"
+									"Data": "在 Web 页面上选择需要剪藏的内容，然后在右键菜单中选择 “复制到 Kora Note(Kora Note)”"
 								}
 							]
 						}
@@ -279,7 +279,7 @@
 							"Children": [
 								{
 									"Type": "NodeText",
-									"Data": "在思源中粘贴"
+									"Data": "在 Kora Note 中粘贴"
 								}
 							]
 						}
@@ -297,7 +297,7 @@
 			"Children": [
 				{
 					"Type": "NodeText",
-					"Data": "如果需要剪藏整篇文章，可在扩展上直接点击“发送到思源(SiYuan)”。"
+					"Data": "如果需要剪藏整篇文章，可在扩展上直接点击“发送到 Kora Note(Kora Note)”。"
 				}
 			]
 		},

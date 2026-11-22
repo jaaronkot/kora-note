@@ -57,7 +57,7 @@ const describeFailure = (code: number, port: number | string): KernelExitReport 
                 kind: "error",
                 titleZh: "文件系统访问失败",
                 titleEn: "File system access failed",
-                content: "<div>思源内核无法访问所需文件，现已安全退出。可能原因包括文件或文件夹权限不足、文件为只读、文件被其他程序占用，以及同步盘或安全软件干预。</div><div>请查看 <a href=\"#\" data-log-path>工作空间/temp/siyuan.log</a> 获取详细错误信息。</div><div>SiYuan Kernel could not access a required file and has exited safely. Possible causes include insufficient permissions, read-only files, another process using a file, or interference from sync or security software.</div><div>Please check <a href=\"#\" data-log-path>workspace/temp/siyuan.log</a> for details.</div>",
+                content: "<div>Kora Note 内核无法访问所需文件，现已安全退出。可能原因包括文件或文件夹权限不足、文件为只读、文件被其他程序占用，以及同步盘或安全软件干预。</div><div>请查看 <a href=\"#\" data-log-path>工作空间/temp/siyuan.log</a> 获取详细错误信息。</div><div>Kora Note Kernel could not access a required file and has exited safely. Possible causes include insufficient permissions, read-only files, another process using a file, or interference from sync or security software.</div><div>Please check <a href=\"#\" data-log-path>workspace/temp/siyuan.log</a> for details.</div>",
                 emoji: "⚠️",
                 logSource: "workspace",
             };
@@ -66,7 +66,7 @@ const describeFailure = (code: number, port: number | string): KernelExitReport 
                 kind: "error",
                 titleZh: "内核因未知原因退出",
                 titleEn: "The kernel exited for unknown reasons",
-                content: `<div>思源内核因未知原因退出 [code=${code}]，请尝试重启操作系统后再启动思源。如果该问题依然发生，请检查杀毒软件是否阻止思源内核启动。</div><div>SiYuan Kernel exited for unknown reasons [code=${code}], please try to reboot your operating system and then start SiYuan again. If occurs this problem still, please check your anti-virus software whether kill the SiYuan Kernel.</div>`,
+                content: `<div>Kora Note 内核因未知原因退出 [code=${code}]，请尝试重启操作系统后再启动 Kora Note。如果该问题依然发生，请检查杀毒软件是否阻止 Kora Note 内核启动。</div><div>Kora Note Kernel exited for unknown reasons [code=${code}], please try to reboot your operating system and then start Kora Note again. If occurs this problem still, please check your anti-virus software whether kill the Kora Note Kernel.</div>`,
             };
     }
 };

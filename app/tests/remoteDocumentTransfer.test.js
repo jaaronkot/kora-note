@@ -92,7 +92,7 @@ test("local desktop and mobile retain their document export choices", () => {
         const items = env.load("menus/commonMenuItem").exportMd("doc").submenu.filter(item => !item.ignore);
         assert.ok(items.some(item => item.id === "exportPDF"));
         assert.ok(items.some(item => item.id === "exportTemplate"));
-        assert.equal(items.some(item => item.id === "exportWord"), !options.mobile);
+        assert.equal(items.some(item => item.id === "exportWord"), false);
     }
 });
 
@@ -147,7 +147,7 @@ test("remote notebook and migration dialogs offer archive uploads without bindin
     env.load("menus/dataMigration").openDataMigration();
     assert.equal(contents.length, 2);
     for (const content of contents) {
-        assert.ok(content.includes("SiYuan .sy.zip"));
+        assert.ok(content.includes("Kora Note .sy.zip"));
         assert.ok(content.includes("Markdown .zip"));
         assert.ok(!content.includes("Obsidian"));
         assert.ok(!content.includes("Data.zip"));

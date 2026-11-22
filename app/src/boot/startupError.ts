@@ -46,7 +46,7 @@ export const setStartupLanguage = (language: string) =>
     window.dispatchEvent(new CustomEvent("siyuan-startup-language", {detail: language}));
 
 export const reportStartupError = (error: unknown) => {
-    console.error("SiYuan startup failed:", error);
+    console.error("Kora Note startup failed:", error);
     window.dispatchEvent(new CustomEvent("siyuan-startup-error", {detail: error}));
 };
 
@@ -99,7 +99,7 @@ export const installStartupError = (target: Window, version: string, timeout = 3
         details.className = "startup-error__details";
         details.tabIndex = 0;
         details.dir = "ltr";
-        details.textContent = `SiYuan ${version}\nstage=${failure.stage}\nlanguage=${language}\n${target.navigator.userAgent}\n\n${failure.error}`;
+        details.textContent = `Kora Note ${version}\nstage=${failure.stage}\nlanguage=${language}\n${target.navigator.userAgent}\n\n${failure.error}`;
         content.append(phase, details);
         const actions = document.createElement("div");
         actions.className = "b3-dialog__action startup-error__actions";

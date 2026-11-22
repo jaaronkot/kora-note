@@ -42,7 +42,7 @@ const installWindowCloseRecovery = (window: BrowserWindow, {
             ]);
             cancelTimer(timer);
             if (responsive || disposed || window.isDestroyed()) return;
-            const decision = await showMessage({type: "warning", title: "SiYuan",
+            const decision = await showMessage({type: "warning", title: "Kora Note",
                 message: languages.windowCloseTimeout ?? "", buttons: [languages.cancel ?? "", languages.confirm ?? ""],
                 defaultId: 0, cancelId: 0, noLink: true});
             if (decision.response !== 1 || disposed || window.isDestroyed()) return;
@@ -64,7 +64,7 @@ const installWindowCloseRecovery = (window: BrowserWindow, {
                 if (result?.code === 0 || state.kernel.exitedPorts.has(workspace.port.toString())) {
                     exit(workspace);
                 } else {
-                    await showMessage({type: "error", title: "SiYuan", message: languages.exitWaitFailed ?? "",
+                    await showMessage({type: "error", title: "Kora Note", message: languages.exitWaitFailed ?? "",
                         buttons: [languages.confirm ?? ""]});
                 }
             } finally {
@@ -74,7 +74,7 @@ const installWindowCloseRecovery = (window: BrowserWindow, {
         } catch (error) {
             writeLog("window close recovery failed: " + error);
             if (!disposed && !window.isDestroyed()) {
-                await showMessage({type: "error", title: "SiYuan", message: languages.exitWaitFailed ?? "",
+                await showMessage({type: "error", title: "Kora Note", message: languages.exitWaitFailed ?? "",
                     buttons: [languages.confirm ?? ""]}).catch(error => writeLog("close recovery dialog failed: " + error));
             }
         } finally {

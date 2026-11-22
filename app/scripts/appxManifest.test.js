@@ -40,7 +40,7 @@ for (const [filename, architecture] of manifests) {
         const applications = Array.from(source.matchAll(/<Application\b([^>]*)>/g));
         assert.equal(applications.length, 1);
         assert.deepEqual(attributes(applications[0][1]), {
-            Id: "SiYuan", Executable: "app\\SiYuan.exe", EntryPoint: "Windows.FullTrustApplication",
+            Id: "KoraNote", Executable: "app\\Kora Note.exe", EntryPoint: "Windows.FullTrustApplication",
         });
         assert.match(source, /<uap:Extension\s+Category="windows\.protocol">\s*<uap:Protocol\s+Name="siyuan"\s*\/>\s*<\/uap:Extension>/);
         assert.match(source, /<rescap:Capability\s+Name="runFullTrust"\s*\/>/);

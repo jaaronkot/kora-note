@@ -83,7 +83,7 @@ test("an asynchronous startup rejection shows localized, selectable diagnostics 
         guardStartup<void>(async () => { throw new Error("<script>untrusted error</script>"); })();
         await new Promise(resolve => setImmediate(resolve));
         assert.equal(page.document.documentElement.attributes.get("data-startup-state"), "failed");
-        assert.equal(page.find(element => element.id === "startupErrorTitle")?.textContent, "思源启动失败");
+        assert.equal(page.find(element => element.id === "startupErrorTitle")?.textContent, "Kora Note 启动失败");
         assert.match(page.find(element => element.tagName === "P")?.textContent || "", /加载编辑引擎/);
         const details = page.find(element => element.tagName === "PRE");
         assert.match(details.textContent, /test-version\nstage=engine/);

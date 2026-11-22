@@ -321,7 +321,7 @@
 			"Children": [
 				{
 					"Type": "NodeText",
-					"Data": "On desktop, a workspace takes its name from its folder. Exit SiYuan before renaming the folder in your file manager. Rename the entire workspace folder; there is no need to empty it or migrate its data."
+					"Data": "On desktop, a workspace takes its name from its folder. Exit Kora Note before renaming the folder in your file manager. Rename the entire workspace folder; there is no need to empty it or migrate its data."
 				}
 			]
 		},
@@ -426,7 +426,7 @@
 								},
 								{
 									"Type": "NodeText",
-									"Data": " in the menu on the left side of the top bar to exit SiYuan safely, and wait for the corresponding kernel process to exit"
+									"Data": " in the menu on the left side of the top bar to exit Kora Note safely, and wait for the corresponding kernel process to exit"
 								}
 							]
 						}
@@ -492,7 +492,7 @@
 							"Children": [
 								{
 									"Type": "NodeText",
-									"Data": "Restart SiYuan and select the renamed folder in the workspace selection window; if another workspace is already open, select the folder through "
+									"Data": "Restart Kora Note and select the renamed folder in the workspace selection window; if another workspace is already open, select the folder through "
 								},
 								{
 									"Type": "NodeTextMark",

@@ -446,7 +446,7 @@
 					"Type": "NodeTextMark",
 					"TextMarkType": "a",
 					"TextMarkAHref": "https://ld246.com/tag/code-snippet",
-					"TextMarkTextContent": "链滴"
+					"TextMarkTextContent": "社区"
 				},
 				{
 					"Type": "NodeText",
@@ -1568,7 +1568,7 @@
 							"Children": [
 								{
 									"Type": "NodeText",
-									"Data": "自定义主题会继承内置主题变量，只需覆盖需要调整的变量；思源升级后应检查变量是否发生重命名或移除"
+									"Data": "自定义主题会继承内置主题变量，只需覆盖需要调整的变量；Kora Note 升级后应检查变量是否发生重命名或移除"
 								}
 							]
 						}

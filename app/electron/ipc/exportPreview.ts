@@ -33,7 +33,7 @@ const registerExportPreview = (): void => {
         const wndBounds = senderWindow.getBounds();
         const wndScreen = electron.screen.getDisplayNearestPoint({x: wndBounds.x, y: wndBounds.y});
         const printWin = new electron.BrowserWindow({
-            title: "SiYuan",
+            title: "Kora Note",
             show: true,
             width: Math.floor(wndScreen.size.width * 0.8),
             height: Math.floor(wndScreen.size.height * 0.8),

@@ -285,7 +285,7 @@ const createSettingsWindows = ({initialize = initializeSettingsWindow,
     // 放行的窗口按授权记录决定外观：标题、标题栏高度与几何都来自该次请求。
     const approvedWindowOptions = (approved: ApprovedWindow): BrowserWindowConstructorOptions => ({
         show: false,
-        title: approved.data.title || "SiYuan",
+        title: approved.data.title || "Kora Note",
         frame: platform === "darwin",
         titleBarStyle: "hidden",
         titleBarOverlay: getTitleBarOverlayOptions(platform, getCaptionHeight(approved.data.compactMode, false)),

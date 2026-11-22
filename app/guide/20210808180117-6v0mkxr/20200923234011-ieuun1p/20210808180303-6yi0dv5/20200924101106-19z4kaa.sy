@@ -38,7 +38,7 @@
 			"Children": [
 				{
 					"Type": "NodeText",
-					"Data": "A content block is a unit of content that you can edit, reference, and organize independently in SiYuan. Each block has an automatically generated, globally unique ID, such as "
+					"Data": "A content block is a unit of content that you can edit, reference, and organize independently in Kora Note. Each block has an automatically generated, globally unique ID, such as "
 				},
 				{
 					"Type": "NodeTextMark",

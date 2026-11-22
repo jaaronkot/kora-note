@@ -12,7 +12,7 @@ const appIconPath = (): string => path.join(paths.appDir, "stage", "icon-large.p
 
 /** 内核与网页请求据此识别桌面端；base 为窗口原有的 UA。 */
 const desktopUserAgent = (appVer: string, base: string): string =>
-    "SiYuan/" + appVer + " https://b3log.org/siyuan Electron " + base;
+    "SiYuan/" + appVer + " https://github.com/jaaronkot/kora-note Electron " + base;
 
 /** 本机 HTML 页面（启动页、错误页、导出预览）整页信任本地脚本。 */
 const LOCAL_PAGE_WEB_PREFERENCES: WebPreferences = {

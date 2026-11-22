@@ -6,7 +6,7 @@
 		"id": "20230808120347-3cob0nb",
 		"title": "数据同步",
 		"type": "doc",
-		"updated": "20261105042900"
+		"updated": "20261120170000"
 	},
 	"Children": [
 		{
@@ -15,7 +15,7 @@
 			"HeadingLevel": 2,
 			"Properties": {
 				"id": "20230808120347-wx5cr4v",
-				"updated": "20261012014930"
+				"updated": "20261120170000"
 			},
 			"Children": [
 				{
@@ -29,7 +29,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20230808120347-q4v034g",
-				"updated": "20260917202413"
+				"updated": "20261120170000"
 			},
 			"Children": [
 				{
@@ -52,7 +52,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20261102100000-1riy9u5",
-				"updated": "20261102100000"
+				"updated": "20261120170000"
 			},
 			"Children": [
 				{
@@ -67,7 +67,7 @@
 			"HeadingLevel": 2,
 			"Properties": {
 				"id": "20230808120347-qbr56bx",
-				"updated": "20261103163507"
+				"updated": "20261120170000"
 			},
 			"Children": [
 				{
@@ -81,7 +81,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20230808120347-2p4bc49",
-				"updated": "20261024161816"
+				"updated": "20261120170000"
 			},
 			"Children": [
 				{
@@ -106,7 +106,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20261103104841-074cd66",
-				"updated": "20261103110957"
+				"updated": "20261120170000"
 			},
 			"Children": [
 				{
@@ -130,7 +130,7 @@
 			"ListData": {},
 			"Properties": {
 				"id": "20230808120347-n3vxtba",
-				"updated": "20220708101339"
+				"updated": "20261120170000"
 			},
 			"Children": [
 				{
@@ -142,7 +142,7 @@
 					},
 					"Properties": {
 						"id": "20230808120347-kmv8g3m",
-						"updated": "20220708101329"
+						"updated": "20261120170000"
 					},
 					"Children": [
 						{
@@ -150,7 +150,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20230808120347-mthf707",
-								"updated": "20220708101330"
+								"updated": "20261120170000"
 							},
 							"Children": [
 								{
@@ -193,7 +193,7 @@
 					},
 					"Properties": {
 						"id": "20230808120347-2m0pkdb",
-						"updated": "20220708101339"
+						"updated": "20261120170000"
 					},
 					"Children": [
 						{
@@ -201,7 +201,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20230808120347-cslq6vc",
-								"updated": "20220708101339"
+								"updated": "20261120170000"
 							},
 							"Children": [
 								{
@@ -222,7 +222,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20230808120347-qytpdxh",
-				"updated": "20220831004438"
+				"updated": "20261120170000"
 			},
 			"Children": [
 				{
@@ -246,7 +246,7 @@
 			"ListData": {},
 			"Properties": {
 				"id": "20230808120347-y41kxh2",
-				"updated": "20261024163013"
+				"updated": "20261120170000"
 			},
 			"Children": [
 				{
@@ -258,7 +258,7 @@
 					},
 					"Properties": {
 						"id": "20230808120347-xthfmk7",
-						"updated": "20230220103623"
+						"updated": "20261120170000"
 					},
 					"Children": [
 						{
@@ -266,7 +266,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20230808120347-p3dn7n3",
-								"updated": "20230220103623"
+								"updated": "20261120170000"
 							},
 							"Children": [
 								{
@@ -286,7 +286,7 @@
 					},
 					"Properties": {
 						"id": "20230808120347-3l72g5v",
-						"updated": "20261024163013"
+						"updated": "20261120170000"
 					},
 					"Children": [
 						{
@@ -294,7 +294,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20230808120347-4mlag9e",
-								"updated": "20261024163013"
+								"updated": "20261120170000"
 							},
 							"Children": [
 								{
@@ -358,7 +358,7 @@
 			"HeadingLevel": 3,
 			"Properties": {
 				"id": "20261011151543-be59rg9",
-				"updated": "20261103163507"
+				"updated": "20261120170000"
 			},
 			"Children": [
 				{
@@ -372,7 +372,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20261011151543-x2jg56f",
-				"updated": "20261016111431"
+				"updated": "20261120170000"
 			},
 			"Children": [
 				{
@@ -395,7 +395,7 @@
 				},
 				{
 					"Type": "NodeText",
-					"Data": " 中选择 S3、WebDAV 或本地文件系统，再点击同步服务配置一行的设置按钮。本地文件系统支持桌面标准内核和 Docker 内核，移动内核不提供此选项；路径属于内核所在机器或容器，不是浏览器所在设备的目录。填写完整后点击 "
+					"Data": " 中选择 WebDAV 或本地文件系统，再点击同步服务配置一行的设置按钮。本地文件系统支持桌面标准内核和 Docker 内核，移动内核不提供此选项；路径属于内核所在机器或容器，不是浏览器所在设备的目录。填写完整后点击 "
 				},
 				{
 					"Type": "NodeTextMark",
@@ -413,7 +413,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20261020224352-ftr760i",
-				"updated": "20261020224352"
+				"updated": "20261120170000"
 			},
 			"Children": [
 				{
@@ -427,7 +427,7 @@
 				},
 				{
 					"Type": "NodeText",
-					"Data": " 检查当前 S3、WebDAV 或本地文件系统配置草稿，测试不会保存配置。WebDAV 会检查建目录和探针读写权限，本地文件系统会检查目录读写权限，结束后尽力清理探针。测试失败时可根据提示修改后重试，已保存的配置会保留。"
+					"Data": " 检查当前 WebDAV 或本地文件系统配置草稿，测试不会保存配置。WebDAV 会检查建目录和探针读写权限，本地文件系统会检查目录读写权限，结束后尽力清理探针。测试失败时可根据提示修改后重试，已保存的配置会保留。"
 				}
 			]
 		},
@@ -436,12 +436,12 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20261102160000-699d624",
-				"updated": "20261102160000"
+				"updated": "20261120170000"
 			},
 			"Children": [
 				{
 					"Type": "NodeText",
-					"Data": "S3 和 WebDAV 的端点地址省略协议时，含点的主机名默认使用 HTTPS；IP 地址、localhost 和单标签主机名默认使用 HTTP。含点的主机名对应的服务若只支持 HTTP，请显式填写 http://。显式填写的 http:// 和 https:// 地址保持原样，已保存的配置也不会自动改换协议。"
+					"Data": "WebDAV 的端点地址省略协议时，含点的主机名默认使用 HTTPS；IP 地址、localhost 和单标签主机名默认使用 HTTP。含点的主机名对应的服务若只支持 HTTP，请显式填写 http://。显式填写的 http:// 和 https:// 地址保持原样，已保存的配置也不会自动改换协议。"
 				}
 			]
 		},
@@ -450,12 +450,12 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20261102113000-1530bce",
-				"updated": "20261103163507"
+				"updated": "20261120170000"
 			},
 			"Children": [
 				{
 					"Type": "NodeText",
-					"Data": "更改同步服务商、端点或目录前，思源会保存已打开的编辑器并为当前数据创建完整快照。新来源非空时，自动合并会停止。点击同步可预览两边文件数、来源时间和设备，以及上传、覆盖或删除的文件数量，然后选择以本地上传或以来源恢复，两种方向均不默认选中。上传会将当前本地快照发布到来源，但不删除来源中多余的存储对象；恢复会按来源替换本地数据。空来源直接接收本地数据。首轮同步在保存可恢复进度或完成数据提交前失败时，仍需重新预览并确认来源。已有可恢复进度时会继续按已选方向处理；数据提交后的资源下载失败可直接重试。切换前的快照可在数据历史中恢复。"
+					"Data": "更改同步服务商、端点或目录前，Kora Note 会保存已打开的编辑器并为当前数据创建完整快照。新来源非空时，自动合并会停止。点击同步可预览两边文件数、来源时间和设备，以及上传、覆盖或删除的文件数量，然后选择以本地上传或以来源恢复，两种方向均不默认选中。上传会将当前本地快照发布到来源，但不删除来源中多余的存储对象；恢复会按来源替换本地数据。空来源直接接收本地数据。首轮同步在保存可恢复进度或完成数据提交前失败时，仍需重新预览并确认来源。已有可恢复进度时会继续按已选方向处理；数据提交后的资源下载失败可直接重试。切换前的快照可在数据历史中恢复。"
 				}
 			]
 		},
@@ -464,7 +464,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20261011151543-p38jv4a",
-				"updated": "20261011151543"
+				"updated": "20261120170000"
 			},
 			"Children": [
 				{
@@ -487,7 +487,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20261011151543-986cazk",
-				"updated": "20261011151543"
+				"updated": "20261120170000"
 			},
 			"Children": [
 				{
@@ -501,7 +501,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20261020231029-gzbucu8",
-				"updated": "20261101195843"
+				"updated": "20261120170000"
 			},
 			"Children": [
 				{
@@ -546,7 +546,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20261020231029-obrohrp",
-				"updated": "20261020231029"
+				"updated": "20261120170000"
 			},
 			"Children": [
 				{
@@ -561,7 +561,7 @@
 			"HeadingLevel": 2,
 			"Properties": {
 				"id": "20260905184908-5o1vhpi",
-				"updated": "20261105042900"
+				"updated": "20261120170000"
 			},
 			"Children": [
 				{
@@ -575,7 +575,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20260905184908-hlr159c",
-				"updated": "20260905184908"
+				"updated": "20261120170000"
 			},
 			"Children": [
 				{
@@ -616,7 +616,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20260905184908-9m2nksl",
-				"updated": "20260905184908"
+				"updated": "20261120170000"
 			},
 			"Children": [
 				{
@@ -630,7 +630,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20260905184908-88bc5es",
-				"updated": "20260905184908"
+				"updated": "20261120170000"
 			},
 			"Children": [
 				{
@@ -644,7 +644,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20260905184908-k9wkzqk",
-				"updated": "20260905191024"
+				"updated": "20261120170000"
 			},
 			"Children": [
 				{
@@ -658,7 +658,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20260905184908-cv88hsn",
-				"updated": "20260905184908"
+				"updated": "20261120170000"
 			},
 			"Children": [
 				{
@@ -672,7 +672,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20260905184908-84gaare",
-				"updated": "20261105042900"
+				"updated": "20261120170000"
 			},
 			"Children": [
 				{
@@ -686,7 +686,7 @@
 			"Type": "NodeHeading",
 			"Properties": {
 				"id": "20261012014537-e8z1u63",
-				"updated": "20261012014859"
+				"updated": "20261120170000"
 			},
 			"Children": [
 				{
@@ -701,7 +701,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20260917190844-x6jwutu",
-				"updated": "20260918195936"
+				"updated": "20261120170000"
 			},
 			"Children": [
 				{
@@ -716,7 +716,7 @@
 			"HeadingLevel": 2,
 			"Properties": {
 				"id": "20230808120347-buiv5yn",
-				"updated": "20261024163013"
+				"updated": "20261120170000"
 			},
 			"Children": [
 				{
@@ -730,7 +730,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20230808120347-fwrmpx3",
-				"updated": "20261024163013"
+				"updated": "20261120170000"
 			},
 			"Children": [
 				{
@@ -772,7 +772,7 @@
 			"ListData": {},
 			"Properties": {
 				"id": "20230808120347-amosggq",
-				"updated": "20261016111431"
+				"updated": "20261120170000"
 			},
 			"Children": [
 				{
@@ -784,7 +784,7 @@
 					},
 					"Properties": {
 						"id": "20230808120347-7xxyobg",
-						"updated": "20261016111431"
+						"updated": "20261120170000"
 					},
 					"Children": [
 						{
@@ -792,7 +792,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20230808120347-nwozegn",
-								"updated": "20230219121007"
+								"updated": "20261120170000"
 							},
 							"Children": [
 								{
@@ -807,7 +807,7 @@
 							"ListData": {},
 							"Properties": {
 								"id": "20230808120347-l1b7vtd",
-								"updated": "20261016111431"
+								"updated": "20261120170000"
 							},
 							"Children": [
 								{
@@ -819,7 +819,7 @@
 									},
 									"Properties": {
 										"id": "20230808120347-7yo5dux",
-										"updated": "20261016111431"
+										"updated": "20261120170000"
 									},
 									"Children": [
 										{
@@ -827,7 +827,7 @@
 											"Type": "NodeParagraph",
 											"Properties": {
 												"id": "20230808120347-33fgevw",
-												"updated": "20261016111431"
+												"updated": "20261120170000"
 											},
 											"Children": [
 												{
@@ -847,7 +847,7 @@
 									},
 									"Properties": {
 										"id": "20230808120347-k9w4s4e",
-										"updated": "20230219121045"
+										"updated": "20261120170000"
 									},
 									"Children": [
 										{
@@ -855,7 +855,7 @@
 											"Type": "NodeParagraph",
 											"Properties": {
 												"id": "20230808120347-tixrpss",
-												"updated": "20230219121045"
+												"updated": "20261120170000"
 											},
 											"Children": [
 												{
@@ -879,7 +879,7 @@
 					},
 					"Properties": {
 						"id": "20230808120347-vzxk1jz",
-						"updated": "20230219121049"
+						"updated": "20261120170000"
 					},
 					"Children": [
 						{
@@ -887,7 +887,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20230808120347-1gxchhr",
-								"updated": "20230219120922"
+								"updated": "20261120170000"
 							},
 							"Children": [
 								{
@@ -902,7 +902,7 @@
 							"ListData": {},
 							"Properties": {
 								"id": "20230808120347-no67dio",
-								"updated": "20230219121049"
+								"updated": "20261120170000"
 							},
 							"Children": [
 								{
@@ -913,7 +913,8 @@
 										"Marker": "Kg=="
 									},
 									"Properties": {
-										"id": "20230808120347-5cx2eby"
+										"id": "20230808120347-5cx2eby",
+										"updated": "20261120170000"
 									},
 									"Children": [
 										{
@@ -921,7 +922,7 @@
 											"Type": "NodeParagraph",
 											"Properties": {
 												"id": "20230808120347-1wfzyl4",
-												"updated": "20230219120927"
+												"updated": "20261120170000"
 											},
 											"Children": [
 												{
@@ -941,7 +942,7 @@
 									},
 									"Properties": {
 										"id": "20230808120347-gq4mmhp",
-										"updated": "20230219121049"
+										"updated": "20261120170000"
 									},
 									"Children": [
 										{
@@ -949,7 +950,7 @@
 											"Type": "NodeParagraph",
 											"Properties": {
 												"id": "20230808120347-zsvwvg9",
-												"updated": "20230219121049"
+												"updated": "20261120170000"
 											},
 											"Children": [
 												{
@@ -972,7 +973,8 @@
 						"Marker": "Kg=="
 					},
 					"Properties": {
-						"id": "20230808120347-mzynq44"
+						"id": "20230808120347-mzynq44",
+						"updated": "20261120170000"
 					},
 					"Children": [
 						{
@@ -980,7 +982,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20230808120347-zlxogea",
-								"updated": "20230219120848"
+								"updated": "20261120170000"
 							},
 							"Children": [
 								{
@@ -998,12 +1000,12 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20261026111206-4b3zwsx",
-				"updated": "20261026115057"
+				"updated": "20261120170000"
 			},
 			"Children": [
 				{
 					"Type": "NodeText",
-					"Data": "退出等待期间，退出框会显示收到的状态栏消息，便于查看当前同步状态。退出等待超过 12 秒时，可以选择「跳过同步并退出」，确认后取消同步并完成退出。未同步的更改会保留在本机；取消确认则继续等待同步完成。"
+					"Data": "退出等待期间，左下角的退出提示会显示收到的状态栏消息，便于查看当前同步状态。退出等待超过 12 秒时，可以选择「跳过同步并退出」，确认后取消同步并完成退出。未同步的更改会保留在本机；取消确认则继续等待同步完成。"
 				}
 			]
 		},
@@ -1013,7 +1015,7 @@
 			"HeadingLevel": 2,
 			"Properties": {
 				"id": "20230808120347-lptnyvq",
-				"updated": "20261016111431"
+				"updated": "20261120170000"
 			},
 			"Children": [
 				{
@@ -1027,12 +1029,12 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20230808120347-o64blc2",
-				"updated": "20220703225614"
+				"updated": "20261120170000"
 			},
 			"Children": [
 				{
 					"Type": "NodeText",
-					"Data": "思源通过对比云端数据快照和本地数据快照进行相应操作："
+					"Data": "Kora Note 通过对比云端数据快照和本地数据快照进行相应操作："
 				}
 			]
 		},
@@ -1042,7 +1044,7 @@
 			"ListData": {},
 			"Properties": {
 				"id": "20230808120347-j4bqb3a",
-				"updated": "20260918195936"
+				"updated": "20261120170000"
 			},
 			"Children": [
 				{
@@ -1054,7 +1056,7 @@
 					},
 					"Properties": {
 						"id": "20230808120347-7uvkzsb",
-						"updated": "20210901163356"
+						"updated": "20261120170000"
 					},
 					"Children": [
 						{
@@ -1062,7 +1064,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20230808120347-dx8pr4f",
-								"updated": "20220703230507"
+								"updated": "20261120170000"
 							},
 							"Children": [
 								{
@@ -1082,7 +1084,7 @@
 					},
 					"Properties": {
 						"id": "20230808120347-pvyr15g",
-						"updated": "20260918195936"
+						"updated": "20261120170000"
 					},
 					"Children": [
 						{
@@ -1090,7 +1092,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20230808120347-5e92ogb",
-								"updated": "20220703230630"
+								"updated": "20261120170000"
 							},
 							"Children": [
 								{
@@ -1105,7 +1107,7 @@
 							"ListData": {},
 							"Properties": {
 								"id": "20230808120347-vb1ee0l",
-								"updated": "20260918195936"
+								"updated": "20261120170000"
 							},
 							"Children": [
 								{
@@ -1116,7 +1118,8 @@
 										"Marker": "Kg=="
 									},
 									"Properties": {
-										"id": "20230808120347-fbsghqb"
+										"id": "20230808120347-fbsghqb",
+										"updated": "20261120170000"
 									},
 									"Children": [
 										{
@@ -1124,7 +1127,7 @@
 											"Type": "NodeParagraph",
 											"Properties": {
 												"id": "20230808120347-cvefpca",
-												"updated": "20220703230650"
+												"updated": "20261120170000"
 											},
 											"Children": [
 												{
@@ -1144,7 +1147,7 @@
 									},
 									"Properties": {
 										"id": "20230808120347-7p8pzdq",
-										"updated": "20260918195936"
+										"updated": "20261120170000"
 									},
 									"Children": [
 										{
@@ -1152,7 +1155,7 @@
 											"Type": "NodeParagraph",
 											"Properties": {
 												"id": "20230808120347-t5n8fkj",
-												"updated": "20260918195936"
+												"updated": "20261120170000"
 											},
 											"Children": [
 												{
@@ -1174,7 +1177,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20230808120347-piwm6s0",
-				"updated": "20230219121719"
+				"updated": "20261120170000"
 			},
 			"Children": [
 				{
@@ -1189,7 +1192,7 @@
 			"ListData": {},
 			"Properties": {
 				"id": "20230808120347-3afa1j8",
-				"updated": "20261016111431"
+				"updated": "20261120170000"
 			},
 			"Children": [
 				{
@@ -1201,7 +1204,7 @@
 					},
 					"Properties": {
 						"id": "20230808120347-9gjv9e4",
-						"updated": "20261016111431"
+						"updated": "20261120170000"
 					},
 					"Children": [
 						{
@@ -1209,7 +1212,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20230808120347-sx4xflq",
-								"updated": "20261016111431"
+								"updated": "20261120170000"
 							},
 							"Children": [
 								{
@@ -1256,7 +1259,7 @@
 					},
 					"Properties": {
 						"id": "20230808120347-uu8mf5z",
-						"updated": "20261016111431"
+						"updated": "20261120170000"
 					},
 					"Children": [
 						{
@@ -1264,7 +1267,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20230808120347-tm5aosj",
-								"updated": "20261016111431"
+								"updated": "20261120170000"
 							},
 							"Children": [
 								{
@@ -1283,49 +1286,12 @@
 			"HeadingLevel": 2,
 			"Properties": {
 				"id": "20261016111431-zi9x0zz",
-				"updated": "20261016111710"
+				"updated": "20261120170000"
 			},
 			"Children": [
 				{
 					"Type": "NodeText",
-					"Data": "同步感知与局域网加速"
-				}
-			]
-		},
-		{
-			"ID": "20261016111431-2cccmpf",
-			"Type": "NodeParagraph",
-			"Properties": {
-				"id": "20261016111431-2cccmpf",
-				"updated": "20261016111710"
-			},
-			"Children": [
-				{
-					"Type": "NodeTextMark",
-					"TextMarkType": "kbd",
-					"TextMarkTextContent": "设置"
-				},
-				{
-					"Type": "NodeText",
-					"Data": " - "
-				},
-				{
-					"Type": "NodeTextMark",
-					"TextMarkType": "kbd",
-					"TextMarkTextContent": "账号与同步"
-				},
-				{
-					"Type": "NodeText",
-					"Data": " - "
-				},
-				{
-					"Type": "NodeTextMark",
-					"TextMarkType": "kbd",
-					"TextMarkTextContent": "同步感知"
-				},
-				{
-					"Type": "NodeText",
-					"Data": " 利用思源官方云端的信号，在自动模式下更及时地触发同步。Docker 内核不提供同步感知；它不会绕过手动或完全手动模式，也不能消除编辑冲突。"
+					"Data": "局域网加速"
 				}
 			]
 		},
@@ -1334,7 +1300,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20261016111431-2qiwp8z",
-				"updated": "20261016111431"
+				"updated": "20261120170000"
 			},
 			"Children": [
 				{
@@ -1362,7 +1328,7 @@
 				},
 				{
 					"Type": "NodeText",
-					"Data": " 优先从局域网内可达、使用相同仓库密钥和云端同步目标的设备下载加密数据对象。使用 S3 时，两端的 Endpoint、Bucket 和 Region 配置必须一致；即使 auto 和显式 Region 都能访问同一云端仓库，局域网发现也不会匹配，请将两端 Region 设置为相同的值。云端存储仍是同步权威来源，局域网传输不可用时会回退到云端，因此不能替代为完全离线的点对点同步。Docker 内核不提供局域网加速；局域网通知仅在自动模式下触发同步。"
+					"Data": " 优先从局域网内可达、使用相同仓库密钥和云端同步目标的设备下载加密数据对象。云端存储仍是同步权威来源，局域网传输不可用时会回退到云端，因此不能替代为完全离线的点对点同步。Docker 内核不提供局域网加速；局域网通知仅在自动模式下触发同步。"
 				}
 			]
 		},
@@ -1372,7 +1338,7 @@
 			"HeadingLevel": 2,
 			"Properties": {
 				"id": "20230808120347-w8dfrmf",
-				"updated": "20261016111431"
+				"updated": "20261120170000"
 			},
 			"Children": [
 				{
@@ -1386,12 +1352,12 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20230808120347-92sa9pr",
-				"updated": "20261016111431"
+				"updated": "20261120170000"
 			},
 			"Children": [
 				{
 					"Type": "NodeText",
-					"Data": "为减少冲突，请先在设备 A 上完成同步，再在设备 B 上同步完成后开始编辑。同时编辑同一文件可能产生冲突并使一个版本覆盖另一个版本；同步感知和局域网加速也不能消除这种风险。"
+					"Data": "为减少冲突，请先在设备 A 上完成同步，再在设备 B 上同步完成后开始编辑。同时编辑同一文件可能产生冲突并使一个版本覆盖另一个版本；局域网加速也不能消除这种风险。"
 				}
 			]
 		},
@@ -1401,7 +1367,7 @@
 			"HeadingLevel": 3,
 			"Properties": {
 				"id": "20230808120347-dec0dhv",
-				"updated": "20261016111431"
+				"updated": "20261120170000"
 			},
 			"Children": [
 				{
@@ -1418,7 +1384,7 @@
 			},
 			"Properties": {
 				"id": "20230808120347-0t8dl3b",
-				"updated": "20261016111431"
+				"updated": "20261120170000"
 			},
 			"Children": [
 				{
@@ -1432,7 +1398,7 @@
 					},
 					"Properties": {
 						"id": "20230808120347-hoyv0c6",
-						"updated": "20261016111431"
+						"updated": "20261120170000"
 					},
 					"Children": [
 						{
@@ -1440,7 +1406,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20230808120347-pnaqfwp",
-								"updated": "20261016111431"
+								"updated": "20261120170000"
 							},
 							"Children": [
 								{
@@ -1462,7 +1428,7 @@
 					},
 					"Properties": {
 						"id": "20230808120347-f6n68f0",
-						"updated": "20261016111431"
+						"updated": "20261120170000"
 					},
 					"Children": [
 						{
@@ -1470,7 +1436,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20230808120347-r17i3kh",
-								"updated": "20261016111431"
+								"updated": "20261120170000"
 							},
 							"Children": [
 								{
@@ -1492,7 +1458,7 @@
 					},
 					"Properties": {
 						"id": "20230808120347-8r0pu6k",
-						"updated": "20261016111431"
+						"updated": "20261120170000"
 					},
 					"Children": [
 						{
@@ -1500,7 +1466,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20230808120347-cxnduxx",
-								"updated": "20261016111431"
+								"updated": "20261120170000"
 							},
 							"Children": [
 								{
@@ -1522,7 +1488,7 @@
 					},
 					"Properties": {
 						"id": "20230808120347-x5cb7aq",
-						"updated": "20261016111431"
+						"updated": "20261120170000"
 					},
 					"Children": [
 						{
@@ -1530,7 +1496,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20230808120347-099ii2x",
-								"updated": "20261016111431"
+								"updated": "20261120170000"
 							},
 							"Children": [
 								{
@@ -1548,7 +1514,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20230808120347-5crduzj",
-				"updated": "20261016111431"
+				"updated": "20261120170000"
 			},
 			"Children": [
 				{
@@ -1563,7 +1529,7 @@
 			"HeadingLevel": 3,
 			"Properties": {
 				"id": "20230808120347-2ir9q3j",
-				"updated": "20261016111431"
+				"updated": "20261120170000"
 			},
 			"Children": [
 				{
@@ -1580,7 +1546,7 @@
 			},
 			"Properties": {
 				"id": "20230808120347-7b58yr8",
-				"updated": "20261016111431"
+				"updated": "20261120170000"
 			},
 			"Children": [
 				{
@@ -1594,7 +1560,7 @@
 					},
 					"Properties": {
 						"id": "20230808120347-8zop0b9",
-						"updated": "20261016111431"
+						"updated": "20261120170000"
 					},
 					"Children": [
 						{
@@ -1602,7 +1568,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20230808120347-mhivq6o",
-								"updated": "20261016111431"
+								"updated": "20261120170000"
 							},
 							"Children": [
 								{
@@ -1624,7 +1590,7 @@
 					},
 					"Properties": {
 						"id": "20230808120347-drznd8r",
-						"updated": "20261016111431"
+						"updated": "20261120170000"
 					},
 					"Children": [
 						{
@@ -1632,7 +1598,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20230808120347-s36sg66",
-								"updated": "20261016111431"
+								"updated": "20261120170000"
 							},
 							"Children": [
 								{
@@ -1654,7 +1620,7 @@
 					},
 					"Properties": {
 						"id": "20230808120347-msh8db8",
-						"updated": "20221009104351"
+						"updated": "20261120170000"
 					},
 					"Children": [
 						{
@@ -1662,7 +1628,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20230808120347-vbx3gpm",
-								"updated": "20221009104351"
+								"updated": "20261120170000"
 							},
 							"Children": [
 								{
@@ -1681,7 +1647,7 @@
 			"HeadingLevel": 2,
 			"Properties": {
 				"id": "20230808120347-yy5m46r",
-				"updated": "20261016111431"
+				"updated": "20261120170000"
 			},
 			"Children": [
 				{
@@ -1697,7 +1663,7 @@
 			"ListData": {},
 			"Properties": {
 				"id": "20230808120347-um16u4f",
-				"updated": "20261016111431"
+				"updated": "20261120170000"
 			},
 			"Children": [
 				{
@@ -1709,7 +1675,7 @@
 					},
 					"Properties": {
 						"id": "20230808120347-5j8ihgi",
-						"updated": "20220420100248"
+						"updated": "20261120170000"
 					},
 					"Children": [
 						{
@@ -1717,7 +1683,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20230808120347-fr63cm5",
-								"updated": "20220420100248"
+								"updated": "20261120170000"
 							},
 							"Children": [
 								{
@@ -1737,7 +1703,7 @@
 					},
 					"Properties": {
 						"id": "20230808120347-sampfbn",
-						"updated": "20210721160123"
+						"updated": "20261120170000"
 					},
 					"Children": [
 						{
@@ -1745,12 +1711,12 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20230808120347-ibgzf8o",
-								"updated": "20210721160123"
+								"updated": "20261120170000"
 							},
 							"Children": [
 								{
 									"Type": "NodeText",
-									"Data": "请勿同时使用第三方同步盘和思源同步，可能会导致数据损坏"
+									"Data": "请勿同时使用第三方同步盘和 Kora Note 同步，可能会导致数据损坏"
 								}
 							]
 						}
@@ -1765,7 +1731,7 @@
 					},
 					"Properties": {
 						"id": "20260614203346-ezgc1h8",
-						"updated": "20260614203347"
+						"updated": "20261120170000"
 					},
 					"Children": [
 						{
@@ -1773,12 +1739,12 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20260614203346-9lo6xlu",
-								"updated": "20260614203347"
+								"updated": "20261120170000"
 							},
 							"Children": [
 								{
 									"Type": "NodeText",
-									"Data": "思源会自动检测工作空间是否位于第三方同步目录下，如果检测到会强制退出以防止数据损坏"
+									"Data": "Kora Note 会自动检测工作空间是否位于第三方同步目录下，如果检测到会强制退出以防止数据损坏"
 								}
 							]
 						}
@@ -1793,7 +1759,7 @@
 					},
 					"Properties": {
 						"id": "20230808120347-g4y6u9o",
-						"updated": "20220807180028"
+						"updated": "20261120170000"
 					},
 					"Children": [
 						{
@@ -1801,7 +1767,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20230808120347-rbe32cd",
-								"updated": "20220807180028"
+								"updated": "20261120170000"
 							},
 							"Children": [
 								{
@@ -1821,7 +1787,7 @@
 					},
 					"Properties": {
 						"id": "20231120211520-p8tb9wg",
-						"updated": "20231120213300"
+						"updated": "20261120170000"
 					},
 					"Children": [
 						{
@@ -1829,7 +1795,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20231120211520-1xtrwfh",
-								"updated": "20231120213300"
+								"updated": "20261120170000"
 							},
 							"Children": [
 								{
@@ -1849,7 +1815,7 @@
 					},
 					"Properties": {
 						"id": "20231120211807-pzxmsee",
-						"updated": "20261016111431"
+						"updated": "20261120170000"
 					},
 					"Children": [
 						{
@@ -1857,7 +1823,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20231120211807-n24g7wl",
-								"updated": "20231120211921"
+								"updated": "20261120170000"
 							},
 							"Children": [
 								{
@@ -1872,7 +1838,7 @@
 							"ListData": {},
 							"Properties": {
 								"id": "20231120211944-fvla0hc",
-								"updated": "20231120212046"
+								"updated": "20261120170000"
 							},
 							"Children": [
 								{
@@ -1884,7 +1850,7 @@
 									},
 									"Properties": {
 										"id": "20231120211944-ol64svy",
-										"updated": "20231120211944"
+										"updated": "20261120170000"
 									},
 									"Children": [
 										{
@@ -1892,7 +1858,7 @@
 											"Type": "NodeParagraph",
 											"Properties": {
 												"id": "20231120211944-4edb9kx",
-												"updated": "20231120211944"
+												"updated": "20261120170000"
 											},
 											"Children": [
 												{
@@ -1930,7 +1896,7 @@
 									},
 									"Properties": {
 										"id": "20231120211944-5yhw1vi",
-										"updated": "20231120212046"
+										"updated": "20261120170000"
 									},
 									"Children": [
 										{
@@ -1938,7 +1904,7 @@
 											"Type": "NodeParagraph",
 											"Properties": {
 												"id": "20231120211944-chb1tvm",
-												"updated": "20231120212046"
+												"updated": "20261120170000"
 											},
 											"Children": [
 												{
@@ -1965,7 +1931,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20231120211944-m955a64",
-								"updated": "20261016111431"
+								"updated": "20261120170000"
 							},
 							"Children": [
 								{

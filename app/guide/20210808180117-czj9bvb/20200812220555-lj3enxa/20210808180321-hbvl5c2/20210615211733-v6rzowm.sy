@@ -6,7 +6,7 @@
 		"id": "20210615211733-v6rzowm",
 		"title": "数据历史",
 		"type": "doc",
-		"updated": "20261102161000"
+		"updated": "20261120163514"
 	},
 	"Children": [
 		{
@@ -29,7 +29,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20220501134418-ql8s90v",
-				"updated": "20220615111558"
+				"updated": "20261120163514"
 			},
 			"Children": [
 				{
@@ -44,7 +44,7 @@
 			"ListData": {},
 			"Properties": {
 				"id": "20220615111559-oiv8079",
-				"updated": "20261016111431"
+				"updated": "20261120163514"
 			},
 			"Children": [
 				{
@@ -56,7 +56,7 @@
 					},
 					"Properties": {
 						"id": "20220615111600-89ecgx0",
-						"updated": "20261016111431"
+						"updated": "20261120163514"
 					},
 					"Children": [
 						{
@@ -64,7 +64,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220615111600-ag04crg",
-								"updated": "20261016111431"
+								"updated": "20261120163514"
 							},
 							"Children": [
 								{
@@ -78,7 +78,7 @@
 								},
 								{
 									"Type": "NodeText",
-									"Data": " 文件夹下。普通笔记本历史是明文，加密笔记本历史保留密文；优先通过思源恢复，并核对下文的笔记本和密钥要求"
+									"Data": " 文件夹下。普通笔记本历史是明文，加密笔记本历史保留密文；优先通过 Kora Note 恢复，并核对下文的笔记本和密钥要求"
 								}
 							]
 						}
@@ -93,7 +93,7 @@
 					},
 					"Properties": {
 						"id": "20220615111601-l9ydpwh",
-						"updated": "20261016111431"
+						"updated": "20261120163514"
 					},
 					"Children": [
 						{
@@ -101,7 +101,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220615111601-8oaj5t3",
-								"updated": "20261016111431"
+								"updated": "20261120163514"
 							},
 							"Children": [
 								{
@@ -115,7 +115,7 @@
 								},
 								{
 									"Type": "NodeText",
-									"Data": " 文件夹下，应通过思源恢复，不能把单个仓库文件直接复制到 data 中恢复"
+									"Data": " 文件夹下，应通过 Kora Note 恢复，不能把单个仓库文件直接复制到 data 中恢复"
 								}
 							]
 						}
@@ -128,7 +128,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20220615112117-57abhen",
-				"updated": "20220830225617"
+				"updated": "20261120163514"
 			},
 			"Children": [
 				{
@@ -184,7 +184,7 @@
 			"ListData": {},
 			"Properties": {
 				"id": "20210403160319-ufy7jta",
-				"updated": "20261016112108"
+				"updated": "20261120163514"
 			},
 			"Children": [
 				{
@@ -196,7 +196,7 @@
 					},
 					"Properties": {
 						"id": "20210403160319-8uzmero",
-						"updated": "20261016112108"
+						"updated": "20261120163514"
 					},
 					"Children": [
 						{
@@ -204,7 +204,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20210524213102-cwl7v2f",
-								"updated": "20261016112108"
+								"updated": "20261120163514"
 							},
 							"Children": [
 								{
@@ -260,7 +260,7 @@
 					},
 					"Properties": {
 						"id": "20220501134315-6omumob",
-						"updated": "20220501134735"
+						"updated": "20261120163514"
 					},
 					"Children": [
 						{
@@ -268,7 +268,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220501134315-1h4mvgn",
-								"updated": "20220501134735"
+								"updated": "20261120163514"
 							},
 							"Children": [
 								{
@@ -297,7 +297,7 @@
 					},
 					"Properties": {
 						"id": "20220501134333-kamak39",
-						"updated": "20220501134747"
+						"updated": "20261120163514"
 					},
 					"Children": [
 						{
@@ -305,7 +305,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220501134333-1f6hbi9",
-								"updated": "20220501134747"
+								"updated": "20261120163514"
 							},
 							"Children": [
 								{
@@ -342,7 +342,7 @@
 					},
 					"Properties": {
 						"id": "20210524213119-wybx1kh",
-						"updated": "20220830225509"
+						"updated": "20261120163514"
 					},
 					"Children": [
 						{
@@ -350,7 +350,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20210524213119-ofmb315",
-								"updated": "20220830225509"
+								"updated": "20261120163514"
 							},
 							"Children": [
 								{
@@ -390,7 +390,7 @@
 					},
 					"Properties": {
 						"id": "20220501134920-qb6wh0b",
-						"updated": "20230403114300"
+						"updated": "20261120163514"
 					},
 					"Children": [
 						{
@@ -398,7 +398,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220501134920-k403n1r",
-								"updated": "20230403114300"
+								"updated": "20261120163514"
 							},
 							"Children": [
 								{
@@ -438,7 +438,7 @@
 					},
 					"Properties": {
 						"id": "20230403113929-44xkaoz",
-						"updated": "20230403114310"
+						"updated": "20261120163514"
 					},
 					"Children": [
 						{
@@ -446,7 +446,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20230403113929-ud36ubv",
-								"updated": "20230403114310"
+								"updated": "20261120163514"
 							},
 							"Children": [
 								{
@@ -484,7 +484,7 @@
 					},
 					"Properties": {
 						"id": "20240402173746-e726apc",
-						"updated": "20240402173808"
+						"updated": "20261120163514"
 					},
 					"Children": [
 						{
@@ -492,7 +492,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20240402173746-k4p1tqy",
-								"updated": "20240402173808"
+								"updated": "20261120163514"
 							},
 							"Children": [
 								{
@@ -535,7 +535,7 @@
 			"ListData": {},
 			"Properties": {
 				"id": "20210104090742-8rmcz3i",
-				"updated": "20250115153518"
+				"updated": "20261120163514"
 			},
 			"Children": [
 				{
@@ -547,7 +547,7 @@
 					},
 					"Properties": {
 						"id": "20220501135052-k47n4ms",
-						"updated": "20250115153518"
+						"updated": "20261120163514"
 					},
 					"Children": [
 						{
@@ -555,7 +555,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220501135052-o3r30jj",
-								"updated": "20260720201253"
+								"updated": "20261120163514"
 							},
 							"Children": [
 								{
@@ -620,7 +620,7 @@
 					},
 					"Properties": {
 						"id": "20220501135057-pa9pcyo",
-						"updated": "20220501135111"
+						"updated": "20261120163514"
 					},
 					"Children": [
 						{
@@ -628,7 +628,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220501135057-4hmpdzy",
-								"updated": "20220501135111"
+								"updated": "20261120163514"
 							},
 							"Children": [
 								{
@@ -654,7 +654,8 @@
 			"ID": "20261109120000-hist00a",
 			"Type": "NodeParagraph",
 			"Properties": {
-				"id": "20261109120000-hist00a"
+				"id": "20261109120000-hist00a",
+				"updated": "20261120163514"
 			},
 			"Children": [
 				{
@@ -683,7 +684,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20210121105921-zdk68jf",
-				"updated": "20261016111431"
+				"updated": "20261120163514"
 			},
 			"Children": [
 				{
@@ -708,12 +709,12 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20220501133017-3hecoih",
-				"updated": "20261016111431"
+				"updated": "20261120163514"
 			},
 			"Children": [
 				{
 					"Type": "NodeText",
-					"Data": "优先通过思源恢复。如需手动复制进行批量恢复，请先核对来源和目标；加密笔记本必须保留原笔记本 ID、目录结构和匹配的密钥材料，不要将其密文复制到普通笔记本中。历史目录与对应的 data 路径结构一致，例如："
+					"Data": "优先通过 Kora Note 恢复。如需手动复制进行批量恢复，请先核对来源和目标；加密笔记本必须保留原笔记本 ID、目录结构和匹配的密钥材料，不要将其密文复制到普通笔记本中。历史目录与对应的 data 路径结构一致，例如："
 				}
 			]
 		},
@@ -723,7 +724,7 @@
 			"ListData": {},
 			"Properties": {
 				"id": "20220501133105-b25vi0a",
-				"updated": "20220831210446"
+				"updated": "20261120163514"
 			},
 			"Children": [
 				{
@@ -735,7 +736,7 @@
 					},
 					"Properties": {
 						"id": "20220501133105-kzow9y3",
-						"updated": "20220501133105"
+						"updated": "20261120163514"
 					},
 					"Children": [
 						{
@@ -743,7 +744,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220501133105-1dmg0zl",
-								"updated": "20220501133105"
+								"updated": "20261120163514"
 							},
 							"Children": [
 								{
@@ -777,7 +778,7 @@
 					},
 					"Properties": {
 						"id": "20220501133105-ham1o5d",
-						"updated": "20220501134003"
+						"updated": "20261120163514"
 					},
 					"Children": [
 						{
@@ -785,7 +786,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220501133105-a1rwa0u",
-								"updated": "20220501134003"
+								"updated": "20261120163514"
 							},
 							"Children": [
 								{
@@ -819,7 +820,7 @@
 					},
 					"Properties": {
 						"id": "20220501133105-486vgy6",
-						"updated": "20220831210446"
+						"updated": "20261120163514"
 					},
 					"Children": [
 						{
@@ -827,7 +828,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220501133105-jqnfpzv",
-								"updated": "20220831210446"
+								"updated": "20261120163514"
 							},
 							"Children": [
 								{
@@ -859,7 +860,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20220501133041-w6ydfgw",
-				"updated": "20220501133251"
+				"updated": "20261120163514"
 			},
 			"Children": [
 				{
@@ -876,7 +877,7 @@
 			},
 			"Properties": {
 				"id": "20220501133237-il09opg",
-				"updated": "20261016111431"
+				"updated": "20261120163514"
 			},
 			"Children": [
 				{
@@ -890,7 +891,7 @@
 					},
 					"Properties": {
 						"id": "20220501133254-az0u30r",
-						"updated": "20261016111431"
+						"updated": "20261120163514"
 					},
 					"Children": [
 						{
@@ -898,7 +899,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220501133254-4ztj9yt",
-								"updated": "20261016111431"
+								"updated": "20261120163514"
 							},
 							"Children": [
 								{
@@ -923,7 +924,7 @@
 								},
 								{
 									"Type": "NodeText",
-									"Data": " 并完成下载，再正常退出思源，全量备份整个工作空间，包括配置、历史、仓库和加密笔记本密钥备份，然后再进行覆盖操作"
+									"Data": " 并完成下载，再正常退出 Kora Note，全量备份整个工作空间，包括配置、历史、仓库和加密笔记本密钥备份，然后再进行覆盖操作"
 								}
 							]
 						}
@@ -940,7 +941,7 @@
 					},
 					"Properties": {
 						"id": "20220501133342-7fu44br",
-						"updated": "20261016111431"
+						"updated": "20261120163514"
 					},
 					"Children": [
 						{
@@ -948,7 +949,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220501133342-j92vqhx",
-								"updated": "20261016111431"
+								"updated": "20261120163514"
 							},
 							"Children": [
 								{
@@ -988,7 +989,7 @@
 					},
 					"Properties": {
 						"id": "20220501133422-0nxnwc2",
-						"updated": "20261016111431"
+						"updated": "20261120163514"
 					},
 					"Children": [
 						{
@@ -996,12 +997,12 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220501133422-gc6qund",
-								"updated": "20261016111431"
+								"updated": "20261120163514"
 							},
 							"Children": [
 								{
 									"Type": "NodeText",
-									"Data": "启动思源，解锁恢复的加密笔记本，手动重建索引并检查恢复后的文档和资源文件"
+									"Data": "启动 Kora Note，解锁恢复的加密笔记本，手动重建索引并检查恢复后的文档和资源文件"
 								}
 							]
 						}
@@ -1029,7 +1030,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20220615115551-u75o5mk",
-				"updated": "20261016112108"
+				"updated": "20261120163514"
 			},
 			"Children": [
 				{
@@ -1079,7 +1080,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20220615115625-3dx0t1j",
-				"updated": "20261016112108"
+				"updated": "20261120163514"
 			},
 			"Children": [
 				{
@@ -1129,7 +1130,7 @@
 				},
 				{
 					"Type": "NodeText",
-					"Data": "。也可先退出思源，再手动删除 "
+					"Data": "。也可先退出 Kora Note，再手动删除 "
 				},
 				{
 					"Type": "NodeTextMark",
@@ -1186,7 +1187,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20220615113752-lbtlf6j",
-				"updated": "20261016111431"
+				"updated": "20261120163514"
 			},
 			"Children": [
 				{
@@ -1227,7 +1228,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20220722001510-mtrrbj0",
-				"updated": "20220722001555"
+				"updated": "20261120163514"
 			},
 			"Children": [
 				{
@@ -1242,7 +1243,7 @@
 			"ListData": {},
 			"Properties": {
 				"id": "20220722001555-3wcanjb",
-				"updated": "20220722001917"
+				"updated": "20261120163514"
 			},
 			"Children": [
 				{
@@ -1254,7 +1255,7 @@
 					},
 					"Properties": {
 						"id": "20220722001556-sjm48yn",
-						"updated": "20220722001556"
+						"updated": "20261120163514"
 					},
 					"Children": [
 						{
@@ -1262,7 +1263,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220722001556-8sc4mqb",
-								"updated": "20220722001656"
+								"updated": "20261120163514"
 							},
 							"Children": [
 								{
@@ -1286,7 +1287,8 @@
 						"Marker": "Kg=="
 					},
 					"Properties": {
-						"id": "20220722001657-79plg0z"
+						"id": "20220722001657-79plg0z",
+						"updated": "20261120163514"
 					},
 					"Children": [
 						{
@@ -1294,7 +1296,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220722001657-gh22p4n",
-								"updated": "20220722001831"
+								"updated": "20261120163514"
 							},
 							"Children": [
 								{
@@ -1324,7 +1326,7 @@
 					},
 					"Properties": {
 						"id": "20220722001834-8kc1pdr",
-						"updated": "20220722001917"
+						"updated": "20261120163514"
 					},
 					"Children": [
 						{
@@ -1332,7 +1334,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220722001834-13o5rzz",
-								"updated": "20220722001917"
+								"updated": "20261120163514"
 							},
 							"Children": [
 								{
@@ -1355,7 +1357,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20220615113953-4o3uc9z",
-				"updated": "20220722002029"
+				"updated": "20261120163514"
 			},
 			"Children": [
 				{
@@ -1387,7 +1389,7 @@
 			},
 			"Properties": {
 				"id": "20220615112933-zoh8iyg",
-				"updated": "20250115153534"
+				"updated": "20261120163514"
 			},
 			"Children": [
 				{
@@ -1401,7 +1403,7 @@
 					},
 					"Properties": {
 						"id": "20220615114246-9or7h68",
-						"updated": "20250115153534"
+						"updated": "20261120163514"
 					},
 					"Children": [
 						{
@@ -1409,7 +1411,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220615114246-lr3ydl0",
-								"updated": "20250115153534"
+								"updated": "20261120163514"
 							},
 							"Children": [
 								{
@@ -1457,7 +1459,8 @@
 						"Num": 2
 					},
 					"Properties": {
-						"id": "20220615114251-72kaaxr"
+						"id": "20220615114251-72kaaxr",
+						"updated": "20261120163514"
 					},
 					"Children": [
 						{
@@ -1465,7 +1468,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220615114251-2y9unt4",
-								"updated": "20220615114252"
+								"updated": "20261120163514"
 							},
 							"Children": [
 								{
@@ -1492,7 +1495,7 @@
 					},
 					"Properties": {
 						"id": "20220615114253-k4a3tg5",
-						"updated": "20220615120214"
+						"updated": "20261120163514"
 					},
 					"Children": [
 						{
@@ -1500,7 +1503,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220615114253-70sfmtn",
-								"updated": "20220615120214"
+								"updated": "20261120163514"
 							},
 							"Children": [
 								{
@@ -1536,7 +1539,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20220615114908-0y5tfv9",
-				"updated": "20261016111431"
+				"updated": "20261120163514"
 			},
 			"Children": [
 				{
@@ -1550,7 +1553,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20261024203645-jje7alu",
-				"updated": "20261024203645"
+				"updated": "20261120163514"
 			},
 			"Children": [
 				{
@@ -1606,7 +1609,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20220615114706-5wy741l",
-				"updated": "20260914101605"
+				"updated": "20261120163514"
 			},
 			"Children": [
 				{
@@ -1674,7 +1677,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20260914101605-18n2jmp",
-				"updated": "20260914101605"
+				"updated": "20261120163514"
 			},
 			"Children": [
 				{
@@ -1688,7 +1691,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20260927191121-grjxhnz",
-				"updated": "20260927191121"
+				"updated": "20261120163514"
 			},
 			"Children": [
 				{
@@ -1720,7 +1723,7 @@
 			},
 			"Properties": {
 				"id": "20260914101605-2kciwtf",
-				"updated": "20260914101605"
+				"updated": "20261120163514"
 			},
 			"Children": [
 				{
@@ -1734,7 +1737,7 @@
 					},
 					"Properties": {
 						"id": "20260914101605-pp06byr",
-						"updated": "20260914101605"
+						"updated": "20261120163514"
 					},
 					"Children": [
 						{
@@ -1742,7 +1745,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20260914101605-bfq23q8",
-								"updated": "20260914101605"
+								"updated": "20261120163514"
 							},
 							"Children": [
 								{
@@ -1782,7 +1785,7 @@
 					},
 					"Properties": {
 						"id": "20260914101605-2x5qw4j",
-						"updated": "20260914101605"
+						"updated": "20261120163514"
 					},
 					"Children": [
 						{
@@ -1790,7 +1793,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20260914101605-dofbxyc",
-								"updated": "20260914101605"
+								"updated": "20261120163514"
 							},
 							"Children": [
 								{
@@ -1821,7 +1824,7 @@
 					},
 					"Properties": {
 						"id": "20260914101605-eb2bmzo",
-						"updated": "20260914101605"
+						"updated": "20261120163514"
 					},
 					"Children": [
 						{
@@ -1829,7 +1832,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20260914101605-tbvv9wt",
-								"updated": "20260914101605"
+								"updated": "20261120163514"
 							},
 							"Children": [
 								{
@@ -1860,7 +1863,7 @@
 					},
 					"Properties": {
 						"id": "20260914101605-iov86px",
-						"updated": "20260914101605"
+						"updated": "20261120163514"
 					},
 					"Children": [
 						{
@@ -1868,7 +1871,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20260914101605-yvl4rz4",
-								"updated": "20260914101605"
+								"updated": "20261120163514"
 							},
 							"Children": [
 								{
@@ -1913,12 +1916,12 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20260914101605-xj18m3f",
-				"updated": "20260914102430"
+				"updated": "20261120163514"
 			},
 			"Children": [
 				{
 					"Type": "NodeText",
-					"Data": "删除标记不会立即删除快照数据，也不会自动清理数据仓库。如需释放空间，可另行清理本地数据仓库；云端手动清理仅适用于 S3、WebDAV 和本地文件系统同步存储。"
+					"Data": "删除标记不会立即删除快照数据，也不会自动清理数据仓库。如需释放空间，可另行清理本地数据仓库；云端手动清理仅适用于 WebDAV 和本地文件系统同步存储。"
 				}
 			]
 		},
@@ -1942,7 +1945,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20220615115227-oxdlcxq",
-				"updated": "20220615115452"
+				"updated": "20261120163514"
 			},
 			"Children": [
 				{
@@ -1956,7 +1959,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20261102161000-033bee9",
-				"updated": "20261102161000"
+				"updated": "20261120163514"
 			},
 			"Children": [
 				{
@@ -1985,7 +1988,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20261016111431-wem57hb",
-				"updated": "20261016111710"
+				"updated": "20261120163514"
 			},
 			"Children": [
 				{
@@ -2027,7 +2030,7 @@
 			"ListData": {},
 			"Properties": {
 				"id": "20220615115758-ajl5l83",
-				"updated": "20261016111431"
+				"updated": "20261120163514"
 			},
 			"Children": [
 				{
@@ -2039,7 +2042,7 @@
 					},
 					"Properties": {
 						"id": "20230422101107-ihb3kxp",
-						"updated": "20261011203418"
+						"updated": "20261120163514"
 					},
 					"Children": [
 						{
@@ -2047,7 +2050,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20230422101107-zxq6qh2",
-								"updated": "20261011203418"
+								"updated": "20261120163514"
 							},
 							"Children": [
 								{
@@ -2116,7 +2119,7 @@
 							"ListData": {},
 							"Properties": {
 								"id": "20230422101343-wvt2y4r",
-								"updated": "20230422101936"
+								"updated": "20261120163514"
 							},
 							"Children": [
 								{
@@ -2128,7 +2131,7 @@
 									},
 									"Properties": {
 										"id": "20230422101343-obxopx6",
-										"updated": "20230422101934"
+										"updated": "20261120163514"
 									},
 									"Children": [
 										{
@@ -2136,7 +2139,7 @@
 											"Type": "NodeParagraph",
 											"Properties": {
 												"id": "20230422101343-f5w2p8p",
-												"updated": "20230422101934"
+												"updated": "20261120163514"
 											},
 											"Children": [
 												{
@@ -2165,7 +2168,7 @@
 									},
 									"Properties": {
 										"id": "20230422101357-4ugrbw1",
-										"updated": "20230422101936"
+										"updated": "20261120163514"
 									},
 									"Children": [
 										{
@@ -2173,7 +2176,7 @@
 											"Type": "NodeParagraph",
 											"Properties": {
 												"id": "20230422101357-istm02i",
-												"updated": "20230422101936"
+												"updated": "20261120163514"
 											},
 											"Children": [
 												{
@@ -2206,7 +2209,7 @@
 					},
 					"Properties": {
 						"id": "20260914101605-lsjt1pd",
-						"updated": "20260914102430"
+						"updated": "20261120163514"
 					},
 					"Children": [
 						{
@@ -2214,12 +2217,12 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20260914101605-9cgd3h9",
-								"updated": "20260914102430"
+								"updated": "20261120163514"
 							},
 							"Children": [
 								{
 									"Type": "NodeText",
-									"Data": "使用 S3、WebDAV 或本地文件系统作为同步存储时，云端栏的 "
+									"Data": "使用 WebDAV 或本地文件系统作为同步存储时，云端栏的 "
 								},
 								{
 									"Type": "NodeTextMark",
@@ -2228,7 +2231,7 @@
 								},
 								{
 									"Type": "NodeText",
-									"Data": " 仅清理云端未引用的快照和相关数据对象；执行前请确保其他设备已经暂停同步，并保持网络稳定；思源官方云端不支持此手动清理操作，因此不显示该入口"
+									"Data": " 仅清理云端未引用的快照和相关数据对象；执行前请确保其他设备已经暂停同步，并保持网络稳定；该入口仅在支持手动清理的同步服务下显示"
 								}
 							]
 						}
@@ -2243,7 +2246,7 @@
 					},
 					"Properties": {
 						"id": "20230422101105-vdd9m4g",
-						"updated": "20261016111431"
+						"updated": "20261120163514"
 					},
 					"Children": [
 						{
@@ -2251,7 +2254,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20230422101105-0csmuf6",
-								"updated": "20261016111431"
+								"updated": "20261120163514"
 							},
 							"Children": [
 								{
@@ -2312,7 +2315,7 @@
 								},
 								{
 									"Type": "NodeText",
-									"Data": "​​ 会绕过检查并删除包括标记快照在内的全部本地快照；只有完成这些前提并正常退出思源后才考虑此操作"
+									"Data": "​​ 会绕过检查并删除包括标记快照在内的全部本地快照；只有完成这些前提并正常退出 Kora Note 后才考虑此操作"
 								}
 							]
 						}
@@ -2340,7 +2343,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20210928094612-rymbb43",
-				"updated": "20260809160000"
+				"updated": "20261120163514"
 			},
 			"Children": [
 				{
@@ -2392,7 +2395,7 @@
 			"ListData": {},
 			"Properties": {
 				"id": "20210928094821-syjcgbp",
-				"updated": "20211222185741"
+				"updated": "20261120163514"
 			},
 			"Children": [
 				{
@@ -2404,7 +2407,7 @@
 					},
 					"Properties": {
 						"id": "20210928094822-nn422ie",
-						"updated": "20211222185741"
+						"updated": "20261120163514"
 					},
 					"Children": [
 						{
@@ -2412,7 +2415,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20210928094822-ipyjn3n",
-								"updated": "20211222185741"
+								"updated": "20261120163514"
 							},
 							"Children": [
 								{
@@ -2437,7 +2440,7 @@
 					},
 					"Properties": {
 						"id": "20210928095121-tyfox35",
-						"updated": "20210928095254"
+						"updated": "20261120163514"
 					},
 					"Children": [
 						{
@@ -2445,7 +2448,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20210928095121-tng5faj",
-								"updated": "20210928095254"
+								"updated": "20261120163514"
 							},
 							"Children": [
 								{
@@ -2485,7 +2488,7 @@
 			"ListData": {},
 			"Properties": {
 				"id": "20220807180308-7hyw96s",
-				"updated": "20220807180341"
+				"updated": "20261120163514"
 			},
 			"Children": [
 				{
@@ -2497,7 +2500,7 @@
 					},
 					"Properties": {
 						"id": "20220807180328-2km55lx",
-						"updated": "20220807180341"
+						"updated": "20261120163514"
 					},
 					"Children": [
 						{
@@ -2505,7 +2508,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220807180328-x8lpi2n",
-								"updated": "20220807180341"
+								"updated": "20261120163514"
 							},
 							"Children": [
 								{

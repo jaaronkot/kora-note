@@ -54,7 +54,7 @@ const registerAppLifecycle = ({
     electron.app.on("will-quit", relaunchConnection);
 };
 
-// Windows 关机、重启或注销时取消本次会话结束，等待内核安全退出后再关闭思源。
+// Windows 关机、重启或注销时取消本次会话结束，等待内核安全退出后再关闭 Kora Note。
 const watchWindowSessionEnd = (_event: ElectronEvent, window: BrowserWindow): void => {
     window.on("query-session-end", (sessionEvent: ElectronEvent) => {
         writeLog("query-session-end");

@@ -31,7 +31,6 @@ import {canOpenMarkdownAsset, openMarkdownAsset} from "../editor/markdownAsset";
 import {openAsset, openAssetInBackground, openBy} from "../editor/util";
 /// #endif
 import {rename, replaceFileName} from "../editor/rename";
-import dayjs from "dayjs";
 import {Constants} from "../constants";
 import {exportImage} from "../protyle/export/util";
 import type {App} from "../index";
@@ -67,166 +66,6 @@ const bindAttrInput = (inputElement: HTMLInputElement, id: string) => {
     });
 };
 
-export const openWechatNotify = (nodeElement: Element) => {
-    const id = nodeElement.getAttribute("data-node-id");
-    const range = getEditorRange(nodeElement);
-    const reminder = nodeElement.getAttribute(Constants.CUSTOM_REMINDER_WECHAT);
-    let reminderFormat = "";
-    if (reminder) {
-        reminderFormat = dayjs(reminder).format("YYYY-MM-DD HH:mm");
-    }
-    const dialog = new MobileDialog({
-        width: isMobile() ? "92vw" : "50vw",
-        title: window.siyuan.languages.wechatReminder,
-        content: `<div class="b3-dialog__content custom-attr">
-    <div class="fn__flex">
-        <span class="ft__on-surface fn__flex-center" style="text-align: right;flex: 0 0 100px;overflow-wrap: anywhere">${window.siyuan.languages.notifyTime}</span>
-        <div class="fn__space"></div>
-        <input class="b3-text-field fn__flex-1" type="datetime-local" max="9999-12-31 23:59" value="${reminderFormat}">
-    </div>
-    <div class="b3-label__text" style="text-align: center">${window.siyuan.languages.wechatTip}</div>
-</div>
-<div class="b3-dialog__action">
-    <button class="b3-button b3-button--cancel">${window.siyuan.languages.cancel}</button><div class="fn__space"></div>
-    <button class="b3-button b3-button--text">${window.siyuan.languages.remove}</button><div class="fn__space"></div>
-    <button class="b3-button b3-button--text">${window.siyuan.languages.confirm}</button>
-</div>`,
-        destroyCallback() {
-            focusByRange(range);
-        }
-    });
-    dialog.element.setAttribute("data-key", Constants.DIALOG_WECHATREMINDER);
-    const btnsElement = dialog.element.querySelectorAll(".b3-button");
-    btnsElement[0].addEventListener("click", () => {
-        dialog.destroy();
-    });
-    btnsElement[1].addEventListener("click", () => {
-        if (isMobile()) {
-            void dialog.runPending(async () => {
-                const response = await fetchSyncPost("/api/block/setBlockReminder", {id, timed: "0"});
-                if (response.code !== 0) return false;
-                nodeElement.removeAttribute(Constants.CUSTOM_REMINDER_WECHAT);
-                return true;
-            });
-            return;
-        }
-        if (btnsElement[1].getAttribute("disabled")) {
-            return;
-        }
-        btnsElement[1].setAttribute("disabled", "disabled");
-        fetchPost("/api/block/setBlockReminder", {id, timed: "0"}, () => {
-            nodeElement.removeAttribute(Constants.CUSTOM_REMINDER_WECHAT);
-            dialog.destroy();
-        });
-    });
-    btnsElement[2].addEventListener("click", () => {
-        const date = dialog.element.querySelector("input").value;
-        if (date) {
-            if (new Date(date) <= new Date()) {
-                showMessage(window.siyuan.languages.reminderTip);
-                return;
-            }
-            if (isMobile()) {
-                void dialog.runPending(async () => {
-                    const timed = dayjs(date).format("YYYYMMDDHHmmss");
-                    const response = await fetchSyncPost("/api/block/setBlockReminder", {id, timed});
-                    if (response.code !== 0) return false;
-                    nodeElement.setAttribute(Constants.CUSTOM_REMINDER_WECHAT, timed);
-                    return true;
-                });
-                return;
-            }
-            if (btnsElement[2].getAttribute("disabled")) {
-                return;
-            }
-            btnsElement[2].setAttribute("disabled", "disabled");
-            const timed = dayjs(date).format("YYYYMMDDHHmmss");
-            fetchPost("/api/block/setBlockReminder", {id, timed}, () => {
-                nodeElement.setAttribute(Constants.CUSTOM_REMINDER_WECHAT, timed);
-                dialog.destroy();
-            });
-        } else {
-            showMessage(window.siyuan.languages.notEmpty);
-        }
-    });
-};
-
-export const openFileWechatNotify = (id: string, notebookId: string) => {
-    const docInfoParam: BlockQueryRequestInput = {
-        id
-    };
-    if (isEncryptedBox(notebookId)) {
-        docInfoParam.notebook = notebookId;
-    }
-    fetchPost("/api/block/getDocInfo", docInfoParam, (response) => {
-        const reminder = response.data.ial[Constants.CUSTOM_REMINDER_WECHAT];
-        let reminderFormat = "";
-        if (reminder) {
-            reminderFormat = dayjs(reminder).format("YYYY-MM-DD HH:mm");
-        }
-        const dialog = new MobileDialog({
-            width: isMobile() ? "92vw" : "50vw",
-            title: window.siyuan.languages.wechatReminder,
-            content: `<div class="b3-dialog__content custom-attr">
-    <div class="fn__flex">
-        <span class="ft__on-surface fn__flex-center" style="text-align: right;flex: 0 0 100px;overflow-wrap: anywhere">${window.siyuan.languages.notifyTime}</span>
-        <div class="fn__space"></div>
-        <input class="b3-text-field fn__flex-1" type="datetime-local" max="9999-12-31 23:59" value="${reminderFormat}">
-    </div>
-    <div class="b3-label__text" style="text-align: center">${window.siyuan.languages.wechatTip}</div>
-</div>
-<div class="b3-dialog__action">
-    <button class="b3-button b3-button--cancel">${window.siyuan.languages.cancel}</button><div class="fn__space"></div>
-    <button class="b3-button b3-button--text">${window.siyuan.languages.remove}</button><div class="fn__space"></div>
-    <button class="b3-button b3-button--text">${window.siyuan.languages.confirm}</button>
-</div>`
-        });
-        dialog.element.setAttribute("data-key", Constants.DIALOG_WECHATREMINDER);
-        const btnsElement = dialog.element.querySelectorAll(".b3-button");
-        btnsElement[0].addEventListener("click", () => {
-            dialog.destroy();
-        });
-        btnsElement[1].addEventListener("click", () => {
-            if (isMobile()) {
-                void dialog.runPending(async () => {
-                    const response = await fetchSyncPost("/api/block/setBlockReminder", {id, timed: "0"});
-                    return response.code === 0;
-                });
-                return;
-            }
-            fetchPost("/api/block/setBlockReminder", {id, timed: "0"}, () => {
-                dialog.destroy();
-            });
-        });
-        btnsElement[2].addEventListener("click", () => {
-            const date = dialog.element.querySelector("input").value;
-            if (date) {
-                if (new Date(date) <= new Date()) {
-                    showMessage(window.siyuan.languages.reminderTip);
-                    return;
-                }
-                if (isMobile()) {
-                    void dialog.runPending(async () => {
-                        const response = await fetchSyncPost("/api/block/setBlockReminder", {
-                            id, timed: dayjs(date).format("YYYYMMDDHHmmss"),
-                        });
-                        return response.code === 0;
-                    });
-                    return;
-                }
-                fetchPost("/api/block/setBlockReminder", {
-                    id,
-                    timed: dayjs(date).format("YYYYMMDDHHmmss")
-                }, () => {
-                    dialog.destroy();
-                });
-            } else {
-                showMessage(window.siyuan.languages.notEmpty);
-            }
-        });
-    });
-};
-
 export const openFileAttr = (attrs: Record<string, string>, focusName = "bookmark", protyle?: IProtyle) => {
     /// #if MOBILE
     // 属性抽屉先结束编辑焦点，等待软键盘收起后展开。
@@ -234,7 +73,6 @@ export const openFileAttr = (attrs: Record<string, string>, focusName = "bookmar
     activeBlur(true);
     /// #endif
     let customHTML = "";
-    let notifyHTML = "";
     let hasAV = false;
     const range = getSelection().rangeCount > 0 ? getSelection().getRangeAt(0) : null;
     let ghostProtyle: Protyle;
@@ -257,13 +95,7 @@ export const openFileAttr = (attrs: Record<string, string>, focusName = "bookmar
         if (Constants.CUSTOM_RIFF_DECKS === item || item.startsWith("custom-sy-")) {
             return;
         }
-        if (item === Constants.CUSTOM_REMINDER_WECHAT) {
-            notifyHTML = `<label class="b3-label b3-label--noborder">
-    ${window.siyuan.languages.wechatReminder}
-    <div class="fn__hr"></div>
-    <input class="b3-text-field fn__block" type="datetime-local" max="9999-12-31 23:59" readonly data-name="${item}" value="${dayjs(attrs[item]).format("YYYY-MM-DD HH:mm")}">
-</label>`;
-        } else if (item.indexOf("custom-av") > -1) {
+        if (item.indexOf("custom-av") > -1) {
             hasAV = true;
         } else if (item.indexOf("custom") > -1) {
             customHTML += `<label class="b3-label b3-label--noborder">
@@ -324,7 +156,6 @@ export const openFileAttr = (attrs: Record<string, string>, focusName = "bookmar
                 <div class="fn__hr"></div>
                 <textarea style="resize: vertical" spellcheck="${window.siyuan.config.editor.spellcheck}" class="b3-text-field fn__block" placeholder="${window.siyuan.languages.attrMemoTip}" rows="2" data-name="memo"></textarea>
             </label>
-            ${notifyHTML}
         </div>
         <div data-type="NodeAttributeView" class="fn__none custom-attr"></div>
         <div data-type="custom" class="fn__none custom-attr">
@@ -797,7 +628,7 @@ ${databaseOptions}`,
             }
         }, {
             id: "exportSiYuanZip",
-            label: "SiYuan .sy.zip",
+            label: "Kora Note .sy.zip",
             icon: "iconSiYuan",
             click: () => {
                 const msgId = showMessage(window.siyuan.languages.exporting, -1);
@@ -833,7 +664,7 @@ ${databaseOptions}`,
                 }
             }, {
                 id: "exportHTML_SiYuan",
-                label: "HTML (SiYuan)",
+                label: "HTML (Kora Note)",
                 iconClass: "ft__error",
                 icon: "iconHTML5",
                 click: () => {
@@ -846,129 +677,6 @@ ${databaseOptions}`,
                 click: () => {
                     saveExport({type: "htmlmd", id});
                 }
-            }, {
-                id: "exportWord",
-                ignore: !getHostCapabilities().importExport,
-                label: "Word .docx",
-                icon: "iconDocx",
-                click: () => {
-                    saveExport({type: "word", id});
-                }
-            }, {
-                id: "exportMore",
-                ignore: !getHostCapabilities().importExport,
-                label: window.siyuan.languages.more,
-                icon: "iconMore",
-                type: "submenu",
-                submenu: [{
-                    id: "exportReStructuredText",
-                    label: "reStructuredText",
-                    iconHTML: "",
-                    click: () => {
-                        const msgId = showMessage(window.siyuan.languages.exporting, -1);
-                        fetchPost("/api/export/exportReStructuredText", {
-                            id,
-                        }, response => {
-                            saveExportFile(response.data.zip, msgId);
-                        });
-                    }
-                }, {
-                    id: "exportAsciiDoc",
-                    label: "AsciiDoc",
-                    iconHTML: "",
-                    click: () => {
-                        const msgId = showMessage(window.siyuan.languages.exporting, -1);
-                        fetchPost("/api/export/exportAsciiDoc", {
-                            id,
-                        }, response => {
-                            saveExportFile(response.data.zip, msgId);
-                        });
-                    }
-                }, {
-                    id: "exportTextile",
-                    label: "Textile",
-                    iconHTML: "",
-                    click: () => {
-                        const msgId = showMessage(window.siyuan.languages.exporting, -1);
-                        fetchPost("/api/export/exportTextile", {
-                            id,
-                        }, response => {
-                            saveExportFile(response.data.zip, msgId);
-                        });
-                    }
-                }, {
-                    id: "exportOPML",
-                    label: "OPML",
-                    iconHTML: "",
-                    click: () => {
-                        const msgId = showMessage(window.siyuan.languages.exporting, -1);
-                        fetchPost("/api/export/exportOPML", {
-                            id,
-                        }, response => {
-                            saveExportFile(response.data.zip, msgId);
-                        });
-                    }
-                }, {
-                    id: "exportOrgMode",
-                    label: "Org-Mode",
-                    iconHTML: "",
-                    click: () => {
-                        const msgId = showMessage(window.siyuan.languages.exporting, -1);
-                        fetchPost("/api/export/exportOrgMode", {
-                            id,
-                        }, response => {
-                            saveExportFile(response.data.zip, msgId);
-                        });
-                    }
-                }, {
-                    id: "exportMediaWiki",
-                    label: "MediaWiki",
-                    iconHTML: "",
-                    click: () => {
-                        const msgId = showMessage(window.siyuan.languages.exporting, -1);
-                        fetchPost("/api/export/exportMediaWiki", {
-                            id,
-                        }, response => {
-                            saveExportFile(response.data.zip, msgId);
-                        });
-                    }
-                }, {
-                    id: "exportODT",
-                    label: "ODT",
-                    iconHTML: "",
-                    click: () => {
-                        const msgId = showMessage(window.siyuan.languages.exporting, -1);
-                        fetchPost("/api/export/exportODT", {
-                            id,
-                        }, response => {
-                            saveExportFile(response.data.zip, msgId);
-                        });
-                    }
-                }, {
-                    id: "exportRTF",
-                    label: "RTF",
-                    iconHTML: "",
-                    click: () => {
-                        const msgId = showMessage(window.siyuan.languages.exporting, -1);
-                        fetchPost("/api/export/exportRTF", {
-                            id,
-                        }, response => {
-                            saveExportFile(response.data.zip, msgId);
-                        });
-                    }
-                }, {
-                    id: "exportEPUB",
-                    label: "EPUB",
-                    iconHTML: "",
-                    click: () => {
-                        const msgId = showMessage(window.siyuan.languages.exporting, -1);
-                        fetchPost("/api/export/exportEPUB", {
-                            id,
-                        }, response => {
-                            saveExportFile(response.data.zip, msgId);
-                        });
-                    }
-                }]
             },
             /// #else
             {
@@ -1005,7 +713,7 @@ ${databaseOptions}`,
                 })
             }, {
                 id: "exportHTML_SiYuan",
-                label: "HTML (SiYuan)",
+                label: "HTML (Kora Note)",
                 iconClass: "ft__error",
                 icon: "iconHTML5",
                 click: () => {

@@ -1,5 +1,5 @@
 import {mobileConfirmDialog} from "../../dialog/mobileConfirmDialog";
-import {hideMessage, showMessage} from "../../dialog/message";
+import {showMessage} from "../../dialog/message";
 import {Constants} from "../../constants";
 /// #if !BROWSER
 import {ipcRenderer} from "electron";
@@ -11,9 +11,8 @@ import {confirmDialog} from "../../dialog/confirmDialog";
 import {getThemeMode, setInlineStyle} from "../../util/assets";
 import {getCustomFontStyle} from "../../util/customFont";
 import {fetchPost, fetchSyncPost} from "../../util/fetch";
-import {Dialog} from "../../dialog";
 import {replaceLocalPath} from "../../editor/rename";
-import {getScreenWidth, isInMobileApp, saveExportFile, setStorageVal} from "../util/compatibility";
+import {getScreenWidth, isInMobileApp, saveExportFile} from "../util/compatibility";
 import {getFrontend, isBrowser} from "../../util/functions";
 import {isEncryptedBox} from "../../util/pathName";
 import {getHostCapabilities} from "../../util/hostCapabilities";
@@ -96,78 +95,6 @@ export const saveExport = (option: IExportOptions) => {
         } else {
             renderPDF(option.id);
         }
-    } else if (option.type === "word") {
-        const localData = window.siyuan.storage[Constants.LOCAL_EXPORTWORD];
-        const wordDialog = new Dialog({
-            title: "Word " + window.siyuan.languages.config,
-            content: `<div class="b3-dialog__content">
-    <label class="fn__flex b3-label">
-        <div class="fn__flex-1">
-            ${window.siyuan.languages.removeAssetsFolder}
-        </div>
-        <span class="fn__space"></span>
-        <input id="removeAssets" class="b3-switch" type="checkbox" ${localData.removeAssets ? "checked" : ""}>
-    </label>
-    <label class="fn__flex b3-label">
-        <div class="fn__flex-1">
-            ${window.siyuan.languages.mergeSubdocs}
-        </div>
-        <span class="fn__space"></span>
-        <input id="mergeSubdocs" class="b3-switch" type="checkbox" ${localData.mergeSubdocs ? "checked" : ""}>
-    </label>
-    <label class="fn__flex b3-label merge-heading-option${localData.mergeSubdocs ? "" : " fn__none"}">
-        <div class="fn__flex-1">
-            ${window.siyuan.languages.mergeDocHeadingMode}
-        </div>
-        <span class="fn__space"></span>
-        <select id="mergeDocHeadingMode" class="b3-select">
-            <option value="flat" ${localData.mergeDocHeadingMode === "flat" ? "selected" : ""}>${window.siyuan.languages.mergeDocHeadingFlat}</option>
-            <option value="tree" ${localData.mergeDocHeadingMode === "tree" ? "selected" : ""}>${window.siyuan.languages.mergeDocHeadingTree}</option>
-        </select>
-    </label>
-    <label class="fn__flex b3-label merge-heading-option${localData.mergeSubdocs ? "" : " fn__none"}">
-        <div class="fn__flex-1">
-            ${window.siyuan.languages.mergeContentHeadingMode}
-        </div>
-        <span class="fn__space"></span>
-        <select id="mergeContentHeadingMode" class="b3-select">
-            <option value="preserve" ${localData.mergeContentHeadingMode === "preserve" ? "selected" : ""}>${window.siyuan.languages.mergeContentHeadingPreserve}</option>
-            <option value="demote" ${localData.mergeContentHeadingMode === "demote" ? "selected" : ""}>${window.siyuan.languages.mergeContentHeadingDemote}</option>
-        </select>
-    </label>
-</div>
-<div class="b3-dialog__action">
-    <button class="b3-button b3-button--cancel">${window.siyuan.languages.cancel}</button><div class="fn__space"></div>
-    <button class="b3-button b3-button--text">${window.siyuan.languages.confirm}</button>
-</div>`,
-            width: "520px",
-        });
-        wordDialog.element.setAttribute("data-key", Constants.DIALOG_EXPORTWORD);
-        const mergeSubdocsElement = wordDialog.element.querySelector("#mergeSubdocs") as HTMLInputElement;
-        mergeSubdocsElement.addEventListener("change", () => {
-            wordDialog.element.querySelectorAll(".merge-heading-option").forEach((item) => {
-                item.classList.toggle("fn__none", !mergeSubdocsElement.checked);
-            });
-        });
-        const btnsElement = wordDialog.element.querySelectorAll(".b3-button");
-        btnsElement[0].addEventListener("click", () => {
-            wordDialog.destroy();
-        });
-        btnsElement[1].addEventListener("click", () => {
-            const removeAssets = (wordDialog.element.querySelector("#removeAssets") as HTMLInputElement).checked;
-            const mergeSubdocs = mergeSubdocsElement.checked;
-            const mergeDocHeadingMode = (wordDialog.element.querySelector("#mergeDocHeadingMode") as HTMLSelectElement).value;
-            const mergeContentHeadingMode = (wordDialog.element.querySelector("#mergeContentHeadingMode") as HTMLSelectElement).value;
-            window.siyuan.storage[Constants.LOCAL_EXPORTWORD] = {
-                removeAssets,
-                mergeSubdocs,
-                mergeDocHeadingMode,
-                mergeContentHeadingMode,
-            };
-            setStorageVal(Constants.LOCAL_EXPORTWORD, window.siyuan.storage[Constants.LOCAL_EXPORTWORD]);
-            getExportPath(option, removeAssets, mergeSubdocs, mergeDocHeadingMode, mergeContentHeadingMode);
-            wordDialog.destroy();
-        });
     } else {
         getExportPath(option, false, true);
     }
@@ -1145,13 +1072,10 @@ const getExportPath = (
             });
             return;
         }
-        let exportType = "HTML (SiYuan)";
+        let exportType = "HTML (Kora Note)";
         switch (option.type) {
             case "htmlmd":
                 exportType = "HTML (Markdown)";
-                break;
-            case "word":
-                exportType = "Word .docx";
                 break;
             case "pdf":
                 exportType = "PDF";
@@ -1171,11 +1095,9 @@ const getExportPath = (
             let url = "/api/export/exportHTML";
             if (option.type === "htmlmd") {
                 url = "/api/export/exportMdHTML";
-            } else if (option.type === "word") {
-                url = "/api/export/exportDocx";
             }
             let savePath = result.filePaths[0];
-            if (option.type !== "word" && !savePath.endsWith(response.data.rootTitle)) {
+            if (!savePath.endsWith(response.data.rootTitle)) {
                 savePath = path.join(savePath, replaceLocalPath(response.data.rootTitle));
             }
             savePath = savePath.trim();
@@ -1188,16 +1110,7 @@ const getExportPath = (
                 mergeContentHeadingMode,
                 savePath
             }, exportResponse => {
-                if (option.type === "word") {
-                    if (exportResponse.code === 1) {
-                        hideMessage(msgId);
-                        showMessage(exportResponse.msg, 0, "error");
-                        return;
-                    }
-                    afterExport(exportResponse.data.path, msgId);
-                } else {
-                    onExport(exportResponse, savePath, "", option, msgId);
-                }
+                onExport(exportResponse, savePath, "", option, msgId);
             });
         }
     });
@@ -1241,7 +1154,7 @@ export const onExport = async (data: IWebSocketData, filePath: string, servePath
     <script src="${servePath}stage/protyle/js/protyle-html.js?v=${Constants.SIYUAN_VERSION}"></script>
     ${themeStyle}
     <title>${data.data.name}</title>
-    <!-- Exported by SiYuan v${Constants.SIYUAN_VERSION} -->
+    <!-- Exported by Kora Note v${Constants.SIYUAN_VERSION} -->
     <style>
         body {font-family: var(--b3-font-family);background-color: var(--b3-theme-background);color: var(--b3-theme-on-background)}
         ${await setInlineStyle(false, servePath, data.data.content)}
@@ -1251,7 +1164,7 @@ export const onExport = async (data: IWebSocketData, filePath: string, servePath
     ${getSnippetCSS()}
 </head>
 <body>
-<div class="${["htmlmd", "word"].includes(exportOption.type) ? "b3-typography" : "protyle-wysiwyg" + (window.siyuan.config.editor.displayBookmarkIcon ? " protyle-wysiwyg--attr" : "")}" 
+<div class="${exportOption.type === "htmlmd" ? "b3-typography" : "protyle-wysiwyg" + (window.siyuan.config.editor.displayBookmarkIcon ? " protyle-wysiwyg--attr" : "")}" 
 style="max-width: 800px;margin: 0 auto;" id="preview">${data.data.content}</div>
 ${getIconScript(servePath)}
 <script src="${servePath}stage/build/export/protyle-method.js?v=${Constants.SIYUAN_VERSION}"></script>

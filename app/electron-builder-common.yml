@@ -28,7 +28,7 @@ linux:
   fileAssociations:
     - &markdownAssociation
       ext: ["md", "markdown"]
-      name: "SiYuan Markdown"
+      name: "Kora Note Markdown"
       description: "Markdown document"
       mimeType: "text/markdown"
       role: "Editor"

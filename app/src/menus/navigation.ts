@@ -32,13 +32,9 @@ import {getDockByType} from "../layout/tabUtil";
 import {Files} from "../layout/dock/Files";
 import {getDocTreeController} from "../layout/dock/docTree/DocTreeController";
 import type {IDocTreeItem} from "../layout/dock/docTree/types";
-import {openCardByData} from "../card/openCard";
-import {viewCards} from "../card/viewCards";
 import type {App} from "../index";
 import {openDocHistory} from "../history/doc";
 import {openEditorTab} from "./util";
-import {makeCard} from "../card/makeCard";
-import {transaction} from "../protyle/wysiwyg/transaction";
 import {emitOpenMenu} from "../plugin/EventBus";
 import {isPhablet, saveExportFile} from "../protyle/util/compatibility";
 import {exportMarkdownZip} from "../protyle/export/exportMd";
@@ -258,7 +254,7 @@ const initMultiMenu = (selection: IDocTreeMenuContext, app: App) => {
                 ignore: ignoreExport,
                 submenu: [{
                     id: "exportSiYuanZip",
-                    label: "SiYuan .sy.zip",
+                    label: "Kora Note .sy.zip",
                     icon: "iconSiYuan",
                     click: () => {
                         const msgId = showMessage(window.siyuan.languages.exporting, -1);
@@ -389,51 +385,6 @@ const initMultiMenu = (selection: IDocTreeMenuContext, app: App) => {
         }
     }
     window.siyuan.menus.menu.append(new MenuItem({id: "separator_1", type: "separator"}).element);
-    if (!window.siyuan.config.readonly && !encryptedNotebookId) {
-        const riffCardMenu = [{
-            id: "quickMakeCard",
-            iconHTML: "",
-            accelerator: window.siyuan.config.keymap.editor.general.quickMakeCard.custom,
-            label: window.siyuan.languages.quickMakeCard,
-            click: () => {
-                transaction(undefined, [{
-                    action: "addFlashcards",
-                    deckID: Constants.QUICK_DECK_ID,
-                    blockIDs,
-                }]);
-            }
-        }, {
-            id: "removeCard",
-            iconHTML: "",
-            label: window.siyuan.languages.removeCard,
-            click: () => {
-                transaction(undefined, [{
-                    action: "removeFlashcards",
-                    deckID: Constants.QUICK_DECK_ID,
-                    blockIDs,
-                }]);
-            }
-        }];
-        if (window.siyuan.config.flashcard.deck) {
-            riffCardMenu.push({
-                id: "addToDeck",
-                iconHTML: "",
-                label: window.siyuan.languages.addToDeck,
-                click: () => {
-                    makeCard(app, blockIDs);
-                }
-            });
-        }
-        window.siyuan.menus.menu.append(new MenuItem({
-            id: "riffCard",
-            label: window.siyuan.languages.riffCard,
-            icon: "iconRiffCard",
-            submenu: riffCardMenu,
-        }).element);
-        if (getHostCapabilities().documentImportExport) {
-            window.siyuan.menus.menu.append(new MenuItem({id: "separator_2", type: "separator"}).element);
-        }
-    }
     openEditorTab(app, blockIDs);
     if (getHostCapabilities().documentImportExport) {
         window.siyuan.menus.menu.append(new MenuItem({
@@ -443,7 +394,7 @@ const initMultiMenu = (selection: IDocTreeMenuContext, app: App) => {
             icon: "iconDownload",
             submenu: [{
                 id: "exportSiYuanZip",
-                label: "SiYuan .sy.zip",
+                label: "Kora Note .sy.zip",
                 icon: "iconSiYuan",
                 click: () => {
                     confirmEncryptedExport(encryptedNotebookId, () => {
@@ -606,38 +557,6 @@ const initNotebookMenu = (app: App, selection: IDocTreeMenuContext, item: IDocTr
             submenu: subMenu,
         }).element);
     }
-    if (!window.siyuan.config.readonly && !isEncryptedBox(notebookId)) {
-        window.siyuan.menus.menu.append(new MenuItem({
-            id: "riffCard",
-            label: window.siyuan.languages.riffCard,
-            type: "submenu",
-            icon: "iconRiffCard",
-            submenu: [{
-                id: "spaceRepetition",
-                iconHTML: "",
-                label: window.siyuan.languages.spaceRepetition,
-                accelerator: window.siyuan.config.keymap.editor.general.spaceRepetition.custom,
-                click: () => {
-                    fetchPost("/api/riff/getNotebookRiffDueCards", {notebook: notebookId}, (response) => {
-                        openCardByData(app, response.data, "notebook", notebookId, name);
-                    });
-                    /// #if MOBILE
-                    closePanel();
-                    /// #endif
-                }
-            }, {
-                id: "manage",
-                iconHTML: "",
-                label: window.siyuan.languages.manage,
-                click: () => {
-                    viewCards(app, notebookId, name, "Notebook");
-                    /// #if MOBILE
-                    closePanel();
-                    /// #endif
-                }
-            }],
-        }).element);
-    }
     window.siyuan.menus.menu.append(new MenuItem({
         id: "search",
         label: window.siyuan.languages.search,
@@ -746,7 +665,7 @@ const initNotebookMenu = (app: App, selection: IDocTreeMenuContext, item: IDocTr
             icon: "iconDownload",
             submenu: [{
                 id: "exportSiYuanZip",
-                label: "SiYuan .sy.zip",
+                label: "Kora Note .sy.zip",
                 icon: "iconSiYuan",
                 click: () => {
                     confirmEncryptedExport(notebookId, () => {
@@ -1040,76 +959,6 @@ export const initDocumentMenu = (app: App, options: {
             type: "submenu",
             submenu: sortSubMenu,
         }).element);
-        if (!window.siyuan.config.readonly && !isEncryptedBox(notebookId)) {
-            const riffCardMenu = [{
-                id: "spaceRepetition",
-                iconHTML: "",
-                label: window.siyuan.languages.spaceRepetition,
-                accelerator: window.siyuan.config.keymap.editor.general.spaceRepetition.custom,
-                click: () => {
-                    fetchPost("/api/riff/getTreeRiffDueCards", {rootID: id}, (response) => {
-                        openCardByData(app, response.data, "doc", id, name);
-                    });
-                    /// #if MOBILE
-                    closePanel();
-                    /// #endif
-                }
-            }, {
-                id: "manage",
-                iconHTML: "",
-                label: window.siyuan.languages.manage,
-                click: () => {
-                    fetchPost("/api/filetree/getHPathByID", {
-                        id
-                    }, (response) => {
-                        viewCards(app, id, pathPosix().join(getNotebookName(notebookId), response.data), "Tree");
-                    });
-                    /// #if MOBILE
-                    closePanel();
-                    /// #endif
-                }
-            }, {
-                id: "quickMakeCard",
-                iconHTML: "",
-                accelerator: window.siyuan.config.keymap.editor.general.quickMakeCard.custom,
-                label: window.siyuan.languages.quickMakeCard,
-                click: () => {
-                    transaction(undefined, [{
-                        action: "addFlashcards",
-                        deckID: Constants.QUICK_DECK_ID,
-                        blockIDs: [id]
-                    }]);
-                }
-            }, {
-                id: "removeCard",
-                iconHTML: "",
-                label: window.siyuan.languages.removeCard,
-                click: () => {
-                    transaction(undefined, [{
-                        action: "removeFlashcards",
-                        deckID: Constants.QUICK_DECK_ID,
-                        blockIDs: [id]
-                    }]);
-                }
-            }];
-            if (window.siyuan.config.flashcard.deck) {
-                riffCardMenu.push({
-                    id: "addToDeck",
-                    iconHTML: "",
-                    label: window.siyuan.languages.addToDeck,
-                    click: () => {
-                        makeCard(app, [id]);
-                    }
-                });
-            }
-            window.siyuan.menus.menu.append(new MenuItem({
-                id: "riffCard",
-                label: window.siyuan.languages.riffCard,
-                type: "submenu",
-                icon: "iconRiffCard",
-                submenu: riffCardMenu,
-            }).element);
-        }
         window.siyuan.menus.menu.append(new MenuItem({
             id: "search",
             label: window.siyuan.languages.search,
@@ -1207,7 +1056,7 @@ export const genImportMenu = (notebookId: string, pathString: string) => {
             {
                 id: "importSiYuanZip",
                 icon: "iconSiYuan",
-                label: 'SiYuan .sy.zip<input class="b3-form__upload" type="file" accept="application/zip">',
+                label: 'Kora Note .sy.zip<input class="b3-form__upload" type="file" accept="application/zip">',
                 bind: (element) => {
                     element.querySelector(".b3-form__upload").addEventListener("change", (event: InputEvent & {
                         target: HTMLInputElement

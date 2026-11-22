@@ -496,7 +496,7 @@ const createMainWindow = ({
     const createMainBrowserWindow = (kernelTarget: KernelTarget,
         {state: windowState, x, y, resetToCenter}: ResolvedWindowState): BrowserWindow => {
         const currentWindow = new BrowserWindow({
-            title: "SiYuan",
+            title: "Kora Note",
             show: false,
             width: windowState.width,
             height: windowState.height,

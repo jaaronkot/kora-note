@@ -6,7 +6,7 @@
 		"id": "20260612191136-feqbi1x",
 		"title": "命令行接口",
 		"type": "doc",
-		"updated": "20261101194733"
+		"updated": "20261120142917"
 	},
 	"Children": [
 		{
@@ -34,7 +34,7 @@
 			"Children": [
 				{
 					"Type": "NodeText",
-					"Data": "思源笔记内置 CLI（Command Line Interface），可直接访问工作空间数据，无需启动内核服务。适合脚本化处理、批量管理，以及配合 AI 智能体对笔记数据进行读写操作。"
+					"Data": "Kora Note 内置 CLI（Command Line Interface），可直接访问工作空间数据，无需启动内核服务。适合脚本化处理、批量管理，以及配合 AI 智能体对笔记数据进行读写操作。"
 				}
 			]
 		},
@@ -225,7 +225,7 @@
 							"Children": [
 								{
 									"Type": "NodeText",
-									"Data": "如果找不到命令，请检查 Windows 中思源的应用执行别名是否已启用，以及 "
+									"Data": "如果找不到命令，请检查 Windows 中 Kora Note 的应用执行别名是否已启用，以及 "
 								},
 								{
 									"Type": "NodeTextMark",
@@ -243,7 +243,7 @@
 								},
 								{
 									"Type": "NodeText",
-									"Data": " 中。上述命令可检查命令解析结果；同时安装多个思源版本或 "
+									"Data": " 中。上述命令可检查命令解析结果；同时安装多个 Kora Note 版本或 "
 								},
 								{
 									"Type": "NodeTextMark",
@@ -345,7 +345,7 @@
 								},
 								{
 									"Type": "NodeCodeBlockCode",
-									"Data": "ln -s /Applications/SiYuan.app/Contents/Resources/kernel/SiYuan-Kernel /usr/local/bin/siyuan\n"
+									"Data": "ln -s /Applications/Kora Note.app/Contents/Resources/kernel/SiYuan-Kernel /usr/local/bin/siyuan\n"
 								},
 								{
 									"Type": "NodeCodeBlockFenceCloseMarker",
@@ -5691,7 +5691,7 @@
 			"HeadingLevel": 3,
 			"Properties": {
 				"id": "20260618123536-j2jjfdn",
-				"updated": "20261016112115"
+				"updated": "20261120142917"
 			},
 			"Children": [
 				{
@@ -5763,7 +5763,7 @@
 			"Properties": {
 				"colgroup": "||",
 				"id": "20260618123536-w0ad7f0",
-				"updated": "20261016112115"
+				"updated": "20261120142917"
 			},
 			"Children": [
 				{
@@ -6012,69 +6012,6 @@
 								{
 									"Type": "NodeTextMark",
 									"TextMarkType": "code",
-									"TextMarkTextContent": "export docx"
-								},
-								{
-									"Type": "NodeText",
-									"Data": "​"
-								}
-							]
-						},
-						{
-							"Type": "NodeTableCell",
-							"Data": "td",
-							"Children": [
-								{
-									"Type": "NodeText",
-									"Data": "​"
-								},
-								{
-									"Type": "NodeTextMark",
-									"TextMarkType": "code",
-									"TextMarkTextContent": "--id --output"
-								},
-								{
-									"Type": "NodeText",
-									"Data": "​"
-								}
-							]
-						},
-						{
-							"Type": "NodeTableCell",
-							"Data": "td",
-							"Children": [
-								{
-									"Type": "NodeText",
-									"Data": "导出 Word（"
-								},
-								{
-									"Type": "NodeTextMark",
-									"TextMarkType": "code",
-									"TextMarkTextContent": "--output"
-								},
-								{
-									"Type": "NodeText",
-									"Data": "​ 必填）"
-								}
-							]
-						}
-					]
-				},
-				{
-					"Type": "NodeTableRow",
-					"Data": "tr",
-					"Children": [
-						{
-							"Type": "NodeTableCell",
-							"Data": "td",
-							"Children": [
-								{
-									"Type": "NodeText",
-									"Data": "​"
-								},
-								{
-									"Type": "NodeTextMark",
-									"TextMarkType": "code",
 									"TextMarkTextContent": "export sy"
 								},
 								{
@@ -6261,7 +6198,7 @@
 				},
 				{
 					"Type": "NodeCodeBlockCode",
-					"Data": "siyuan export md --id doc-id\nsiyuan export md --id doc-id --output ./output.md\nsiyuan export html --id doc-id --output ./output.html\nsiyuan export preview --id doc-id --output ./preview.html\nsiyuan export docx --id doc-id --output ./output.docx\nsiyuan export sy --id doc-id --output ./backup.sy.zip\nsiyuan export md-zip --id doc-id --output ./archive.zip\nsiyuan export data --output ./data-backup.zip\n"
+					"Data": "siyuan export md --id doc-id\nsiyuan export md --id doc-id --output ./output.md\nsiyuan export html --id doc-id --output ./output.html\nsiyuan export preview --id doc-id --output ./preview.html\nsiyuan export sy --id doc-id --output ./backup.sy.zip\nsiyuan export md-zip --id doc-id --output ./archive.zip\nsiyuan export data --output ./data-backup.zip\n"
 				},
 				{
 					"Type": "NodeCodeBlockFenceCloseMarker",

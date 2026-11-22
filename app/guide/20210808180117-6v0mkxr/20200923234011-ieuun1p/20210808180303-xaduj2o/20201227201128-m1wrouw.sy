@@ -34,7 +34,7 @@
 			"Children": [
 				{
 					"Type": "NodeText",
-					"Data": "The easiest way to serve SiYuan on a server is to deploy it through Docker."
+					"Data": "The easiest way to serve Kora Note on a server is to deploy it through Docker."
 				}
 			]
 		},
@@ -358,7 +358,7 @@
 			"Children": [
 				{
 					"Type": "NodeText",
-					"Data": "When the main service uses a port other than 6806, SiYuan also starts a proxy on port 6806 if that port is available, allowing browser extensions to use a stable address. Add "
+					"Data": "When the main service uses a port other than 6806, Kora Note also starts a proxy on port 6806 if that port is available, allowing browser extensions to use a stable address. Add "
 				},
 				{
 					"Type": "NodeTextMark",

@@ -7,7 +7,7 @@
 		"id": "20210117211155-56n4odu",
 		"title": "数据安全",
 		"type": "doc",
-		"updated": "20261024161440"
+		"updated": "20261120163602"
 	},
 	"Children": [
 		{
@@ -34,12 +34,12 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20210117212533-b9xm7h6",
-				"updated": "20261024161440"
+				"updated": "20261120163602"
 			},
 			"Children": [
 				{
 					"Type": "NodeText",
-					"Data": "使用思源时，需要分别考虑数据恢复和访问保护："
+					"Data": "使用 Kora Note 时，需要分别考虑数据恢复和访问保护："
 				}
 			]
 		},
@@ -49,7 +49,7 @@
 			"ListData": {},
 			"Properties": {
 				"id": "20210302223430-kskwppo",
-				"updated": "20261024161440"
+				"updated": "20261120163602"
 			},
 			"Children": [
 				{
@@ -61,7 +61,7 @@
 					},
 					"Properties": {
 						"id": "20210525220618-mb42ynt",
-						"updated": "20230422123357"
+						"updated": "20261120163602"
 					},
 					"Children": [
 						{
@@ -69,7 +69,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20210525220618-ctad9jk",
-								"updated": "20230422123357"
+								"updated": "20261120163602"
 							},
 							"Children": [
 								{
@@ -96,7 +96,7 @@
 					},
 					"Properties": {
 						"id": "20210525220623-i1o11y5",
-						"updated": "20261024161440"
+						"updated": "20261120163602"
 					},
 					"Children": [
 						{
@@ -104,7 +104,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20210525220623-f3ugyow",
-								"updated": "20261024161440"
+								"updated": "20261120163602"
 							},
 							"Children": [
 								{
@@ -122,7 +122,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20210117213032-48sgu29",
-				"updated": "20261024161440"
+				"updated": "20261120163602"
 			},
 			"Children": [
 				{
@@ -155,7 +155,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20210525214530-69ml3fo",
-				"updated": "20261016111431"
+				"updated": "20261120163602"
 			},
 			"Children": [
 				{
@@ -176,7 +176,7 @@
 			},
 			"Properties": {
 				"id": "20210117213258-m2gevi3",
-				"updated": "20261016111431"
+				"updated": "20261120163602"
 			},
 			"Children": [
 				{
@@ -192,7 +192,7 @@
 					},
 					"Properties": {
 						"id": "20210117213526-cy3oj8v",
-						"updated": "20261016111431"
+						"updated": "20261120163602"
 					},
 					"Children": [
 						{
@@ -200,7 +200,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20210302223430-44dbhvt",
-								"updated": "20261016111431"
+								"updated": "20261120163602"
 							},
 							"Children": [
 								{
@@ -223,7 +223,8 @@
 						"Num": -1
 					},
 					"Properties": {
-						"id": "20210117213528-fp23mvh"
+						"id": "20210117213528-fp23mvh",
+						"updated": "20261120163602"
 					},
 					"Children": [
 						{
@@ -231,7 +232,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20210302223430-1hpa148",
-								"updated": "20210501163203"
+								"updated": "20261120163602"
 							},
 							"Children": [
 								{
@@ -249,7 +250,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20261016111431-ejwdf0a",
-				"updated": "20261016111431"
+				"updated": "20261120163602"
 			},
 			"Children": [
 				{
@@ -285,12 +286,12 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20210721110555-81sqopb",
-				"updated": "20261016111431"
+				"updated": "20261120163602"
 			},
 			"Children": [
 				{
 					"Type": "NodeText",
-					"Data": "思源云端同步对数据快照使用"
+					"Data": "云端同步对数据快照使用"
 				},
 				{
 					"Type": "NodeTextMark",
@@ -344,7 +345,7 @@
 			},
 			"Properties": {
 				"id": "20210117214728-szj3mg9",
-				"updated": "20220703223831"
+				"updated": "20261120163602"
 			},
 			"Children": [
 				{
@@ -360,7 +361,7 @@
 					},
 					"Properties": {
 						"id": "20210117215237-1mbl2ly",
-						"updated": "20220703223831"
+						"updated": "20261120163602"
 					},
 					"Children": [
 						{
@@ -368,7 +369,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20210302223430-wz2k547",
-								"updated": "20220703223831"
+								"updated": "20261120163602"
 							},
 							"Children": [
 								{
@@ -391,7 +392,8 @@
 						"Num": -1
 					},
 					"Properties": {
-						"id": "20210117214814-lm8tmiq"
+						"id": "20210117214814-lm8tmiq",
+						"updated": "20261120163602"
 					},
 					"Children": [
 						{
@@ -399,7 +401,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20210302223430-u4v0huy",
-								"updated": "20210524220935"
+								"updated": "20261120163602"
 							},
 							"Children": [
 								{
@@ -432,12 +434,12 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20220626210804-d1iir4r",
-				"updated": "20220626213925"
+				"updated": "20261120163602"
 			},
 			"Children": [
 				{
 					"Type": "NodeText",
-					"Data": "主要针对本地数据安全和思源云端存储安全进行评估。"
+					"Data": "主要针对本地数据安全和云端存储安全进行评估。"
 				}
 			]
 		},
@@ -462,7 +464,7 @@
 			"ListData": {},
 			"Properties": {
 				"id": "20220626210038-joi74n0",
-				"updated": "20220626211139"
+				"updated": "20261120163602"
 			},
 			"Children": [
 				{
@@ -474,7 +476,7 @@
 					},
 					"Properties": {
 						"id": "20220626210038-412dnfz",
-						"updated": "20220626210038"
+						"updated": "20261120163602"
 					},
 					"Children": [
 						{
@@ -482,7 +484,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220626210038-us3tpf5",
-								"updated": "20220626210326"
+								"updated": "20261120163602"
 							},
 							"Children": [
 								{
@@ -496,7 +498,8 @@
 							"Type": "NodeList",
 							"ListData": {},
 							"Properties": {
-								"id": "20220626210254-707f04m"
+								"id": "20220626210254-707f04m",
+								"updated": "20261120163602"
 							},
 							"Children": [
 								{
@@ -507,7 +510,8 @@
 										"Marker": "Kg=="
 									},
 									"Properties": {
-										"id": "20220626210254-fr4kbsa"
+										"id": "20220626210254-fr4kbsa",
+										"updated": "20261120163602"
 									},
 									"Children": [
 										{
@@ -515,7 +519,7 @@
 											"Type": "NodeParagraph",
 											"Properties": {
 												"id": "20220626210254-ldlvsgr",
-												"updated": "20220626210532"
+												"updated": "20261120163602"
 											},
 											"Children": [
 												{
@@ -534,7 +538,8 @@
 										"Marker": "Kg=="
 									},
 									"Properties": {
-										"id": "20220626210411-15gniy2"
+										"id": "20220626210411-15gniy2",
+										"updated": "20261120163602"
 									},
 									"Children": [
 										{
@@ -542,7 +547,7 @@
 											"Type": "NodeParagraph",
 											"Properties": {
 												"id": "20220626210411-abr4ep7",
-												"updated": "20220626210723"
+												"updated": "20261120163602"
 											},
 											"Children": [
 												{
@@ -561,7 +566,8 @@
 										"Marker": "Kg=="
 									},
 									"Properties": {
-										"id": "20220626210401-9o0os4g"
+										"id": "20220626210401-9o0os4g",
+										"updated": "20261120163602"
 									},
 									"Children": [
 										{
@@ -569,7 +575,7 @@
 											"Type": "NodeParagraph",
 											"Properties": {
 												"id": "20220626210401-64ngms3",
-												"updated": "20220626210417"
+												"updated": "20261120163602"
 											},
 											"Children": [
 												{
@@ -592,7 +598,8 @@
 						"Marker": "Kg=="
 					},
 					"Properties": {
-						"id": "20220626210629-dleyp1j"
+						"id": "20220626210629-dleyp1j",
+						"updated": "20261120163602"
 					},
 					"Children": [
 						{
@@ -600,7 +607,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220626210629-7yee6s7",
-								"updated": "20220626210707"
+								"updated": "20261120163602"
 							},
 							"Children": [
 								{
@@ -619,7 +626,8 @@
 						"Marker": "Kg=="
 					},
 					"Properties": {
-						"id": "20220626210739-9bgfjnr"
+						"id": "20220626210739-9bgfjnr",
+						"updated": "20261120163602"
 					},
 					"Children": [
 						{
@@ -627,7 +635,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220626210739-2zabs74",
-								"updated": "20220626210932"
+								"updated": "20261120163602"
 							},
 							"Children": [
 								{
@@ -647,7 +655,7 @@
 					},
 					"Properties": {
 						"id": "20220626211010-vq0mwwm",
-						"updated": "20220626211025"
+						"updated": "20261120163602"
 					},
 					"Children": [
 						{
@@ -655,7 +663,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220626211010-6k8ivhp",
-								"updated": "20220626211025"
+								"updated": "20261120163602"
 							},
 							"Children": [
 								{
@@ -675,7 +683,7 @@
 					},
 					"Properties": {
 						"id": "20220626211022-6h7y6bs",
-						"updated": "20220626211139"
+						"updated": "20261120163602"
 					},
 					"Children": [
 						{
@@ -683,7 +691,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220626211022-3n1z0hp",
-								"updated": "20220626211139"
+								"updated": "20261120163602"
 							},
 							"Children": [
 								{
@@ -717,7 +725,7 @@
 			"ListData": {},
 			"Properties": {
 				"id": "20220626211230-el1oox9",
-				"updated": "20220626211249"
+				"updated": "20261120163602"
 			},
 			"Children": [
 				{
@@ -729,7 +737,7 @@
 					},
 					"Properties": {
 						"id": "20220626211249-wrkarxp",
-						"updated": "20220626211249"
+						"updated": "20261120163602"
 					},
 					"Children": [
 						{
@@ -737,7 +745,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220626211249-2ovxrgo",
-								"updated": "20220626211503"
+								"updated": "20261120163602"
 							},
 							"Children": [
 								{
@@ -756,7 +764,8 @@
 						"Marker": "Kg=="
 					},
 					"Properties": {
-						"id": "20220626211459-k8c0zvf"
+						"id": "20220626211459-k8c0zvf",
+						"updated": "20261120163602"
 					},
 					"Children": [
 						{
@@ -764,7 +773,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220626211459-w4e8ch7",
-								"updated": "20220626211539"
+								"updated": "20261120163602"
 							},
 							"Children": [
 								{
@@ -797,7 +806,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20220626211621-yw8d4zb",
-				"updated": "20220626211919"
+				"updated": "20261120163602"
 			},
 			"Children": [
 				{
@@ -811,7 +820,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20220626211754-ftwoqz4",
-				"updated": "20220626212025"
+				"updated": "20261120163602"
 			},
 			"Children": [
 				{
@@ -826,7 +835,7 @@
 			"ListData": {},
 			"Properties": {
 				"id": "20220626212000-iri4fhz",
-				"updated": "20220626212909"
+				"updated": "20261120163602"
 			},
 			"Children": [
 				{
@@ -838,7 +847,7 @@
 					},
 					"Properties": {
 						"id": "20220626212007-152nmb6",
-						"updated": "20220626212007"
+						"updated": "20261120163602"
 					},
 					"Children": [
 						{
@@ -846,7 +855,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220626212007-sj2d1y0",
-								"updated": "20220626212245"
+								"updated": "20261120163602"
 							},
 							"Children": [
 								{
@@ -866,7 +875,7 @@
 					},
 					"Properties": {
 						"id": "20220626212247-3ldjbn9",
-						"updated": "20220626212909"
+						"updated": "20261120163602"
 					},
 					"Children": [
 						{
@@ -874,7 +883,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220626212247-bdfgh5c",
-								"updated": "20220626212909"
+								"updated": "20261120163602"
 							},
 							"Children": [
 								{
@@ -892,7 +901,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20220626212515-ap79woa",
-				"updated": "20220626212650"
+				"updated": "20261120163602"
 			},
 			"Children": [
 				{
@@ -907,7 +916,7 @@
 			"ListData": {},
 			"Properties": {
 				"id": "20220626212651-jmsl9e0",
-				"updated": "20220626212914"
+				"updated": "20261120163602"
 			},
 			"Children": [
 				{
@@ -919,7 +928,7 @@
 					},
 					"Properties": {
 						"id": "20220626212658-td3mom4",
-						"updated": "20220626212658"
+						"updated": "20261120163602"
 					},
 					"Children": [
 						{
@@ -927,7 +936,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220626212658-cil0rtv",
-								"updated": "20220626212759"
+								"updated": "20261120163602"
 							},
 							"Children": [
 								{
@@ -946,7 +955,8 @@
 						"Marker": "Kg=="
 					},
 					"Properties": {
-						"id": "20220626212804-op12pak"
+						"id": "20220626212804-op12pak",
+						"updated": "20261120163602"
 					},
 					"Children": [
 						{
@@ -954,7 +964,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220626212804-2kb2439",
-								"updated": "20220626212836"
+								"updated": "20261120163602"
 							},
 							"Children": [
 								{
@@ -974,7 +984,7 @@
 					},
 					"Properties": {
 						"id": "20220626212854-jn95j1j",
-						"updated": "20220626212914"
+						"updated": "20261120163602"
 					},
 					"Children": [
 						{
@@ -982,7 +992,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220626212854-4vfflua",
-								"updated": "20220626212914"
+								"updated": "20261120163602"
 							},
 							"Children": [
 								{
@@ -1015,7 +1025,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20220626213125-y4dolh0",
-				"updated": "20220626213144"
+				"updated": "20261120163602"
 			},
 			"Children": [
 				{
@@ -1029,7 +1039,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20220626213144-2t86jkw",
-				"updated": "20220626213227"
+				"updated": "20261120163602"
 			},
 			"Children": [
 				{
@@ -1044,7 +1054,7 @@
 			"ListData": {},
 			"Properties": {
 				"id": "20220626213227-y3lsr2u",
-				"updated": "20220626213836"
+				"updated": "20261120163602"
 			},
 			"Children": [
 				{
@@ -1056,7 +1066,7 @@
 					},
 					"Properties": {
 						"id": "20220626213228-5y4ooc5",
-						"updated": "20220626213653"
+						"updated": "20261120163602"
 					},
 					"Children": [
 						{
@@ -1064,7 +1074,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220626213228-mcfm0xy",
-								"updated": "20220626213653"
+								"updated": "20261120163602"
 							},
 							"Children": [
 								{
@@ -1084,7 +1094,7 @@
 					},
 					"Properties": {
 						"id": "20220626213330-4qecgfd",
-						"updated": "20220626213831"
+						"updated": "20261120163602"
 					},
 					"Children": [
 						{
@@ -1092,7 +1102,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220626213330-ycd3hae",
-								"updated": "20220626213831"
+								"updated": "20261120163602"
 							},
 							"Children": [
 								{
@@ -1112,7 +1122,7 @@
 					},
 					"Properties": {
 						"id": "20220626213347-bm66fsj",
-						"updated": "20220626213836"
+						"updated": "20261120163602"
 					},
 					"Children": [
 						{
@@ -1120,7 +1130,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220626213347-6a376wm",
-								"updated": "20220626213836"
+								"updated": "20261120163602"
 							},
 							"Children": [
 								{
@@ -1138,7 +1148,7 @@
 			"Type": "NodeParagraph",
 			"Properties": {
 				"id": "20220626213353-klg8vw5",
-				"updated": "20220626213537"
+				"updated": "20261120163602"
 			},
 			"Children": [
 				{
@@ -1153,7 +1163,7 @@
 			"ListData": {},
 			"Properties": {
 				"id": "20220626213507-6er6cfn",
-				"updated": "20220626213935"
+				"updated": "20261120163602"
 			},
 			"Children": [
 				{
@@ -1165,7 +1175,7 @@
 					},
 					"Properties": {
 						"id": "20220626213541-93non0e",
-						"updated": "20220626213935"
+						"updated": "20261120163602"
 					},
 					"Children": [
 						{
@@ -1173,7 +1183,7 @@
 							"Type": "NodeParagraph",
 							"Properties": {
 								"id": "20220626213541-t09iiuw",
-								"updated": "20220626213935"
+								"updated": "20261120163602"
 							},
 							"Children": [
 								{

@@ -10,7 +10,7 @@ type UpdateInstall = {
     launchUpdateInstallPackage: (installPkgPath: string) => Promise<void>;
 };
 
-// 安装包校验是执行外部安装程序前的唯一边界，只接受安装目录直属的思源安装包。
+// 安装包校验是执行外部安装程序前的唯一边界，只接受安装目录直属的 Kora Note 安装包。
 const createUpdateInstall = ({confDir, writeLog, platform = process.platform,
     spawn = childProcess.spawn}: {
         confDir: string;

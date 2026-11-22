@@ -122,7 +122,7 @@ const createOpenWindowHandler = ({
     const mainScreen = screen.getDisplayNearestPoint({x: mainBounds.x, y: mainBounds.y});
     const geometry = workspaceID ? normalizeGeometry(data.windowGeometry, screen) : undefined;
     const win = new BrowserWindow({
-        title: "SiYuan",
+        title: "Kora Note",
         // 先在隐藏状态完成定位和加载，等画面就绪或短暂延迟后再显示，
         // 避免窗口映射早于首帧提交时出现系统填充的近白色占位帧。
         show: false,

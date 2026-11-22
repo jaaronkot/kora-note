@@ -1,9 +1,9 @@
 {
-  "name": "SiYuan",
+  "name": "Kora",
   "desktopName": "org.b3log.siyuan",
   "version": "3.8.10",
   "description": "From thought to insight, with agents",
-  "homepage": "https://b3log.org/siyuan",
+  "homepage": "https://github.com/jaaronkot/kora-note",
   "main": "./electron-dist/main.js",
   "packageManager": "pnpm@12.6.0",
   "engines": {
@@ -53,22 +53,9 @@
     "notebook"
   ],
   "author": {
-    "name": "Yunnan Liandi Technology Co., Ltd.",
-    "email": "845765@qq.com",
-    "url": "https://ld246.com"
+    "name": "Kora Note",
+    "url": "https://github.com/jaaronkot/kora-note"
   },
-  "maintainers": [
-    {
-      "name": "Liang Ding",
-      "email": "845765@qq.com",
-      "url": "https://ld246.com/member/88250"
-    },
-    {
-      "name": "Liyuan Li",
-      "email": "84588990@qq.com",
-      "url": "https://ld246.com/member/Vanessa"
-    }
-  ],
   "devDependencies": {
     "@breezystack/lamejs": "1.2.7",
     "@eslint/eslintrc": "^3.3.7",
@@ -106,7 +93,6 @@
     "stylelint": "^17.16.0",
     "tsx": "^4.23.15",
     "typescript": "npm:@typescript/typescript6@^6.0.2",
-    "unzipper": "0.12.5",
     "vditor": "4.0.2-alpha.8",
     "webpack": "^5.104.1",
     "webpack-bundle-analyzer": "^4.5.0",

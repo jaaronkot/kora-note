@@ -335,7 +335,7 @@ export class AgentChat extends Model {
         window.addEventListener(AI_CONFIG_CHANGED_EVENT, this.checkConfigChangedHandler);
         window.addEventListener("focus", this.checkConfigChangedHandler);
         window.addEventListener(AGENT_STREAMING_MARKDOWN_CHANGED_EVENT, this.checkStreamingMarkdownChanged);
-        // 设置对话框是 SiYuan 内部模态，关闭时 window 不失焦，focus 事件不触发。
+        // 设置对话框是 Kora Note 内部模态，关闭时 window 不失焦，focus 事件不触发。
         // 监听 body 子节点变化，当含 .config__panel 的设置 dialog 被移除时即时刷新。
         this.settingDialogObserver = new MutationObserver(() => {
             if (!document.querySelector(".config__panel")) {

@@ -35,11 +35,11 @@ const resetTrayMenu = (tray: Tray, lang: TrayMenuLabels, mainWindow: BrowserWind
         },
     }, {
         label: lang.officialWebsite, click: () => {
-            electron.shell.openExternal("https://b3log.org/siyuan/");
+            electron.shell.openExternal("https://github.com/jaaronkot/kora-note");
         },
     }, {
         label: lang.openSource, click: () => {
-            electron.shell.openExternal("https://github.com/siyuan-note/siyuan");
+            electron.shell.openExternal("https://github.com/jaaronkot/kora-note");
         },
     }, {
         label: lang.resetWindow, type: "checkbox", click: (v: {checked: boolean}) => {

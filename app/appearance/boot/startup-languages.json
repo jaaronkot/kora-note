@@ -1,6 +1,6 @@
 {
 	"ar": {
-		"startupFailed": "تعذر بدء SiYuan",
+		"startupFailed": "تعذر بدء Kora Note",
 		"startupStage": "مرحلة الفشل: ${stage}",
 		"startupReload": "إعادة التحميل",
 		"startupCopy": "نسخ تفاصيل الخطأ",
@@ -16,7 +16,7 @@
 		"copied": "تم النسخ"
 	},
 	"de": {
-		"startupFailed": "SiYuan konnte nicht gestartet werden",
+		"startupFailed": "Kora Note konnte nicht gestartet werden",
 		"startupStage": "Fehlgeschlagener Schritt: ${stage}",
 		"startupReload": "Neu laden",
 		"startupCopy": "Fehlerdetails kopieren",
@@ -32,7 +32,7 @@
 		"copied": "Kopiert"
 	},
 	"en": {
-		"startupFailed": "SiYuan failed to start",
+		"startupFailed": "Kora Note failed to start",
 		"startupStage": "Failed stage: ${stage}",
 		"startupReload": "Reload",
 		"startupCopy": "Copy error details",
@@ -48,7 +48,7 @@
 		"copied": "Copied"
 	},
 	"es": {
-		"startupFailed": "SiYuan no pudo iniciarse",
+		"startupFailed": "Kora Note no pudo iniciarse",
 		"startupStage": "Etapa con error: ${stage}",
 		"startupReload": "Volver a cargar",
 		"startupCopy": "Copiar detalles del error",
@@ -64,7 +64,7 @@
 		"copied": "Copiado"
 	},
 	"fr": {
-		"startupFailed": "SiYuan n’a pas pu démarrer",
+		"startupFailed": "Kora Note n’a pas pu démarrer",
 		"startupStage": "Étape en échec : ${stage}",
 		"startupReload": "Recharger",
 		"startupCopy": "Copier les détails de l’erreur",
@@ -80,7 +80,7 @@
 		"copied": "Copié"
 	},
 	"he": {
-		"startupFailed": "לא ניתן להפעיל את SiYuan",
+		"startupFailed": "לא ניתן להפעיל את Kora Note",
 		"startupStage": "השלב שנכשל: ${stage}",
 		"startupReload": "טעינה מחדש",
 		"startupCopy": "העתקת פרטי השגיאה",
@@ -96,7 +96,7 @@
 		"copied": "הועתק"
 	},
 	"hi": {
-		"startupFailed": "SiYuan शुरू नहीं हो सका",
+		"startupFailed": "Kora Note शुरू नहीं हो सका",
 		"startupStage": "विफल चरण: ${stage}",
 		"startupReload": "फिर से लोड करें",
 		"startupCopy": "त्रुटि विवरण कॉपी करें",
@@ -112,7 +112,7 @@
 		"copied": "कॉपी किया गया"
 	},
 	"id": {
-		"startupFailed": "SiYuan gagal dimulai",
+		"startupFailed": "Kora Note gagal dimulai",
 		"startupStage": "Tahap yang gagal: ${stage}",
 		"startupReload": "Muat ulang",
 		"startupCopy": "Salin detail kesalahan",
@@ -128,7 +128,7 @@
 		"copied": "Disalin"
 	},
 	"it": {
-		"startupFailed": "Impossibile avviare SiYuan",
+		"startupFailed": "Impossibile avviare Kora Note",
 		"startupStage": "Fase non riuscita: ${stage}",
 		"startupReload": "Ricarica",
 		"startupCopy": "Copia i dettagli dell’errore",
@@ -144,7 +144,7 @@
 		"copied": "Copiato"
 	},
 	"ja": {
-		"startupFailed": "SiYuan を起動できませんでした",
+		"startupFailed": "Kora Note を起動できませんでした",
 		"startupStage": "失敗した段階：${stage}",
 		"startupReload": "再読み込み",
 		"startupCopy": "エラー情報をコピー",
@@ -160,7 +160,7 @@
 		"copied": "コピーしました"
 	},
 	"ko": {
-		"startupFailed": "SiYuan을 시작하지 못했습니다",
+		"startupFailed": "Kora Note을 시작하지 못했습니다",
 		"startupStage": "실패한 단계: ${stage}",
 		"startupReload": "다시 불러오기",
 		"startupCopy": "오류 정보 복사",
@@ -176,7 +176,7 @@
 		"copied": "복사됨"
 	},
 	"nl": {
-		"startupFailed": "SiYuan kon niet worden gestart",
+		"startupFailed": "Kora Note kon niet worden gestart",
 		"startupStage": "Mislukte stap: ${stage}",
 		"startupReload": "Opnieuw laden",
 		"startupCopy": "Foutdetails kopiëren",
@@ -192,7 +192,7 @@
 		"copied": "Gekopieerd"
 	},
 	"pl": {
-		"startupFailed": "Nie udało się uruchomić SiYuan",
+		"startupFailed": "Nie udało się uruchomić Kora Note",
 		"startupStage": "Etap błędu: ${stage}",
 		"startupReload": "Wczytaj ponownie",
 		"startupCopy": "Kopiuj szczegóły błędu",
@@ -208,7 +208,7 @@
 		"copied": "Skopiowane"
 	},
 	"pt-BR": {
-		"startupFailed": "Não foi possível iniciar o SiYuan",
+		"startupFailed": "Não foi possível iniciar o Kora Note",
 		"startupStage": "Etapa com falha: ${stage}",
 		"startupReload": "Recarregar",
 		"startupCopy": "Copiar detalhes do erro",
@@ -224,7 +224,7 @@
 		"copied": "Copiado"
 	},
 	"ru": {
-		"startupFailed": "Не удалось запустить SiYuan",
+		"startupFailed": "Не удалось запустить Kora Note",
 		"startupStage": "Этап сбоя: ${stage}",
 		"startupReload": "Перезагрузить",
 		"startupCopy": "Копировать сведения об ошибке",
@@ -240,7 +240,7 @@
 		"copied": "Скопировано"
 	},
 	"sk": {
-		"startupFailed": "SiYuan sa nepodarilo spustiť",
+		"startupFailed": "Kora Note sa nepodarilo spustiť",
 		"startupStage": "Neúspešný krok: ${stage}",
 		"startupReload": "Znova načítať",
 		"startupCopy": "Kopírovať podrobnosti chyby",
@@ -256,7 +256,7 @@
 		"copied": "Skopírované"
 	},
 	"sr": {
-		"startupFailed": "SiYuan није могао да се покрене",
+		"startupFailed": "Kora Note није могао да се покрене",
 		"startupStage": "Неуспешна фаза: ${stage}",
 		"startupReload": "Учитај поново",
 		"startupCopy": "Копирај детаље грешке",
@@ -272,7 +272,7 @@
 		"copied": "Kopirano"
 	},
 	"th": {
-		"startupFailed": "ไม่สามารถเริ่ม SiYuan ได้",
+		"startupFailed": "ไม่สามารถเริ่ม Kora Note ได้",
 		"startupStage": "ขั้นตอนที่ล้มเหลว: ${stage}",
 		"startupReload": "โหลดใหม่",
 		"startupCopy": "คัดลอกรายละเอียดข้อผิดพลาด",
@@ -288,7 +288,7 @@
 		"copied": "คัดลอกแล้ว"
 	},
 	"tr": {
-		"startupFailed": "SiYuan başlatılamadı",
+		"startupFailed": "Kora Note başlatılamadı",
 		"startupStage": "Başarısız aşama: ${stage}",
 		"startupReload": "Yeniden yükle",
 		"startupCopy": "Hata ayrıntılarını kopyala",
@@ -304,7 +304,7 @@
 		"copied": "Kopyalandı"
 	},
 	"uk": {
-		"startupFailed": "Не вдалося запустити SiYuan",
+		"startupFailed": "Не вдалося запустити Kora Note",
 		"startupStage": "Етап збою: ${stage}",
 		"startupReload": "Перезавантажити",
 		"startupCopy": "Копіювати відомості про помилку",
@@ -320,7 +320,7 @@
 		"copied": "Скопійовано"
 	},
 	"zh-CN": {
-		"startupFailed": "思源启动失败",
+		"startupFailed": "Kora Note 启动失败",
 		"startupStage": "失败阶段：${stage}",
 		"startupReload": "重新加载",
 		"startupCopy": "复制错误信息",
@@ -336,7 +336,7 @@
 		"copied": "已复制"
 	},
 	"zh-TW": {
-		"startupFailed": "思源啟動失敗",
+		"startupFailed": "Kora Note 啟動失敗",
 		"startupStage": "失敗階段：${stage}",
 		"startupReload": "重新載入",
 		"startupCopy": "複製錯誤資訊",

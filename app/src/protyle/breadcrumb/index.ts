@@ -13,7 +13,6 @@ import {RecordMedia, RecordMediaInputEndedError} from "../util/RecordMedia";
 import {hideMessage, showMessage} from "../../dialog/message";
 import {uploadFiles} from "../upload";
 import {hasClosestBlock, hasTopClosestByClassName} from "../util/hasClosest";
-import {needSubscribe} from "../../util/needSubscribe";
 import {isMobile} from "../../util/functions";
 import {zoomOut} from "../../menus/protyle";
 import {getEditorRange} from "../util/selection";
@@ -39,7 +38,6 @@ import {getGlobalBreadcrumb, isBreadcrumbNotebookAvailable, type GlobalBreadcrum
 import {getBreadcrumbCustomIcon} from "./icon";
 import {listIndent, listOutdent} from "../wysiwyg/list";
 import {improveBreadcrumbAppearance} from "./appearance";
-import {getCloudURL} from "../../config/util/about";
 import {decodeHTML, escapeAttr, escapeAriaLabel, escapeHtml, escapeSearchHighlight} from "../../util/escape";
 import {refreshUndoButtons} from "../undo/globalUndo";
 import {getAllEditor} from "../../layout/getAll";
@@ -54,6 +52,10 @@ import {getEditorFocusRange} from "../util/editorFocus";
 import {DocumentHistory} from "./history";
 import {openMobileFileById} from "../../mobile/editor";
 /// #endif
+
+// 面包屑首项是当前文档，用带文字的文件图标与普通文档节点图标区分。
+const getBreadcrumbDocumentIcon = (type: string, subType?: string) =>
+    type === "NodeDocument" ? "iconFileText" : getIconByType(type, subType);
 
 const genDocumentStatLabel = (stat: IBlockStat, statWithEmbed?: IBlockStat, embedStat?: IEmbedStat) => {
     const runeEmbedAttrs = statWithEmbed ? ` class="ariaLabel" data-position="north" aria-label="${escapeAriaLabel(genEmbedStatTip(window.siyuan.languages.runeCountWithEmbed, statWithEmbed.runeCount, embedStat))}"` : "";
@@ -118,7 +120,7 @@ export class Breadcrumb {
 ${padHTML}
 ${isMobile() ? `<button class="block__icon fn__flex-center ariaLabel" data-type="command-panel" data-breadcrumb-entry="command-panel" aria-label="${escapeAttr(window.siyuan.languages.commandPanel)}"><svg><use xlink:href="#iconTerminal"></use></svg></button>` : ""}
 <button class="block__icon fn__flex-center ariaLabel${window.siyuan.config.readonly ? " fn__none" : ""}" aria-label="${window.siyuan.languages.lockEdit}" data-type="readonly" data-breadcrumb-entry="readonly" data-subtype="unlock"><svg><use xlink:href="#iconUnlock"></use></svg></button>
-<button class="block__icon fn__flex-center ariaLabel" data-type="doc" data-breadcrumb-entry="doc" aria-label="${isMac() ? window.siyuan.languages.gutterTip2 : window.siyuan.languages.gutterTip2.replace("⇧", "Shift+")}"><svg><use xlink:href="#iconFile"></use></svg></button>
+<button class="block__icon fn__flex-center ariaLabel" data-type="doc" data-breadcrumb-entry="doc" aria-label="${isMac() ? window.siyuan.languages.gutterTip2 : window.siyuan.languages.gutterTip2.replace("⇧", "Shift+")}"><svg><use xlink:href="#iconFileSliders"></use></svg></button>
 <button class="block__icon fn__flex-center ariaLabel" data-type="more" data-breadcrumb-entry="more" aria-label="${window.siyuan.languages.more}"><svg><use xlink:href="#iconMore"></use></svg></button>
 </div>
 <button class="block__icon fn__flex-center fn__none ariaLabel" data-type="context" aria-label="${window.siyuan.languages.context}"><svg><use xlink:href="#iconAlignCenter"></use></svg></button>`;
@@ -1055,34 +1057,6 @@ ${isMobile() ? `<button class="block__icon fn__flex-center ariaLabel" data-type=
                                 net2LocalAssets(protyle, "Assets");
                             }
                         }).element);
-                        window.siyuan.menus.menu.append(new MenuItem({
-                            id: "uploadAssets2CDN",
-                            label: window.siyuan.languages.uploadAssets2CDN,
-                            icon: "iconUploadAssets",
-                            click() {
-                                if (!needSubscribe()) {
-                                    mobileConfirmDialog("📦 " + window.siyuan.languages.uploadAssets2CDN, window.siyuan.languages.uploadAssets2CDNConfirmTip, () => {
-                                        fetchPost("/api/asset/uploadCloud", {id: protyle.block.id});
-                                    });
-                                }
-                            }
-                        }).element);
-                        if (window.siyuan.user && getHostCapabilities().importExport) { // 登录链滴账号后即可使用 `分享到链滴` https://github.com/siyuan-note/siyuan/issues/7392
-                            window.siyuan.menus.menu.append(new MenuItem({
-                                id: "share2Liandi",
-                                label: window.siyuan.languages.share2Liandi,
-                                icon: "iconLiandi",
-                                click() {
-                                    if (!getHostCapabilities().importExport) {
-                                        return;
-                                    }
-                                    mobileConfirmDialog("🤩 " + window.siyuan.languages.share2Liandi,
-                                        window.siyuan.languages.share2LiandiConfirmTip.replace("${accountServer}", getCloudURL("")), () => {
-                                            fetchPost("/api/export/export2Liandi", {id: protyle.block.parentID});
-                                        });
-                                }
-                            }).element);
-                        }
                     }
                     if (!protyle.scroll?.element.classList.contains("fn__none")) {
                         if (hasUnloadedDocumentBlocks(protyle.wysiwyg.element, true)) {
@@ -1411,7 +1385,7 @@ ${isMobile() ? `<button class="block__icon fn__flex-center ariaLabel" data-type=
                     `<svg class="popover__block" data-id="${item.id}"><use xlink:href="#${getIconByType(item.type, item.subType)}"></use></svg>`;
                 if (index === 0 && !global && !protyle.options.render.breadcrumbDocName) {
                     html += `<span class="protyle-breadcrumb__item${isCurrent ? " protyle-breadcrumb__item--active" : ""}" data-node-id="${item.id}" role="button" tabindex="-1" aria-label="${escapeAriaLabel(item.name || (item.type === "NodeDocument" ? window.siyuan.languages._kernel[16] : window.siyuan.languages.untitled))}"${response.data.length === 1 ? ' style="max-width:none"' : ""}>
-    <svg class="popover__block" data-id="${item.id}"><use xlink:href="#${getIconByType(item.type, item.subType)}"></use></svg>
+    <svg class="popover__block" data-id="${item.id}"><use xlink:href="#${getBreadcrumbDocumentIcon(item.type, item.subType)}"></use></svg>
 </span>`;
                 } else {
                     html += `<span class="protyle-breadcrumb__item${isCurrent ? " protyle-breadcrumb__item--active" : ""}" ${attributes} role="button" tabindex="-1" aria-label="${escapeAriaLabel(item.name || (item.type === "NodeDocument" ? window.siyuan.languages._kernel[16] : window.siyuan.languages.untitled))}"${(paths.length === 1 || index === 0) ? ' style="max-width:none"' : ""}>

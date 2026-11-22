@@ -133,7 +133,7 @@ const registerWorkspaceIpc = ({
                 if (tray) {
                     const trayName = workspaceItem.ownsKernel ? path.basename(workspaceDir) :
                         new URL(workspaceItem.kernelTarget.origin).host;
-                    tray.setToolTip(`${trayName} - SiYuan v${paths.appVer}`);
+                    tray.setToolTip(`${trayName} - Kora Note v${paths.appVer}`);
                     const mainWindow = getWindowByContentId(event.sender.id);
                     if (!mainWindow || mainWindow.isDestroyed()) {
                         tray.destroy();

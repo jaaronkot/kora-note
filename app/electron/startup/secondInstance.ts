@@ -32,7 +32,7 @@ const openRemoteTarget = (argv: string[]): void => {
             secondRemoteOrigin = normalizeRemoteKernelOrigin(secondRemoteArg);
             writeLog("got second-instance remote kernel [origin=" + secondRemoteOrigin + "]");
             if (!remoteKernelTarget || secondRemoteOrigin !== remoteKernelTarget.origin) {
-                writeLog("ignored a different remote kernel while another SiYuan instance is running");
+                writeLog("ignored a different remote kernel while another Kora Note instance is running");
             }
         } catch (error) {
             writeLog("ignored invalid second-instance remote kernel: " + errorMessage(error));

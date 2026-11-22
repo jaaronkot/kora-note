@@ -5,125 +5,15 @@ import {isMobile} from "./functions";
 import {fetchPost, fetchSyncPost} from "./fetch";
 import {ContractFormData} from "./contractFormData";
 import {MobileDialog as Dialog} from "../dialog/mobileDialog";
-import {getOpenNotebookCount} from "./pathName";
 import {normalizeNotebookName, validateName} from "../editor/rename";
 import {escapeHtml} from "../util/escape";
-import {setStorageVal} from "../protyle/util/compatibility";
-import {openFileById} from "../editor/util";
-import {openMobileFileById} from "../mobile/editor";
 import type {App} from "../index";
-import {genNotebookOptionsHTML, getLastDailyNoteNotebookId} from "./dailyNote";
 import {getHostCapabilities} from "./hostCapabilities";
-import {fetchWithDocumentSelection} from "./documentSelectionRequest";
 /// #if !BROWSER
 import {ipcRenderer} from "electron";
 import {importObsidianVault} from "../menus/importObsidian";
 import * as path from "path";
 /// #endif
-
-const pendingDailyNotes = new Map<string, Promise<void>>();
-
-export const fetchNewDailyNote = (app: App, notebook: string) => {
-    const pending = pendingDailyNotes.get(notebook);
-    if (pending) {
-        return pending;
-    }
-    const request = fetchWithDocumentSelection(selection => fetchSyncPost("/api/filetree/createDailyNote", {
-        selection,
-        notebook,
-        app: Constants.SIYUAN_APPID,
-    }, undefined, false), {notebooks: [notebook]}).then(response => {
-        if (!response || response.code !== 0 || !("id" in response.data)) {
-            return;
-        }
-        /// #if MOBILE
-        openMobileFileById(app, response.data.id, [Constants.CB_GET_SCROLL, Constants.CB_GET_FOCUS]);
-        /// #else
-        openFileById({app, id: response.data.id, action: [Constants.CB_GET_SCROLL, Constants.CB_GET_FOCUS]});
-        /// #endif
-    }).finally(() => pendingDailyNotes.delete(notebook));
-    pendingDailyNotes.set(notebook, request);
-    return request;
-};
-
-const openDailyNote = (app: App, useLastNotebook: boolean) => {
-    const exit = window.siyuan.dialogs.find(item => {
-        if (item.element.getAttribute("data-key") === Constants.DIALOG_DIALYNOTE) {
-            item.destroy();
-            return true;
-        }
-    });
-    if (exit) {
-        return;
-    }
-    const openCount = getOpenNotebookCount();
-    if (openCount === 0) {
-        showMessage(window.siyuan.languages.newFileTip);
-        return;
-    }
-    if (openCount === 1) {
-        let notebookId = "";
-        window.siyuan.notebooks.find(item => {
-            if (!item.closed) {
-                notebookId = item.id;
-            }
-        });
-        fetchNewDailyNote(app, notebookId);
-        return;
-    }
-    const localNotebookId = window.siyuan.storage[Constants.LOCAL_DAILYNOTEID];
-    const lastNotebookId = getLastDailyNoteNotebookId(window.siyuan.notebooks, localNotebookId);
-    if (lastNotebookId && useLastNotebook) {
-        fetchNewDailyNote(app, lastNotebookId);
-    } else {
-        selectDailyNoteNotebook(window.siyuan.notebooks, notebook => fetchNewDailyNote(app, notebook));
-    }
-};
-
-export const selectDailyNoteNotebook = (notebooks: readonly {id: string, name: string, closed: boolean}[],
-                                       callback: (notebook: string) => void) => {
-    const optionsHTML = genNotebookOptionsHTML(notebooks);
-    const dialog = new Dialog({
-        positionId: Constants.DIALOG_DIALYNOTE,
-        title: window.siyuan.languages.plsChoose,
-        content: `<div class="b3-dialog__content">
-    <select class="b3-select fn__block">${optionsHTML}</select>
-</div>
-<div class="b3-dialog__action">
-    <button class="b3-button b3-button--cancel">${window.siyuan.languages.cancel}</button><div class="fn__space"></div>
-    <button class="b3-button b3-button--text">${window.siyuan.languages.confirm}</button>
-</div>`,
-        width: isMobile() ? "92vw" : "520px",
-    });
-    dialog.element.setAttribute("data-key", Constants.DIALOG_DIALYNOTE);
-    const btnsElement = dialog.element.querySelectorAll(".b3-button");
-    const selectElement = dialog.element.querySelector(".b3-select") as HTMLSelectElement;
-    const localNotebookId = getLastDailyNoteNotebookId(notebooks, window.siyuan.storage[Constants.LOCAL_DAILYNOTEID]);
-    if (localNotebookId) {
-        selectElement.value = localNotebookId;
-    }
-    btnsElement[0].addEventListener("click", () => {
-        dialog.destroy();
-    });
-    btnsElement[1].addEventListener("click", () => {
-        const notebook = selectElement.value;
-        if (!notebooks.some(item => item.id === notebook && !item.closed)) {
-            return;
-        }
-        window.siyuan.storage[Constants.LOCAL_DAILYNOTEID] = notebook;
-        setStorageVal(Constants.LOCAL_DAILYNOTEID, notebook);
-        callback(notebook);
-        dialog.destroy();
-    });
-};
-
-export const newDailyNote = (app: App) => {
-    openDailyNote(app, !isMobile());
-};
-
-export const newDailyNoteFromLastNotebook = (app: App) => {
-    openDailyNote(app, true);
-};
 
 export const mountHelp = () => {
     const notebookId = Constants.HELP_PATH[window.siyuan.config.appearance.lang];
@@ -155,7 +45,7 @@ export const newNotebook = () => {
     const importHTML = getHostCapabilities().documentImportExport ? `<div class="fn__hr"></div>
     <div class="b3-label__text fn__pointer fn__flex" style="align-items: center;gap: 4px" data-type="toggle-import" role="button" tabindex="0" aria-expanded="false"><svg class="b3-list-item__arrow" style="display: block;flex: none;height: 14px;width: 14px" data-type="import-arrow"><use xlink:href="#iconRight"></use></svg><span style="line-height: 20px">${window.siyuan.languages.importFromMoreApps}</span></div>
     <div class="b3-list--background fn__none" data-type="import-options" style="padding-top: 8px">
-        <label class="b3-list-item fn__pointer" data-type="import-sy"><svg class="b3-list-item__graphic"><use xlink:href="#iconSiYuan"></use></svg><span class="b3-list-item__text">SiYuan .sy.zip</span><input class="b3-form__upload" type="file" accept="application/zip"></label>
+        <label class="b3-list-item fn__pointer" data-type="import-sy"><svg class="b3-list-item__graphic"><use xlink:href="#iconSiYuan"></use></svg><span class="b3-list-item__text">Kora Note .sy.zip</span><input class="b3-form__upload" type="file" accept="application/zip"></label>
         <label class="b3-list-item fn__pointer" data-type="import-markdown-zip"><svg class="b3-list-item__graphic"><use xlink:href="#iconMarkdown"></use></svg><span class="b3-list-item__text">Markdown .zip</span><input class="b3-form__upload" type="file" accept="application/zip"></label>
         ${nativeImportHTML}
     </div>` : "";

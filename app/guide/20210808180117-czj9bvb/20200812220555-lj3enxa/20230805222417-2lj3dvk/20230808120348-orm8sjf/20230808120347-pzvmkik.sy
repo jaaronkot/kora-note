@@ -367,7 +367,7 @@
 			"Children": [
 				{
 					"Type": "NodeText",
-					"Data": "可以通过链滴积分兑换扩容，具体规则请看"
+					"Data": "可以通过会员积分兑换扩容，具体规则请看"
 				},
 				{
 					"Type": "NodeTextMark",
