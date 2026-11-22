@@ -24,10 +24,10 @@
 </p>
 
 <p align="center">
-<a href="README.md">English</a>
-| <a href="README.zh-CN.md">中文</a>
-| <a href="README.ja.md">日本語</a>
-| <a href="README.tr.md">Türkçe</a>
+<a href="README.upstream.md">English</a>
+| <a href="README.upstream.zh-CN.md">中文</a>
+| <a href="README.upstream.ja.md">日本語</a>
+| <a href="README.upstream.tr.md">Türkçe</a>
 | <b>Português</b>
 </p>
 
