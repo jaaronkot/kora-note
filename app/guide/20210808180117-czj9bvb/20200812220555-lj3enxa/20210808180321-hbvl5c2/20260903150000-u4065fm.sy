@@ -141,7 +141,7 @@
 			"Children": [
 				{
 					"Type": "NodeText",
-					"Data": "远程模式支持导入 Kora Note .sy.zip 和 Markdown ZIP 压缩包，以及将文档导出为 Kora Note .sy.zip、Markdown ZIP、图片和 HTML ZIP 压缩包。选择本机压缩包后，文件会上传到远程内核；导出文件通过当前连接下载，并保存到你在本机选择的位置。可以使用文档树中的导入导出菜单，新建笔记本和数据迁移对话框也提供压缩包导入入口。"
+					"Data": "远程模式支持导入 Kora.sy.zip 和 Markdown ZIP 压缩包，以及将文档导出为 Kora.sy.zip、Markdown ZIP、图片和 HTML ZIP 压缩包。选择本机压缩包后，文件会上传到远程内核；导出文件通过当前连接下载，并保存到你在本机选择的位置。可以使用文档树中的导入导出菜单，新建笔记本和数据迁移对话框也提供压缩包导入入口。"
 				}
 			]
 		},

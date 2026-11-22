@@ -41,9 +41,10 @@ const createUpdateInstall = ({confDir, writeLog, platform = process.platform,
             }
 
             const packageName = path.basename(installPkgPath);
+            // 发布资产使用 koranote- 前缀，同时兼容上游历史的 siyuan- 资产名。
             const validPackageName = platform === "win32"
-                ? /^siyuan-.+-win(?:-arm64)?\.exe$/i.test(packageName)
-                : /^siyuan-.+-mac(?:-arm64)?\.dmg$/i.test(packageName);
+                ? /^(?:siyuan|koranote)-.+-win(?:-arm64)?\.exe$/i.test(packageName)
+                : /^(?:siyuan|koranote)-.+-mac(?:-arm64)?\.dmg$/i.test(packageName);
             if (!validPackageName || !fs.statSync(installPkgPath).isFile()) {
                 writeLog("rejected invalid update install package [path=" + installPkgPath + "]");
                 return;

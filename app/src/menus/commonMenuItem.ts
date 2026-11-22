@@ -628,7 +628,7 @@ ${databaseOptions}`,
             }
         }, {
             id: "exportSiYuanZip",
-            label: "Kora Note .sy.zip",
+            label: "Kora.sy.zip",
             icon: "iconSiYuan",
             click: () => {
                 const msgId = showMessage(window.siyuan.languages.exporting, -1);
@@ -664,7 +664,7 @@ ${databaseOptions}`,
                 }
             }, {
                 id: "exportHTML_SiYuan",
-                label: "HTML (Kora Note)",
+                label: "HTML (Kora)",
                 iconClass: "ft__error",
                 icon: "iconHTML5",
                 click: () => {
@@ -713,7 +713,7 @@ ${databaseOptions}`,
                 })
             }, {
                 id: "exportHTML_SiYuan",
-                label: "HTML (Kora Note)",
+                label: "HTML (Kora)",
                 iconClass: "ft__error",
                 icon: "iconHTML5",
                 click: () => {

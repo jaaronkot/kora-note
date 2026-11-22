@@ -76,8 +76,22 @@ test("macOS menu loads translations from language identifiers without an i18n pa
     }
 });
 
+test("macOS application menu title falls back to the short app name", () => {
+    // macOS 的应用菜单标题实际取自 bundle 名，模板 label 只是兜底文案，需与打包配置的 productName 一致。
+    const languages = readLanguages("en");
+    const appMenu = menuOf(buildMacAppMenuTemplate({lang: "en", hotkey: {}}, languages, {platform: "darwin"}))
+        .find(item => item.role === "appMenu");
+    assert.equal(appMenu.label, "Kora");
+    const startupAppMenu = menuOf(buildStartupMenuTemplate(languages)).find(item => item.role === "appMenu");
+    assert.equal(startupAppMenu.label, "Kora");
+});
+
 test("macOS menu application is a no-op outside darwin", () => {
     // applyMacAppMenu 只按当前平台生效；这里断言它不会因为缺少 Electron 菜单对象而抛错。
+    // macOS 测试环境没有可用的 electron.Menu，darwin 分支改由实机启动验证覆盖。
+    if ("darwin" === process.platform) {
+        return;
+    }
     assert.equal(applyMacAppMenu(undefined), undefined);
     assert.equal(applyMacAppMenu({lang: "", hotkey: {}}), undefined);
 });

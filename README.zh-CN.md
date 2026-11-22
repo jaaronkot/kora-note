@@ -41,7 +41,7 @@ Kora Note 是 [思源笔记](https://github.com/siyuan-note/siyuan) 的个人衍
 
 ### 品牌
 
-- 应用名为 **Kora Note**，macOS 应用菜单显示 **Kora**。开屏页、窗口图标、导出格式名（`Kora Note .sy.zip`、`HTML (Kora Note)`）、Linux 文件关联名与 Windows 商店清单均已同步
+- 应用名为 **Kora Note**，macOS 应用菜单显示 **Kora**。开屏页、窗口图标、导出格式名（`Kora.sy.zip`、`HTML (Kora)`）、Linux 文件关联名与 Windows 商店清单均已同步
 - 开屏页重做为静态考拉图标、细进度条与版本号，跟随系统深浅色外观，并在系统要求减少动效时关闭动画
 - 关于面板只保留版本分组：当前版本、检查更新、更新日志与运行信息
 

@@ -29,6 +29,10 @@ test("desktop installation accepts shared and legacy packages and rejects other 
     const invalid = path.join(confDir, "install", "notes.exe");
     fs.writeFileSync(invalid, "unrelated");
     assert.equal(validate(request, invalid), undefined);
+    // 发布资产使用 koranote- 前缀，更新安装必须接受。
+    const koranotePackage = path.join(confDir, "install", "koranote-99.0.0-win.exe");
+    fs.writeFileSync(koranotePackage, "package");
+    assert.equal(validate(request, koranotePackage), fs.realpathSync(koranotePackage));
     fs.mkdirSync(path.join(confDir, "install", "siyuan-99.0.1-win.exe"));
     assert.equal(validate(request, path.join(confDir, "install", "siyuan-99.0.1-win.exe")), undefined);
     fs.rmSync(path.join(workspaceDir, "temp", "install"), {recursive: true});

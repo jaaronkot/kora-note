@@ -108,11 +108,11 @@ const sortChildren = (inheritKey?: "sortByFiletree" | "sortByParent") => [
 
 const exportChildren = () => [
     node("exportTemplate", lang("template")),
-    node("exportSiYuanZip", literal("Kora Note .sy.zip")),
+    node("exportSiYuanZip", literal("Kora.sy.zip")),
     node("exportMarkdown", literal("Markdown .zip")),
     node("exportImage", lang("image")),
     node("exportPDF", literal("PDF")),
-    node("exportHTML_SiYuan", literal("HTML (Kora Note)"), false),
+    node("exportHTML_SiYuan", literal("HTML (Kora)"), false),
     node("exportHTML_Markdown", literal("HTML (Markdown)"), false),
 ];
 
@@ -128,7 +128,7 @@ const openChildren = () => [
 ];
 
 const importChildren = () => [
-    node("importSiYuanZip", literal("Kora Note .sy.zip")),
+    node("importSiYuanZip", literal("Kora.sy.zip")),
     node("importMarkdownZip", literal("Markdown .zip")),
     node("importMarkdownDoc", () => `Markdown ${window.siyuan.languages.doc}`),
     node("importMarkdownFolder", () => `Markdown ${window.siyuan.languages.folder}`),
@@ -142,7 +142,7 @@ const docTreeCommon = (multi = false) => [
     node("delete", lang("delete")),
     node("openBy", lang("openBy"), true, openChildren()),
     node("export", lang("export"), true, multi ? [
-        node("exportSiYuanZip", literal("Kora Note .sy.zip")),
+        node("exportSiYuanZip", literal("Kora.sy.zip")),
         node("exportMarkdown", literal("Markdown .zip")),
     ] : exportChildren()),
 ];
@@ -744,7 +744,7 @@ export const entryCatalog: IEntryCatalogSection[] = [
             node("showInFolder", lang("showInFolder")),
             node("import", lang("import"), true, importChildren()),
             node("export", lang("export"), true, [
-                node("exportSiYuanZip", literal("Kora Note .sy.zip")),
+                node("exportSiYuanZip", literal("Kora.sy.zip")),
                 node("exportMarkdown", literal("Markdown .zip")),
             ]),
         ],
@@ -761,7 +761,7 @@ export const entryCatalog: IEntryCatalogSection[] = [
             node("delete", lang("delete")),
             separator("separator_2"),
             node("export", lang("export"), true, [
-                node("exportSiYuanZip", literal("Kora Note .sy.zip")),
+                node("exportSiYuanZip", literal("Kora.sy.zip")),
                 node("exportMarkdown", literal("Markdown .zip")),
             ]),
         ],

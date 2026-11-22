@@ -254,7 +254,7 @@ const initMultiMenu = (selection: IDocTreeMenuContext, app: App) => {
                 ignore: ignoreExport,
                 submenu: [{
                     id: "exportSiYuanZip",
-                    label: "Kora Note .sy.zip",
+                    label: "Kora.sy.zip",
                     icon: "iconSiYuan",
                     click: () => {
                         const msgId = showMessage(window.siyuan.languages.exporting, -1);
@@ -394,7 +394,7 @@ const initMultiMenu = (selection: IDocTreeMenuContext, app: App) => {
             icon: "iconDownload",
             submenu: [{
                 id: "exportSiYuanZip",
-                label: "Kora Note .sy.zip",
+                label: "Kora.sy.zip",
                 icon: "iconSiYuan",
                 click: () => {
                     confirmEncryptedExport(encryptedNotebookId, () => {
@@ -665,7 +665,7 @@ const initNotebookMenu = (app: App, selection: IDocTreeMenuContext, item: IDocTr
             icon: "iconDownload",
             submenu: [{
                 id: "exportSiYuanZip",
-                label: "Kora Note .sy.zip",
+                label: "Kora.sy.zip",
                 icon: "iconSiYuan",
                 click: () => {
                     confirmEncryptedExport(notebookId, () => {
@@ -1056,7 +1056,7 @@ export const genImportMenu = (notebookId: string, pathString: string) => {
             {
                 id: "importSiYuanZip",
                 icon: "iconSiYuan",
-                label: 'Kora Note .sy.zip<input class="b3-form__upload" type="file" accept="application/zip">',
+                label: 'Kora.sy.zip<input class="b3-form__upload" type="file" accept="application/zip">',
                 bind: (element) => {
                     element.querySelector(".b3-form__upload").addEventListener("change", (event: InputEvent & {
                         target: HTMLInputElement

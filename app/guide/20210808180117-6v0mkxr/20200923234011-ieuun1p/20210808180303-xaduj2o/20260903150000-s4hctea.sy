@@ -96,7 +96,7 @@
 		},
 		{"ID": "20260929104853-9rh86m3", "Type": "NodeHeading", "Properties": {"id": "20260929104853-9rh86m3", "updated": "20261024164212"}, "Children": [{"Type": "NodeText", "Data": "Document import and export"}], "HeadingLevel": 2},
 		{"ID": "20260929104853-69ytgab", "Type": "NodeParagraph", "Properties": {"id": "20260929104853-69ytgab", "updated": "20261024164212"}, "Children": [
-				{"Type": "NodeText", "Data": "Remote mode supports importing Kora Note .sy.zip and Markdown ZIP archives, and exporting documents as Kora Note .sy.zip, Markdown ZIP, images, and HTML ZIP archives. Select an archive on this device to upload it to the remote kernel."}
+				{"Type": "NodeText", "Data": "Remote mode supports importing Kora.sy.zip and Markdown ZIP archives, and exporting documents as Kora.sy.zip, Markdown ZIP, images, and HTML ZIP archives. Select an archive on this device to upload it to the remote kernel."}
 			]},
 		{
 			"ID": "20261024164212-wsvlh5b",

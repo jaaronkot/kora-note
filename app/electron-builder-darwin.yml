@@ -1,6 +1,7 @@
 extends: "./electron-builder-common.yml"
 productName: "Kora Note"
 appId: "org.b3log.siyuan"
+afterPack: "./scripts/after-pack-mac-helpers.js"
 publish: null
 asar: false
 compression: "normal"
@@ -22,7 +23,9 @@ mac:
   gatekeeperAssess: false
   hardenedRuntime: true
   extendInfo:
-    - NSMicrophoneUsageDescription: "This app requires microphone access to record audio."
+    NSMicrophoneUsageDescription: "This app requires microphone access to record audio."
+    CFBundleName: "Kora"
+    CFBundleDisplayName: "Kora Note"
   minimumSystemVersion: "12.0.0"
   protocols:
     - name: "Kora Note"

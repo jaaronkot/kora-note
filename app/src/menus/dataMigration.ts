@@ -111,7 +111,7 @@ export const openDataMigration = (options: IDataMigrationOptions = {}) => {
     <div class="b3-list b3-list--background">
         <label class="b3-list-item">
             <svg class="b3-list-item__graphic"><use xlink:href="#iconSiYuan"></use></svg>
-            <span class="b3-list-item__text">Kora Note .sy.zip</span>
+            <span class="b3-list-item__text">Kora.sy.zip</span>
             <input class="b3-form__upload" data-type="siyuan" type="file" accept="application/zip">
         </label>
         ${getHostCapabilities().importExport ? `<div class="b3-list-item b3-list-item--warning fn__flex-wrap data-migration__item">

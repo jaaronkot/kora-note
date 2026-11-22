@@ -30,6 +30,8 @@ type MenuContext = {platform?: NodeJS.Platform; appName?: string};
 const trayLabels = (languages: MenuLanguages): TrayMenuLabels | undefined =>
     (languages as unknown as {_trayMenu?: TrayMenuLabels})._trayMenu;
 
+// macOS 的应用菜单标题由 bundle 名（CFBundleName）决定，模板里的 label 会被系统覆盖；
+// 此常量只是构建模板时的兜底文案，需与打包配置里的 CFBundleName 保持一致。
 const APP_NAME = "Kora";
 
 // 前端存的快捷键是人可读符号，注册前需转换成 Electron 加速键。
@@ -265,7 +267,7 @@ const applyMacAppMenu = (sync: AppMenuSync | undefined): void => {
         return;
     }
     electron.Menu.setApplicationMenu(electron.Menu.buildFromTemplate(
-        buildMacAppMenuTemplate(sync, loadAppMenuLanguages(sync.lang), {platform, appName: electron.app.name})));
+        buildMacAppMenuTemplate(sync, loadAppMenuLanguages(sync.lang), {platform})));
 };
 
 export {

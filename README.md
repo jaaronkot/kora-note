@@ -41,7 +41,7 @@ The following features were dropped to shrink the installer and the maintenance 
 
 ### Rebranded
 
-- The app is called **Kora Note**; the macOS application menu shows **Kora**. The boot screen, window icon, export format names (`Kora Note .sy.zip`, `HTML (Kora Note)`), Linux file association, and the Windows store manifest follow the same naming.
+- The app is called **Kora Note**; the macOS application menu shows **Kora**. The boot screen, window icon, export format names (`Kora.sy.zip`, `HTML (Kora)`), Linux file association, and the Windows store manifest follow the same naming.
 - The boot screen was rebuilt around a static koala logo, a slim progress bar and the version number. It follows the system light/dark appearance and disables animation when the system asks for reduced motion.
 - The About panel keeps only the version section: current version, update check, changelog and runtime info.
 

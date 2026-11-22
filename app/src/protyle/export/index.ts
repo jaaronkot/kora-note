@@ -1072,7 +1072,7 @@ const getExportPath = (
             });
             return;
         }
-        let exportType = "HTML (Kora Note)";
+        let exportType = "HTML (Kora)";
         switch (option.type) {
             case "htmlmd":
                 exportType = "HTML (Markdown)";
