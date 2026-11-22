@@ -312,7 +312,7 @@ describe("dock minimum width on panel changes", () => {
         }
     }
 
-    for (const type of ["graph", "globalGraph", "backlink", "inbox"]) {
+    for (const type of ["graph", "globalGraph", "backlink"]) {
         it(`restores an undersized saved ${type} panel at its minimum width`, () => {
             const {element, add, open} = createWidthFixture("Right");
             element.style.width = "0px";

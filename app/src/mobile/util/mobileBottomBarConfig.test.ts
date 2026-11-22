@@ -79,13 +79,13 @@ describe("mobile bottom bar config", () => {
         assert.deepEqual(config.actions, ["tabs", "forward", "documents", "back", "search"]);
     });
 
-    it("supports inbox, backlinks, the agent, spaced repetition, and forward as configurable actions", () => {
+    it("supports bookmarks, backlinks, the agent, spaced repetition, and forward as configurable actions", () => {
         const config = normalizeMobileBottomBarConfig({
             version: MOBILE_BOTTOM_BAR_CONFIG_VERSION,
-            actions: ["inbox", "backlink", "agent", "spacedRepetition", "forward"],
+            actions: ["bookmark", "backlink", "agent", "spacedRepetition", "forward"],
         });
 
-        assert.deepEqual(config.actions, ["inbox", "backlink", "agent", "spacedRepetition", "forward"]);
+        assert.deepEqual(config.actions, ["bookmark", "backlink", "agent", "spacedRepetition", "forward"]);
     });
 
     it("supports selecting and quickly creating daily notes", () => {
@@ -127,33 +127,6 @@ describe("mobile bottom bar config", () => {
 
         assert.deepEqual(config.actions, ["back", "forward", "documents", "search", "tabs"]);
         assert.equal(config.actions.includes("newDoc"), false);
-    });
-
-    it("replaces the agent when AI is unavailable", () => {
-        const config = resolveMobileBottomBarAvailability({
-            version: MOBILE_BOTTOM_BAR_CONFIG_VERSION,
-            actions: ["documents", "agent", "newDoc", "tabs", "back"],
-        }, ["agent"]);
-
-        assert.deepEqual(config.actions, ["documents", "forward", "newDoc", "tabs", "back"]);
-    });
-
-    it("replaces spaced repetition in read-only mode", () => {
-        const config = resolveMobileBottomBarAvailability({
-            version: MOBILE_BOTTOM_BAR_CONFIG_VERSION,
-            actions: ["documents", "spacedRepetition", "search", "tabs", "back"],
-        }, ["spacedRepetition"]);
-
-        assert.deepEqual(config.actions, ["documents", "forward", "search", "tabs", "back"]);
-    });
-
-    it("replaces daily note actions when document creation is unavailable", () => {
-        const config = resolveMobileBottomBarAvailability({
-            version: MOBILE_BOTTOM_BAR_CONFIG_VERSION,
-            actions: ["dailyNote", "newDailyNote", "documents", "tabs", "back"],
-        }, ["dailyNote", "newDailyNote"]);
-
-        assert.deepEqual(config.actions, ["forward", "search", "documents", "tabs", "back"]);
     });
 
     it("accepts stable plugin dock keys and rejects malformed keys", () => {

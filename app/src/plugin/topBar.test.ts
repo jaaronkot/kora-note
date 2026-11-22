@@ -75,7 +75,7 @@ const buildPluginMenu = (counts: number[], settings: boolean[], mobile = false, 
 test("plugin settings appear once after all top bar buttons", () => {
     const {items, opened, clicked} = buildPluginMenu([0, 2, 1], [true, true, false]);
     assert.deepEqual(items.map(item => item.id), [
-        "manage", "separator_1", "button1_0", "button1_1", "button2_0",
+        "button1_0", "button1_1", "button2_0",
         "separator_settings", "plugin0", "plugin1",
     ]);
     const button = items.find(item => item.id === "button1_0");
@@ -166,11 +166,22 @@ const setup = (mobile = false, detached = false, mounted = false) => {
         document: {
             createElement: () => new TestElement(),
             contains: (element: TestElement) => !!element.parentElement,
-            getElementById: () => toolbar,
-            querySelector: (selector: string) => ({before: (element: TestElement) => {
-                insertions.push(selector);
-                element.parentElement = toolbar;
-            }}),
+            getElementById: (id: string) => {
+                if (id !== "drag") {
+                    return toolbar;
+                }
+                // 顶栏已无插件入口按钮，插件图标挂在拖拽区两侧。
+                return {
+                    insertAdjacentElement: (position: string, element: TestElement) => {
+                        insertions.push(`drag:${position}`);
+                        element.parentElement = toolbar;
+                    },
+                    before: (element: TestElement) => {
+                        insertions.push("drag:before");
+                        element.parentElement = toolbar;
+                    },
+                };
+            },
         },
         window: {siyuan: {storage: mounted ? {} : undefined}},
     });
@@ -277,11 +288,11 @@ test("custom elements move into the toolbar and keep their slot until their side
     element.parentElement = new TestElement();
     plugin.addTopBar({id: "timer", title: "Timer", element});
     assert.equal(element.parentElement, toolbar);
-    assert.deepEqual(insertions, ["#barPlugins"]);
+    assert.deepEqual(insertions, ["drag:afterend"]);
     plugin.addTopBar({id: "timer", title: "Updated", element});
-    assert.deepEqual(insertions, ["#barPlugins"]);
+    assert.deepEqual(insertions, ["drag:afterend"]);
     plugin.addTopBar({id: "timer", title: "Left", element, position: "left"});
-    assert.deepEqual(insertions, ["#barPlugins", "#drag"]);
+    assert.deepEqual(insertions, ["drag:afterend", "drag:before"]);
 });
 
 test("visibility menu leaves custom controls blank while preserving ordinary plugin icons", () => {

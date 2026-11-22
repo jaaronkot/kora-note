@@ -38,7 +38,7 @@ describe("mobile side panel config", () => {
             pluginDockIds: ["pluginRight"],
         };
         const config = normalizeMobileSidePanelConfig(stored);
-        assert.deepEqual(config.left, stored.left);
+        assert.deepEqual(config.left, stored.left.filter((id) => id !== "inbox"));
         assert.deepEqual(config.right, stored.right);
         assert.deepEqual(config.pluginDockIds, stored.pluginDockIds);
         assert.deepEqual(config.hidden, []);
@@ -55,8 +55,9 @@ describe("mobile side panel config", () => {
         assert.deepEqual(config.hidden, [...initial.left, ...initial.right]);
         assert.deepEqual(initial.hidden, []);
         config = normalizeMobileSidePanelConfig(JSON.stringify(config), pluginDocks);
-        config = reduceMobileSidePanelConfig(config, {type: "visibility", id: "inbox", visible: true}, pluginDocks);
-        assert.equal(config.hidden.includes("inbox"), false);
+        const restoredId = initial.left[0];
+        config = reduceMobileSidePanelConfig(config, {type: "visibility", id: restoredId, visible: true}, pluginDocks);
+        assert.equal(config.hidden.includes(restoredId), false);
         assert.deepEqual(config.left, initial.left);
         assert.deepEqual(reduceMobileSidePanelConfig(config, {type: "reset"}, pluginDocks), initial);
     });
@@ -106,7 +107,7 @@ describe("mobile side panel config", () => {
         }), pluginDocks);
 
         assert.deepEqual(config.left, ["file", "pluginRight", "tag"]);
-        assert.deepEqual(config.right, ["backlink", "outline", "bookmark", "inbox", "pluginLeft", "agent"]);
+        assert.deepEqual(config.right, ["backlink", "outline", "bookmark", "pluginLeft", "agent"]);
         assert.deepEqual(config.pluginDockIds, ["pluginRight", "pluginLeft"]);
         assertCompleteConfig(config);
     });
@@ -119,7 +120,7 @@ describe("mobile side panel config", () => {
                 right: ["backlink", "outline"],
             }, pluginDocks);
 
-            assert.deepEqual(config.left, ["file", "bookmark", "tag", "inbox", "pluginLeft"]);
+            assert.deepEqual(config.left, ["file", "bookmark", "tag", "pluginLeft"]);
             assert.deepEqual(config.right, ["backlink", "outline", "agent", "pluginRight"]);
             assert.deepEqual(config.pluginDockIds, ["pluginLeft", "pluginRight"]);
             assertCompleteConfig(config);
@@ -150,7 +151,7 @@ describe("mobile side panel config", () => {
             {id: "pluginLater", side: "left", index: 20},
         ]);
 
-        assert.deepEqual(config.left, ["file", "pluginEarlier", "pluginLater", "bookmark", "tag", "inbox"]);
+        assert.deepEqual(config.left, ["file", "pluginEarlier", "pluginLater", "bookmark", "tag"]);
         assert.deepEqual(config.pluginDockIds, ["pluginEarlier", "pluginLater"]);
         assertCompleteConfig(config);
     });
@@ -167,9 +168,9 @@ describe("mobile side panel config", () => {
             {id: "missingPlugin", side: "right"},
         ]);
 
-        assert.deepEqual(missing.left, stored.left);
+        assert.deepEqual(missing.left, stored.left.filter((id) => id !== "inbox"));
         assert.deepEqual(missing.pluginDockIds, ["missingPlugin"]);
-        assert.deepEqual(restored.left, stored.left);
+        assert.deepEqual(restored.left, stored.left.filter((id) => id !== "inbox"));
         assert.deepEqual(restored.pluginDockIds, ["missingPlugin"]);
         assertCompleteConfig(missing);
         assertCompleteConfig(restored);
@@ -183,7 +184,7 @@ describe("mobile side panel config", () => {
             pluginDockIds: ["pluginLeft", "pluginLeft", ""],
         }, pluginDocks);
 
-        assert.deepEqual(config.left, ["tag", "outline", "pluginLeft", "bookmark", "inbox"]);
+        assert.deepEqual(config.left, ["tag", "outline", "pluginLeft", "bookmark"]);
         assert.deepEqual(config.right, ["file", "backlink", "agent", "pluginRight"]);
         assert.deepEqual(config.pluginDockIds, ["pluginLeft", "pluginRight"]);
         assertCompleteConfig(config);
@@ -253,7 +254,7 @@ describe("mobile side panel config", () => {
             toIndex: 0,
         });
 
-        assert.deepEqual(config.left, ["bookmark", "missingPlugin", "file", "tag", "inbox"]);
+        assert.deepEqual(config.left, ["bookmark", "missingPlugin", "file", "tag"]);
         assertCompleteConfig(config);
     });
 

@@ -2,7 +2,6 @@ import {Constants} from "../constants";
 
 export type TTopBarDropSide = "before" | "after";
 
-const TOP_BAR_WORKSPACE_ID = "barWorkspace";
 const TOP_BAR_DRAG_ID = "drag";
 const TOP_BAR_MORE_ID = "barMore";
 const TOP_BAR_WINDOW_CONTROLS_ID = "windowControls";
@@ -29,9 +28,6 @@ export const resolveTopBarDropSide = (
 ): TTopBarDropSide | undefined => {
     if (targetId === TOP_BAR_WINDOW_CONTROLS_ID) {
         return;
-    }
-    if (targetId === TOP_BAR_WORKSPACE_ID) {
-        return "after";
     }
     if (targetId === TOP_BAR_MORE_ID) {
         return "before";
@@ -64,14 +60,12 @@ const getDirectChild = (toolbarElement: HTMLElement, target: EventTarget | null)
 const isDraggableEntry = (element?: HTMLElement) => element &&
     element.parentElement &&
     element.hasAttribute("data-topbar-entry") &&
-    element.id !== TOP_BAR_WORKSPACE_ID &&
     element.id !== TOP_BAR_MORE_ID &&
     element.id !== TOP_BAR_DRAG_ID &&
     element.id !== TOP_BAR_WINDOW_CONTROLS_ID;
 
 const isDropTarget = (element?: HTMLElement) => element &&
     (element.hasAttribute("data-topbar-entry") ||
-        element.id === TOP_BAR_WORKSPACE_ID ||
         element.id === TOP_BAR_DRAG_ID ||
         element.id === TOP_BAR_MORE_ID) &&
     element.id !== TOP_BAR_WINDOW_CONTROLS_ID;

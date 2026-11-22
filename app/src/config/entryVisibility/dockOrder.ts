@@ -42,6 +42,10 @@ export const DOCK_ORDER_SCOPES: readonly TDockOrderScope[] = [
 
 const DOCK_ORDER_SCOPE_SET = new Set<string>(DOCK_ORDER_SCOPES);
 
+// 书签入口固定停靠在左侧下组，保存的停靠栏排序里若残留其他分组的位置，需要归位。
+const FIXED_SCOPE_DOCK_ENTRY = "bookmark";
+const FIXED_SCOPE_DOCK_ENTRY_SCOPE = DOCK_ORDER_SCOPE_BY_POSITION.LeftBottom;
+
 const DOCK_ORDER_SCOPE_META: Record<TDockOrderScope, {
     position: TPluginDockPosition;
     labelKey: string;
@@ -189,6 +193,18 @@ const mergeDockEntryOrders = (
     const normalizedSaved = useCurrentPlacement
         ? normalizeCurrentPlacementSavedOrders(savedOrders, currentOwners)
         : normalizeDockEntryOrderSnapshot(savedOrders);
+    DOCK_ORDER_SCOPES.forEach((scope) => {
+        if (scope === FIXED_SCOPE_DOCK_ENTRY_SCOPE) {
+            return;
+        }
+        const index = normalizedSaved[scope].indexOf(FIXED_SCOPE_DOCK_ENTRY);
+        if (index > -1) {
+            normalizedSaved[scope].splice(index, 1);
+            if (!normalizedSaved[FIXED_SCOPE_DOCK_ENTRY_SCOPE].includes(FIXED_SCOPE_DOCK_ENTRY)) {
+                normalizedSaved[FIXED_SCOPE_DOCK_ENTRY_SCOPE].unshift(FIXED_SCOPE_DOCK_ENTRY);
+            }
+        }
+    });
     const savedOwners = getDockEntryOwners(normalizedSaved);
     const snapshot = createEmptySnapshot();
     DOCK_ORDER_SCOPES.forEach((scope) => {

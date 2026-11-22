@@ -213,14 +213,13 @@ class TestDocument extends TestEventTarget {
 const createToolbar = () => {
     const documentSelf = new TestDocument();
     const toolbar = new TestElement(documentSelf, "toolbar");
-    const workspace = new TestElement(documentSelf, "barWorkspace", undefined, {left: 0, top: 0, width: 20, height: 24});
     const left = new TestElement(documentSelf, "barBack", "back", {left: 20, top: 0, width: 24, height: 24});
     const drag = new TestElement(documentSelf, "drag", undefined, {left: 44, top: 0, width: 100, height: 24});
-    const right = new TestElement(documentSelf, "barSearch", "search", {left: 144, top: 0, width: 24, height: 24});
+    const right = new TestElement(documentSelf, "barZoom", "zoom", {left: 144, top: 0, width: 24, height: 24});
     const more = new TestElement(documentSelf, "barMore", undefined, {left: 168, top: 0, width: 24, height: 24});
     const controls = new TestElement(documentSelf, "windowControls", undefined, {left: 192, top: 0, width: 80, height: 24});
-    [workspace, left, drag, right, more, controls].forEach((item) => toolbar.appendChild(item));
-    return {controls, documentSelf, drag, left, more, right, toolbar, workspace};
+    [left, drag, right, more, controls].forEach((item) => toolbar.appendChild(item));
+    return {controls, documentSelf, drag, left, more, right, toolbar};
 };
 
 const getPlaceholder = (toolbar: TestElement) => toolbar.children.find((item) =>
@@ -230,22 +229,20 @@ describe("top bar drag", () => {
     it("reads only direct configurable entries and the fixed drag key", () => {
         const toolbar = {
             children: [
-                createOrderElement("barWorkspace"),
                 createOrderElement("barBack", "back"),
                 createOrderElement("drag"),
-                createOrderElement("barSearch", "search"),
+                createOrderElement("barZoom", "zoom"),
                 createOrderElement("barMore"),
                 createOrderElement("windowControls"),
             ],
         } as unknown as HTMLElement;
 
-        assert.deepEqual(topBarDrag.getTopBarOrder(toolbar), ["back", "drag", "search"]);
+        assert.deepEqual(topBarDrag.getTopBarOrder(toolbar), ["back", "drag", "zoom"]);
     });
 
     it("keeps fixed edge targets on their respective side", () => {
         const rect = {left: 100, width: 40} as DOMRect;
 
-        assert.equal(topBarDrag.resolveTopBarDropSide("barWorkspace", 1000, rect), "after");
         assert.equal(topBarDrag.resolveTopBarDropSide("barMore", 0, rect), "before");
         assert.equal(topBarDrag.resolveTopBarDropSide("windowControls", 110, rect), undefined);
     });
@@ -280,7 +277,7 @@ describe("top bar drag", () => {
         documentSelf.dispatch("mousemove", new TestEvent(drag, 120, 12));
         assert.equal(documentSelf.body.children.length, 1);
         assert.equal(left.style.opacity, "0.38");
-        assert.deepEqual(topBarDrag.getTopBarOrder(toolbar as unknown as HTMLElement), ["back", "drag", "search"]);
+        assert.deepEqual(topBarDrag.getTopBarOrder(toolbar as unknown as HTMLElement), ["back", "drag", "zoom"]);
         assert.equal(getPlaceholder(toolbar), undefined);
         const ghost = documentSelf.body.children[0];
         assert.equal(ghost.style.backgroundColor, "var(--b3-theme-background-light)");
@@ -295,8 +292,8 @@ describe("top bar drag", () => {
         assert.equal(getPlaceholder(toolbar), placeholder);
         documentSelf.dispatch("mouseup", new TestEvent(controls, 250, 12));
 
-        assert.deepEqual(topBarDrag.getTopBarOrder(toolbar as unknown as HTMLElement), ["drag", "back", "search"]);
-        assert.deepEqual(orders, [["drag", "back", "search"]]);
+        assert.deepEqual(topBarDrag.getTopBarOrder(toolbar as unknown as HTMLElement), ["drag", "back", "zoom"]);
+        assert.deepEqual(orders, [["drag", "back", "zoom"]]);
         assert.equal(documentSelf.body.children.length, 0);
         assert.equal(documentSelf.listenerCount("mousemove"), 0);
         assert.equal(documentSelf.listenerCount("mouseup"), 0);
@@ -342,7 +339,7 @@ describe("top bar drag", () => {
         documentSelf.dispatch("mouseup", new TestEvent(left, 30, 12));
 
         assert.deepEqual(orders, []);
-        assert.deepEqual(topBarDrag.getTopBarOrder(toolbar as unknown as HTMLElement), ["back", "drag", "search"]);
+        assert.deepEqual(topBarDrag.getTopBarOrder(toolbar as unknown as HTMLElement), ["back", "drag", "zoom"]);
         assert.equal(documentSelf.body.children.length, 0);
         unbind();
     });
@@ -370,7 +367,7 @@ describe("top bar drag", () => {
 
         assert.equal(changeCount, 0);
         assert.equal(click.defaultPrevented, false);
-        assert.deepEqual(topBarDrag.getTopBarOrder(toolbar as unknown as HTMLElement), ["back", "drag", "search"]);
+        assert.deepEqual(topBarDrag.getTopBarOrder(toolbar as unknown as HTMLElement), ["back", "drag", "zoom"]);
         unbind();
     });
 });
