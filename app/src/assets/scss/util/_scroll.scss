@@ -13,8 +13,18 @@
   border-radius: var(--b3-border-radius);
   box-shadow: inset 0 0 5px 5px var(--b3-scroll-color);
   cursor: default;
+}
 
-  &:hover {
+// 指针设备：滑块可见宽度固定为 8px（轨道 10px 减去两侧 1px 边框），悬停不再变宽；
+// 默认不显示，滚动中或悬停滑块时显示。触屏设备没有悬停，保持原有的细滑块常显。
+@media (hover: hover) {
+  ::-webkit-scrollbar-thumb {
     border-width: 1px;
+    box-shadow: none;
+  }
+
+  .fn__scroll-active::-webkit-scrollbar-thumb,
+  ::-webkit-scrollbar-thumb:hover {
+    box-shadow: inset 0 0 5px 5px var(--b3-scroll-color);
   }
 }

@@ -23,7 +23,7 @@ test("typing a slash in reference search does not run title replacement or show 
         window: {siyuan: {languages: {newFile: "New document", newSubDoc: "New child", newFileAtPath: "Choose location"}}},
         Constants: {ZWSP: "\u200b"}, Lute: {Caret: "caret", UnEscapeHTMLStr: (text: string) => text},
         getEditorRange: () => ({startContainer: block}), hasClosestBlock: () => block,
-        isEncryptedBox: () => false, getDailyNoteHints: async (): Promise<IHintData[]> => [],
+        isEncryptedBox: () => false,
         getConfiguredEntryVisibility: () => true,
         normalizeDocumentTitle: () => assert.fail("typing a query sanitized a document title"),
         fetchPost: (path: string, request: {k: string}, callback: (response: unknown) => void) => {
@@ -43,8 +43,8 @@ test("typing a slash in reference search does not run title replacement or show 
     assert.equal(rendered, true);
 });
 
-test("closing a reference resolves exact titles before daily notes or configured creation and rejects stale results", async () => {
-    const scenarios = ["document", "daily", "create", "subdoc", "subdocVisibility", "path", "hidden", "stale", "error", "ordinary"];
+test("closing a reference resolves exact titles before configured creation and rejects stale results", async () => {
+    const scenarios = ["document", "create", "subdoc", "subdocVisibility", "path", "hidden", "stale", "error", "ordinary"];
     for (const [splitChar, scenario] of ["[[", "【【"].flatMap(split => scenarios.map(scenario => [split, scenario]))) {
         const block = {getAttribute: () => "block"};
         const closeContext = {range: "original"};
@@ -58,8 +58,6 @@ test("closing a reference resolves exact titles before daily notes or configured
             getConfiguredEntryVisibility: (path: string) => scenario !== "hidden" &&
                 (scenario !== "subdocVisibility" || path !== "editor.ref.newFile") &&
                 (scenario !== "path" || path !== "editor.ref.newSubDoc"),
-            getDailyNoteHints: async () => scenario === "daily" || scenario === "document" ?
-                [{value: "daily-note:2026-10-14:box", html: "daily"}] : [],
             fetchPost: (_path: string, request: {exactDocTitle?: boolean; notebook?: string}, callback: (response: unknown) => void) => {
                 assert.equal(request.exactDocTitle, scenario === "ordinary" ? undefined : true);
                 assert.equal(request.notebook, "box");
@@ -84,8 +82,6 @@ test("closing a reference resolves exact titles before daily notes or configured
         if (scenario === "document") {
             assert.equal(commits.length, 1);
             assert.match(commits[0], /data-id="exact"/);
-        } else if (scenario === "daily") {
-            assert.deepEqual(commits, ["daily-note:2026-10-14:box"]);
         } else if (["create", "subdoc", "subdocVisibility", "path"].includes(scenario)) {
             assert.equal(commits.length, 1);
             const command = scenario === "create" ? "newFile" : scenario === "path" ? "newFileAtPath" : "newSubDoc";

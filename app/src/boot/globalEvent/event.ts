@@ -23,12 +23,14 @@ import {initHoverInput} from "../../util/hoverInput";
 import {bindGutterPointerLeave} from "./gutterPointerLeave";
 import {isInIOS} from "../../protyle/util/compatibility";
 import {scrollDraggedAVColumn} from "./avColumnDragScroll";
+import {initScrollbarVisibility} from "../../util/scrollbar";
 
 const KANBAN_GROUP_DRAG_TYPE = `${Constants.SIYUAN_DROP_GUTTER}NodeAttributeView${Constants.ZWSP}Group${Constants.ZWSP}`.toLowerCase();
 
 export const initWindowEvent = (app: App) => {
     initHoverInput();
     initHarmonyTextSelectionMenu();
+    initScrollbarVisibility();
     let lastEncryptedNotebookTouch = 0;
     const touchEncryptedNotebooks = () => {
         if (window.siyuan.isPublish) {

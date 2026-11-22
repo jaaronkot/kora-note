@@ -23,8 +23,6 @@ import {searchRef} from "./searchRef";
 import {getSlashEntryKey, TSlashMenuItem} from "./slashMenu";
 import {getFrequentSlashItems, recordSlashExecution} from "./frequentSlashStorage";
 import {escapeAttr} from "../../util/escape";
-import {createDailyNoteReference} from "./dailyNote";
-import {captureDailyNoteSelection, insertDailyNoteReference} from "./dailyNoteSelection";
 import {
     getBlockRefAnchorText,
     getDocCreateTemplatePath,
@@ -1220,14 +1218,6 @@ ${genHintItemHTML(item)}
         }
         // 自动闭合时，光标后的闭合符随查询一起被替换
         this.consumeRefBracketClose(range);
-        if (["[[", "【【"].includes(this.splitChar) && /^daily-note:\d{4}-\d{2}-\d{2}:[a-z0-9-]*$/.test(value)) {
-            const [, date, notebookID] = value.split(":");
-            const target = captureDailyNoteSelection(protyle, range);
-            createDailyNoteReference(protyle, date, notebookID, (id, title) => {
-                insertDailyNoteReference(protyle, target, id, title, refIsS, undoContext);
-            });
-            return;
-        }
         if (Constants.BLOCK_HINT_KEYS.includes(this.splitChar) && value.startsWith("((newSubDoc ") &&
             value.endsWith(`${Lute.Caret}'))`)) {
             const prefix = "((newSubDoc ";

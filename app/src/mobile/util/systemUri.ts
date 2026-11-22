@@ -8,7 +8,7 @@ const pending = new Set<string>();
 export const processMobileSystemUri = (app: App, uri: string) => {
     try {
         const url = new URL(uri);
-        if (url.protocol !== "siyuan:" || !["plugins", "bazaar"].includes(url.hostname)) {
+        if (url.protocol !== "siyuan:" || url.hostname !== "plugins") {
             return false;
         }
     } catch {

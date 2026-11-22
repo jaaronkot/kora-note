@@ -6,9 +6,9 @@ export type TFileTreeDefaultIcon = "notebook" | "folder" | "file" | "lock";
 
 const FILE_TREE_SVG_ICONS: Record<TFileTreeDefaultIcon, string> = {
     notebook: "iconNotebook",
-    folder: "iconFileText",
-    file: "iconFile",
-    lock: "iconLock",
+    folder: "iconBookText",
+    file: "iconFileText",
+    lock: "iconFileLock",
 };
 
 const getDefaultEmoji = (defaultIcon: TFileTreeDefaultIcon) => {

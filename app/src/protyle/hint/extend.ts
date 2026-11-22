@@ -59,7 +59,6 @@ import {
 import {countBlockWord} from "../../layout/status";
 import {genTemplateDocTreePlanHTML} from "../../template/docTree";
 import {guardTemplateHTTPRequest} from "../../template/http";
-import {getDailyNoteHints} from "./dailyNote";
 import {isTitleSlashContext, TITLE_INLINE_SLASH_IDS} from "./titleSlash";
 
 const slashBuiltinStyleIDs: Partial<Record<string, TBuiltinInlineStyleID>> = {
@@ -738,7 +737,6 @@ export const hintRef = (key: string, protyle: IProtyle, source: THintSource): IH
     if (closeContext) {
         refParam.exactDocTitle = true;
     }
-    const dailyNotes = source === "hint" ? getDailyNoteHints(key, protyle).catch((): IHintData[] => []) : Promise.resolve([] as IHintData[]);
     searchRef(refParam).then((response) => {
         if (!response) {
             if (createTarget.isCurrent()) {
@@ -746,7 +744,7 @@ export const hintRef = (key: string, protyle: IProtyle, source: THintSource): IH
             }
             return;
         }
-        return Promise.all([createTarget.promise, dailyNotes]).then(([hideConfiguredCreate, dateHints]) => {
+        return createTarget.promise.then((hideConfiguredCreate) => {
             if (!createTarget.isCurrent()) {
                 return;
             }
@@ -756,8 +754,6 @@ export const hintRef = (key: string, protyle: IProtyle, source: THintSource): IH
             }
             const dataList: IHintData[] = [];
             let createItemCount = 0;
-            dataList.push(...dateHints);
-            createItemCount += dateHints.length;
             if (response.newDoc) {
                 const newFileName = Lute.UnEscapeHTMLStr(response.k);
                 if (!hideConfiguredCreate && getConfiguredEntryVisibility("editor.ref.newFile")) {
@@ -803,7 +799,7 @@ export const hintRef = (key: string, protyle: IProtyle, source: THintSource): IH
                 });
             });
             if (closeContext) {
-                // 依次选择标题完全一致的文档、日记、新建文档
+                // 依次选择标题完全一致的文档、新建文档
                 const commitItem = response.blocks.length > 0 ? dataList[createItemCount] :
                     (createItemCount > 0 ? dataList[0] : undefined);
                 if (commitItem) {

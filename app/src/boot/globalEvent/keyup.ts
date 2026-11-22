@@ -1,7 +1,6 @@
 import {getKeymapBindings} from "../../util/keymapBindings";
 import {fetchPost} from "../../util/fetch";
 import {escapeHtml} from "../../util/escape";
-import {openCard} from "../../card/openCard";
 import {getDockByType} from "../../layout/tabUtil";
 import {getAllTabs} from "../../layout/getAll";
 import type {App} from "../../index";
@@ -121,11 +120,7 @@ export const windowKeyUp = (app: App, event: KeyboardEvent) => {
             }
             const currentType = currentLiElement.getAttribute("data-type");
             if (currentType) {
-                if (currentType === "riffCard") {
-                    openCard(app);
-                } else {
-                    getDockByType(currentType).toggleModel(currentType, true);
-                }
+                getDockByType(currentType).toggleModel(currentType, true);
                 if (document.activeElement) {
                     (document.activeElement as HTMLElement).blur();
                 }

@@ -7,7 +7,7 @@ import type {ICommandContextSnapshot} from "./types";
 it("hides publish write commands and rejects their shortcut execution", async () => {
     const original = Object.getOwnPropertyDescriptor(globalThis, "window");
     const blocked = ["addToDatabase", "closeUnmodified", "editReadonly", "switchReadonly", "replace",
-        "move", "newFile", "dailyNote", "syncNow", "dataHistory"];
+        "move", "newFile", "syncNow", "dataHistory"];
     const siyuan = {
         isPublish: true,
         config: {keymap: {

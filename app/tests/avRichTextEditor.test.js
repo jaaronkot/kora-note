@@ -63,7 +63,6 @@ const runCases = async (sources, appDirectory) => {
             callback({code: 0, data: {newDoc: true, k: "New document", blocks: []}});
         },
         Lute: {UnEscapeHTMLStr: value => value, Caret: "caret"},
-        getDailyNoteHints: async () => [],
         getConfiguredEntryVisibility: () => true,
         Constants: {ZWSP: "\u200b"},
     };

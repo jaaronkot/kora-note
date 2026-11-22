@@ -85,16 +85,6 @@ export const onGetnotebookconf = (data: INotebookConf) => {
         <div class="fn__space"></div>
         <input spellcheck="false" class="b3-text-field fn__flex-1" id="refCreateSavePath" value="">
     </div>
-</div>
-<div class="b3-label config-item">
-    <div class="config-name">${window.siyuan.languages.fileTree11}</div>
-    <div class="b3-label__text">${window.siyuan.languages.fileTree14}</div>
-    <div class="fn__hr"></div>
-    <input spellcheck="false" class="b3-text-field fn__flex-center fn__block" id="dailyNoteSavePath" value="">
-    <div class="fn__hr"></div>
-    <div class="b3-label__text">${window.siyuan.languages.fileTree15}</div>
-    <div class="fn__hr"></div>
-    <input spellcheck="false" class="b3-text-field fn__flex-center fn__block" id="dailyNoteTemplatePath" value="">
 </div></div>`;
     if (isMobile()) {
         openModel({
@@ -121,16 +111,12 @@ const bindSettingEvent = (contentElement: Element, data: INotebookConf) => {
         writeText(data.box);
         showMessage(window.siyuan.languages.copied);
     });
-    const dailyNoteSavePathElement = contentElement.querySelector("#dailyNoteSavePath") as HTMLInputElement;
-    dailyNoteSavePathElement.value = data.conf.dailyNoteSavePath;
     const docCreateSavePathElement = contentElement.querySelector("#docCreateSavePath") as HTMLInputElement;
     docCreateSavePathElement.value = data.conf.docCreateSavePath;
     const docCreateTemplatePathElement = contentElement.querySelector("#docCreateTemplatePath") as HTMLInputElement;
     docCreateTemplatePathElement.value = data.conf.docCreateTemplatePath;
     const refCreateSavePathElement = contentElement.querySelector("#refCreateSavePath") as HTMLInputElement;
     refCreateSavePathElement.value = data.conf.refCreateSavePath;
-    const dailyNoteTemplatePathElement = contentElement.querySelector("#dailyNoteTemplatePath") as HTMLInputElement;
-    dailyNoteTemplatePathElement.value = data.conf.dailyNoteTemplatePath;
     contentElement.querySelectorAll("input, select").forEach((item) => {
         item.addEventListener("change", () => {
             saveNotebookConf(data.box, {
@@ -139,8 +125,8 @@ const bindSettingEvent = (contentElement: Element, data: INotebookConf) => {
                 docCreateSaveBox: (contentElement.querySelector("#docCreateSaveBox") as HTMLInputElement).value,
                 docCreateSavePath: docCreateSavePathElement.value,
                 docCreateTemplatePath: docCreateTemplatePathElement.value,
-                dailyNoteSavePath: dailyNoteSavePathElement.value,
-                dailyNoteTemplatePath: dailyNoteTemplatePathElement.value,
+                dailyNoteSavePath: data.conf.dailyNoteSavePath,
+                dailyNoteTemplatePath: data.conf.dailyNoteTemplatePath,
             });
         });
     });

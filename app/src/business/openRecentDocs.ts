@@ -51,17 +51,6 @@ const renderRecentDocsContent = async (data: {
     let dockHtml = "";
     if (!isWindow()) {
         let docIndex = 0;
-        if (!key || window.siyuan.languages.riffCard.toLowerCase().includes(key.toLowerCase())) {
-            dockHtml += `<li data-type="riffCard" data-index="0" class="b3-list-item${!switchPath ? " b3-list-item--focus" : ""}">
-    <svg class="b3-list-item__graphic"><use xlink:href="#iconRiffCard"></use></svg>
-    <span class="b3-list-item__text">${window.siyuan.languages.riffCard}</span>
-    <span class="b3-list-item__meta">${updateHotkeyTip(window.siyuan.config.keymap.general.riffCard.custom)}</span>
-</li>`;
-            docIndex++;
-            if (!switchPath) {
-                switchPath = window.siyuan.languages.riffCard;
-            }
-        }
         getAllDocks().forEach((item) => {
             if (!key || item.title.toLowerCase().includes(key.toLowerCase())) {
                 dockHtml += `<li data-type="${item.type}" data-index="${docIndex}" class="b3-list-item${!switchPath ? " b3-list-item--focus" : ""}">

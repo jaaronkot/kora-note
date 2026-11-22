@@ -32,13 +32,9 @@
   &::-webkit-scrollbar-thumb,
   &__submenu::-webkit-scrollbar-thumb {
     box-sizing: content-box;
-    border: 2px solid transparent;
+    border: .5px solid transparent;
     border-radius: var(--b3-border-radius);
     box-shadow: inset 0 0 2.5px 2.5px var(--b3-scroll-color);
-
-    &:hover {
-      border-width: .5px;
-    }
   }
 
   &__filter {
@@ -425,6 +421,50 @@
     }
   }
 
+  // 主菜单顶部的外观模式分段控件：三个图标按钮并排，当前模式以高亮块标出。
+  &__theme-mode {
+    display: flex;
+    gap: 4px;
+    margin: 4px 0 8px;
+    padding: 4px;
+    border-radius: var(--b3-border-radius-b);
+    background-color: var(--b3-theme-surface);
+
+    &__item {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 28px;
+      padding: 0;
+      border: 0;
+      border-radius: var(--b3-border-radius);
+      background-color: transparent;
+      color: var(--b3-theme-on-surface);
+      cursor: pointer;
+
+      svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      &:hover {
+        background-color: var(--b3-list-hover);
+      }
+
+      &:focus-visible {
+        outline: 1px solid var(--b3-theme-primary);
+        outline-offset: -1px;
+      }
+
+      &--active {
+        color: var(--b3-theme-on-background);
+        background-color: var(--b3-theme-background);
+        box-shadow: 0 1px 2px var(--b3-dock-shadow-color);
+      }
+    }
+  }
+
   &__item {
     padding: var(--b3-ui-menu-item-padding, 0 8px);
     border-radius: var(--b3-border-radius);
@@ -697,5 +737,17 @@
       height: 20px;
       float: left;
     }
+  }
+}
+
+// 指针设备：子菜单滚动条滑块默认不显示，滚动中或悬停滑块时显示。
+@media (hover: hover) {
+  .b3-menu__submenu::-webkit-scrollbar-thumb {
+    box-shadow: none;
+  }
+
+  .b3-menu__submenu.fn__scroll-active::-webkit-scrollbar-thumb,
+  .b3-menu__submenu::-webkit-scrollbar-thumb:hover {
+    box-shadow: inset 0 0 2.5px 2.5px var(--b3-scroll-color);
   }
 }

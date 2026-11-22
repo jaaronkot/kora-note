@@ -6,7 +6,7 @@ import {syncStatusBarVisibility} from "../../layout/statusHover";
 import {syncFloatingDockBarPreference} from "../../layout/dock/barVisibility";
 import {adjustDockPadding} from "../../layout/dock/util";
 import {reloadUI as reloadDesktopUI} from "../../layout/util";
-import {syncHideToolbarLayout, updateBarModeIcon} from "../../layout/topBar";
+import {syncHideToolbarLayout} from "../../layout/topBar";
 /// #endif
 import {
     enqueueAppearanceUpdate,
@@ -126,7 +126,6 @@ const applyAppearanceConfig = async (data: Config.IAppearance, refresh?: IAppear
                 if (!isSettingsWindow() && next.hideStatusBar !== old.hideStatusBar) adjustDockPadding();
                 if (!isSettingsWindow() && next.hideToolbar !== old.hideToolbar) syncHideToolbarLayout();
                 if (!isSettingsWindow() && next.showFloatingDockBar !== old.showFloatingDockBar) syncFloatingDockBarPreference();
-                if (!isSettingsWindow()) updateBarModeIcon();
                 /// #endif
             },
         }, {

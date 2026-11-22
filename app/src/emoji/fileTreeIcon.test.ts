@@ -64,13 +64,13 @@ after(() => {
 describe("file tree icon", () => {
     it("renders the configured SVG defaults", () => {
         assert.match(getFileTreeIconHTML("", "notebook", "", false, true), /#iconNotebook/);
-        assert.match(getFileTreeIconHTML("", "folder", "", false, true), /#iconFileText/);
-        assert.match(getFileTreeIconHTML("", "file", "", false, true), /#iconFile/);
-        assert.match(getFileTreeIconHTML("", "lock", "", false, true), /#iconLock/);
+        assert.match(getFileTreeIconHTML("", "folder", "", false, true), /#iconBookText/);
+        assert.match(getFileTreeIconHTML("", "file", "", false, true), /#iconFileText/);
+        assert.match(getFileTreeIconHTML("", "lock", "", false, true), /#iconFileLock/);
         assert.equal(getFileTreeIconHTML("", "notebook", "b3-menu__icon", true, true),
             '<svg class="b3-menu__icon"><use xlink:href="#iconNotebook"></use></svg>');
         assert.equal(getDocumentIconHTML("", "mobile-tabs__item-icon", true),
-            '<svg class="mobile-tabs__item-icon"><use xlink:href="#iconFile"></use></svg>');
+            '<svg class="mobile-tabs__item-icon"><use xlink:href="#iconFileText"></use></svg>');
     });
 
     it("keeps the Emoji defaults when SVG icons are disabled", () => {
@@ -107,7 +107,7 @@ describe("file tree icon", () => {
 
         syncFileTreeItemDefaultIcon(liElement);
         assert.equal(dataset.defaultIcon, "folder");
-        assert.match(iconElement.innerHTML, /#iconFileText/);
+        assert.match(iconElement.innerHTML, /#iconBookText/);
 
         updateFileTreeItemIcon(liElement, "1f4c4");
         assert.equal("defaultIcon" in dataset, false);
@@ -128,7 +128,7 @@ describe("file tree icon", () => {
         } as unknown as HTMLElement;
         window.siyuan.config.fileTree.useSVGDefaultIcon = true;
         refreshDefaultFileTreeIcons({querySelectorAll: () => [liElement]} as unknown as ParentNode);
-        assert.match(iconElement.innerHTML, /#iconLock/);
+        assert.match(iconElement.innerHTML, /#iconFileLock/);
         window.siyuan.config.fileTree.useSVGDefaultIcon = false;
         refreshDefaultFileTreeIcons({querySelectorAll: () => [liElement]} as unknown as ParentNode);
         assert.equal(iconElement.innerHTML, "🔒️");
@@ -146,7 +146,7 @@ describe("file tree icon", () => {
         assert.equal(iconElement.innerHTML, '<img class="" src="/emojis/custom.png"/>');
         window.siyuan.config.fileTree.useSVGDefaultIcon = true;
         updateFileTreeItemIcon(liElement, "", "file");
-        assert.equal(iconElement.innerHTML, '<svg><use xlink:href="#iconFile"></use></svg>');
+        assert.equal(iconElement.innerHTML, '<svg><use xlink:href="#iconFileText"></use></svg>');
         window.siyuan.config.fileTree.useSVGDefaultIcon = false;
         refreshDefaultFileTreeIcons({querySelectorAll: () => [liElement]} as unknown as ParentNode);
         assert.equal(iconElement.innerHTML, "📄");

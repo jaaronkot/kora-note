@@ -43,7 +43,6 @@ const fixture = () => {
     const focused = [];
     let picker;
     const deps = {
-        "./dailyNote": {getDailyNoteHints: async () => []},
         hasClosestBlock: node => node.block,
         Constants: {ZWSP: "\u200b", BLOCK_HINT_KEYS: ["((", "[[", "（（", "【【"]},
         fetchPost: (url, data, cb) => requests.push({url, data, cb}),

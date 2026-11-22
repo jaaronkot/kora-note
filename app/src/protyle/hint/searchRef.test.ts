@@ -31,7 +31,7 @@ const fixture = (pendingCreate = false, hiddenEntries: string[] = [], hideConfig
         window: {siyuan: {config: {editor: {}}, languages: {emptyContent: "Empty", ref: "Reference"}}},
         Constants: {ZWSP: "\u200b"},
         getEditorRange: () => ({startContainer: block}), hasClosestBlock: () => block,
-        isEncryptedBox: () => false, getDailyNoteHints: async (): Promise<IHintData[]> => [],
+        isEncryptedBox: () => false,
         getConfiguredEntryVisibility: (path: string) => !hiddenEntries.includes(path),
         Lute: {Caret: "caret", UnEscapeHTMLStr: (text: string) => text},
         getIconByType: () => "iconFile", unicode2Emoji: () => "icon",

@@ -75,9 +75,6 @@ body {
 
     .layout {
       &__wnd--active .layout-tab-bar .item--focus {
-        background-color: var(--b3-theme-surface-light);
-        box-shadow: 0 0 0 1px var(--b3-border-color) inset;
-
         & > .item__text {
           color: var(--b3-theme-on-surface);
         }

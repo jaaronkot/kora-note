@@ -25,7 +25,7 @@ const getHotkey = (item: INativeCommandCatalogItem) => {
 
 const publishUnavailableCommands = new Set([
     "addToDatabase", "closeUnmodified", "editReadonly", "switchReadonly", "replace",
-    "move", "newFile", "dailyNote", "syncNow", "dataHistory",
+    "move", "newFile", "syncNow", "dataHistory",
 ]);
 
 const matchesContext = (item: INativeCommandCatalogItem, context: ICommandContextSnapshot) => {

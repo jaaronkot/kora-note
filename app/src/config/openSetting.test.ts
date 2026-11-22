@@ -33,23 +33,21 @@ const fixture = (browser = false, mobile = false) => {
         window: {siyuan: {dialogs: [dialog], config}},
         Constants: {DIALOG_SETTING: "settings"}, switchSettingTab: (...args: unknown[]) => calls.push(["switch", ...args]),
         fetchSyncPost: async () => ({code: 0, data: {packages: [{name: "plugin"}]}}),
-        getFrontend: () => "desktop", withMountedBazaar: async () => calls.push(["readme"]),
+        getFrontend: () => "desktop",
     });
     return {calls, entry,
         setPreference: (value: unknown) => { system.settingsWindow = value; },
         setNative: () => { native = true; }};
 };
 
-test("settings and marketplace readmes follow the current workspace preference", async () => {
+test("settings follow the current workspace preference", async () => {
     const f = fixture();
     const app = {};
     f.entry.openSetting(app, "app");
-    await f.entry.openBazaarReadme(app, "plugins", "plugin", "downloaded");
-    assert.deepEqual(f.calls.map(item => item[0]), ["dialog", "dialog", "readme"]);
+    assert.deepEqual(f.calls.map(item => item[0]), ["dialog", "dialog"]);
     f.calls.length = 0;
     f.setPreference(true);
     f.entry.openSetting(app, "app");
-    await f.entry.openBazaarReadme(app, "plugins", "plugin", "downloaded");
     assert.deepEqual(f.calls.map(item => item[0]), ["native", "native"]);
     f.calls.length = 0;
     f.setNative();

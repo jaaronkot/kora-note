@@ -13,76 +13,6 @@ const deferred = () => {
     const promise = new Promise(done => { resolve = done; });
     return {promise, resolve};
 };
-const loadTab = (refreshPackages = async () => {}) => {
-    let loads = 0;
-    const module = {
-        bazaar: {refreshPackages},
-        mountBazaarTab(root) { this.bazaar.element = root; },
-        unmountBazaarTab() {},
-    };
-    const exports = {};
-    runInNewContext(compile(readFileSync("src/config/bazaarTab.ts", "utf8")), {
-        exports, console, require: path => {
-            if (path === "./bazaar") { loads++; return module; }
-            return config;
-        },
-    });
-    return {api: exports, loads: () => loads};
-};
-
-test("marketplace notifications do not load an unopened marketplace", async () => {
-    const {api, loads} = loadTab();
-    await api.refreshMountedBazaar(["widgets"]);
-    assert.equal(loads(), 0);
-});
-
-test("marketplace refresh merges notifications and drains changes received during a request", async () => {
-    const started = deferred();
-    const blocked = deferred();
-    const calls = [];
-    const app = {};
-    const {api} = loadTab(async (types, owner) => {
-        assert.equal(owner, app);
-        calls.push(Array.from(types));
-        if (calls.length === 1) { started.resolve(); await blocked.promise; }
-    });
-    await api.mountBazaarTab({isConnected: true}, undefined, app);
-    const pending = api.refreshMountedBazaar(["widgets"]);
-    api.refreshMountedBazaar(["widgets", "templates"]);
-    await started.promise;
-    api.refreshMountedBazaar(["icons"]);
-    api.refreshMountedBazaar(["icons", "plugins"]);
-    assert.equal(calls.length, 1);
-    blocked.resolve();
-    await pending;
-    assert.deepEqual(calls, [["widgets", "templates"], ["icons", "plugins"]]);
-});
-
-test("queued marketplace refresh ignores an unmounted or detached page", async () => {
-    let refreshed = 0;
-    const {api} = loadTab(async () => { refreshed++; });
-    const root = {isConnected: true};
-    await api.mountBazaarTab(root);
-    const pending = api.refreshMountedBazaar(["themes"]);
-    api.unmountBazaarTab(root);
-    await pending;
-    assert.equal(refreshed, 0);
-    await api.mountBazaarTab({isConnected: false});
-    await api.refreshMountedBazaar();
-    assert.equal(refreshed, 0);
-});
-
-test("a settings remount during notification delivery does not lose the refresh", async () => {
-    const calls = [];
-    const {api} = loadTab(async types => { calls.push(Array.from(types)); });
-    const root = {isConnected: true};
-    await api.mountBazaarTab(root);
-    const pending = api.refreshMountedBazaar(["themes"]);
-    await Promise.resolve();
-    await api.mountBazaarTab(root);
-    await pending;
-    assert.deepEqual(calls, [["themes"]]);
-});
 
 const source = ts.createSourceFile("bazaar.ts", readFileSync("src/config/bazaar.ts", "utf8"), ts.ScriptTarget.ES2021, true);
 const declaration = source.statements.find(statement => ts.isVariableStatement(statement) &&
@@ -343,16 +273,3 @@ for (const available of [undefined, {name: "sample"}]) {
         }
     });
 }
-
-test("shared WebSocket dispatcher refreshes marketplace state before forwarding the notification", () => {
-    const model = ts.createSourceFile("Model.ts", readFileSync("src/layout/Model.ts", "utf8"), ts.ScriptTarget.ES2021, true);
-    const declaration = model.statements.find(ts.isClassDeclaration);
-    const method = declaration.members.find(member => member.name?.getText(model) === "processWebSocketMessage");
-    const calls = [];
-    const exports = {};
-    runInNewContext(compile(`export class Model {${method.getText(model)}}`), {exports, require: path =>
-        path.includes("processMessage") ? {processMessage: data => data} :
-            {refreshMountedBazaar: types => { calls.push(Array.from(types)); return Promise.resolve(); }}});
-    new exports.Model().processWebSocketMessage(JSON.stringify({cmd: "bazaarChanged", data: ["templates"]}), message => calls.push(message.cmd));
-    assert.deepEqual(calls, [["templates"], "bazaarChanged"]);
-});
