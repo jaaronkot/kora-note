@@ -1,8 +1,7 @@
 name: Upload to AUR
 
 on:
-  release:
-    types: [published]
+  # 仅保留手动触发：发布 Release 不再自动触发 AUR 打包，需要时手动运行并填写版本号。
   workflow_dispatch:
     inputs:
       version:
@@ -20,11 +19,7 @@ jobs:
       - name: Check tag aka check release type
         id: checktag
         run: |
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            VERSION="${{ github.event.inputs.version }}"
-          else
-            VERSION="${{ github.ref }}"
-          fi
+          VERSION="${{ github.event.inputs.version }}"
           if [[ "$VERSION" == *"dev"* ]]; then
             echo "Skip the workflow as the tag contains 'dev'"
             echo "skip=true" >> $GITHUB_OUTPUT
@@ -37,20 +32,12 @@ jobs:
       - name: Extract tag name
         id: get_version
         run: |
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            echo "TAG_VERSION=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
-          else
-            echo "TAG_VERSION=${{ github.event.release.tag_name }}" >> $GITHUB_OUTPUT
-          fi
+          echo "TAG_VERSION=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
 
       - name: Extra tag name without v
         id: get_version_without_v
         run: |
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            echo "TAG_VERSION_WITHOUT_V=$(echo '${{ github.event.inputs.version }}' | sed 's/^v//')" >> $GITHUB_OUTPUT
-          else
-            echo "TAG_VERSION_WITHOUT_V=$(echo '${{ github.event.release.tag_name }}' | sed 's/^v//')" >> $GITHUB_OUTPUT
-          fi
+          echo "TAG_VERSION_WITHOUT_V=$(echo '${{ github.event.inputs.version }}' | sed 's/^v//')" >> $GITHUB_OUTPUT
 
       - name: Create PKGBUILD
         run: |
