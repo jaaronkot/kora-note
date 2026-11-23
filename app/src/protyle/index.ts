@@ -79,6 +79,7 @@ import {
 import {initEditorTabs} from "./wysiwyg/tabs";
 import {initListMindmaps} from "./render/listMindmap";
 import {initFoldedRender} from "./util/foldedRender";
+import {initSubDocListRender, refreshSubDocList} from "./render/subdocListRender";
 import {registerCustomBlockRoot} from "../plugin/customBlockRender";
 import {getTransactionOperations} from "../util/transactionOperations";
 import {
@@ -220,6 +221,7 @@ export class Protyle {
         this.protyle.wysiwyg = new WYSIWYG(this.protyle);
         setAutoDirection(this.protyle.wysiwyg.element, window.siyuan.config.editor.autoDirection);
         initFoldedRender(this.protyle);
+        initSubDocListRender(this.protyle);
         initEditorTabs(this.protyle);
         initListMindmaps(this.protyle);
         if (isProtyleCustomBlockRenderEnabled(this.protyle)) {
@@ -276,6 +278,11 @@ export class Protyle {
                             }
                             queueDatabaseRowRefresh(this.protyle.id, data.data.id);
                             break;
+                        case "create":
+                            if (data.data.box?.id === this.protyle.notebookId) {
+                                refreshSubDocList(this.protyle);
+                            }
+                            break;
                         case "addLoading":
                             if (data.data === this.protyle.block.rootID) {
                                 addLoading(this.protyle, data.msg);
@@ -297,6 +304,7 @@ export class Protyle {
                         case "heading2doc":
                         case "li2doc":
                             if (this.protyle.block.rootID === data.data.srcRootBlockID) {
+                                refreshSubDocList(this.protyle);
                                 if (this.protyle.block.showAll && data.cmd === "heading2doc" && !this.protyle.options.backlinkData) {
                                     const getDocParam: FileTreeGetDocRequestInput = {
                                         id: this.protyle.block.rootID,
@@ -395,6 +403,7 @@ export class Protyle {
                                 });
                             });
                             /// #endif
+                            refreshSubDocList(this.protyle);
                             break;
                         case "moveDoc":
                             if (this.protyle.path === data.data.fromPath) {
@@ -412,6 +421,7 @@ export class Protyle {
                                 invalidateSearchPathRequests(element);
                             });
                             /// #endif
+                            refreshSubDocList(this.protyle);
                             break;
                         case "closeBox":
                         case "removeBox":
@@ -444,6 +454,7 @@ export class Protyle {
                                 delete window.siyuan.storage[Constants.LOCAL_FILEPOSITION][this.protyle.block.rootID];
                                 setStorageVal(Constants.LOCAL_FILEPOSITION, window.siyuan.storage[Constants.LOCAL_FILEPOSITION]);
                             }
+                            refreshSubDocList(this.protyle);
                             break;
                     }
                 }

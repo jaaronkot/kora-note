@@ -1,6 +1,7 @@
 import {destroyTabsRender} from "../render/tabsRender";
 import {destroyListMindmaps} from "../render/listMindmap";
 import {destroyFoldedRender} from "./foldedRender";
+import {destroySubDocListRender} from "../render/subdocListRender";
 import {cancelLegacyMindmapMigration} from "../render/listMindmap/migrate";
 import {hideElements} from "../ui/hideElements";
 import {isSupportCSSHL} from "../render/searchMarkRender";
@@ -50,6 +51,7 @@ export const destroy = (protyle: IProtyle) => {
     protyle.element.removeAttribute("style");
     if (protyle.wysiwyg) {
         destroyAutoDirection(protyle.wysiwyg.element);
+        destroySubDocListRender(protyle.wysiwyg.element);
         unregisterCustomBlockRoot(protyle.wysiwyg.element);
         destroyTabsRender(protyle.wysiwyg.element);
         protyle.wysiwyg.destroy();

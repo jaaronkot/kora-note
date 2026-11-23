@@ -478,3 +478,24 @@
     }
   }
 }
+
+// 子文档列表显示在正文末尾的只读视图，使用目录结构的普通列表，不嵌入代码块。
+.protyle-content > .subdoc-list-auto {
+  font-family: var(--b3-font-family);
+  font-size: var(--b3-font-size-editor);
+
+  > .subdoc-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    .b3-list-item {
+      font-family: var(--b3-font-family);
+      margin: 1px 0;
+
+      > .b3-list-item__graphic {
+        margin-right: 8px;
+      }
+    }
+  }
+}

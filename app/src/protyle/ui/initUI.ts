@@ -125,7 +125,8 @@ export const initUI = (protyle: IProtyle) => {
         if (eventProtyleElement && eventProtyleElement !== protyle.element) {
             return;
         }
-        if (hasClosestByClassName(event.target, "sy__backlink--bottom", true)) {
+        if (hasClosestByClassName(event.target, "sy__backlink--bottom", true) ||
+            hasClosestByClassName(event.target, "subdoc-list-auto", true)) {
             return;
         }
         const lastElement = protyle.wysiwyg.element.lastElementChild;
@@ -445,6 +446,16 @@ export const setPadding = (protyle: IProtyle) => {
         }
         backlinkBottomElement.style.marginBottom = backlinkBottomVisible && protyle.options.typewriterMode ?
             `${Math.max(padding.bottom - backlinkBottomGap, 0)}px` : "";
+    }
+    const subDocListElement = protyle.contentElement.querySelector<HTMLElement>(".subdoc-list-auto");
+    if (subDocListElement) {
+        if (responsivePadding) {
+            subDocListElement.style.padding = "";
+            subDocListElement.style.paddingTop = "8px";
+            subDocListElement.style.paddingBottom = "16px";
+        } else {
+            subDocListElement.style.padding = `8px ${paddingRight}px 16px ${paddingLeft}px`;
+        }
     }
 
     // https://github.com/siyuan-note/siyuan/issues/15021
