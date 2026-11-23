@@ -1,7 +1,7 @@
 {
   "name": "Kora",
   "desktopName": "org.b3log.siyuan",
-  "version": "3.8.11",
+  "version": "3.8.12",
   "description": "From thought to insight, with agents",
   "homepage": "https://github.com/jaaronkot/kora-note",
   "main": "./electron-dist/main.js",
