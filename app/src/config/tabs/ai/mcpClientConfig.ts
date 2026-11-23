@@ -3,8 +3,16 @@ import {showMessage} from "../../../dialog/message";
 import {writeClipboardData} from "../../../protyle/util/compatibility";
 import {escapeHtmlTextAndAttr} from "../../../util/escape";
 
-/** MCP 服务端地址：内核把 MCP 端点挂在根路由的 /mcp 上，前端与内核同源。 */
-const getMcpEndpoint = (): string => `${window.location.origin}/mcp`;
+/** 内核主服务使用随机端口；6806 是内核默认启动的固定端口反代，外部客户端不必跟随随机端口变化。 */
+const FIXED_MCP_PORT = "6806";
+
+/** MCP 服务端地址：内核把 MCP 端点挂在根路由的 /mcp 上，本机访问固定走 6806 反代。 */
+const getMcpEndpoint = (): string => {
+    if (["127.0.0.1", "localhost", "[::1]"].includes(window.location.hostname)) {
+        return `http://127.0.0.1:${FIXED_MCP_PORT}/mcp`;
+    }
+    return `${window.location.origin}/mcp`;
+};
 
 /** 工作空间 API Token 是 MCP 端点的管理员级凭据。 */
 const getMcpToken = (): string => window.siyuan.config.api?.token || "";
