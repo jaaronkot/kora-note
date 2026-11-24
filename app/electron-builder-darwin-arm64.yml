@@ -19,7 +19,7 @@ extraFiles:
     to: "Resources/THIRD_PARTY_NOTICES.md"
 
 mac:
-  icon: "src/assets/icon.icns"
+  icon: "src/assets/Icon.icon"
   gatekeeperAssess: false
   hardenedRuntime: true
   extendInfo:

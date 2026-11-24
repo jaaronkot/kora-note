@@ -1,7 +1,7 @@
 <p align="center">
 <img alt="Kora Note" src="app/appearance/boot/boot-logo.png" width="128">
 <br>
-<em>From thought to insight, with agents</em>
+<em>Lightweight notes. MCP-native. AI-ready.</em>
 <br><br>
 <b>A trimmed-down, rebranded build of SiYuan Note</b>
 <br><br>
@@ -9,6 +9,8 @@
 <a title="Downloads" target="_blank" href="https://github.com/jaaronkot/kora-note/releases"><img src="https://img.shields.io/github/downloads/jaaronkot/kora-note/total.svg?style=flat-square&color=blueviolet"></a>
 <a title="AGPLv3" target="_blank" href="https://www.gnu.org/licenses/agpl-3.0.txt"><img src="https://img.shields.io/badge/license-AGPLv3-orange.svg?style=flat-square"></a>
 </p>
+
+
 
 <p align="center">
 <a href="README.zh-CN.md">简体中文</a> | <b>English</b>

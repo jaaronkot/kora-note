@@ -1,7 +1,7 @@
 <p align="center">
 <img alt="Kora Note" src="app/appearance/boot/boot-logo.png" width="128">
 <br>
-<em>从思考到洞见，与智能体同行</em>
+<em>轻量笔记仓，AI 用 MCP 存取.</em>
 <br><br>
 <b>一个精简重塑过的思源笔记版本</b>
 <br><br>
@@ -9,6 +9,7 @@
 <a title="Downloads" target="_blank" href="https://github.com/jaaronkot/kora-note/releases"><img src="https://img.shields.io/github/downloads/jaaronkot/kora-note/total.svg?style=flat-square&color=blueviolet"></a>
 <a title="AGPLv3" target="_blank" href="https://www.gnu.org/licenses/agpl-3.0.txt"><img src="https://img.shields.io/badge/license-AGPLv3-orange.svg?style=flat-square"></a>
 </p>
+
 
 <p align="center">
 <b>简体中文</b> | <a href="README.md">English</a>
